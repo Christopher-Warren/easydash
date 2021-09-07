@@ -8,6 +8,8 @@ const mongoose = require('mongoose')
 const graphqlSchema = require('./graphql/schema')
 const graphqlResolvers = require('./graphql/resolvers')
 
+const thing = require('./environment')
+console.log(thing.env)
 const app = express()
 
 app.use(express.json())
@@ -33,7 +35,7 @@ app.get('*', function (req, res) {
 })
 
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.MONGO_URI || thing.env.MONGO_URI)
   .then(() => {
     app.listen('3000' || process.env.PORT)
   })
