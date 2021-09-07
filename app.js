@@ -49,7 +49,7 @@ console.log(process.env.PORT)
 mongoose
   .connect(process.env.MONGO_URI || thing.env.MONGO_URI)
   .then(() => {
-    app.listen('3000' || process.env.PORT)
+    app.listen(process.env.PORT || '3000')
   })
   .catch((err) => {
     console.log(err)
