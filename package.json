@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
-    "dev": "concurrently \"nodemon app.js\" \"cd client & npm start\""
+    "dev": "concurrently \"nodemon app.js\" \"cd client & npm start\"",
+    "heroku-postbuild": "cd client & npm build"
   },
   "keywords": [],
   "author": "",
