@@ -26,13 +26,23 @@ app.use(
 )
 console.log(path.join(__dirname, './client/build//static'))
 // app.use('/client/build', express.static(path.join(__dirname, '/client/build/')))
+// worked but prod error
+// app.use(express.static('./client/build'))
+// app.get('*', function (req, res) {
+//   res.sendFile('index.html', {
+//     root: path.join(__dirname, '/client/build/'),
+//   })
+// })
 
-app.use(express.static('./client/build'))
-app.get('*', function (req, res) {
-  res.sendFile('index.html', {
-    root: path.join(__dirname, '/client/build/'),
+if (process.env.NODE_ENV === 'production') {
+  // Allows Express to serve production assets.
+  app.use(express.static('client/build'))
+
+  const path = require('path')
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
   })
-})
+}
 
 console.log(process.env.PORT)
 
