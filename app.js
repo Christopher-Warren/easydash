@@ -35,7 +35,7 @@ app.get('*', function (req, res) {
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
-    app.listen('3000')
+    app.listen('3000' || process.env.PORT)
   })
   .catch((err) => {
     console.log(err)
