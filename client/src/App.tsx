@@ -1,11 +1,9 @@
-import Login from './Login'
+function Home() {
+  return <h1>This is home</h1>
+}
 
 function App() {
-  return (
-    <div className="relative">
-      <Login />
-    </div>
-  )
+  return <Home />
 }
 
 export default App

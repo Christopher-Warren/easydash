@@ -5,13 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "dev": "concurrently \"nodemon app.js\" \"cd client & npm start\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "concurrently": "^6.2.1",
     "express": "^4.17.1",
     "express-graphql": "^0.12.0",
     "graphql": "^15.5.1",

@@ -1,5 +1,7 @@
+import Login from './Login'
+
 const Dashboard = () => {
-  return <div>I'm the dashboard</div>
+  return <Login />
 }
 
 export default Dashboard
