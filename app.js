@@ -9,7 +9,6 @@ const graphqlSchema = require('./graphql/schema')
 const graphqlResolvers = require('./graphql/resolvers')
 
 const thing = require('./environment')
-console.log(thing.env)
 const app = express()
 
 app.use(express.json())
@@ -24,15 +23,6 @@ app.use(
     graphiql: true,
   }),
 )
-console.log(path.join(__dirname, './client/build//static'))
-// app.use('/client/build', express.static(path.join(__dirname, '/client/build/')))
-// worked but prod error
-// app.use(express.static('./client/build'))
-// app.get('*', function (req, res) {
-//   res.sendFile('index.html', {
-//     root: path.join(__dirname, '/client/build/'),
-//   })
-// })
 
 if (process.env.NODE_ENV === 'production') {
   // Allows Express to serve production assets.
