@@ -42,8 +42,6 @@ if (process.env.NODE_ENV === 'production') {
   })
 }
 
-console.log(process.env.PORT)
-
 mongoose
   .connect(process.env.MONGO_URI || thing.env.MONGO_URI)
   .then(() => {
