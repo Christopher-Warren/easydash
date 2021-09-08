@@ -1,4 +1,9 @@
-console.log('AUTOPREF:' + require('autoprefixer'))
+try {
+  console.log(require('tailwindcss'), 'AUTOPREF:' + require('autoprefixer'))
+} catch (error) {
+  console.log(error)
+}
+
 module.exports = {
   style: {
     postcss: {
