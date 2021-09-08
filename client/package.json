@@ -28,6 +28,12 @@
     "test": "craco test",
     "eject": "react-scripts eject"
   },
+  "workspaces": {
+    "nohoist": [
+      "**/tailwindcss",
+      "**/@tailwindcss/**"
+    ]
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
