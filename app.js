@@ -45,7 +45,7 @@ if (process.env.NODE_ENV === 'production') {
 mongoose
   .connect(process.env.MONGO_URI || thing.env.MONGO_URI)
   .then(() => {
-    app.listen(process.env.PORT || '3000')
+    app.listen(process.env.PORT || '4000')
   })
   .catch((err) => {
     console.log(err)
