@@ -20,7 +20,7 @@ module.exports = {
       throw err
     }
   },
-  login: async ({ email, password }) => {
+  login: async ({ email, password }, { res }, param1, param2) => {
     const user = await User.findOne({ email })
     if (!user) throw new Error('User does not exist.')
 
@@ -33,6 +33,7 @@ module.exports = {
       'iliketoeateateatapplesandbananas',
       { expiresIn: '1h' },
     )
+    res.cookie('token', token)
     // Return has to meet AuthData type
     return { userId: user.id, token: token, tokenExpiration: 1 }
   },

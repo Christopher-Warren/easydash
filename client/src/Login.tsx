@@ -3,7 +3,20 @@ import FormInput from './components/FormInput'
 
 import logo from './assets/logobanner.png'
 
+import { useLazyQuery, gql } from '@apollo/client'
+import { useEffect } from 'react'
+
 const Login = () => {
+  const [getUser, { loading, error, data }] = useLazyQuery(gql`
+    query($email: String!, $password: String!) {
+      login(email: $email, password: $password) {
+        userId
+      }
+    }
+  `)
+  document.cookie = `referral_key=hello;max-age=604800;samesite=strict`
+
+  console.log(document.cookie)
   return (
     <div className="h-screen w-screen flex items-center justify-center">
       <div className="absolute hidden lg:block  w-1/3 bg-black h-screen left-0 overflow-hidden border-r-4 border-gray-200">
@@ -11,8 +24,8 @@ const Login = () => {
           <rect fill="#7C3AED" width="2000" height="1500" />
           <defs>
             <radialGradient id="a" gradientUnits="objectBoundingBox">
-              <stop offset="0" stop-color="#FFFFFF" />
-              <stop offset="1" stop-color="#7C3AED" />
+              <stop offset="0" stopColor="#FFFFFF" />
+              <stop offset="1" stopColor="#7C3AED" />
             </radialGradient>
             <linearGradient
               id="b"
@@ -22,8 +35,8 @@ const Login = () => {
               x2="1550"
               y2="750"
             >
-              <stop offset="0" stop-color="#be9df6" />
-              <stop offset="1" stop-color="#7C3AED" />
+              <stop offset="0" stopColor="#be9df6" />
+              <stop offset="1" stopColor="#7C3AED" />
             </linearGradient>
             <path
               id="s"
@@ -70,7 +83,7 @@ const Login = () => {
                 <use href="#g" transform="rotate(120)" />
                 <use href="#g" transform="rotate(240)" />
               </g>
-              <circle fill-opacity="0.37" fill="url(#a)" r="3000" />
+              <circle fillOpacity="0.37" fill="url(#a)" r="3000" />
             </g>
           </g>
         </svg>
@@ -81,18 +94,27 @@ const Login = () => {
           onSubmit={(e: any) => {
             e.preventDefault()
             const formData = new FormData(e.target as HTMLFormElement)
+            getUser({
+              variables: {
+                email: formData.get('email'),
+                password: formData.get('password'),
+              },
+            })
+            // make api request here
 
-            console.log(formData.get('password'))
+            // console.log(formData.get('password'))
+            // console.log(formData.get('email'))
           }}
         >
           <img className="lg:mx-0 mx-auto" src={logo} alt="Easy Dash Logo" />
           <FormInput id="email" name="email" type="email">
             Email Address
           </FormInput>
-          <FormInput id="password" name="password" type="button">
+          <FormInput id="password" name="password" type="password">
             Password
           </FormInput>
 
+          {data && <h1>loggedin</h1>}
           <FormButton type="submit">LOGIN</FormButton>
 
           {/* <div className="w-full h-full absolute top-0 left-0 flex justify-center items-center">

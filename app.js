@@ -1,4 +1,5 @@
 const express = require('express')
+const cookieParser = require('cookie-parser')
 const path = require('path')
 const { graphqlHTTP } = require('express-graphql')
 const isAuth = require('./middleware/isAuth')
@@ -12,15 +13,21 @@ const thing = require('./environment')
 const app = express()
 
 app.use(express.json())
+app.use(cookieParser())
 
 app.use(isAuth)
 
 app.use(
   '/graphql',
-  graphqlHTTP({
-    schema: graphqlSchema,
-    rootValue: graphqlResolvers,
-    graphiql: true,
+  graphqlHTTP((_, res) => {
+    // console.log(res)
+
+    return {
+      schema: graphqlSchema,
+      rootValue: graphqlResolvers,
+      graphiql: true,
+      // context: { res },
+    }
   }),
 )
 

@@ -1,17 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
+
 import App from './App'
 import Dashboard from './Dashboard'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 // apollo
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  useQuery,
-  gql,
-} from '@apollo/client'
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
 
 const client = new ApolloClient({
   uri: '/graphql',
@@ -26,6 +21,7 @@ ReactDOM.render(
           <Route path="/dashboard">
             <Dashboard />
           </Route>
+
           <App />
         </Switch>
       </Router>
