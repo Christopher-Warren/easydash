@@ -7,6 +7,9 @@ import { useLazyQuery, gql } from '@apollo/client'
 import { useEffect } from 'react'
 
 const Login = () => {
+  // We are already sending the token, and we have access to it on the backend
+  // thus there is NO REASON to bother storing the js in react state.
+
   const [getUser, { loading, error, data }] = useLazyQuery(gql`
     query($email: String!, $password: String!) {
       login(email: $email, password: $password) {
@@ -14,9 +17,11 @@ const Login = () => {
       }
     }
   `)
-  document.cookie = `referral_key=hello;max-age=604800;samesite=strict`
+  // We might as well store the userId, to conditionally render pages. If we get back
+  // valid data from getUser, then the user is securely authenticated.
 
-  console.log(document.cookie)
+  // ** Everytime we load data e.g. events, items, etc, that is where it will fail and return auth error.
+  console.log(data)
   return (
     <div className="h-screen w-screen flex items-center justify-center">
       <div className="absolute hidden lg:block  w-1/3 bg-black h-screen left-0 overflow-hidden border-r-4 border-gray-200">
@@ -115,6 +120,7 @@ const Login = () => {
           </FormInput>
 
           {data && <h1>loggedin</h1>}
+
           <FormButton type="submit">LOGIN</FormButton>
 
           {/* <div className="w-full h-full absolute top-0 left-0 flex justify-center items-center">

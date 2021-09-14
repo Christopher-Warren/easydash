@@ -20,7 +20,7 @@ module.exports = {
       throw err
     }
   },
-  login: async ({ email, password }, { res }, param1, param2) => {
+  login: async ({ email, password }, { res }) => {
     const user = await User.findOne({ email })
     if (!user) throw new Error('User does not exist.')
 
@@ -31,9 +31,10 @@ module.exports = {
     const token = jwt.sign(
       { userId: user.id, email: user.email },
       'iliketoeateateatapplesandbananas',
-      { expiresIn: '1h' },
+      { expiresIn: '60s' },
     )
-    res.cookie('token', token)
+
+    res.cookie('token', token, { maxAge: 6000, httpOnly: true, sameSite: true })
     // Return has to meet AuthData type
     return { userId: user.id, token: token, tokenExpiration: 1 }
   },

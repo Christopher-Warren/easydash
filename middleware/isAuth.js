@@ -1,11 +1,15 @@
 const jwt = require('jsonwebtoken')
 
 module.exports = (req, res, next) => {
+  console.log('asdasd')
   console.log(req.cookies.token)
 
   let decodedToken
   try {
-    decodedToken = jwt.verify(token, 'iliketoeateateatapplesandbananas')
+    decodedToken = jwt.verify(
+      req.cookies.token,
+      'iliketoeateateatapplesandbananas',
+    )
     console.log('token', decodedToken)
   } catch (err) {
     req.isAuth = false
