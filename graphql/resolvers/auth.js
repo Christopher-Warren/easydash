@@ -34,7 +34,11 @@ module.exports = {
       { expiresIn: '60s' },
     )
 
-    res.cookie('token', token, { maxAge: 6000, httpOnly: true, sameSite: true })
+    res.cookie('token', token, {
+      maxAge: 60000,
+      httpOnly: true,
+      sameSite: true,
+    })
     // Return has to meet AuthData type
     return { userId: user.id, token: token, tokenExpiration: 1 }
   },
