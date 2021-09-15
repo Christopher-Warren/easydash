@@ -38,13 +38,14 @@ app.use(
   }),
 )
 
-app.get('/playground', expressPlayground({ endpoint: '/graphql' }))
 if (process.env.NODE_ENV === 'production') {
   // Allows Express to serve production assets.
   app.use(express.static('client/build'))
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
   })
+} else {
+  app.get('/playground', expressPlayground({ endpoint: '/graphql' }))
 }
 mongoose
   .connect(process.env.MONGO_URI || env.MONGO_URI)
