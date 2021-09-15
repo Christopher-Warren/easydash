@@ -120,6 +120,8 @@ const Login = () => {
           </FormInput>
 
           {data && <h1>loggedin</h1>}
+          {loading && <h1>loading</h1>}
+          {error && <h1>{error.message}</h1>}
 
           <FormButton type="submit">LOGIN</FormButton>
 
