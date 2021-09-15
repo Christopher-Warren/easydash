@@ -39,6 +39,7 @@ module.exports = {
       httpOnly: true,
       sameSite: true,
     })
+
     // Return has to meet AuthData type
     return { userId: user.id, token: token, tokenExpiration: 1 }
   },
