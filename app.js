@@ -12,7 +12,6 @@ const mongoose = require('mongoose')
 const graphqlSchema = require('./graphql/schema')
 const graphqlResolvers = require('./graphql/resolvers')
 
-const { env } = require('./env')
 const app = express()
 
 app.use(express.json())
@@ -37,19 +36,27 @@ app.use(
     }
   }),
 )
+app.get(
+  '/playground',
+  expressPlayground({
+    endpoint: '/graphql',
+    settings: {
+      'request.credentials': 'include',
+    },
+  }),
+)
 
-console.log()
 if (process.env.NODE_ENV === 'production') {
+  const { env } = require('./env')
   // Allows Express to serve production assets.
   app.use(express.static('client/build'))
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
   })
-} else {
-  app.get('/playground', expressPlayground({ endpoint: '/graphql' }))
 }
+
 mongoose
-  .connect(process.env.MONGO_URI || require('./env').env.MONGO_URI)
+  .connect(process.env.MONGO_URI || env.MONGO_URI)
   .then(() => {
     app.listen(process.env.PORT || '4000')
   })
