@@ -38,6 +38,7 @@ app.use(
   }),
 )
 
+console.log()
 if (process.env.NODE_ENV === 'production') {
   // Allows Express to serve production assets.
   app.use(express.static('client/build'))
@@ -48,7 +49,7 @@ if (process.env.NODE_ENV === 'production') {
   app.get('/playground', expressPlayground({ endpoint: '/graphql' }))
 }
 mongoose
-  .connect(process.env.MONGO_URI || env.MONGO_URI)
+  .connect(process.env.MONGO_URI || require('./env').env.MONGO_URI)
   .then(() => {
     app.listen(process.env.PORT || '4000')
   })
