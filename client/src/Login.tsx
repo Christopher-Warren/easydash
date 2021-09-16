@@ -1,11 +1,12 @@
 import FormButton from './components/FormButton'
 import FormInput from './components/FormInput'
+import LoadingSpinner from './components/LoadingSpinner'
 
 import logo from './assets/logobanner.png'
 
 import { useLazyQuery, gql } from '@apollo/client'
 
-const Login = ({ props }: any) => {
+const Login = ({ refetchUser }: any) => {
   // We are already sending the token, and we have access to it on the backend
   // thus there is NO REASON to bother storing the js in react state.
   // console.log('log')
@@ -16,7 +17,8 @@ const Login = ({ props }: any) => {
       }
     }
   `)
-  data && props()
+  data && refetchUser()
+  console.log('login')
   // We might as well store the userId, to conditionally render pages. If we get back
   // valid data from getUser, then the user is securely authenticated.
 
@@ -105,10 +107,6 @@ const Login = ({ props }: any) => {
                 password: formData.get('password'),
               },
             })
-            // make api request here
-
-            // console.log(formData.get('password'))
-            // console.log(formData.get('email'))
           }}
         >
           <img className="lg:mx-0 mx-auto" src={logo} alt="Easy Dash Logo" />
@@ -119,28 +117,10 @@ const Login = ({ props }: any) => {
             Password
           </FormInput>
 
-          {data && <h1>loggedin</h1>}
-          {loading && <h1>loading</h1>}
+          {loading && <LoadingSpinner />}
           {error && <h1>{error.message}</h1>}
 
           <FormButton type="submit">LOGIN</FormButton>
-
-          {/* <div className="w-full h-full absolute top-0 left-0 flex justify-center items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              xmlnsXlink="http://www.w3.org/1999/xlink"
-              viewBox="0 0 100 100"
-              preserveAspectRatio="xMidYMid"
-              className="animate-spin text-purple-500  absolute w-52"
-            >
-              <path
-                d="M10 50A40 40 0 0 0 90 50A40 42 0 0 1 10 50"
-                fill="currentColor"
-                stroke="none"
-                transform="matrix(1,0,0,1,0,0)"
-              />
-            </svg>
-          </div> */}
         </form>
       </div>
     </div>

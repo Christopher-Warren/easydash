@@ -4,7 +4,8 @@ const User = require('../../models/user')
 const { transformEvent } = require('./merge')
 
 module.exports = {
-  events: async (args, req) => {
+  events: async (args, req, args2, args3) => {
+    // console.log(req)
     if (!req.cookies.token) {
       throw new Error('Unauthenticated.')
     }

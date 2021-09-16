@@ -20,15 +20,13 @@ const app = express()
 app.use(express.json())
 app.use(cookieParser())
 
-//app.use(isAuth)
-
 app.use(
   '/graphql',
   (req, res, next) => {
     // console.log('middleware: ', req.cookies)
     next()
   },
-  graphqlHTTP((_, res) => ({
+  graphqlHTTP((req, res) => ({
     schema: graphqlSchema,
     rootValue: graphqlResolvers,
   })),
