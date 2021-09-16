@@ -19,7 +19,11 @@ function App() {
       <Switch>
         <Route path="/dashboard">
           {loading && <LoadingSpinner />}
-          {!data ? <Login refetchUser={refetch} /> : <Dashboard />}
+          {!data ? (
+            <Login refetchUser={refetch} />
+          ) : (
+            <Dashboard refetchUser={refetch} />
+          )}
         </Route>
       </Switch>
     </Router>

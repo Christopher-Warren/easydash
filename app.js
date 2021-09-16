@@ -2,10 +2,11 @@ const express = require('express')
 const cookieParser = require('cookie-parser')
 const path = require('path')
 const { graphqlHTTP } = require('express-graphql')
-const isAuth = require('./middleware/isAuth')
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
+
+const jwt = require('jsonwebtoken')
 
 const expressPlayground = require('graphql-playground-middleware-express')
   .default
@@ -14,6 +15,7 @@ const mongoose = require('mongoose')
 
 const graphqlSchema = require('./graphql/schema')
 const graphqlResolvers = require('./graphql/resolvers')
+const isAdmin = require('./middlewares/isAdmin')
 
 const app = express()
 
@@ -22,10 +24,7 @@ app.use(cookieParser())
 
 app.use(
   '/graphql',
-  (req, res, next) => {
-    // console.log('middleware: ', req.cookies)
-    next()
-  },
+  isAdmin,
   graphqlHTTP((req, res) => ({
     schema: graphqlSchema,
     rootValue: graphqlResolvers,

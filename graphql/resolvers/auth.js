@@ -3,19 +3,32 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
 module.exports = {
-  createUser: async (args) => {
+  createUser: async ({ userInput }) => {
     try {
-      const existingUser = await User.findOne({ email: args.userInput.email })
+      const existingUser = await User.findOne({ email: userInput.email })
       if (existingUser) {
         throw new Error('User already exists.')
       }
-      const hashedPassword = await bcrypt.hash(args.userInput.password, 12)
+      const hashedPassword = await bcrypt.hash(userInput.password, 12)
+      let role
+      if (userInput.email === process.env.ADMIN_ROLE) {
+        role = 'ADMIN'
+      } else {
+        role = 'USER'
+      }
       const user = new User({
-        email: args.userInput.email,
+        email: userInput.email,
         password: hashedPassword,
+        role: role,
       })
       const result = await user.save()
-      return { ...result._doc, _id: result.id, password: null }
+
+      return {
+        ...result._doc,
+        _id: result.id,
+        password: null,
+        role: role,
+      }
     } catch (err) {
       throw err
     }
@@ -39,13 +52,20 @@ module.exports = {
       httpOnly: true,
       sameSite: true,
     })
-
-    // Return has to meet AuthData type
-    return { userId: user.id, token: token, tokenExpiration: 1 }
+    return { userId: user.id, email: email, role: user.role }
   },
   validateToken: async (args, req) => {
-    if (!req.cookies.token) throw new Error('Need to login')
+    if (!req.cookies.token) throw new Error('Session expired: Please log in')
 
-    return { userId: 'user.id', token: 'token', tokenExpiration: 1 }
+    const { userId, email } = jwt.verify(
+      req.cookies.token,
+      process.env.JWT_SECRET,
+    )
+
+    return { userId, email }
+  },
+  logout: (args, { res }) => {
+    res.clearCookie('token')
+    return 'asdasd'
   },
 }
