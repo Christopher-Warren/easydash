@@ -1,7 +1,12 @@
 import Login from './Login'
+import { useQuery, gql } from '@apollo/client'
 
 const Dashboard = () => {
-  return <Login />
+  const Interface = () => {
+    return <div>Logged in</div>
+  }
+
+  return <div>dash</div>
 }
 
 export default Dashboard

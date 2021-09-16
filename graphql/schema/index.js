@@ -36,6 +36,7 @@ module.exports = buildSchema(`
             events: [Event!]!
             bookings: [Booking!]!
             login(email: String!, password: String!): AuthData
+            validateToken: AuthData
         }
 
         input EventInput {

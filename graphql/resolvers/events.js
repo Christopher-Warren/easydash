@@ -5,6 +5,10 @@ const { transformEvent } = require('./merge')
 
 module.exports = {
   events: async (args, req) => {
+    if (!req.cookies.token) {
+      throw new Error('Unauthenticated.')
+    }
+
     try {
       const events = await Event.find()
       return events.map((event) => {

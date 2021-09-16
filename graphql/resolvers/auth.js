@@ -43,4 +43,9 @@ module.exports = {
     // Return has to meet AuthData type
     return { userId: user.id, token: token, tokenExpiration: 1 }
   },
+  validateToken: async (args, req) => {
+    if (!req.cookies.token) throw new Error('Need to login')
+
+    return { userId: 'user.id', token: 'token', tokenExpiration: 1 }
+  },
 }

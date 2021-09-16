@@ -25,22 +25,16 @@ app.use(cookieParser())
 app.use(
   '/graphql',
   (req, res, next) => {
-    console.log('middleware: ', req.cookies)
+    // console.log('middleware: ', req.cookies)
     next()
   },
-  graphqlHTTP((_, res) => {
-    // console.log(res)
-
-    return {
-      schema: graphqlSchema,
-      rootValue: graphqlResolvers,
-
-      // context: { res },
-    }
-  }),
+  graphqlHTTP((_, res) => ({
+    schema: graphqlSchema,
+    rootValue: graphqlResolvers,
+  })),
 )
 app.get(
-  '/graphql',
+  '/playground',
   expressPlayground({
     endpoint: '/graphql',
     settings: {
