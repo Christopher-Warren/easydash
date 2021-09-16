@@ -1,12 +1,29 @@
-import Login from './Login'
-import { useQuery, gql } from '@apollo/client'
+import FormButton from './components/FormButton'
+import LoadingSpinner from './components/LoadingSpinner'
 
-const Dashboard = () => {
-  const Interface = () => {
-    return <div>Logged in</div>
+import { gql, useMutation } from '@apollo/client'
+
+const Dashboard = ({ refetchUser }: any) => {
+  const [logout, { data }] = useMutation(gql`
+    mutation {
+      logout
+    }
+  `)
+  async function handleLogout(e: any) {
+    e.preventDefault()
+
+    await logout()
+    window.location.reload()
   }
 
-  return <div>dash</div>
+  return (
+    <div>
+      <FormButton type="button" handleClick={handleLogout}>
+        Logout
+      </FormButton>
+      {data && <LoadingSpinner />}
+    </div>
+  )
 }
 
 export default Dashboard
