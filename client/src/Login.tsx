@@ -7,9 +7,6 @@ import logo from './assets/logobanner.png'
 import { useLazyQuery, gql } from '@apollo/client'
 
 const Login = ({ refetchUser }: any) => {
-  // We are already sending the token, and we have access to it on the backend
-  // thus there is NO REASON to bother storing the js in react state.
-  // console.log('log')
   const [getUser, { loading, error, data }] = useLazyQuery(gql`
     query($email: String!, $password: String!) {
       login(email: $email, password: $password) {
@@ -17,12 +14,12 @@ const Login = ({ refetchUser }: any) => {
       }
     }
   `)
-  data && refetchUser()
-  console.log('login')
-  // We might as well store the userId, to conditionally render pages. If we get back
-  // valid data from getUser, then the user is securely authenticated.
-
-  // ** Everytime we load data e.g. events, items, etc, that is where it will fail and return auth error.
+  // this is bad practice because we need to render the
+  // <login /> component conditionally, checking, data.
+  // when data successfully returns, we need to update the ui
+  // accordingly, thus getUser should not exist in this
+  // child component.
+  // data && refetchUser()
 
   return (
     <div className="h-screen w-screen flex items-center justify-center">
@@ -119,6 +116,7 @@ const Login = ({ refetchUser }: any) => {
 
           {loading && <LoadingSpinner />}
           {error && <h1>{error.message}</h1>}
+          {data && <h1>logged in</h1>}
 
           <FormButton type="submit">LOGIN</FormButton>
         </form>
