@@ -19,6 +19,10 @@ const Login = ({ refetchUser }: any) => {
   // when data successfully returns, we need to update the ui
   // accordingly, thus getUser should not exist in this
   // child component.
+
+  // it may be better to instantiate useLazyQuery in the root level,
+  // and pass it's state onto it's children.
+
   // data && refetchUser()
 
   return (
