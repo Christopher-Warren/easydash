@@ -17,8 +17,8 @@ const Login = ({ refetchUser }: any) => {
   // this is bad practice because we need to render the
   // <login /> component conditionally, checking, data.
   // when data successfully returns, we need to update the ui
-  // accordingly, thus getUser should not exist in this
-  // child component.
+  // accordingly, *thus getUser should not exist in this
+  // child component.*
 
   // it may be better to instantiate useLazyQuery in the root level,
   // and pass it's state onto it's children.
