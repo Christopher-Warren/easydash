@@ -1,5 +1,5 @@
-import FormButton from './components/FormButton'
-import LoadingSpinner from './components/LoadingSpinner'
+import FormButton from '../components/FormButton'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 import { gql, useMutation } from '@apollo/client'
 

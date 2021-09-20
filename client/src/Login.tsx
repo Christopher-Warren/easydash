@@ -4,16 +4,16 @@ import LoadingSpinner from './components/LoadingSpinner'
 
 import logo from './assets/logobanner.png'
 
-import { useLazyQuery, gql } from '@apollo/client'
+import { gql, useMutation } from '@apollo/client'
 
-const Login = ({ refetchUser }: any) => {
-  const [getUser, { loading, error, data }] = useLazyQuery(gql`
-    query($email: String!, $password: String!) {
-      login(email: $email, password: $password) {
-        userId
-      }
-    }
-  `)
+const Login = ({ login, loginError }: any) => {
+  // const [getUser, { loading, error, data }] = useMutation(gql`
+  //   mutation($email: String!, $password: String!) {
+  //     login(email: $email, password: $password) {
+  //       userId
+  //     }
+  //   }
+  // `)
   // this is bad practice because we need to render the
   // <login /> component conditionally, checking, data.
   // when data successfully returns, we need to update the ui
@@ -99,15 +99,17 @@ const Login = ({ refetchUser }: any) => {
       <div className="max-w-lg p-4 flex-grow mb-56 lg:ml-96 ">
         <form
           className="relative"
-          onSubmit={(e: any) => {
+          onSubmit={async (e: any) => {
             e.preventDefault()
             const formData = new FormData(e.target as HTMLFormElement)
-            getUser({
-              variables: {
-                email: formData.get('email'),
-                password: formData.get('password'),
-              },
-            })
+            try {
+              await login({
+                variables: {
+                  email: formData.get('email'),
+                  password: formData.get('password'),
+                },
+              })
+            } catch (error) {}
           }}
         >
           <img className="lg:mx-0 mx-auto" src={logo} alt="Easy Dash Logo" />
@@ -118,9 +120,7 @@ const Login = ({ refetchUser }: any) => {
             Password
           </FormInput>
 
-          {loading && <LoadingSpinner />}
-          {error && <h1>{error.message}</h1>}
-          {data && <h1>logged in</h1>}
+          {loginError && <h1>{loginError.message}</h1>}
 
           <FormButton type="submit">LOGIN</FormButton>
         </form>
