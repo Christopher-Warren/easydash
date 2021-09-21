@@ -41,7 +41,8 @@ const useLogin = () => {
   if (validateError) {
     error = validateError
 
-    // need to handle when session expires
+    // @TODO: Add logout functionality
+    // and cleanup code.
   }
 
   if (loginError) error = loginError
