@@ -1,52 +1,31 @@
 import { useMutation, useQuery, gql } from '@apollo/client'
 
+import { isLoggedInVar } from '../graphql/cache'
+
 const useLogin = () => {
-  const [
-    login,
-    { data: loginData, loading: loginLoading, error: loginError },
-  ] = useMutation(gql`
-    mutation($email: String!, $password: String!) {
-      login(email: $email, password: $password) {
-        userId
+  const [login, { data, loading, error }] = useMutation(
+    gql`
+      mutation Login($email: String!, $password: String!) {
+        login(email: $email, password: $password) {
+          userId
+        }
       }
+    `,
+    {
+      onCompleted: ({ login }) => {
+        localStorage.setItem('user', login.userId as string)
+        isLoggedInVar(true)
+      },
+    },
+  )
+
+  const IS_LOGGED_IN = gql`
+    query IsUserLoggedIn {
+      isLoggedIn @client
     }
-  `)
-  const {
-    data: validateData,
-    loading: validateLoading,
-    error: validateError,
-  } = useQuery(gql`
-    query {
-      validateToken {
-        userId
-      }
-    }
-  `)
-  let user
-  let error
-  const loading = [loginLoading, validateLoading].some((val) => val === true)
+  `
 
-  if (!validateError && validateData) {
-    user = validateData
-
-    console.log('cookie is valid')
-  }
-
-  if (loginData) {
-    user = loginData
-
-    console.log('login')
-  }
-
-  if (validateError) {
-    error = validateError
-
-    // @TODO: Add logout functionality
-    // and cleanup code.
-  }
-
-  if (loginError) error = loginError
-
+  const { data: user } = useQuery(IS_LOGGED_IN)
   return { login, user, loading, error }
 }
 

@@ -2,15 +2,24 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 
+import { cache } from './graphql/cache'
+
 import App from './App'
 
 // apollo
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
+import { ApolloClient, ApolloProvider, gql } from '@apollo/client'
+export const typeDefs = gql`
+  extend type Query {
+    isLoggedIn: Boolean!
+    cartItems: [ID!]!
+  }
+`
 
 const client = new ApolloClient({
   uri: '/graphql',
-  cache: new InMemoryCache(),
+  cache: cache,
   credentials: 'include',
+  typeDefs,
 })
 
 ReactDOM.render(

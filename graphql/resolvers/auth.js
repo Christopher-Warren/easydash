@@ -44,23 +44,37 @@ module.exports = {
     const token = jwt.sign(
       { userId: user.id, email: user.email },
       process.env.JWT_SECRET,
-      { expiresIn: '60s' },
+      { expiresIn: '30s' },
     )
-
+    // We can set a maxAge to infinite, and trigger session expired
+    // err based off jwt verify.
     res.cookie('token', token, {
-      maxAge: 60000,
+      maxAge: 240000,
       httpOnly: true,
       sameSite: true,
     })
     return { userId: user.id, email: email, role: user.role }
   },
   validateToken: async (args, req) => {
+    // I want to eventually move this into a middleware
+    // in root/index.js
     if (!req.cookies.token) throw new Error('Session expired: Please log in')
 
-    const { userId, email } = jwt.verify(
-      req.cookies.token,
-      process.env.JWT_SECRET,
-    )
+    try {
+      const { userId, email } = jwt.verify(
+        req.cookies.token,
+        process.env.JWT_SECRET,
+      )
+
+      //console.log('Token is good.')
+
+      return { userId, email }
+    } catch (error) {
+      //console.log(error)
+      throw new Error('dat jwt expired', error)
+    }
+
+    // console.log('user ', userId, email)
 
     return { userId, email }
   },

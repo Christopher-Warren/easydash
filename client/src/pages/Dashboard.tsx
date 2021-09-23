@@ -1,19 +1,27 @@
 import FormButton from '../components/FormButton'
 import LoadingSpinner from '../components/LoadingSpinner'
 
-import { gql, useMutation } from '@apollo/client'
+import { gql, useMutation, useQuery } from '@apollo/client'
 
 const Dashboard = ({ refetchUser }: any) => {
-  const [logout, { data }] = useMutation(gql`
-    mutation {
-      logout
-    }
-  `)
   async function handleLogout(e: any) {
     e.preventDefault()
+  }
 
-    await logout()
-    window.location.reload()
+  const { data, error } = useQuery(gql`
+    query {
+      events {
+        title
+      }
+    }
+  `)
+
+  const mapEvents = () => {
+    const events = data.events.map((item: any) => {
+      return <h1>{item.title}</h1>
+    })
+
+    return events
   }
 
   return (
@@ -21,7 +29,9 @@ const Dashboard = ({ refetchUser }: any) => {
       <FormButton type="button" handleClick={handleLogout}>
         Logout
       </FormButton>
-      {data && <LoadingSpinner />}
+      {data && mapEvents()}
+      {error && error.message}
+      {/* look in resolver */}
     </div>
   )
 }
