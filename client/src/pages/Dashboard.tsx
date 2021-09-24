@@ -31,7 +31,7 @@ const Dashboard = ({ refetchUser }: any) => {
       </FormButton>
       {data && mapEvents()}
       {error && error.message}
-      {/* look in resolver */}
+      {/* look in resolver to handle error  */}
     </div>
   )
 }
