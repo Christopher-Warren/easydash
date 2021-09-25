@@ -23,13 +23,14 @@ const Dashboard = ({ refetchUser }: any) => {
 
     return events
   }
-
+  // changes
   return (
     <div>
       <FormButton type="button" handleClick={handleLogout}>
         Logout
       </FormButton>
       {data && mapEvents()}
+      {/* Every day. */}
       {error && error.message}
       {/* look in resolver to handle error  */}
     </div>
