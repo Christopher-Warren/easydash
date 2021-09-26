@@ -1,30 +1,8 @@
 import FormButton from './components/FormButton'
 import FormInput from './components/FormInput'
-import LoadingSpinner from './components/LoadingSpinner'
-
 import logo from './assets/logobanner.png'
 
-import { gql, useMutation } from '@apollo/client'
-
 const Login = ({ login, loginError }: any) => {
-  // const [getUser, { loading, error, data }] = useMutation(gql`
-  //   mutation($email: String!, $password: String!) {
-  //     login(email: $email, password: $password) {
-  //       userId
-  //     }
-  //   }
-  // `)
-  // this is bad practice because we need to render the
-  // <login /> component conditionally, checking, data.
-  // when data successfully returns, we need to update the ui
-  // accordingly, *thus getUser should not exist in this
-  // child component.*
-
-  // it may be better to instantiate useLazyQuery in the root level,
-  // and pass it's state onto it's children.
-
-  // data && refetchUser()
-
   return (
     <div className="h-screen w-screen flex items-center justify-center">
       <div className="absolute hidden lg:block  w-1/3 bg-black h-screen left-0 overflow-hidden border-r-4 border-gray-200">

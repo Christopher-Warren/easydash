@@ -1,14 +1,14 @@
 import FormButton from '../components/FormButton'
 import LoadingSpinner from '../components/LoadingSpinner'
 
-import { gql, useMutation, useQuery } from '@apollo/client'
+import { gql, useQuery } from '@apollo/client'
 
 const Dashboard = ({ refetchUser }: any) => {
   async function handleLogout(e: any) {
     e.preventDefault()
   }
 
-  const { data, error } = useQuery(
+  const { data, loading } = useQuery(
     gql`
       query Events {
         events {
@@ -18,22 +18,20 @@ const Dashboard = ({ refetchUser }: any) => {
     `,
   )
 
-  const mapEvents = () => {
+  const renderEvents = () => {
     const events = data.events.map((item: any) => {
       return <h1>{item.title}</h1>
     })
 
     return events
   }
-  console.log(error)
   return (
     <div>
       <FormButton type="button" handleClick={handleLogout}>
         Logout
       </FormButton>
-      {data && mapEvents()}
-      {error && error.message}
-      {/* look in resolver to handle error  */}
+      {data && renderEvents()}
+      {loading && <LoadingSpinner />}
     </div>
   )
 }

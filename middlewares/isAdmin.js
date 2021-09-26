@@ -14,12 +14,9 @@ module.exports = async function isAdmin(req, res, next) {
     } else {
       req.isAdmin = false
     }
-    console.log('good')
   } catch (error) {
     console.log('err', error.message)
     req.sessionExpired = true
   }
-  console.log('isAdmin', req.cookies)
-
   next()
 }
