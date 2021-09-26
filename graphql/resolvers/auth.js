@@ -71,7 +71,7 @@ module.exports = {
       return { userId, email }
     } catch (error) {
       //console.log(error)
-      throw new Error('dat jwt expired', error)
+      throw new Error('dat jwt expired!')
     }
 
     // console.log('user ', userId, email)

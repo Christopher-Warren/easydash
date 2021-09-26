@@ -5,16 +5,22 @@ const { transformEvent } = require('./merge')
 
 module.exports = {
   events: async (args, req, args2, args3) => {
-    if (!req.isAdmin) {
-      throw new Error('Unauthenticated.')
+    console.log(req.isAdmin)
+    if (req.sessionExpired) {
+      throw new Error('Session expired')
     }
 
+    if (!req.isAdmin) {
+      throw new Error('Unauthenticated')
+    }
+    console.log('asd')
     try {
       const events = await Event.find()
       return events.map((event) => {
         return transformEvent(event)
       })
     } catch (err) {
+      console.log(err)
       throw err
     }
   },

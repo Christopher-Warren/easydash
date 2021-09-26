@@ -8,13 +8,15 @@ const Dashboard = ({ refetchUser }: any) => {
     e.preventDefault()
   }
 
-  const { data, error } = useQuery(gql`
-    query {
-      events {
-        title
+  const { data, error } = useQuery(
+    gql`
+      query Events {
+        events {
+          title
+        }
       }
-    }
-  `)
+    `,
+  )
 
   const mapEvents = () => {
     const events = data.events.map((item: any) => {
@@ -23,14 +25,13 @@ const Dashboard = ({ refetchUser }: any) => {
 
     return events
   }
-  // changes
+  console.log(error)
   return (
     <div>
       <FormButton type="button" handleClick={handleLogout}>
         Logout
       </FormButton>
       {data && mapEvents()}
-      {/* Every day. */}
       {error && error.message}
       {/* look in resolver to handle error  */}
     </div>

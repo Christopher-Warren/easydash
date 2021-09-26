@@ -28,6 +28,20 @@ app.use(
   graphqlHTTP((req, res) => ({
     schema: graphqlSchema,
     rootValue: graphqlResolvers,
+    customFormatErrorFn: (error) => {
+      // By default, graphql sends a status of 500 for all errors. Apollo handles
+      // these errors arbitrarily, preventing our thrown resolver error from being shown
+      // on the front end.
+
+      // 299 is a custom "OK" status, allowing us to see the thrown error.
+      res.status(299)
+      return {
+        message: error.message,
+        locations: error.locations,
+        stack: error.stack ? error.stack.split('\n') : [],
+        path: error.path,
+      }
+    },
   })),
 )
 app.get(
