@@ -1,4 +1,3 @@
-import { useQuery, gql, useMutation } from '@apollo/client'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 import Dashboard from './pages/Dashboard'

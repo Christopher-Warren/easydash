@@ -5,7 +5,7 @@ import logo from './assets/logobanner.png'
 const Login = ({ login, loginError }: any) => {
   return (
     <div className="h-screen w-screen flex items-center justify-center">
-      <div className="absolute hidden lg:block  w-1/3 bg-black h-screen left-0 overflow-hidden border-r-4 border-gray-200">
+      <div className="absolute hidden lg:block  w-1/3  h-screen left-0 overflow-hidden border-r-4 border-gray-200">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 1500">
           <rect fill="#7C3AED" width="2000" height="1500" />
           <defs>
