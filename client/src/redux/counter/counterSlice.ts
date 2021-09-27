@@ -6,27 +6,9 @@ interface CounterState {
   value: number
 }
 
-interface ErrorState {
-  value: string[]
-}
-
 const initialState: CounterState = {
   value: 0,
 }
-
-const initialState1: ErrorState = {
-  value: [],
-}
-
-const errorSlice = createSlice({
-  name: 'errors',
-  initialState: initialState1,
-  reducers: {
-    addError(state: ErrorState) {
-      state.value.push('asd')
-    },
-  },
-})
 
 const counterSlice = createSlice({
   name: 'counter',
@@ -43,8 +25,6 @@ const counterSlice = createSlice({
 })
 
 export const { incremented, amountAdded } = counterSlice.actions
-
-export const { addError } = errorSlice.actions
 
 export default counterSlice.reducer
 
