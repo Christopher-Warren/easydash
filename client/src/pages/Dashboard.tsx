@@ -3,7 +3,7 @@ import LoadingSpinner from '../components/LoadingSpinner'
 
 import { gql, useQuery } from '@apollo/client'
 
-const Dashboard = () => {
+const Dashboard = ({ logout }: any) => {
   async function handleLogout(e: any) {
     e.preventDefault()
   }
@@ -26,7 +26,7 @@ const Dashboard = () => {
   }
   return (
     <div>
-      <FormButton type="button" handleClick={handleLogout}>
+      <FormButton type="button" handleClick={logout}>
         Logout
       </FormButton>
       {data && renderEvents()}

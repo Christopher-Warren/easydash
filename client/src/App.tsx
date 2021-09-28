@@ -8,7 +8,7 @@ import useLogin from './hooks/useLogin'
 import LoadingSpinner from './components/LoadingSpinner'
 
 function App() {
-  const { login, loading, user, error } = useLogin()
+  const { login, loading, user, error, logout } = useLogin()
 
   return (
     <Router>
@@ -16,7 +16,7 @@ function App() {
         <Route path="/dashboard">
           {loading && <LoadingSpinner />}
           {user.isLoggedIn ? (
-            <Dashboard />
+            <Dashboard logout={logout} />
           ) : (
             <Login login={login} loginError={error} />
           )}

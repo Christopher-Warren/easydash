@@ -60,6 +60,9 @@ module.exports = {
   },
   logout: (args, { res }) => {
     res.clearCookie('token')
-    return 'asdasd'
+    // On frontend we need to remove 'user' localstorage item,
+    // and update isLoggedInVar
+
+    return { message: 'You have logged out successfully' }
   },
 }

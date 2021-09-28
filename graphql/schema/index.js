@@ -33,6 +33,10 @@ module.exports = buildSchema(`
             role: String!
         }
 
+        type LogoutSuccess {
+            message: String!
+        }
+
      
 
         input EventInput {
@@ -50,6 +54,8 @@ module.exports = buildSchema(`
 
 
 
+
+
         type RootQuery {
             events: [Event!]!
             bookings: [Booking!]!
@@ -61,7 +67,7 @@ module.exports = buildSchema(`
             bookEvent(eventId: ID!): Booking!
             cancelBooking(bookingId: ID!): Event!
             login(email: String!, password: String!): AuthData
-            logout: String!
+            logout: LogoutSuccess
         }
 
 
