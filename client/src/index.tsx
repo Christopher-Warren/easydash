@@ -9,7 +9,7 @@ import App from './App'
 import { ApolloProvider } from '@apollo/client'
 
 import { useAppDispatch, useAppSelector } from './redux/hooks'
-import { incremented, amountAdded } from './redux/counter/counterSlice'
+import { amountAdded } from './redux/counter/counterSlice'
 
 import { addError, removeError } from './redux/error/errorSlice'
 
@@ -17,6 +17,7 @@ import { Provider } from 'react-redux'
 import { store } from './redux/store'
 
 const ErrorNotifs = () => {
+  // This needs to be modularized.
   const count = useAppSelector((state) => state.counter.value)
 
   const appError = useAppSelector((state) => state.error.value)
@@ -37,7 +38,7 @@ const ErrorNotifs = () => {
       <ol>
         {appError.map((err, index) => {
           return (
-            <li>
+            <li key={index}>
               <h1>{err}</h1>
               <button onClick={() => dispatch(removeError(index))}>X</button>
             </li>

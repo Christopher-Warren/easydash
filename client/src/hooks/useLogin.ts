@@ -6,7 +6,7 @@ import { store } from '../redux/store'
 import { addError } from '../redux/error/errorSlice'
 
 const useLogin = () => {
-  const [login, { data, loading, error }] = useMutation(
+  const [login, { loading, error }] = useMutation(
     gql`
       mutation Login($email: String!, $password: String!) {
         login(email: $email, password: $password) {

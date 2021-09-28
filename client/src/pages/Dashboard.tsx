@@ -4,9 +4,6 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import { gql, useQuery } from '@apollo/client'
 
 const Dashboard = ({ logout }: any) => {
-  async function handleLogout(e: any) {
-    e.preventDefault()
-  }
   const { data, loading } = useQuery(
     gql`
       query Events {
@@ -18,8 +15,8 @@ const Dashboard = ({ logout }: any) => {
   )
 
   const renderEvents = () => {
-    const events = data.events.map((item: any) => {
-      return <h1>{item.title}</h1>
+    const events = data.events.map((item: any, index: number) => {
+      return <h1 key={index}>{item.title}</h1>
     })
 
     return events
