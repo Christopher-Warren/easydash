@@ -3,11 +3,10 @@ import LoadingSpinner from '../components/LoadingSpinner'
 
 import { gql, useQuery } from '@apollo/client'
 
-const Dashboard = ({ refetchUser }: any) => {
+const Dashboard = () => {
   async function handleLogout(e: any) {
     e.preventDefault()
   }
-
   const { data, loading } = useQuery(
     gql`
       query Events {

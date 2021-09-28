@@ -11,7 +11,7 @@ import { ApolloProvider } from '@apollo/client'
 import { useAppDispatch, useAppSelector } from './redux/hooks'
 import { incremented, amountAdded } from './redux/counter/counterSlice'
 
-import { addError } from './redux/error/errorSlice'
+import { addError, removeError } from './redux/error/errorSlice'
 
 import { Provider } from 'react-redux'
 import { store } from './redux/store'
@@ -19,7 +19,7 @@ import { store } from './redux/store'
 const ErrorNotifs = () => {
   const count = useAppSelector((state) => state.counter.value)
 
-  const appError = useAppSelector((state) => state.error)
+  const appError = useAppSelector((state) => state.error.value)
 
   const dispatch = useAppDispatch()
 
@@ -30,13 +30,18 @@ const ErrorNotifs = () => {
 
       <button
         className="bg-black text-white p-2 rounded-sm"
-        onClick={() => dispatch(addError())}
+        onClick={() => dispatch(addError('asd'))}
       >
         Add List item
       </button>
       <ol>
-        {appError.value.map((err) => {
-          return <li>{err}</li>
+        {appError.map((err, index) => {
+          return (
+            <li>
+              <h1>{err}</h1>
+              <button onClick={() => dispatch(removeError(index))}>X</button>
+            </li>
+          )
         })}
       </ol>
     </div>

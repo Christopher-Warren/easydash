@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 
 module.exports = async function isAdmin(req, res, next) {
-  // have to include return?
   if (!req.cookies.token) return next()
 
   try {
@@ -15,8 +14,12 @@ module.exports = async function isAdmin(req, res, next) {
       req.isAdmin = false
     }
   } catch (error) {
-    console.log('err', error.message)
-    req.sessionExpired = true
+    if (error.message.includes('jwt expired')) {
+      req.sessionExpired = true
+      res.clearCookie('token')
+    } else {
+      console.log('isAdminError', error.message)
+    }
   }
   next()
 }

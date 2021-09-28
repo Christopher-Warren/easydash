@@ -11,6 +11,8 @@ module.exports = {
       }
       const hashedPassword = await bcrypt.hash(userInput.password, 12)
       let role
+      // Check whitelist to assign user role
+      // then save the role in our db
       if (userInput.email === process.env.ADMIN_ROLE) {
         role = 'ADMIN'
       } else {
@@ -44,12 +46,13 @@ module.exports = {
     const token = jwt.sign(
       { userId: user.id, email: user.email },
       process.env.JWT_SECRET,
-      { expiresIn: '30s' },
+      { expiresIn: '7d' },
     )
     // We can set a maxAge to infinite, and trigger session expired
     // err based off jwt verify.
     res.cookie('token', token, {
-      maxAge: 240000,
+      // Expires after 7 days
+      maxAge: 60000 * 60 * 24 * 7,
       httpOnly: true,
       sameSite: true,
     })

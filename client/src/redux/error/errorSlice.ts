@@ -12,11 +12,14 @@ const errorSlice = createSlice({
   name: 'errors',
   initialState,
   reducers: {
-    addError(state: ErrorState) {
-      state.value.push('asd')
+    addError(state: ErrorState, action: PayloadAction<string>) {
+      state.value.push(action.payload)
+    },
+    removeError(state, action: PayloadAction<number>) {
+      state.value.splice(action.payload, 1)
     },
   },
 })
 
-export const { addError } = errorSlice.actions
+export const { addError, removeError } = errorSlice.actions
 export default errorSlice.reducer

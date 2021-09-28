@@ -8,9 +8,8 @@ module.exports = {
     if (req.sessionExpired) {
       throw new Error('Session expired')
     }
-
     if (!req.isAdmin) {
-      throw new Error('Unauthenticated')
+      throw new Error('Unauthorized')
     }
     try {
       const events = await Event.find()
@@ -24,7 +23,7 @@ module.exports = {
 
   createEvent: async (args, req) => {
     if (!req.isAuth) {
-      throw new Error('Unauthenticated.')
+      throw new Error('Unauthorized')
     }
     const event = new Event({
       title: args.eventInput.title,
