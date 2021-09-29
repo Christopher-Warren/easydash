@@ -13,6 +13,8 @@ const errorSlice = createSlice({
   initialState,
   reducers: {
     addError(state: ErrorState, action: PayloadAction<string>) {
+      if (state.value.length > 4) state.value.shift()
+
       state.value.push(action.payload)
     },
     removeError(state, action: PayloadAction<number>) {

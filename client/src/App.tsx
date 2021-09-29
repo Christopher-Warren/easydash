@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 import Dashboard from './pages/Dashboard'
 import Login from './Login'
+import ErrorNotifs from './components/ErrorNotifs'
 
 import useLogin from './hooks/useLogin'
 
@@ -13,6 +14,7 @@ function App() {
   return (
     <Router>
       <Switch>
+        {/* Admin Dashboard Entry */}
         <Route path="/dashboard">
           {loading && <LoadingSpinner />}
           {user.isLoggedIn ? (
@@ -21,7 +23,13 @@ function App() {
             <Login login={login} loginError={error} />
           )}
         </Route>
+        {/* Customer Entry */}
+        <Route path="/" exact>
+          <h1>Welcome to our store!</h1>
+        </Route>
       </Switch>
+      {/* Global App Errors */}
+      <ErrorNotifs />
     </Router>
   )
 }

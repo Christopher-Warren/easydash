@@ -1,0 +1,31 @@
+@keyframes slide-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-out {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+.error-animation {
+  animation: slide-up 0.4s ease;
+}
+
+.fade-out {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s;
+}
