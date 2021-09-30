@@ -2,7 +2,6 @@ import { ApolloClient, gql, HttpLink, from } from '@apollo/client/'
 import { onError } from '@apollo/client/link/error'
 
 import { cache } from './cache'
-import { isLoggedInVar } from '../graphql/cache'
 
 import { addError } from '../redux/error/errorSlice'
 
@@ -11,6 +10,7 @@ import { store } from '../redux/store'
 export const typeDefs = gql`
   extend type Query {
     isLoggedIn: Boolean!
+    isAdmin: Boolean!
     cartItems: [ID!]!
   }
 `

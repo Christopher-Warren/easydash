@@ -17,7 +17,7 @@ function App() {
         {/* Admin Dashboard Entry */}
         <Route path="/dashboard">
           {loading && <LoadingSpinner />}
-          {user.isLoggedIn ? (
+          {user.isLoggedIn && user.isAdmin ? (
             <Dashboard logout={logout} />
           ) : (
             <Login login={login} loginError={error} />
