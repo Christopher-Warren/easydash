@@ -1,4 +1,4 @@
-@keyframes slide-up {
+@keyframes fade-in {
   0% {
     opacity: 0;
     transform: translateY(20px);
@@ -9,22 +9,11 @@
   }
 }
 
-@keyframes slide-out {
-  0% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
+.error-fade-in {
+  animation: fade-in 0.4s ease;
 }
 
-.error-animation {
-  animation: slide-up 0.4s ease;
-}
-
-.fade-out {
+.error-fade-out {
   opacity: 0;
   pointer-events: none;
   transition: opacity 1s;
