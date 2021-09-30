@@ -20,8 +20,6 @@ const useLogin = () => {
         localStorage.setItem('user', login.userId as string)
         localStorage.setItem('role', login.role as string)
         isLoggedInVar(true)
-        console.log('useL', login.role)
-        console.log(isAdminVar())
         if (login.role === 'ADMIN') {
           isAdminVar(true)
         } else if (login.role === 'USER') {
@@ -58,6 +56,7 @@ const useLogin = () => {
       isLoggedInVar(false)
       isAdminVar(false)
       localStorage.removeItem('user')
+      localStorage.removeItem('role')
       store.dispatch(addError(data.logout.message))
     },
   })

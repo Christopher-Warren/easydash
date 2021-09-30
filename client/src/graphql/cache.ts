@@ -28,7 +28,7 @@ export const cache: InMemoryCache = new InMemoryCache({
 // false otherwise
 export const isLoggedInVar = makeVar<boolean>(!!localStorage.getItem('user'))
 
-export const isAdminVar = makeVar<boolean>(!!localStorage.getItem('role'))
+export const isAdminVar = makeVar<boolean>(!!!localStorage.getItem('role'))
 
 // Initializes to an empty array
 export const cartItemsVar = makeVar<string[]>([])
