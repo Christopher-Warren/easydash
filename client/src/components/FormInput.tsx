@@ -62,7 +62,7 @@ const FormInput = ({ children, id, name, type }: InputProps) => {
             }
           }}
           type={type}
-          className={`border border-gray-400 rounded-sm pt-4 pb-1 pl-3 w-full text-lg focus:outline-purple hover:border-purple-500`}
+          className={`border text-gray-800 border-gray-400 rounded-sm pt-4 pb-1 pl-3 w-full text-lg focus:outline-purple hover:border-purple-500`}
           id={id}
         ></input>
       </div>

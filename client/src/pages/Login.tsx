@@ -98,7 +98,7 @@ const Login = ({ login, loginError }: any) => {
           <FormInput id="password" name="password" type="password">
             Password
           </FormInput>
-          <div className="flex justify-between -mt-1">
+          <div className="flex justify-between -mt-1 text-gray-600">
             <div>
               <span> No Account? </span>
               <a href="/dashboard" className="text-blue-700 underline">

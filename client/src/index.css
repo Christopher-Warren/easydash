@@ -4,3 +4,7 @@
 @tailwind utilities;
 
 @import url('./assets/css/ErrorNotifs.css');
+
+::selection {
+  background-color: #a78bfa5b;
+}
