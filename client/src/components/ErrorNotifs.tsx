@@ -27,7 +27,7 @@ const ErrorNotifs = () => {
   }, [appError.length, dispatch])
 
   return (
-    <div className="fixed bottom-20 right-20 ">
+    <div className="fixed lg:bottom-20 bottom-5 lg:right-20 lg:left-auto right-1/4 left-1/4 ">
       <ol>
         {appError.map((err, index) => {
           const success = err.includes('success')
@@ -36,12 +36,12 @@ const ErrorNotifs = () => {
             <li
               id={`error-${index}`}
               key={index}
-              className={`text-white py-2 px-5  border rounded text-lg mt-4 error-fade-in bg-p
+              className={`text-white py-2 px-5 min-w-max  border rounded text-lg mt-4 error-fade-in bg-opacity-75
               ${success ? 'bg-green-500' : 'bg-red-500'}
              
               `}
             >
-              <h1>{err}</h1>
+              <h1 className="text-center">{err}</h1>
               {/* Optional: Add a button to allow user to dismiss errors. */}
               {/* <button
                 onClick={(e) => {

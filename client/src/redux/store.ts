@@ -1,10 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
-import counterReducer from './counter/counterSlice'
 import errorReducer from './error/errorSlice'
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
     error: errorReducer,
   },
 })

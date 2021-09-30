@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 import Dashboard from './pages/Dashboard'
-import Login from './Login'
+import Login from './pages/Login'
 import ErrorNotifs from './components/ErrorNotifs'
 
 import useLogin from './hooks/useLogin'

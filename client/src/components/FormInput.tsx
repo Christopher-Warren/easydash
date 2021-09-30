@@ -34,12 +34,12 @@ const FormInput = ({ children, id, name, type }: InputProps) => {
   const [active, setActive] = useState(() => {
     return false
   })
-
+  // if (type === 'password' && loginError)
   return (
     <>
       <div className="relative my-4">
         <label
-          className={`absolute z-10 text-gray-500  left-3.5 pointer-events-none transition-all ease-in-out duration-200   ${
+          className={`absolute z-10 text-gray-400  left-3.5 pointer-events-none transition-all ease-in-out duration-200   ${
             active
               ? 'transform scale-90 top-0 origin-left text-purple-500'
               : 'top-1/4 origin-left'
@@ -48,7 +48,6 @@ const FormInput = ({ children, id, name, type }: InputProps) => {
         >
           {children}
         </label>
-
         <input
           name={name}
           onChange={(e) => {
@@ -63,7 +62,7 @@ const FormInput = ({ children, id, name, type }: InputProps) => {
             }
           }}
           type={type}
-          className="border border-gray-400 rounded-sm pt-4 pb-1 pl-3 w-full text-lg focus:outline-purple hover:border-purple-500"
+          className={`border border-gray-400 rounded-sm pt-4 pb-1 pl-3 w-full text-lg focus:outline-purple hover:border-purple-500`}
           id={id}
         ></input>
       </div>
