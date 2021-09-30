@@ -13,6 +13,7 @@ type InputTypes =
   | 'month'
   | 'number'
   | 'password'
+  | 'password2'
   | 'radio'
   | 'range'
   | 'reset'
@@ -28,13 +29,21 @@ interface InputProps {
   id: string
   name: InputTypes
   type: InputTypes
+  required?: boolean
+  minLength?: number
 }
 
-const FormInput = ({ children, id, name, type }: InputProps) => {
+const FormInput = ({
+  children,
+  id,
+  name,
+  type,
+  required,
+  minLength,
+}: InputProps) => {
   const [active, setActive] = useState(() => {
     return false
   })
-  // if (type === 'password' && loginError)
   return (
     <>
       <div className="relative my-4">
@@ -64,6 +73,8 @@ const FormInput = ({ children, id, name, type }: InputProps) => {
           type={type}
           className={`border text-gray-800 border-gray-400 rounded-sm pt-4 pb-1 pl-3 w-full text-lg focus:outline-purple hover:border-purple-500`}
           id={id}
+          required={required}
+          minLength={minLength}
         ></input>
       </div>
     </>

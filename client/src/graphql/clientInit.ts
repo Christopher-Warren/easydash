@@ -23,10 +23,11 @@ const httpLink = new HttpLink({
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     graphQLErrors.forEach((error) => {
+      console.log(error)
       store.dispatch(addError(error.message))
     })
-    localStorage.removeItem('user')
-    isLoggedInVar(false)
+    // localStorage.removeItem('user')
+    // isLoggedInVar(false)
   }
 })
 

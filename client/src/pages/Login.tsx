@@ -1,6 +1,9 @@
 import FormButton from '../components/FormButton'
 import FormInput from '../components/FormInput'
 import logo from '../assets/logobanner.png'
+import { BrowserRouter as Switch, Route, Link } from 'react-router-dom'
+
+import RegisterForm from '../components/forms/RegisterForm'
 
 const Login = ({ login, loginError }: any) => {
   return (
@@ -68,50 +71,66 @@ const Login = ({ login, loginError }: any) => {
               gradientUnits="userSpaceOnUse"
               id="SvgjsLinearGradient1301"
             >
-              <stop stop-color="rgba(22, 114, 209, 1)" offset="0"></stop>
-              <stop stop-color="rgba(158, 0, 141, 1)" offset="1"></stop>
+              <stop stopColor="rgba(22, 114, 209, 1)" offset="0"></stop>
+              <stop stopColor="rgba(158, 0, 141, 1)" offset="1"></stop>
             </linearGradient>
           </defs>
         </svg>
       </div>
       {/* max-w-lg p-4 flex-grow mb-56 lg:ml-96  */}
-      <div className="max-w-lg flex-grow lg:mr-96 lg:p-0 p-4">
-        <form
-          className="relative"
-          onSubmit={async (e: any) => {
-            e.preventDefault()
-            const formData = new FormData(e.target as HTMLFormElement)
-            try {
-              await login({
-                variables: {
-                  email: formData.get('email'),
-                  password: formData.get('password'),
-                },
-              })
-            } catch (error) {}
-          }}
-        >
-          <img className="lg:mx-0 mx-auto" src={logo} alt="Easy Dash Logo" />
-          <FormInput id="email" name="email" type="email">
-            Email Address
-          </FormInput>
-          <FormInput id="password" name="password" type="password">
-            Password
-          </FormInput>
-          <div className="flex justify-between -mt-1 text-gray-600">
-            <div>
-              <span> No Account? </span>
-              <a href="/dashboard" className="text-blue-700 underline">
-                Create One!
-              </a>
-            </div>
-            <a href="/dashboard" className="text-blue-700 underline">
-              Forgot Password?
-            </a>
-          </div>
 
-          <FormButton type="submit">LOGIN</FormButton>
-        </form>
+      <div className="max-w-lg flex-grow lg:mr-40 xl:mr-96  lg:p-0 p-4 ">
+        <Switch>
+          <Route path="/dashboard" exact>
+            <form
+              className="relative"
+              onSubmit={async (e: any) => {
+                e.preventDefault()
+                const formData = new FormData(e.target as HTMLFormElement)
+                try {
+                  await login({
+                    variables: {
+                      email: formData.get('email'),
+                      password: formData.get('password'),
+                    },
+                  })
+                } catch (error) {}
+              }}
+            >
+              <img
+                className="lg:mx-0 mx-auto"
+                src={logo}
+                alt="Easy Dash Logo"
+              />
+
+              <FormInput id="email" name="email" type="email" required>
+                Email Address
+              </FormInput>
+              <FormInput id="password" name="password" type="password" required>
+                Password
+              </FormInput>
+              <div className="flex justify-between -mt-1 text-gray-600">
+                <div>
+                  <span> No Account? </span>
+                  <Link
+                    to="/dashboard/register"
+                    className="text-blue-700 underline"
+                  >
+                    Create One!
+                  </Link>
+                </div>
+                <a href="/dashboard" className="text-blue-700 underline">
+                  Forgot Password?
+                </a>
+              </div>
+
+              <FormButton type="submit">LOGIN</FormButton>
+            </form>
+          </Route>
+          <Route path="/dashboard/register">
+            <RegisterForm />
+          </Route>
+        </Switch>
       </div>
     </div>
   )
