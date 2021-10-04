@@ -22,7 +22,6 @@ module.exports = buildSchema(`
         type User {
           _id: ID!
           email: String!
-          role: String!
           password: String
           createdEvents: [Event!]
         }
@@ -30,12 +29,12 @@ module.exports = buildSchema(`
         type AuthData {
             userId: ID!
             email: String!
-            role: String!
         }
 
-        type LogoutSuccess {
+        type LogoutSuccessMessage {
             message: String!
         }
+
 
      
 
@@ -52,7 +51,22 @@ module.exports = buildSchema(`
           
         }
 
+        input ProductInput {
+            name: String!
+            category: String!
+            description: String!
+            price: Float!
+            createdAt: String
+        }
 
+        type Product {
+            _id: ID!
+            name: String!
+            category: String!
+            description: String!
+            price: Float!
+            createdAt: String
+        }
 
 
 
@@ -62,12 +76,13 @@ module.exports = buildSchema(`
             validateToken: AuthData
         }
         type RootMutation {
+            createProduct(productInput: ProductInput): Product
             createEvent(eventInput: EventInput): Event
             createUser(userInput: UserInput): User
             bookEvent(eventId: ID!): Booking!
             cancelBooking(bookingId: ID!): Event!
             login(email: String!, password: String!): AuthData
-            logout: LogoutSuccess
+            logout: LogoutSuccessMessage
         }
 
 

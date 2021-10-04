@@ -1,5 +1,6 @@
 const Event = require('../../models/event')
 const User = require('../../models/user')
+const Product = require('../../models/product')
 
 const { transformEvent } = require('./merge')
 
@@ -49,6 +50,27 @@ module.exports = {
       return createdEvent
     } catch (err) {
       throw err
+    }
+  },
+
+  createProduct: async ({ productInput }) => {
+    const createdProduct = await Product.create({
+      name: productInput.name,
+      category: productInput.category,
+      description: productInput.description,
+      price: productInput.price,
+      createdAt: Date.now(),
+    })
+
+    const { name, category, description, price, date, _id } = createdProduct
+
+    return {
+      name,
+      category,
+      description,
+      price,
+      date,
+      _id,
     }
   },
 }
