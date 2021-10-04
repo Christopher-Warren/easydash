@@ -4,8 +4,9 @@ import logo from '../assets/logobanner.png'
 import { BrowserRouter as Switch, Route, Link } from 'react-router-dom'
 
 import RegisterForm from '../components/forms/RegisterForm'
+import LoadingSpinner from '../components/LoadingSpinner'
 
-const Login = ({ login, loginError }: any) => {
+const Login = ({ login, loading }: any) => {
   return (
     <div className="h-screen w-full flex items-center justify-center lg:justify-end">
       <div className="absolute hidden lg:block  w-1/4  h-screen left-0 overflow-hidden border-r-2 border-blue-200 drop-shadow-xl">
@@ -97,12 +98,12 @@ const Login = ({ login, loginError }: any) => {
                 } catch (error) {}
               }}
             >
+              {loading && <LoadingSpinner />}
               <img
                 className="lg:mx-0 mx-auto"
                 src={logo}
                 alt="Easy Dash Logo"
               />
-
               <FormInput id="email" name="email" type="email" required>
                 Email Address
               </FormInput>
@@ -123,7 +124,6 @@ const Login = ({ login, loginError }: any) => {
                   Forgot Password?
                 </a>
               </div>
-
               <FormButton type="submit">LOGIN</FormButton>
             </form>
           </Route>

@@ -10,7 +10,6 @@ import { store } from '../redux/store'
 export const typeDefs = gql`
   extend type Query {
     isLoggedIn: Boolean!
-    isAdmin: Boolean!
     cartItems: [ID!]!
   }
 `

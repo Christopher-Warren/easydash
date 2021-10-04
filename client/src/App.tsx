@@ -24,14 +24,12 @@ function App() {
       <Switch>
         {/* Admin Dashboard Entry */}
         <Route path="/dashboard">
-          {loading && <LoadingSpinner />}
-          {user.isLoggedIn && user.isAdmin ? (
+          {/* {<LoadingSpinner />} */}
+          {user.isLoggedIn ? (
             <Dashboard logout={logout} />
           ) : (
-            <Login login={login} loginError={error} />
+            <Login login={login} loginError={error} loading={loading} />
           )}
-
-          {!user.isAdmin && user.isLoggedIn && <Redirect to="/"></Redirect>}
         </Route>
         {/* Customer Entry */}
         <Route path="/" exact>
