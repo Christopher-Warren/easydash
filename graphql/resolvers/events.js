@@ -3,6 +3,7 @@ const User = require('../../models/user')
 const Product = require('../../models/product')
 
 const Category = require('../../models/category')
+const Subcategory = require('../../models/subcategory')
 
 const { transformEvent } = require('./merge')
 
@@ -66,21 +67,60 @@ module.exports = {
     })
     if (!foundCategory) throw new Error('Please create a category')
 
-    // Create the product
+    // If a subcategory was entered, create the subcategory
+    // and assign it to the product
+    let foundSubcategory
+    if (productInput.subcategory) {
+      console.log('subcat entered, creating document...')
+      foundSubcategory = await Subcategory.findOne({
+        name: productInput.subcategory,
+      })
+      // console.log(foundSubcategory)
+      if (!foundSubcategory) {
+        console.log('creating subcategory...')
+        foundSubcategory = await Subcategory.create({
+          name: productInput.subcategory,
+          category: foundCategory._id,
+        })
+      }
+    }
+
+    // Create the product, with category _id
     const createdProduct = await Product.create({
       name: productInput.name,
       category: foundCategory._id,
+      subcategory: foundSubcategory ? foundSubcategory._id : null,
       description: productInput.description,
       price: productInput.price,
       createdAt: Date.now(),
     })
-
-    // Add the product to the category in which it belogs to
-    const updateCat = await Category.findByIdAndUpdate(foundCategory._id, {
-      products: [...foundCategory.products, createdProduct._id],
-    })
-    console.log(updateCat)
     const { name, category, description, price, date, _id } = createdProduct
+
+    console.log(productInput.subcategory)
+    // Add the product to the category in which it belogs to
+    // Add subcategory to the category if exists
+    const updateCat = await Category.findByIdAndUpdate(foundCategory._id, {
+      products: [...foundCategory.products, _id],
+      subcategories: foundCategory.subcategories.includes(foundSubcategory._id)
+        ? [...foundCategory.subcategories]
+        : [...foundCategory.subcategories, foundSubcategory._id],
+    }).populate('products')
+
+    // When creating a product without entering a subcategory we run into issues, beginning at 104
+    // "message": "Cannot read property '_id' of undefined"
+
+    // We need to create a solution that is clean.
+    //  • Seperate logic
+    //    ○ when a user enters a subcat
+    //    ○ and when a user DOESN'T enter a subcat
+    //  • A category must exist before creating a product.
+
+    const updateSubcat = await Subcategory.findByIdAndUpdate(
+      foundSubcategory._id,
+      {
+        products: [...foundSubcategory.products, _id],
+      },
+    ).populate('products')
 
     return {
       name,
@@ -89,6 +129,8 @@ module.exports = {
       price,
       date,
       _id,
+      category: updateCat,
+      subcategory: updateSubcat,
     }
   },
   categories: async ({ category }) => {
@@ -101,19 +143,15 @@ module.exports = {
 
     return categories
   },
-  createCategory: async ({ name, sub }) => {
+  createCategory: async ({ name }) => {
     const foundCategory = await Category.findOne({ name })
 
-    console.log(sub)
     if (foundCategory) {
       throw new Error('A category with this name already exists')
     }
 
     const createdCategory = await Category.create({
       name: name.toLowerCase(),
-      Subcategories: {
-        name: sub,
-      },
     })
 
     return {

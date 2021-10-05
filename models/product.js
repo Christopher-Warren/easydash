@@ -12,6 +12,11 @@ const productSchema = new Schema({
     required: true,
     ref: 'Category',
   },
+  subcategory: {
+    type: Schema.Types.ObjectId,
+    required: false,
+    ref: 'Subcategory',
+  },
   description: {
     type: String,
     required: true,

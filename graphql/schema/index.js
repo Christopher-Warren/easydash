@@ -53,6 +53,7 @@ module.exports = buildSchema(`
         input ProductInput {
             name: String!
             category: String!
+            subcategory: String
             description: String!
             price: Float!
         }
@@ -61,15 +62,25 @@ module.exports = buildSchema(`
             _id: ID!
             name: String!
             category: Category!
+            subcategory: Subcategory
             description: String!
             price: Float!
             createdAt: String!
+        }
+
+
+        type Subcategory {
+            _id: ID!
+            name: String!
+            description: String
+            products: [Product!]
         }
 
         type Category {
             _id: ID!
             name: String!
             description: String
+            subcategories: [Subcategory!]
             products: [Product!]
         }
 
