@@ -8,8 +8,9 @@ const productSchema = new Schema({
     required: true,
   },
   category: {
-    type: String,
+    type: Schema.Types.ObjectId,
     required: true,
+    ref: 'Category',
   },
   description: {
     type: String,
@@ -25,4 +26,4 @@ const productSchema = new Schema({
   },
 })
 
-module.exports = mongoose.model('Products', productSchema)
+module.exports = mongoose.model('Product', productSchema)

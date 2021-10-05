@@ -2,6 +2,8 @@ const Event = require('../../models/event')
 const User = require('../../models/user')
 const Product = require('../../models/product')
 
+const Category = require('../../models/category')
+
 const { transformEvent } = require('./merge')
 
 module.exports = {
@@ -52,16 +54,32 @@ module.exports = {
       throw err
     }
   },
-
+  products: async () => {
+    const products = await Product.find({}).populate('category')
+    console.log(products)
+    return products
+  },
   createProduct: async ({ productInput }) => {
+    // Ensure that the input category exists
+    const foundCategory = await Category.findOne({
+      name: productInput.category,
+    })
+    if (!foundCategory) throw new Error('Please create a category')
+
+    // Create the product
     const createdProduct = await Product.create({
       name: productInput.name,
-      category: productInput.category,
+      category: foundCategory._id,
       description: productInput.description,
       price: productInput.price,
       createdAt: Date.now(),
     })
 
+    // Add the product to the category in which it belogs to
+    const updateCat = await Category.findByIdAndUpdate(foundCategory._id, {
+      products: [...foundCategory.products, createdProduct._id],
+    })
+    console.log(updateCat)
     const { name, category, description, price, date, _id } = createdProduct
 
     return {
@@ -71,6 +89,36 @@ module.exports = {
       price,
       date,
       _id,
+    }
+  },
+  categories: async ({ category }) => {
+    let categories
+    if (category) {
+      categories = await Category.find({ name: category }).populate('products')
+    } else {
+      categories = await Category.find().populate('products')
+    }
+
+    return categories
+  },
+  createCategory: async ({ name, sub }) => {
+    const foundCategory = await Category.findOne({ name })
+
+    console.log(sub)
+    if (foundCategory) {
+      throw new Error('A category with this name already exists')
+    }
+
+    const createdCategory = await Category.create({
+      name: name.toLowerCase(),
+      Subcategories: {
+        name: sub,
+      },
+    })
+
+    return {
+      _id: createdCategory._id,
+      name: createdCategory.name,
     }
   },
 }

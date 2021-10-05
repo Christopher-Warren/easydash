@@ -48,7 +48,6 @@ module.exports = buildSchema(`
         input UserInput {
           email: String!
           password: String
-          
         }
 
         input ProductInput {
@@ -56,27 +55,36 @@ module.exports = buildSchema(`
             category: String!
             description: String!
             price: Float!
-            createdAt: String
         }
 
         type Product {
             _id: ID!
             name: String!
-            category: String!
+            category: Category!
             description: String!
             price: Float!
-            createdAt: String
+            createdAt: String!
         }
 
+        type Category {
+            _id: ID!
+            name: String!
+            description: String
+            products: [Product!]
+        }
 
 
         type RootQuery {
             events: [Event!]!
             bookings: [Booking!]!
             validateToken: AuthData
+            categories(category: String): [Category!]
+            products: [Product!]
         }
         type RootMutation {
             createProduct(productInput: ProductInput): Product
+            createCategory(name: String!): Category
+
             createEvent(eventInput: EventInput): Event
             createUser(userInput: UserInput): User
             bookEvent(eventId: ID!): Booking!
