@@ -2,32 +2,19 @@ import FormButton from '../components/FormButton'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 import { gql, useQuery } from '@apollo/client'
+import SideBar from '../components/SideBar'
+import { useState } from 'react'
 
 const Dashboard = ({ logout }: any) => {
-  const { data, loading } = useQuery(
-    gql`
-      query Events {
-        events {
-          title
-        }
-      }
-    `,
-  )
+  let loading
 
-  const renderEvents = () => {
-    const events = data.events.map((item: any, index: number) => {
-      return <h1 key={index}>{item.title}</h1>
-    })
-
-    return events
-  }
-  console.log(data)
   return (
     <div>
+      <SideBar />
       <FormButton type="button" handleClick={logout}>
         Logout
       </FormButton>
-      {data && renderEvents()}
+
       {loading && <LoadingSpinner />}
     </div>
   )

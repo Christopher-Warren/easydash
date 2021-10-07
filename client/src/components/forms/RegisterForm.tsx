@@ -39,8 +39,8 @@ const RegisterForm = () => {
         try {
           await createUser({
             variables: {
-              email: formData.get('email'),
-              password: formData.get('password'),
+              email: email,
+              password: password,
             },
           })
         } catch (error) {}
