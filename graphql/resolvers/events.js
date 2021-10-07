@@ -61,6 +61,7 @@ module.exports = {
     return products
   },
   createProduct: async ({ productInput }) => {
+    if (!productInput.subcategory) throw new Error('Please enter a Subcategory')
     // Ensure that the input category exists
     const foundCategory = await Category.findOne({
       name: productInput.category,
@@ -106,14 +107,7 @@ module.exports = {
         : [...foundCategory.subcategories, foundSubcategory._id],
     }).populate('products')
 
-    // When creating a product without entering a subcategory we run into issues, beginning at 104
-    // "message": "Cannot read property '_id' of undefined"
-
-    // We need to create a solution that is clean.
-    //  • Seperate logic
-    //    ○ when a user enters a subcat
-    //    ○ and when a user DOESN'T enter a subcat
-    //  • A category must exist before creating a product.
+    //  • The easiest solution would be to force a user to enter a subcat •
 
     const updateSubcat = await Subcategory.findByIdAndUpdate(
       foundSubcategory._id,
