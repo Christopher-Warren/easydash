@@ -15,10 +15,8 @@ module.exports = {
       // then save the role in our db
       if (userInput.email === process.env.ADMIN_ROLE) {
         role = 'ADMIN'
-      } else if (userInput.email === process.env.USER_ROLE) {
-        role = 'USER'
       } else {
-        role = 'CUSTOMER'
+        role = 'USER'
       }
       const user = new User({
         email: userInput.email,
@@ -26,7 +24,7 @@ module.exports = {
         role: role,
       })
       const result = await user.save()
-
+      console.log(role)
       return {
         ...result._doc,
         _id: result.id,
@@ -39,11 +37,11 @@ module.exports = {
   },
   login: async ({ email, password }, { res }) => {
     const user = await User.findOne({ email })
-    if (!user) throw new Error('User does not exist.')
+    if (!user) throw new Error('Invalid password or email address')
 
     const isEqual = await bcrypt.compare(password, user.password)
 
-    if (!isEqual) throw new Error('Incorrect password.')
+    if (!isEqual || !user) throw new Error('Invalid password or email address')
 
     const token = jwt.sign(
       { userId: user.id, email: user.email },

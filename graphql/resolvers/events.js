@@ -90,14 +90,13 @@ module.exports = {
     const createdProduct = await Product.create({
       name: productInput.name,
       category: foundCategory._id,
-      subcategory: foundSubcategory ? foundSubcategory._id : null,
+      subcategory: foundSubcategory._id,
       description: productInput.description,
       price: productInput.price,
       createdAt: Date.now(),
     })
     const { name, category, description, price, date, _id } = createdProduct
 
-    console.log(productInput.subcategory)
     // Add the product to the category in which it belogs to
     // Add subcategory to the category if exists
     const updateCat = await Category.findByIdAndUpdate(foundCategory._id, {

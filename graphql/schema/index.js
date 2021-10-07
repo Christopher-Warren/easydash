@@ -29,6 +29,7 @@ module.exports = buildSchema(`
         type AuthData {
             userId: ID!
             email: String!
+            role: String!
         }
 
         type LogoutSuccessMessage {
@@ -53,7 +54,7 @@ module.exports = buildSchema(`
         input ProductInput {
             name: String!
             category: String!
-            subcategory: String
+            subcategory: String!
             description: String!
             price: Float!
         }
@@ -62,7 +63,7 @@ module.exports = buildSchema(`
             _id: ID!
             name: String!
             category: Category!
-            subcategory: Subcategory
+            subcategory: Subcategory!
             description: String!
             price: Float!
             createdAt: String!

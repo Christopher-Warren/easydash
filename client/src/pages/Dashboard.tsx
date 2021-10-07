@@ -21,6 +21,7 @@ const Dashboard = ({ logout }: any) => {
 
     return events
   }
+  console.log(data)
   return (
     <div>
       <FormButton type="button" handleClick={logout}>
