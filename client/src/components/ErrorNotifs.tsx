@@ -42,7 +42,8 @@ const ErrorNotifs = () => {
               `}
             >
               <h1 className="text-center">{err}</h1>
-              {/* Optional: Add a button to allow user to dismiss errors. */}
+              {/* Optional: Add a button to allow user to dismiss errors. A large X followed by the message.
+              Said X could have a padding of x, and hover of #fff */}
               {/* <button
                 onClick={(e) => {
                   const el = document.querySelector(`#error-${index}`)

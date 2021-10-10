@@ -9,7 +9,7 @@ const SideBar = () => {
     >
       {/* Menu Button */}
       <button
-        className="w-20 h-20 text-gray-500  border-gray-400"
+        className="w-20 h-20 text-gray-500  "
         onClick={() => setSideToggle(!sideToggle)}
       >
         {!sideToggle ? (
