@@ -2,14 +2,16 @@ import FormButton from '../components/FormButton'
 
 import SideBar from '../components/SideBar'
 
+// refactor side bar and build a better solution
+
 const Dashboard = ({ logout }: any) => {
   return (
-    <div>
+    <>
       <SideBar />
       <FormButton type="button" handleClick={logout}>
         Logout
       </FormButton>
-    </div>
+    </>
   )
 }
 

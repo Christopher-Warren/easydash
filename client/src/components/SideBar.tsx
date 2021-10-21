@@ -45,10 +45,7 @@ const SideBar = () => {
           </div>
         )}
       </button>
-      <a
-        className="hidden w-20 h-20 text-gray-500 lg:block"
-        href="http://www.google.com"
-      >
+      <a className="hidden w-20 h-20 text-gray-500 lg:block" href="/dashboard">
         <svg
           className="w-12 h-12 mx-auto border-2 border-gray-400 rounded-full p-2 mt-4"
           xmlns="http://www.w3.org/2000/svg"
@@ -62,7 +59,23 @@ const SideBar = () => {
           <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
         </svg>
       </a>
-      <div>Content</div>
+      <div className="text-gray-400">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <polyline points="21 8 21 21 3 21 3 8"></polyline>
+          <rect x="1" y="3" width="22" height="5"></rect>
+          <line x1="10" y1="12" x2="14" y2="12"></line>
+        </svg>
+      </div>
     </div>
   )
 }
