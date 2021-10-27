@@ -1,16 +1,35 @@
 import FormButton from '../components/FormButton'
 
-import SideBar from '../components/SideBar'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  NavLink,
+} from 'react-router-dom'
 
-// refactor side bar and build a better solution
+import SideBar from '../components/SideBar'
 
 const Dashboard = ({ logout }: any) => {
   return (
     <>
-      <SideBar />
-      <FormButton type="button" handleClick={logout}>
-        Logout
-      </FormButton>
+      <Route path="/dashboard">
+        <SideBar />
+      </Route>
+      <div className="ml-20">
+        <Route path="/dashboard" exact>
+          home
+          <FormButton type="button" handleClick={logout}>
+            Logout
+          </FormButton>
+        </Route>
+
+        <Route path="/dashboard/products" exact>
+          prods
+          <FormButton type="button" handleClick={logout}>
+            Logout
+          </FormButton>
+        </Route>
+      </div>
     </>
   )
 }

@@ -8,3 +8,8 @@
 ::selection {
   background-color: #a78bfa5b;
 }
+
+.activeNav > div {
+  background-color: rgb(139, 92, 246);
+  color: white;
+}
