@@ -1,4 +1,7 @@
+import SideBar from '../components/SideBar'
 import FormButton from '../components/FormButton'
+
+import Home from './dashboard/Home'
 
 import {
   BrowserRouter as Router,
@@ -6,8 +9,6 @@ import {
   Route,
   NavLink,
 } from 'react-router-dom'
-
-import SideBar from '../components/SideBar'
 
 const Dashboard = ({ logout }: any) => {
   return (
@@ -17,7 +18,7 @@ const Dashboard = ({ logout }: any) => {
       </Route>
       <div className="ml-20">
         <Route path="/dashboard" exact>
-          home
+          <Home />
           <FormButton type="button" handleClick={logout}>
             Logout
           </FormButton>
