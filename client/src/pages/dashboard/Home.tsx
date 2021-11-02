@@ -1,6 +1,8 @@
 import { useQuery, gql } from '@apollo/client'
 
-const Home = () => {
+import PageWrapper from '../../components/PageWrapper'
+
+const Home = ({ userId }: any) => {
   const { data, loading, error } = useQuery(gql`
     query getCategories {
       products {
@@ -9,18 +11,16 @@ const Home = () => {
     }
   `)
 
-  const { product } = data
+  console.log('asdasd', userId)
 
-  !loading && !error && console.log(data)
+  /* <p className="bg-white border border-gray-200 rounded-md p-2">
+        hello, world
+      </p> */
 
   return (
-    <div>
-      {!loading &&
-        !error &&
-        data.products.map((i: any) => {
-          return <h1>yep</h1>
-        })}
-    </div>
+    <PageWrapper>
+      <h1 className="text-3xl  ">Hello, {userId}</h1>
+    </PageWrapper>
   )
 }
 

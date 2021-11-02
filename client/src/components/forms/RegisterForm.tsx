@@ -8,10 +8,6 @@ import { useMutation, gql } from '@apollo/client'
 import LoadingSpinner from '../LoadingSpinner'
 
 const RegisterForm = () => {
-  function login(sd: any) {
-    console.log(sd)
-  }
-
   const [error, setError] = useState<string[]>([])
 
   const [createUser, { data, loading }] = useMutation(gql`

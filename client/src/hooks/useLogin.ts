@@ -10,6 +10,7 @@ const useLogin = () => {
     gql`
       mutation Login($email: String!, $password: String!) {
         login(email: $email, password: $password) {
+          email
           userId
           role
         }
@@ -17,7 +18,7 @@ const useLogin = () => {
     `,
     {
       onCompleted: ({ login }) => {
-        localStorage.setItem('user', login.userId as string)
+        localStorage.setItem('user', login.email as string)
         isLoggedInVar(true)
       },
     },
@@ -28,7 +29,6 @@ const useLogin = () => {
       isLoggedIn @client
     }
   `
-
   const LOGOUT = gql`
     mutation Logout {
       logout {
@@ -36,7 +36,7 @@ const useLogin = () => {
       }
     }
   `
-
+  const userId = localStorage.getItem('user')
   const [logout] = useMutation(LOGOUT, {
     onCompleted: (data) => {
       isLoggedInVar(false)
@@ -47,7 +47,7 @@ const useLogin = () => {
 
   const { data: user } = useQuery(IS_LOGGED_IN)
 
-  return { login, user, loading, error, logout }
+  return { login, user, loading, userId, error, logout }
 }
 
 export default useLogin

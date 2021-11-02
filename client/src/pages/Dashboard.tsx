@@ -10,7 +10,7 @@ import {
   NavLink,
 } from 'react-router-dom'
 
-const Dashboard = ({ logout }: any) => {
+const Dashboard = ({ logout, userId }: any) => {
   return (
     <>
       <Route path="/dashboard">
@@ -18,7 +18,7 @@ const Dashboard = ({ logout }: any) => {
       </Route>
       <div className="ml-20">
         <Route path="/dashboard" exact>
-          <Home />
+          <Home userId={userId} />
           <FormButton type="button" handleClick={logout}>
             Logout
           </FormButton>

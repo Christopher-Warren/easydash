@@ -72,13 +72,11 @@ module.exports = {
     // and assign it to the product
     let foundSubcategory
     if (productInput.subcategory) {
-      console.log('subcat entered, creating document...')
       foundSubcategory = await Subcategory.findOne({
         name: productInput.subcategory,
       })
       // console.log(foundSubcategory)
       if (!foundSubcategory) {
-        console.log('creating subcategory...')
         foundSubcategory = await Subcategory.create({
           name: productInput.subcategory,
           category: foundCategory._id,

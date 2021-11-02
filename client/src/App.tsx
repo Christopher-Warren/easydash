@@ -9,7 +9,7 @@ import useLogin from './hooks/useLogin'
 import FormButton from './components/FormButton'
 
 function App() {
-  const { login, loading, user, error, logout } = useLogin()
+  const { login, loading, user, userId, error, logout } = useLogin()
 
   return (
     <Router>
@@ -18,7 +18,7 @@ function App() {
         <Route path="/dashboard">
           {/* {<LoadingSpinner />} */}
           {user.isLoggedIn ? (
-            <Dashboard logout={logout} />
+            <Dashboard logout={logout} userId={userId} />
           ) : (
             <Login login={login} loginError={error} loading={loading} />
           )}

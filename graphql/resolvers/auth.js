@@ -24,7 +24,7 @@ module.exports = {
         role: role,
       })
       const result = await user.save()
-      console.log(role)
+
       return {
         ...result._doc,
         _id: result.id,

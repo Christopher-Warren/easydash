@@ -9,6 +9,10 @@
   background-color: #a78bfa5b;
 }
 
+h1 {
+  font-family: 'Rubik', sans-serif;
+}
+
 .activeNav > div {
   background-color: rgb(139, 92, 246);
   color: white;
