@@ -13,6 +13,10 @@ h1 {
   font-family: 'Rubik', sans-serif;
 }
 
+span {
+  font-family: 'Rubik', sans-serif;
+}
+
 .activeNav > div {
   background-color: rgb(139, 92, 246);
   color: white;
