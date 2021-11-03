@@ -24,12 +24,29 @@ const Home = ({ userId }: any) => {
         Welcome to your store's dashboard
       </span>
 
-      <div className="grid grid-cols-3 gap-4 text-white">
-        <div className="bg-blue-500 h-20">Sales</div>
-        <div className="bg-blue-500">Orders</div>
-        <div className="bg-blue-500 row-span-3">Activity</div>
-        <div className="bg-blue-500 col-span-2">Fullfill, payments, stock</div>
-        <div className="bg-blue-500">item</div>
+      <div className="grid grid-cols-12 gap-5 text-white my-10">
+        <div className="bg-blue-500 col-span-4">Sales</div>
+        <div className="bg-blue-500 col-span-4">Orders</div>
+        <div className="bg-blue-500 col-span-3 row-span-2">
+          Activity
+          <ol>
+            <li>item1</li>
+            <li>item1</li>
+            <li>item1</li>
+            <li>item1</li>
+            <li>item1</li>
+            <li>item1</li>
+            <li>item1</li>
+            <li>item1</li>
+            <li>item1</li>
+            <li>item1</li>
+            <li>item1</li>
+          </ol>
+        </div>
+        <div className="bg-blue-500 col-span-8 h-20">
+          Fullfill, payments, stock
+        </div>
+        <div className="bg-blue-500 col-span-8">item</div>
       </div>
     </PageWrapper>
   )
