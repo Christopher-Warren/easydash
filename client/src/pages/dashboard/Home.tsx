@@ -57,9 +57,9 @@ const Home = ({ userId }: any) => {
       
       */}
 
-      <div className="grid grid-cols-12 md:grid-cols-1 gap-4 my-10 text-gray-800">
-        <div className="col-span-9 grid grid-cols-2 gap-4">
-          <div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 my-10 text-gray-800">
+        <div className="col-span-1  lg:col-span-9 grid grid-cols-2 gap-4">
+          <div className="col-span-2 md:col-auto">
             <InfoCard>
               <h1 className="text-2xl">Sales</h1>
               <span className="text-sm block">Today</span>
@@ -68,7 +68,15 @@ const Home = ({ userId }: any) => {
             </InfoCard>
           </div>
 
-          <div>
+          <div className="col-span-2 md:col-auto">
+            <InfoCard>
+              <h1 className="text-2xl">Sales</h1>
+              <span className="text-sm block">Today</span>
+
+              <span className="text-4xl block text-right">$1000.42</span>
+            </InfoCard>
+          </div>
+          <div className="col-span-2">
             <InfoCard>
               <h1 className="text-2xl">Sales</h1>
               <span className="text-sm block">Today</span>
@@ -77,22 +85,31 @@ const Home = ({ userId }: any) => {
             </InfoCard>
           </div>
         </div>
-
-        <div className="col-span-3">
-          <InfoCard>
-            <h1 className="text-2xl pb-4 relative">Activity</h1>
-            <div className="bg-gray-200 absolute h-px  left-0 w-full"></div>
-            <ol className="text-lg py-4">
-              <li>Order #109582 Processed</li>
-              <li>Order #109582 Processed</li>
-              <li>Order #109582 Processed</li>
-              <li>Order #109582 Processed</li>
-              <li>Order #109582 Processed</li>
-              <li>Order #109582 Processed</li>
-              <li>Order #109582 Processed</li>
-              <li>Order #109582 Processed</li>
-            </ol>
-          </InfoCard>
+        <div className="col-span-1 lg:col-span-3 ">
+          <div className="lg:absolute ">
+            <InfoCard>
+              <h1 className="text-2xl pb-4 relative">Activity</h1>
+              <div className="bg-gray-200 absolute h-px  left-0 w-full"></div>
+              <ol className="text-lg py-4">
+                <li>Order #109582 Processed</li>
+                <li>Order #109582 Processed</li>
+                <li>Order #109582 Processed</li>
+                <li>Order #109582 Processed</li>
+                <li>Order #109582 Processed</li>
+                <li>Order #109582 Processed</li>
+                <li>Order #109582 Processed</li>
+                <li>Order #109582 Processed</li>
+                <li>Order #109582 Processed</li>
+                <li>Order #109582 Processed</li>
+                <li>Order #109582 Processed</li>
+                <li>Order #109582 Processed</li>
+                <li>Order #109582 Processed</li>
+                <li>Order #109582 Processed</li>
+                <li>Order #109582 Processed</li>
+                <li>Order #109582 Processed</li>
+              </ol>
+            </InfoCard>
+          </div>
         </div>
       </div>
     </PageWrapper>

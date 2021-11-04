@@ -16,7 +16,7 @@ const Dashboard = ({ logout, userId }: any) => {
       <Route path="/dashboard">
         <SideBar />
       </Route>
-      <div className="ml-20">
+      <div className="lg:ml-20">
         <Route path="/dashboard" exact>
           <Home userId={userId} />
           <FormButton type="button" handleClick={logout}>

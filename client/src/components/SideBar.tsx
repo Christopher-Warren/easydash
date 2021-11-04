@@ -6,10 +6,10 @@ const SideBar = () => {
   const [sideToggle, setSideToggle] = useState(false)
   return (
     <div
-      className={`fixed top-0 w-20 h-28 transition-all duration-200 overflow-hidden lg:h-screen lg:border-r lg:shadow-xl
-      ${sideToggle && 'h-screen border-r shadow-xl'}`}
+      className={`fixed top-0 w-20 h-28 z-10  transition-all duration-200 overflow-hidden lg:h-screen lg:border-r lg:shadow-xl
+      ${sideToggle && 'h-screen border-r shadow-xl bg-white'}`}
     >
-      <div className="lg:mt-32 mt-10">
+      <div className="lg:mt-32 mt-10 ">
         {/* MOBILE-ONLY Menu Button */}
         <img
           src="/mstile-150x150.png"
@@ -17,14 +17,14 @@ const SideBar = () => {
           className="mx-auto -m-4 hidden lg:block"
         />
         <button
-          className="w-16 h-16  flex justify-center items-center text-gray-500  lg:hidden"
+          className="w-16 h-16  flex justify-center items-center text-purple-500  lg:hidden"
           onClick={() => {
             setSideToggle(!sideToggle)
           }}
         >
           {!sideToggle ? (
             <svg
-              className="w-12 h-12 border-2 border-gray-400 rounded-full p-2.5"
+              className="w-12 h-12 border-2 border-purple-400 rounded-full bg-white p-2.5"
               xmlns="http://www.w3.org/2000/svg"
               stroke="none"
               fill="currentColor"
@@ -37,7 +37,7 @@ const SideBar = () => {
           ) : (
             <div>
               <svg
-                className="w-12 h-12 border-2 border-gray-400 rounded-full p-2.5"
+                className="w-12 h-12 border-2 border-purple-400 rounded-full p-2.5"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 stroke="currentColor"
@@ -106,7 +106,6 @@ const SideBar = () => {
             </svg>
           </div>
         </NavLink>
-
         <NavLink to="/dashboard/users" activeClassName="activeNav">
           <div className="p-4 my-2 transition-all text-gray-500">
             <svg
@@ -123,7 +122,6 @@ const SideBar = () => {
             </svg>
           </div>
         </NavLink>
-
         <NavLink to="/dashboard/settings" activeClassName="activeNav">
           <div className="p-4 my-2 transition-all text-gray-500">
             <svg
