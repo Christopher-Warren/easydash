@@ -9,6 +9,7 @@ import {
   Route,
   NavLink,
 } from 'react-router-dom'
+import Products from './dashboard/Products'
 
 const Dashboard = ({ logout, userId }: any) => {
   return (
@@ -25,10 +26,7 @@ const Dashboard = ({ logout, userId }: any) => {
         </Route>
 
         <Route path="/dashboard/products" exact>
-          prods
-          <FormButton type="button" handleClick={logout}>
-            Logout
-          </FormButton>
+          <Products></Products>
         </Route>
       </div>
     </>

@@ -52,12 +52,12 @@ const Home = ({ userId }: any) => {
         Welcome to your store's dashboard
       </span>
       {/* TODO: 
-      [] Fix page wrapped on smaller devices 
+      [] Fix page wrapper on smaller devices 
       [] 
       
       */}
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 my-10 text-gray-800">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 my-5 text-gray-800">
         <div className="col-span-1  lg:col-span-9 grid grid-cols-2 gap-4">
           <div className="col-span-2 md:col-auto">
             <InfoCard>

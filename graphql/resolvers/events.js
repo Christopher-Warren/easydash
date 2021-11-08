@@ -56,8 +56,9 @@ module.exports = {
     }
   },
   products: async () => {
-    const products = await Product.find({}).populate('category')
-    console.log(products)
+    const products = await Product.find({})
+      .populate('category')
+      .populate('subcategory')
     return products
   },
   createProduct: async ({ productInput }) => {
