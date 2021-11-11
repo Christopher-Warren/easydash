@@ -39,6 +39,7 @@ const Products = ({ userId }: any) => {
                       <h2 className="text-lg leading-none">{item.name}</h2>
 
                       <div className="text-sm ">{item.category.name}</div>
+                      <div className="text-sm ">{item.subcategory.name}</div>
                     </div>
 
                     <div className=" border-t border-gray-200 w-full absolute left-0" />
