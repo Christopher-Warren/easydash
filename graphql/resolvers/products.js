@@ -1,60 +1,9 @@
-const Event = require('../../models/event')
-const User = require('../../models/user')
 const Product = require('../../models/product')
 
 const Category = require('../../models/category')
 const Subcategory = require('../../models/subcategory')
 
-const { transformEvent } = require('./merge')
-
 module.exports = {
-  events: async (args, req, args2, args3) => {
-    if (req.sessionExpired) {
-      throw new Error('Session expired')
-    }
-    if (!req.isAdmin) {
-      throw new Error('Unauthorized')
-    }
-    try {
-      const events = await Event.find()
-      return events.map((event) => {
-        return transformEvent(event)
-      })
-    } catch (err) {
-      throw err
-    }
-  },
-
-  createEvent: async (args, req) => {
-    if (!req.isAuth) {
-      throw new Error('Unauthorized')
-    }
-    const event = new Event({
-      title: args.eventInput.title,
-      description: args.eventInput.description,
-      price: +args.eventInput.price,
-      date: new Date().toISOString(),
-      creator: '612d3e3906b754852b6c2b80',
-    })
-    let createdEvent
-    try {
-      const result = await event.save()
-
-      createdEvent = transformEvent(result)
-
-      const user = await User.findById('612d3e3906b754852b6c2b80')
-
-      if (!user) {
-        throw new Error('User does not exist.')
-      }
-      await user.createdEvents.push(event)
-
-      await user.save()
-      return createdEvent
-    } catch (err) {
-      throw err
-    }
-  },
   products: async () => {
     const products = await Product.find({})
       .populate('category')
@@ -92,9 +41,18 @@ module.exports = {
       subcategory: foundSubcategory._id,
       description: productInput.description,
       price: productInput.price,
+      stock: productInput.stock,
       createdAt: Date.now(),
     })
-    const { name, category, description, price, date, _id } = createdProduct
+    const {
+      name,
+      category,
+      description,
+      price,
+      stock,
+      date,
+      _id,
+    } = createdProduct
 
     // Add the product to the category in which it belogs to
     // Add subcategory to the category if exists
@@ -104,8 +62,6 @@ module.exports = {
         ? [...foundCategory.subcategories]
         : [...foundCategory.subcategories, foundSubcategory._id],
     }).populate('products')
-
-    //  • The easiest solution would be to force a user to enter a subcat •
 
     const updateSubcat = await Subcategory.findByIdAndUpdate(
       foundSubcategory._id,
@@ -119,6 +75,7 @@ module.exports = {
       category,
       description,
       price,
+      stock,
       date,
       _id,
       category: updateCat,

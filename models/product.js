@@ -14,7 +14,7 @@ const productSchema = new Schema({
   },
   subcategory: {
     type: Schema.Types.ObjectId,
-    required: false,
+    required: true,
     ref: 'Subcategory',
   },
   description: {
@@ -22,6 +22,10 @@ const productSchema = new Schema({
     required: true,
   },
   price: {
+    type: Number,
+    required: true,
+  },
+  stock: {
     type: Number,
     required: true,
   },

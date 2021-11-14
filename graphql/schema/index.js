@@ -57,6 +57,7 @@ module.exports = buildSchema(`
             subcategory: String!
             description: String!
             price: Float!
+            stock: Float!
         }
 
         type Product {
@@ -67,6 +68,7 @@ module.exports = buildSchema(`
             description: String!
             price: Float!
             createdAt: String!
+            stock: Float!
         }
 
 
