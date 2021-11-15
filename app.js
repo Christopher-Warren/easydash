@@ -6,7 +6,9 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
 
-const jwt = require('jsonwebtoken')
+const S3 = require('aws-sdk/clients/s3')
+const multer = require('multer')
+const upload = multer({ dest: 'uploads/' })
 
 const expressPlayground = require('graphql-playground-middleware-express')
   .default
@@ -21,6 +23,21 @@ const app = express()
 
 app.use(express.json())
 app.use(cookieParser())
+app.post('/upload/image', upload.array('photos', 12), (req, res) => {
+  console.log(req.files)
+
+  res.json({ dang: 'son' })
+})
+
+const s3 = new S3({ apiVersion: '2006-03-01' })
+
+s3.listBuckets(function (err, data) {
+  if (err) {
+    console.log('Error', err)
+  } else {
+    console.log('Success', data.Buckets)
+  }
+})
 
 app.use(
   '/graphql',
