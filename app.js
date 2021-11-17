@@ -25,10 +25,14 @@ app.use(express.json())
 app.use(cookieParser())
 app.post('/upload/image', upload.array('photos', 12), (req, res) => {
   console.log(req.files)
+  s3.upload()
 
   res.json({ dang: 'son' })
 })
 
+// AWS obtains credentials from these environment variables
+// AWS_ACCESS_KEY_ID
+// AWS_SECRET_ACCESS_KEY
 const s3 = new S3({ apiVersion: '2006-03-01' })
 
 s3.listBuckets(function (err, data) {
@@ -38,6 +42,20 @@ s3.listBuckets(function (err, data) {
     console.log('Success', data.Buckets)
   }
 })
+
+s3.upload(
+  {
+    Bucket: 'easydashbucket',
+    Key: 'asdasd',
+    Body: 'asdasd',
+    ACL: 'public-read',
+  },
+  (err, data) => {
+    if (err) {
+      console.log(err)
+    }
+  },
+)
 
 app.use(
   '/graphql',
