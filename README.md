@@ -11,7 +11,7 @@
 - [ ] Integrate Amazon S3 to allow image uploads
       **For brevity, we will be using REST instead of GraphQL.**
   - [ ] Setup credentials
-    - [ ] Enable plublic read access
+    - [x] Enable plublic read access
     - [ ] Heroku environment variables
     - [x] Local environment
   - [x] Connect to bucket

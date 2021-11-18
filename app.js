@@ -1,14 +1,11 @@
 const express = require('express')
 const cookieParser = require('cookie-parser')
 const path = require('path')
+
 const { graphqlHTTP } = require('express-graphql')
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
-
-const S3 = require('aws-sdk/clients/s3')
-const multer = require('multer')
-const upload = multer({ dest: 'uploads/' })
 
 const expressPlayground = require('graphql-playground-middleware-express')
   .default
@@ -23,39 +20,7 @@ const app = express()
 
 app.use(express.json())
 app.use(cookieParser())
-app.post('/upload/image', upload.array('photos', 12), (req, res) => {
-  console.log(req.files)
-  s3.upload()
-
-  res.json({ dang: 'son' })
-})
-
-// AWS obtains credentials from these environment variables
-// AWS_ACCESS_KEY_ID
-// AWS_SECRET_ACCESS_KEY
-const s3 = new S3({ apiVersion: '2006-03-01' })
-
-s3.listBuckets(function (err, data) {
-  if (err) {
-    console.log('Error', err)
-  } else {
-    console.log('Success', data.Buckets)
-  }
-})
-
-s3.upload(
-  {
-    Bucket: 'easydashbucket',
-    Key: 'asdasd',
-    Body: 'asdasd',
-    ACL: 'public-read',
-  },
-  (err, data) => {
-    if (err) {
-      console.log(err)
-    }
-  },
-)
+require('./routes/uploadImagesRoute')(app)
 
 app.use(
   '/graphql',

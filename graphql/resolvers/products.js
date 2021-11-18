@@ -16,7 +16,7 @@ module.exports = {
     const foundCategory = await Category.findOne({
       name: productInput.category,
     })
-    if (!foundCategory) throw new Error('Please create a category')
+    if (!foundCategory) throw new Error('Please enter a Category')
 
     // If a subcategory was entered, create the subcategory
     // and assign it to the product
