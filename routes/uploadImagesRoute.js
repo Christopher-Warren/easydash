@@ -8,6 +8,20 @@ const upload = multer({ dest: 'tmp/' })
 
 module.exports = (app) =>
   app.post('/upload/image', upload.array('photos', 12), (req, res) => {
+    /* This route is dependant on including a productId in 
+    the body of the request. This must be addressed in
+    the front-end api calls.
+    
+    1) User clicks "Create Product"
+    2) User is shown form
+    3) onSubmit, the form is sent as graphql 
+       request and mongo object is created
+    4) Once that request has completed, this route 
+       is called with productId in the body 
+    5) The image is uploaded to an S3 folder named PRODUCTID
+    
+    */
+
     const images = req.files
 
     if (!req.body.productId) {
