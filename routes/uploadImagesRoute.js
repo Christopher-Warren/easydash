@@ -21,24 +21,45 @@ module.exports = (app) =>
     5) The image is uploaded to an S3 folder named PRODUCTID
     
     */
+    const productId = req.body.productId
 
     const images = req.files
 
     if (!req.body.productId) {
       throw new Error('productId is ' + req.body.productId)
     }
+    const imageNames = []
+    let duplicateCount = 1
+    images.forEach((image) => {
+      if (imageNames.includes(image.originalname)) {
+        let newName
+        if (image.originalname.endsWith('.png')) {
+          newName =
+            image.originalname.slice(0, image.originalname.length - 4) +
+            duplicateCount +
+            image.originalname.slice(image.originalname.length - 4)
+        } else {
+          newName =
+            image.originalname.slice(0, image.originalname.length - 5) +
+            duplicateCount +
+            image.originalname.slice(image.originalname.length - 5)
+        }
 
-    // images.map((image) => {
-    //   fs.readFile(image.path, (err, data) => {
-    //     if (err) {
-    //       console.error(err.message)
-    //       return
-    //     }
-    //     console.log(image)
-    //   })
-    // })
-    res.json({ dang: 'son' })
+        imageNames.push(newName)
+        duplicateCount++
+      } else {
+        imageNames.push(image.originalname)
+      }
 
+      fs.readFile(image.path, (err, data) => {
+        if (err) {
+          console.error(err.message)
+          return
+        }
+      })
+    })
+
+    console.log(imageNames)
     // const s3 = new S3({ apiVersion: '2006-03-01' })
 
     // s3.listBuckets(function (err, data) {
@@ -52,7 +73,7 @@ module.exports = (app) =>
     // s3.upload(
     //   {
     //     Bucket: 'easydashbucket',
-    //     Key: 'newfolder/test2',
+    //     Key: `product_photos/${productId}/image`,
     //     Body: 'asd',
     //     ACL: 'public-read',
     //   },
@@ -63,4 +84,5 @@ module.exports = (app) =>
     //     console.log(data)
     //   },
     // )
+    res.json({ dang: 'son' })
   })
