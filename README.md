@@ -8,8 +8,9 @@
 - [ ] Create an endpoint to handle product **_changes_**
   - For product **name**, **price**, **category**, **subcategory**
   - Optional: A "View Changes History"
-- [ ] Integrate Amazon S3 to allow image uploads
+- [x] Integrate Amazon S3 to allow image uploads
       **For brevity, we will be using REST instead of GraphQL.**
+- [ ] Save returned Amazon S3 Urls to appropriate mongo product
   - [ ] Setup credentials
     - [x] Enable plublic read access
     - [ ] Heroku environment variables
