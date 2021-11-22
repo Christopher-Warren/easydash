@@ -28,6 +28,9 @@ module.exports = (app) =>
     if (!req.body.productId) {
       throw new Error('productId is ' + req.body.productId)
     }
+
+    const imgUrls = []
+    // Handle duplicate file names
     const imageNames = []
     let duplicateCount = 1
     images.forEach((image) => {
@@ -44,45 +47,49 @@ module.exports = (app) =>
             duplicateCount +
             image.originalname.slice(image.originalname.length - 5)
         }
-
         imageNames.push(newName)
         duplicateCount++
       } else {
         imageNames.push(image.originalname)
       }
+    })
 
+    // Read and upload files to S3
+    images.forEach((image, index) => {
       fs.readFile(image.path, (err, data) => {
         if (err) {
           console.error(err.message)
           return
         }
+
+        // const s3 = new S3({ apiVersion: '2006-03-01' })
+        // s3.upload(
+        //   {
+        //     Bucket: 'easydashbucket',
+        //     Key: `product_photos/${productId}/${imageNames[index]}`,
+        //     Body: data,
+        //     ACL: 'public-read',
+        //   },
+        //   async (err, data) => {
+        //     if (err) {
+        //       console.error(err.message)
+        //     }
+        //     // update product file url
+        //     await Product.findById(productId, (err, doc) => {
+        //       console.log(doc)
+        //       doc.images = [...doc.images, data.Location]
+        //       doc.save()
+        //     })
+        //   },
+        // )
+        // Cleanup tmp
+        fs.rm(image.path, (err) => {
+          if (err) {
+            console.error(err.message)
+          }
+        })
       })
     })
 
-    console.log(imageNames)
-    // const s3 = new S3({ apiVersion: '2006-03-01' })
-
-    // s3.listBuckets(function (err, data) {
-    //   if (err) {
-    //     console.log('Error', err)
-    //   } else {
-    //     console.log('Successfully connected to -', data.Buckets[0].Name)
-    //   }
-    // })
-
-    // s3.upload(
-    //   {
-    //     Bucket: 'easydashbucket',
-    //     Key: `product_photos/${productId}/image`,
-    //     Body: 'asd',
-    //     ACL: 'public-read',
-    //   },
-    //   (err, data) => {
-    //     if (err) {
-    //       console.error(err.message)
-    //     }
-    //     console.log(data)
-    //   },
-    // )
     res.json({ dang: 'son' })
   })
