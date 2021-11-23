@@ -10,7 +10,8 @@
   - Optional: A "View Changes History"
 - [x] Integrate Amazon S3 to allow image uploads
       **For brevity, we will be using REST instead of GraphQL.**
-- [ ] Save returned Amazon S3 Urls to appropriate mongo product
+- [ ] Save returned Amazon S3 Urls to appropriate mongo product, must
+      use promises to achieve this
   - [ ] Setup credentials
     - [x] Enable plublic read access
     - [ ] Heroku environment variables

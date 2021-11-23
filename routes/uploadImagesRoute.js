@@ -30,7 +30,6 @@ module.exports = (app) =>
     }
 
     const imgUrls = []
-    // Handle duplicate file names
     const imageNames = []
     let duplicateCount = 1
     images.forEach((image) => {
@@ -62,26 +61,21 @@ module.exports = (app) =>
           return
         }
 
-        // const s3 = new S3({ apiVersion: '2006-03-01' })
-        // s3.upload(
-        //   {
-        //     Bucket: 'easydashbucket',
-        //     Key: `product_photos/${productId}/${imageNames[index]}`,
-        //     Body: data,
-        //     ACL: 'public-read',
-        //   },
-        //   async (err, data) => {
-        //     if (err) {
-        //       console.error(err.message)
-        //     }
-        //     // update product file url
-        //     await Product.findById(productId, (err, doc) => {
-        //       console.log(doc)
-        //       doc.images = [...doc.images, data.Location]
-        //       doc.save()
-        //     })
-        //   },
-        // )
+        const s3 = new S3({ apiVersion: '2006-03-01' })
+        s3.upload(
+          {
+            Bucket: 'easydashbucket',
+            Key: `product_photos/${productId}/${imageNames[index]}`,
+            Body: data,
+            ACL: 'public-read',
+          },
+          (err, data) => {
+            if (err) {
+              console.error(err.message)
+            }
+            // update product file url
+          },
+        )
         // Cleanup tmp
         fs.rm(image.path, (err) => {
           if (err) {
