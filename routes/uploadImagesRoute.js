@@ -21,6 +21,10 @@ module.exports = (app) =>
     5) The image is uploaded to an S3 folder named PRODUCTID
     
     */
+
+    // const promise = new Promise(res, rej)
+    //
+
     const productId = req.body.productId
 
     const images = req.files
@@ -28,6 +32,15 @@ module.exports = (app) =>
     if (!req.body.productId) {
       throw new Error('productId is ' + req.body.productId)
     }
+
+    // const promise = new Promise((res, rej) => {
+    //   console.log('promise')
+    //   res()
+    // })
+
+    // promise.then((data) => {
+    //   console.log('fullfilled', data)
+    // })
 
     const imgUrls = []
     const imageNames = []
@@ -55,35 +68,46 @@ module.exports = (app) =>
 
     // Read and upload files to S3
     images.forEach((image, index) => {
-      fs.readFile(image.path, (err, data) => {
-        if (err) {
-          console.error(err.message)
-          return
-        }
+      const uploadedImage = fs.readFileSync(image.path)
 
-        const s3 = new S3({ apiVersion: '2006-03-01' })
-        s3.upload(
-          {
-            Bucket: 'easydashbucket',
-            Key: `product_photos/${productId}/${imageNames[index]}`,
-            Body: data,
-            ACL: 'public-read',
-          },
-          (err, data) => {
-            if (err) {
-              console.error(err.message)
-            }
-            // update product file url
-          },
-        )
-        // Cleanup tmp
-        fs.rm(image.path, (err) => {
+      console.log(index, uploadedImage)
+
+      // fs.readFileSync(image.path, (err, data) => {
+      //   if (err) {
+      //     console.error(err.message)
+      //     return
+      //   }
+      //   console.log('read file', index)
+
+      const s3 = new S3({ apiVersion: '2006-03-01' })
+      s3.upload(
+        {
+          Bucket: 'easydashbucket',
+          Key: `product_photos/${productId}/${imageNames[index]}`,
+          Body: uploadedImage,
+          ACL: 'public-read',
+        },
+        (err, data) => {
           if (err) {
             console.error(err.message)
           }
-        })
-      })
+          // update product file url
+          imgUrls.push(data.Location)
+          // console.log('aws', index)
+          if (index === images.length - 1) {
+            // console.log(imgUrls)
+          }
+        },
+      )
+
+      //   // Cleanup tmp
+      //   fs.rm(image.path, (err) => {
+      //     if (err) {
+      //       console.error(err.message)
+      //     }
+      //   })
+      // })
     })
 
-    res.json({ dang: 'son' })
+    res.json({ dang: 'boi' })
   })
