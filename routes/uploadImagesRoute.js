@@ -93,10 +93,6 @@ module.exports = (app) =>
           }
           // update product file url
           imgUrls.push(data.Location)
-          // console.log('aws', index)
-          if (index === images.length - 1) {
-            // console.log(imgUrls)
-          }
         },
       )
 
@@ -109,5 +105,18 @@ module.exports = (app) =>
       // })
     })
 
-    res.json({ dang: 'boi' })
+    // Easy but not-so-good solution
+    // a better solution would involve the use of promises.
+    // because the input can vary, we need to map over
+    // the image we wish to create, and return a promise.all() of it
+
+    const urlInterval = setInterval(() => {
+      if (imgUrls.length === images.length) {
+        Product.findByIdAndUpdate(productId, { images: imgUrls })
+        clearInterval(urlInterval)
+        res.json({ message: 'Image upload success', images: imgUrls })
+      }
+    }, 10)
+
+    // res.json({ error: 'Internal Server Error' })
   })
