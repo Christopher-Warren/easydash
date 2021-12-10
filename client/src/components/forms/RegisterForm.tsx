@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import FormButton from '../FormButton'
+import PrimaryButton from '../PrimaryButton'
 import FormInput from '../FormInput'
 
 import { validatePassword } from '../../utils/validatePassword'
@@ -79,7 +79,7 @@ const RegisterForm = () => {
             </div>
           </div>
 
-          <FormButton type="submit">LOGIN</FormButton>
+          <PrimaryButton type="submit">LOGIN</PrimaryButton>
           <div className="absolute bottom-0 list-none">
             {error.length > 0 && 'Invalid Password'}
             {error.map((i, idx) => {

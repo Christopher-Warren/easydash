@@ -6,7 +6,7 @@ import ErrorNotifs from './components/ErrorNotifs'
 
 import useLogin from './hooks/useLogin'
 
-import FormButton from './components/FormButton'
+import FormButton from './components/PrimaryButton'
 
 function App() {
   const { login, loading, user, userId, error, logout } = useLogin()

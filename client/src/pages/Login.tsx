@@ -1,4 +1,4 @@
-import FormButton from '../components/FormButton'
+import PrimaryButton from '../components/PrimaryButton'
 import FormInput from '../components/FormInput'
 import logo from '../assets/logobanner.png'
 import { BrowserRouter as Switch, Route, Link } from 'react-router-dom'
@@ -125,9 +125,9 @@ const Login = ({ login, loading }: any) => {
                 </a>
               </div>
               <div className="flex justify-end my-6 ">
-                <FormButton className="px-10 py-1.5" type="submit">
+                <PrimaryButton className="px-10 py-1.5" type="submit">
                   LOGIN
-                </FormButton>
+                </PrimaryButton>
               </div>
             </form>
           </Route>

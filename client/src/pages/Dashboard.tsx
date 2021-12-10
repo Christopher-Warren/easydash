@@ -1,5 +1,5 @@
 import SideBar from '../components/SideBar'
-import FormButton from '../components/FormButton'
+import PrimaryButton from '../components/PrimaryButton'
 
 import Home from './dashboard/Home'
 
@@ -20,9 +20,9 @@ const Dashboard = ({ logout, userId }: any) => {
       <div className="lg:ml-20">
         <Route path="/dashboard" exact>
           <Home userId={userId} />
-          <FormButton type="button" handleClick={logout}>
+          <PrimaryButton type="button" handleClick={logout}>
             Logout
-          </FormButton>
+          </PrimaryButton>
         </Route>
 
         <Route path="/dashboard/products" exact>
