@@ -22,17 +22,22 @@ const Products = ({ userId }: any) => {
 
   return (
     <PageWrapper>
-      <h1 className="text-4xl text-gray-700 font-medium">Products</h1>
-      <span className="text-gray-600 tracking-wider">
+      <h1 className="text-4xl text-gray-700 font-medium ">Products</h1>
+      <span className="text-gray-600 tracking-wider ">
         These are products that you currently have listed for sale
       </span>
       <div className="flex my-5">
-        <PrimaryButton className="px-5 py-1.5 mr-5">NEW PRODUCT</PrimaryButton>
+        <PrimaryButton
+          className="px-5 py-1.5 mr-5"
+          handleClick={(e: any) => alert('clicked')}
+        >
+          NEW PRODUCT
+        </PrimaryButton>
         <SecondaryButton className="px-5 py-1.5">NEW CATEGORY</SecondaryButton>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 my-5 text-gray-800">
-        <div className="col-span-12">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 my-5 text-gray-800 ">
+        <div className="col-span-12 ">
           <InfoCard>
             <h1 className="text-xl relative">All Products</h1>
             {!loading &&
