@@ -2,6 +2,7 @@ import { useQuery, gql } from '@apollo/client'
 
 import PageWrapper from '../../components/PageWrapper'
 import InfoCard from '../../components/InfoCard'
+import FormButton from '../../components/FormButton'
 
 const Products = ({ userId }: any) => {
   const { data, loading, error } = useQuery(gql`
@@ -24,6 +25,10 @@ const Products = ({ userId }: any) => {
       <span className="text-gray-600 tracking-wider">
         These are products that you currently have listed for sale
       </span>
+      <div className="flex my-5">
+        <FormButton className="px-5 py-1.5 mr-5">NEW PRODUCT</FormButton>
+        <FormButton className="px-5 py-1.5">NEW CATEGORY</FormButton>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 my-5 text-gray-800">
         <div className="col-span-12">

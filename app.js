@@ -20,7 +20,7 @@ const app = express()
 
 app.use(express.json())
 app.use(cookieParser())
-require('./routes/uploadImagesRouteNew')(app)
+require('./routes/uploadImagesRoute')(app)
 
 app.use(
   '/graphql',

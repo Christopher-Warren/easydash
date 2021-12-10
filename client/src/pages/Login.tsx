@@ -124,9 +124,14 @@ const Login = ({ login, loading }: any) => {
                   Forgot Password?
                 </a>
               </div>
-              <FormButton type="submit">LOGIN</FormButton>
+              <div className="flex justify-end my-6 ">
+                <FormButton className="px-10 py-1.5" type="submit">
+                  LOGIN
+                </FormButton>
+              </div>
             </form>
           </Route>
+
           <Route path="/dashboard/register">
             <RegisterForm />
           </Route>

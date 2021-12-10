@@ -7,7 +7,7 @@ const Product = require('../models/product')
 const upload = multer({ dest: 'tmp/' })
 
 module.exports = (app) =>
-  app.post('/upload/image', upload.array('photos', 12), (req, res) => {
+  app.post('/upload/image1', upload.array('photos', 12), (req, res) => {
     /* This route is dependant on including a productId in 
     the body of the request. This must be addressed in
     the front-end api calls.
@@ -22,9 +22,6 @@ module.exports = (app) =>
     
     */
 
-    // const promise = new Promise(res, rej)
-    //
-
     const productId = req.body.productId
 
     const images = req.files
@@ -33,22 +30,13 @@ module.exports = (app) =>
       throw new Error('productId is ' + req.body.productId)
     }
 
-    // const promise = new Promise((res, rej) => {
-    //   console.log('promise')
-    //   res()
-    // })
-
-    // promise.then((data) => {
-    //   console.log('fullfilled', data)
-    // })
-
     const imgUrls = []
     const imageNames = []
     let duplicateCount = 1
     images.forEach((image) => {
       if (imageNames.includes(image.originalname)) {
         let newName
-        if (image.originalname.endsWith('.png')) {
+        if (image.originalname.endsWith('.png' || '.gif')) {
           newName =
             image.originalname.slice(0, image.originalname.length - 4) +
             duplicateCount +
@@ -66,57 +54,41 @@ module.exports = (app) =>
       }
     })
 
-    // Read and upload files to S3
-    images.forEach((image, index) => {
+    const uploadedImages = images.map((image, index) => {
       const uploadedImage = fs.readFileSync(image.path)
 
-      console.log(index, uploadedImage)
-
-      // fs.readFileSync(image.path, (err, data) => {
-      //   if (err) {
-      //     console.error(err.message)
-      //     return
-      //   }
-      //   console.log('read file', index)
-
-      const s3 = new S3({ apiVersion: '2006-03-01' })
-      s3.upload(
-        {
-          Bucket: 'easydashbucket',
-          Key: `product_photos/${productId}/${imageNames[index]}`,
-          Body: uploadedImage,
-          ACL: 'public-read',
-        },
-        (err, data) => {
-          if (err) {
-            console.error(err.message)
-          }
-          // update product file url
-          imgUrls.push(data.Location)
-        },
-      )
-
-      //   // Cleanup tmp
-      //   fs.rm(image.path, (err) => {
-      //     if (err) {
-      //       console.error(err.message)
-      //     }
-      //   })
-      // })
+      return new Promise((resolve, reject) => {
+        const s3 = new S3({ apiVersion: '2006-03-01' })
+        s3.upload(
+          {
+            Bucket: 'easydashbucket',
+            Key: `product_photos/${productId}/${imageNames[index]}`,
+            Body: uploadedImage,
+            ACL: 'public-read',
+          },
+          (err, data) => {
+            if (err) {
+              console.error(err.message)
+              reject(err)
+            }
+            // update product file url
+            resolve(data)
+            imgUrls.push(data.Location)
+          },
+        )
+      })
     })
-
-    // Easy but not-so-good solution
-    // a better solution would involve the use of promises.
-    // because the input can vary, we need to map over
-    // the image we wish to create, and return a promise.all() of it
-
-    const urlInterval = setInterval(() => {
-      if (imgUrls.length === images.length) {
-        Product.findByIdAndUpdate(productId, { images: imgUrls })
-        clearInterval(urlInterval)
+    Promise.all(uploadedImages)
+      .then((data) => {
+        const mongoImages = Product.findByIdAndUpdate(productId, {
+          images: imgUrls,
+        })
+        return mongoImages
+      })
+      .then((data) => {
         res.json({ message: 'Image upload success', images: imgUrls })
-      }
-    }, 10)
-
-    // res.json({ error: 'Internal Server Error' })
+      })
+      .catch((err) => {
+        res.json({ error: err })
+      })
   })
