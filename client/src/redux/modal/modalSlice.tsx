@@ -1,18 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface ModalState {
-  value: boolean
+  value: number
 }
 const initialState: ModalState = {
-  value: false,
+  value: 0,
 }
 
 const modalSlice = createSlice({
   name: 'modals',
   initialState,
   reducers: {
-    toggleModal(state: ModalState) {
-      state.value = !state.value
+    toggleModal(state: ModalState, action: PayloadAction<number>) {
+      const id = Number(action.payload)
+      state.value = id
+      console.log('redux', typeof state.value)
     },
   },
 })

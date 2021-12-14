@@ -12,32 +12,32 @@ import {
 import Products from './dashboard/Products'
 import NewProductModal from '../components/modals/NewProductModal'
 
-import { useAppSelector, useAppDispatch } from '../redux/hooks'
+import { useAppSelector } from '../redux/hooks'
 
-import { toggleModal } from '../redux/modal/modalSlice'
+import { Forms } from '../enums'
 
 // import from '../redux/modal/modalSlice'
+
+console.log(Forms.newProduct)
 
 const Dashboard = ({ logout, userId }: any) => {
   // document.body.style.overflow = 'visible'
 
-  const appError = useAppSelector((state) => state.modal.value)
-  const dispatch = useAppDispatch()
-  console.log(appError)
+  const showModal = useAppSelector((state) => state.modal.value)
+
+  console.log(showModal, Forms.newProduct)
+
   return (
     <>
       <Route path="/dashboard">
-        {appError && <NewProductModal />}
+        {showModal === Forms.newProduct && <NewProductModal />}
         <SideBar />
       </Route>
       <div className="lg:ml-20">
         <Route path="/dashboard" exact>
           <Home userId={userId} />
           {/* Need to use this button in Products page */}
-          <PrimaryButton
-            type="button"
-            handleClick={(e: any) => dispatch(toggleModal())}
-          >
+          <PrimaryButton type="button" handleClick={logout}>
             Logout
           </PrimaryButton>
         </Route>

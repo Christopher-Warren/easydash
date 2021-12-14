@@ -5,6 +5,11 @@ import InfoCard from '../../components/InfoCard'
 import PrimaryButton from '../../components/PrimaryButton'
 import SecondaryButton from '../../components/SecondaryButton'
 
+import { useAppDispatch } from '../../redux/hooks'
+import { toggleModal } from '../../redux/modal/modalSlice'
+
+import { Forms } from '../../enums/index'
+
 const Products = ({ userId }: any) => {
   const { data, loading, error } = useQuery(gql`
     query getCategories {
@@ -19,6 +24,7 @@ const Products = ({ userId }: any) => {
       }
     }
   `)
+  const dispatch = useAppDispatch()
 
   return (
     <PageWrapper>
@@ -29,7 +35,11 @@ const Products = ({ userId }: any) => {
       <div className="flex my-5">
         <PrimaryButton
           className="px-5 py-1.5 mr-5"
-          handleClick={(e: any) => alert('clicked')}
+          id={Forms.newProduct}
+          handleClick={(e: any) => {
+            console.log(e.target.id)
+            dispatch(toggleModal(e.target.id))
+          }}
         >
           NEW PRODUCT
         </PrimaryButton>
@@ -42,9 +52,9 @@ const Products = ({ userId }: any) => {
             <h1 className="text-xl relative">All Products</h1>
             {!loading &&
               !error &&
-              data.products.map((item: any) => {
+              data.products.map((item: any, index: any) => {
                 return (
-                  <div className="p-2 hover:bg-blue-500">
+                  <div className="p-2 hover:bg-blue-500" key={index}>
                     <div className="border-b border-gray-200 w-full absolute left-0" />
                     <div>
                       <h2 className="text-lg leading-none">{item.name}</h2>
