@@ -51,17 +51,11 @@ const Home = ({ userId }: any) => {
       <span className="text-gray-600 tracking-wider">
         Welcome to your store's dashboard
       </span>
-      {/* TODO: 
-      [] Fix page wrapper on smaller devices 
-      [] 
-      
-      */}
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 my-5 text-gray-800">
         <div className="col-span-1  lg:col-span-9 grid grid-cols-2 gap-4">
           <div className="col-span-2 md:col-auto">
-            <InfoCard>
-              <h1 className="text-2xl">Sales</h1>
+            <InfoCard title="Sales">
               <span className="text-sm block">Today</span>
 
               <span className="text-4xl block text-right">$1000.42</span>
@@ -69,16 +63,14 @@ const Home = ({ userId }: any) => {
           </div>
 
           <div className="col-span-2 md:col-auto">
-            <InfoCard>
-              <h1 className="text-2xl">Sales</h1>
+            <InfoCard title="Sales">
               <span className="text-sm block">Today</span>
 
               <span className="text-4xl block text-right">$1000.42</span>
             </InfoCard>
           </div>
           <div className="col-span-2">
-            <InfoCard>
-              <h1 className="text-2xl">Sales</h1>
+            <InfoCard title="Sales">
               <span className="text-sm block">Today</span>
 
               <span className="text-4xl block text-right">$1000.42</span>
@@ -87,8 +79,7 @@ const Home = ({ userId }: any) => {
         </div>
         <div className="col-span-1 lg:col-span-3 ">
           <div className="lg:absolute ">
-            <InfoCard>
-              <h1 className="text-2xl pb-4 relative">Activity</h1>
+            <InfoCard title="Activity" titleClassName="pb-4 relative">
               <div className="bg-gray-200 absolute h-px  left-0 w-full"></div>
               <ol className="text-lg py-4">
                 <li>Order #109582 Processed</li>

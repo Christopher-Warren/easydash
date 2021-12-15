@@ -10,27 +10,16 @@ import {
   NavLink,
 } from 'react-router-dom'
 import Products from './dashboard/Products'
-import NewProductModal from '../components/modals/NewProductModal'
 
-import { useAppSelector } from '../redux/hooks'
-
-import { Forms } from '../enums'
-
-// import from '../redux/modal/modalSlice'
-
-console.log(Forms.newProduct)
+import Modals from './modals/Modals'
 
 const Dashboard = ({ logout, userId }: any) => {
   // document.body.style.overflow = 'visible'
 
-  const showModal = useAppSelector((state) => state.modal.value)
-
-  console.log(showModal, Forms.newProduct)
-
   return (
     <>
       <Route path="/dashboard">
-        {showModal === Forms.newProduct && <NewProductModal />}
+        <Modals />
         <SideBar />
       </Route>
       <div className="lg:ml-20">

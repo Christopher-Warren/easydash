@@ -1,6 +1,6 @@
 const PageWrapper = (props: any) => {
   return (
-    <div className="relative max-w-7xl mx-auto mt-32 px-10">
+    <div className="relative max-w-7xl mx-auto mt-32 px-5">
       {props.children}
     </div>
   )

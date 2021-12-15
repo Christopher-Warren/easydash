@@ -37,7 +37,6 @@ const Products = ({ userId }: any) => {
           className="px-5 py-1.5 mr-5"
           id={Forms.newProduct}
           handleClick={(e: any) => {
-            console.log(e.target.id)
             dispatch(toggleModal(e.target.id))
           }}
         >

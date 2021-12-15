@@ -1,10 +1,11 @@
+import InfoCard from '../InfoCard'
 import ModalContainer from './ModalContainer'
 
 const NewProductModal = () => {
   return (
     <ModalContainer>
-      <div className="bg-white w-full mx-10">
-        <h1>Add new Product</h1>
+      <div className=" w-full left-0 z-30 ">
+        <InfoCard title="New Product"></InfoCard>
       </div>
     </ModalContainer>
   )
