@@ -85,10 +85,14 @@ module.exports = {
   categories: async ({ category }) => {
     let categories
     if (category) {
-      categories = await Category.find({ name: category }).populate('products')
+      categories = await Category.find({ name: category })
+        .populate('products')
+        .populate('subcategories')
     } else {
       categories = await Category.find().populate('products')
     }
+
+    console.log(category)
 
     return categories
   },
