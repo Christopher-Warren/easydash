@@ -74,7 +74,7 @@ module.exports = buildSchema(`
 
         type Subcategory {
             _id: ID!
-            name: String!
+            name: String
             description: String
             products: [Product!]
         }

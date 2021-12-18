@@ -42,7 +42,9 @@ const Products = ({ userId }: any) => {
         >
           NEW PRODUCT
         </PrimaryButton>
-        <SecondaryButton className="px-5 py-1.5">NEW CATEGORY</SecondaryButton>
+        <SecondaryButton className="px-5 py-1.5">
+          MANAGE CATEGORIES
+        </SecondaryButton>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 my-5 text-gray-800 ">

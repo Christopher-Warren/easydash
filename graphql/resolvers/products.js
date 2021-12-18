@@ -89,7 +89,9 @@ module.exports = {
         .populate('products')
         .populate('subcategories')
     } else {
-      categories = await Category.find().populate('products')
+      categories = await Category.find()
+        .populate('products')
+        .populate('subcategories')
     }
 
     console.log(category)
