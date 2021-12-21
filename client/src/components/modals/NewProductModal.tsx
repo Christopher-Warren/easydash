@@ -3,7 +3,7 @@ import ModalContainer from './ModalContainer'
 
 import { useQuery, gql, useLazyQuery } from '@apollo/client'
 import FormInput from '../FormInput'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const NewProductModal = () => {
   const { data, loading, error } = useQuery(gql`
@@ -18,77 +18,129 @@ const NewProductModal = () => {
   `)
 
   const [selectedCategory, setSelectedCategory] = useState(0)
+  const [newCategoryInput, setNewCategoryInput] = useState<any>(null)
+  const [newSubCategoryInput, setNewSubCategoryInput] = useState<any>(null)
+  // State for Form Data
 
-  const [newCategory, setNewCategory] = useState('')
-  const [newCategoryDisabled, setNewCategoryDisabled] = useState(true)
+  // Form works. TODO: Clean up code. 'category' state needs to be tied to <select /> element
 
-  // set new category input to disabled when selectedCategory === data.length
-  // may not need to use setcategory disabled state
+  const [category, setCategory] = useState('')
+  const [subcategory, setSubcategory] = useState('')
+  const [name, setName] = useState('')
+  const [description, setDescription] = useState('')
+  const [price, setPrice] = useState(null)
+  const [stock, setStock] = useState(0)
 
-  console.log(data.categories.length)
-
+  console.log(subcategory)
   return (
     <ModalContainer>
       <div className="w-full left-0 z-30">
         <InfoCard title="New Product">
-          {/* category */}
-          <label htmlFor="category-select">Select a category</label>
-          <select
-            id="category-select"
-            onChange={(e) => {
-              if (e.currentTarget.value !== 'new-category') {
-                setNewCategory('')
-                setNewCategoryDisabled(true)
-              } else {
-                setNewCategoryDisabled(false)
-              }
-            }}
-          >
-            {/* <option value="select-category">Select a Category</option> */}
-            {data &&
-              data.categories.map((i: any, index: number) => {
-                return (
-                  <option
-                    value={i.name}
-                    key={index}
-                    onClick={() => setSelectedCategory(index)}
-                  >
-                    {i.name}
-                  </option>
-                )
-              })}
-            <option value="new-category">New Category</option>
-          </select>
-          <input
-            className="bg-gray-600 disabled:opacity-40"
-            name="new cat"
-            value={newCategory}
-            onChange={(e) => setNewCategory(e.currentTarget.value)}
-            disabled={newCategoryDisabled}
-          ></input>
-
-          {/* Subcategory */}
-
-          <label htmlFor="category-select">Select a category</label>
-          <select id="category-select" onChange={(e) => {}}>
-            {data &&
-              data.categories[selectedCategory].subcategories.map(
-                (i: any, index: number) => {
+          <form>
+            <label htmlFor="category-select">Select a category</label>
+            <select
+              id="category-select"
+              onChange={(e) => {
+                if (e.currentTarget.value !== 'new-category') {
+                  setNewCategoryInput(null)
+                  setCategory(e.currentTarget.value)
+                }
+              }}
+            >
+              {data &&
+                data.categories.map((category: any, index: number) => {
                   return (
-                    <option value={i.name} key={index}>
-                      {i.name}
-                    </option>
+                    <>
+                      <option
+                        value={category.name}
+                        key={index}
+                        onClick={() => {
+                          setSelectedCategory(index)
+                          setNewCategoryInput(null)
+                        }}
+                      >
+                        {category.name}
+                      </option>
+                      {index === data.categories.length - 1 && (
+                        <option
+                          value="new-category"
+                          onClick={() => {
+                            setNewCategoryInput('')
+                            setNewSubCategoryInput('')
+                          }}
+                        >
+                          New Category
+                        </option>
+                      )}
+                    </>
                   )
-                },
+                })}
+            </select>
+            <input
+              className="bg-gray-600 disabled:opacity-40"
+              name="new cat"
+              value={newCategoryInput}
+              onChange={(e) => setNewCategoryInput(e.currentTarget.value)}
+              disabled={newCategoryInput === null}
+            ></input>
+
+            {/* Subcategory */}
+
+            <label htmlFor="category-select">Select a category</label>
+            <select
+              id="category-select"
+              value={subcategory}
+              onChange={(e) => {
+                // if (e.currentTarget.value !== 'new-category') {
+                //   setSubcategory(e)
+                // }
+              }}
+            >
+              {data &&
+                newCategoryInput === null &&
+                data.categories[selectedCategory].subcategories.map(
+                  (subcategory: any, index: number) => {
+                    return (
+                      <>
+                        <option
+                          value={subcategory.name}
+                          key={index}
+                          onClick={() => {
+                            setNewSubCategoryInput(null)
+                            setSubcategory(subcategory.name)
+                          }}
+                        >
+                          {subcategory.name}
+                        </option>
+                      </>
+                    )
+                  },
+                )}
+              {data && (
+                <option
+                  value="new-category"
+                  onClick={(e) => setSubcategory(e.currentTarget.value)}
+                >
+                  New Category
+                </option>
               )}
-            {/* <option value="new-category">New Category</option> */}
-          </select>
+            </select>
 
-          <input placeholder="name"></input>
-          <input placeholder="description"></input>
-          <input placeholder="price"></input>
+            <input
+              className="bg-gray-600 disabled:opacity-40"
+              name="new cat"
+              value={newSubCategoryInput}
+              onChange={(e) => setNewSubCategoryInput(e.currentTarget.value)}
+              disabled={newSubCategoryInput === null}
+            ></input>
 
-          <input placeholder="stock"></input>
+            <input placeholder="name"></input>
+            <input placeholder="description"></input>
+            <input placeholder="price"></input>
+
+            <input placeholder="stock"></input>
+            <button type="submit">submit</button>
+          </form>
         </InfoCard>
       </div>
     </ModalContainer>
