@@ -30,41 +30,44 @@ const NewProductModal = () => {
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState(null)
   const [stock, setStock] = useState(0)
-
-  console.log(subcategory)
+  console.log(category, subcategory)
   return (
     <ModalContainer>
       <div className="w-full left-0 z-30">
         <InfoCard title="New Product">
-          <form>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              console.log(category, subcategory)
+            }}
+          >
             <label htmlFor="category-select">Select a category</label>
             <select
               id="category-select"
-              onChange={(e) => {
-                if (e.currentTarget.value !== 'new-category') {
-                  setNewCategoryInput(null)
-                  setCategory(e.currentTarget.value)
-                }
-              }}
+              value={category}
+              onChange={() => console.log('change2')}
             >
               {data &&
                 data.categories.map((category: any, index: number) => {
                   return (
                     <>
                       <option
-                        value={category.name}
                         key={index}
-                        onClick={() => {
+                        onClick={(e) => {
+                          setCategory(e.currentTarget.value)
                           setSelectedCategory(index)
                           setNewCategoryInput(null)
                         }}
                       >
                         {category.name}
                       </option>
+                      {/* Subcategory does not follow this same pattern
+                          where the new-category option is rendered outside of the map statement */}
                       {index === data.categories.length - 1 && (
                         <option
                           value="new-category"
-                          onClick={() => {
+                          onClick={(e) => {
+                            setCategory(e.currentTarget.value)
                             setNewCategoryInput('')
                             setNewSubCategoryInput('')
                           }}
@@ -86,16 +89,8 @@ const NewProductModal = () => {
 
             {/* Subcategory */}
 
-            <label htmlFor="category-select">Select a category</label>
-            <select
-              id="category-select"
-              value={subcategory}
-              onChange={(e) => {
-                // if (e.currentTarget.value !== 'new-category') {
-                //   setSubcategory(e)
-                // }
-              }}
-            >
+            <label htmlFor="subcategory-select">Select a category</label>
+            <select id="subcategory-select" value={subcategory}>
               {data &&
                 newCategoryInput === null &&
                 data.categories[selectedCategory].subcategories.map(
@@ -103,7 +98,6 @@ const NewProductModal = () => {
                     return (
                       <>
                         <option
-                          value={subcategory.name}
                           key={index}
                           onClick={() => {
                             setNewSubCategoryInput(null)
@@ -118,7 +112,7 @@ const NewProductModal = () => {
                 )}
               {data && (
                 <option
-                  value="new-category"
+                  value="new-subcategory"
                   onClick={(e) => setSubcategory(e.currentTarget.value)}
                 >
                   New Category
