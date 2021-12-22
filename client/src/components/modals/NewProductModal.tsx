@@ -3,7 +3,7 @@ import ModalContainer from './ModalContainer'
 
 import { useQuery, gql, useLazyQuery } from '@apollo/client'
 import FormInput from '../FormInput'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 
 const NewProductModal = () => {
   const { data, loading, error } = useQuery(gql`
@@ -26,10 +26,20 @@ const NewProductModal = () => {
   const [subcategory, setSubcategory] = useState('')
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
-  const [price, setPrice] = useState(null)
+  const [price, setPrice] = useState(0)
   const [stock, setStock] = useState(0)
 
-  console.log(subcategory, category)
+  // Track page loads
+  const pageLoads = useRef(0)
+
+  // Initialize Async State
+  useEffect(() => {
+    if (data && pageLoads.current < 1) {
+      pageLoads.current++
+      setCategory(data.categories[0].name)
+      setSubcategory(data.categories[0].subcategories[0].name)
+    }
+  }, [data])
 
   return (
     <ModalContainer>
@@ -130,11 +140,27 @@ const NewProductModal = () => {
               disabled={subcategory !== 'new-subcategory'}
             ></input>
 
-            <input placeholder="name"></input>
-            <input placeholder="description"></input>
-            <input placeholder="price"></input>
+            <input
+              placeholder="name"
+              value={name}
+              onChange={(e) => setName(e.currentTarget.value)}
+            ></input>
+            <input
+              placeholder="description"
+              value={description}
+              onChange={(e) => setDescription(e.currentTarget.value)}
+            ></input>
+            <input
+              placeholder="price"
+              value={price}
+              onChange={(e) => setPrice(parseInt(e.currentTarget.value))}
+            ></input>
 
-            <input placeholder="stock"></input>
+            <input
+              placeholder="stock"
+              value={stock}
+              onChange={(e) => setStock(parseInt(e.currentTarget.value))}
+            ></input>
             <button type="submit">submit</button>
           </form>
         </InfoCard>
