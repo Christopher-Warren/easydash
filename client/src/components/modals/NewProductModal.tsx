@@ -3,7 +3,7 @@ import ModalContainer from './ModalContainer'
 
 import { useQuery, gql, useLazyQuery } from '@apollo/client'
 import FormInput from '../FormInput'
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
 const NewProductModal = () => {
   const { data, loading, error } = useQuery(gql`
@@ -18,8 +18,8 @@ const NewProductModal = () => {
   `)
 
   const [selectedCategory, setSelectedCategory] = useState(0)
-  const [newCategoryInput, setNewCategoryInput] = useState<any>(undefined)
-  const [newSubCategoryInput, setNewSubCategoryInput] = useState<any>(undefined)
+  const [newCategoryInput, setNewCategoryInput] = useState<any>('')
+  const [newSubCategoryInput, setNewSubCategoryInput] = useState<any>('')
   // State for Form Data
 
   const [category, setCategory] = useState('')
@@ -28,6 +28,8 @@ const NewProductModal = () => {
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState(null)
   const [stock, setStock] = useState(0)
+
+  console.log(subcategory, category)
 
   return (
     <ModalContainer>
@@ -46,37 +48,34 @@ const NewProductModal = () => {
                 const selectedIndex = e.target.options.selectedIndex
 
                 if (selectedIndex < data.categories.length) {
+                  // If selecting valid category
                   setSelectedCategory(selectedIndex)
-                  setNewCategoryInput(undefined)
-                } else {
-                  setNewSubCategoryInput('')
                   setNewCategoryInput('')
+
+                  // Resets subcategory <Select />
+                  setSubcategory('')
+                } else {
+                  // If selecting new category
+                  setSelectedCategory(-1)
+                  setSubcategory('new-subcategory')
                 }
+                // Handle case where Category has no Subcategories
+                if (data.categories[selectedIndex]?.subcategories.length === 0)
+                  setSubcategory('new-subcategory')
                 setCategory(e.currentTarget.value)
               }}
             >
               {data &&
                 data.categories.map((category: any, index: number) => {
                   return (
-                    <>
-                      <option key={index} onClick={(e) => {}}>
-                        {category.name}
-                      </option>
+                    <Fragment key={index}>
+                      <option>{category.name}</option>
                       {/* Subcategory does not follow this same pattern
                           where the new-category option is rendered outside of the map statement */}
                       {index === data.categories.length - 1 && (
-                        <option
-                          value="new-category"
-                          onClick={(e) => {
-                            // setCategory(e.currentTarget.value)
-                            // setNewCategoryInput('')
-                            // setNewSubCategoryInput('')
-                          }}
-                        >
-                          New Category
-                        </option>
+                        <option value="new-category">New Category</option>
                       )}
-                    </>
+                    </Fragment>
                   )
                 })}
             </select>
@@ -85,28 +84,31 @@ const NewProductModal = () => {
               name="new cat"
               value={newCategoryInput}
               onChange={(e) => setNewCategoryInput(e.currentTarget.value)}
-              disabled={newCategoryInput === undefined}
+              disabled={category !== 'new-category'}
             ></input>
 
             {/* Subcategory */}
 
             <label htmlFor="subcategory-select">Select a category</label>
-            <select id="subcategory-select" value={subcategory}>
+            <select
+              id="subcategory-select"
+              value={subcategory}
+              onChange={(e) => {
+                const selectedIndex = e.currentTarget.options.selectedIndex
+
+                if (selectedIndex < data.categories.length) {
+                  setNewCategoryInput('')
+                }
+                setSubcategory(e.currentTarget.value)
+              }}
+            >
               {data &&
-                data.categories[selectedCategory].subcategories.map(
+                data.categories[selectedCategory]?.subcategories.map(
                   (subcategory: any, index: number) => {
                     return (
-                      <>
-                        <option
-                          key={index}
-                          onClick={() => {
-                            setNewSubCategoryInput(undefined)
-                            setSubcategory(subcategory.name)
-                          }}
-                        >
-                          {subcategory.name}
-                        </option>
-                      </>
+                      <Fragment key={index}>
+                        <option>{subcategory.name}</option>
+                      </Fragment>
                     )
                   },
                 )}
@@ -125,7 +127,7 @@ const NewProductModal = () => {
               name="new cat"
               value={newSubCategoryInput}
               onChange={(e) => setNewSubCategoryInput(e.currentTarget.value)}
-              disabled={newSubCategoryInput === undefined}
+              disabled={subcategory !== 'new-subcategory'}
             ></input>
 
             <input placeholder="name"></input>
