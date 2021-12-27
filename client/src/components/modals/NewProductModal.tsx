@@ -5,6 +5,8 @@ import { useQuery, gql, useLazyQuery } from '@apollo/client'
 import FormInput from '../FormInput'
 import { Fragment, useEffect, useRef, useState } from 'react'
 
+import axios from 'axios'
+
 const NewProductModal = () => {
   const { data, loading, error } = useQuery(gql`
     query getCategories($category: String) {
@@ -41,13 +43,28 @@ const NewProductModal = () => {
     }
   }, [data])
 
+  const formData = new FormData()
+
   return (
     <ModalContainer>
       <div className="w-full left-0 z-30">
         <InfoCard title="New Product">
           <form
-            onSubmit={(e) => {
+            onSubmit={(e: any) => {
               e.preventDefault()
+
+              axios
+                .post('/api/image', formData, {
+                  headers: {
+                    productid: '61806fd6ae0e565cbafa9418',
+                  },
+                })
+                .then((data) => {
+                  console.log(data)
+                })
+                .catch((err) => console.log(err))
+
+              console.log('data', formData.get('file'))
             }}
           >
             <label htmlFor="category-select">Select a category</label>
@@ -160,6 +177,15 @@ const NewProductModal = () => {
               placeholder="stock"
               value={stock}
               onChange={(e) => setStock(parseInt(e.currentTarget.value))}
+            ></input>
+            <input
+              type="file"
+              multiple
+              accept=".jpg,.gif,.jpeg,.png"
+              onChange={(e: any) => {
+                formData.delete('photos')
+                formData.append('photos', e.currentTarget.files[0])
+              }}
             ></input>
             <button type="submit">submit</button>
           </form>

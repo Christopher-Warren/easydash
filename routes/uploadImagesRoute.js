@@ -7,7 +7,7 @@ const Product = require('../models/product')
 const upload = multer({ dest: 'tmp/' })
 
 module.exports = (app) =>
-  app.post('/upload/image1', upload.array('photos', 12), (req, res) => {
+  app.post('/api/image', upload.array('photos', 12), (req, res) => {
     /* This route is dependant on including a productId in 
     the body of the request. This must be addressed in
     the front-end api calls.
@@ -22,11 +22,11 @@ module.exports = (app) =>
     
     */
 
-    const productId = req.body.productId
+    const productId = req.headers.productid
 
     const images = req.files
 
-    if (!req.body.productId) {
+    if (!productId) {
       throw new Error('productId is ' + req.body.productId)
     }
 

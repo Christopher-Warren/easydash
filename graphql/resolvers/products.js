@@ -94,7 +94,7 @@ module.exports = {
         .populate('subcategories')
     }
 
-    console.log(category)
+    console.log('products.js: category', category)
 
     return categories
   },
