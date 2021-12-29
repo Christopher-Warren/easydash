@@ -19,10 +19,33 @@ const NewProductModal = () => {
     }
   `)
 
-  const [createCategory] = useMutation(gql`
-    mutation createCategory($name: String!) {
-      createCategory(name: $name) {
+  const [createProduct, { data: createdProduct }] = useMutation(gql`
+    mutation createProduct(
+      $name: String!
+      $category: String!
+      $description: String!
+      $price: Float!
+      $subcategory: String!
+      $stock: Float!
+    ) {
+      createProduct(
+        productInput: {
+          name: $name
+          category: $category
+          description: $description
+          price: $price
+          subcategory: $subcategory
+          stock: $stock
+        }
+      ) {
+        _id
         name
+        description
+        price
+        stock
+        subcategory {
+          name
+        }
       }
     }
   `)
@@ -58,15 +81,35 @@ const NewProductModal = () => {
       <div className="w-full left-0 z-30">
         <InfoCard title="New Product">
           <form
-            onSubmit={(e: any) => {
+            onSubmit={async (e: any) => {
               e.preventDefault()
               // Check if new categories/subcategories are being created
-
-              if (newCategoryInput.length > 0) {
-                createCategory({ variables: newCategoryInput })
-              }
-
               // Create product
+
+              createProduct({
+                variables: {
+                  name,
+                  category: newCategoryInput ? newCategoryInput : category,
+                  subcategory: newSubCategoryInput
+                    ? newCategoryInput
+                    : subcategory,
+                  description,
+                  price,
+                  stock,
+                },
+              }).then(({ data }) => {
+                console.log('CREATED: ', createdProduct)
+                axios
+                  .post('/api/image', formData, {
+                    headers: {
+                      productid: data.createProduct._id,
+                    },
+                  })
+                  .then((data) => {
+                    console.log(data)
+                  })
+                  .catch((err) => console.log(err))
+              })
 
               console.log(
                 category,
@@ -76,19 +119,7 @@ const NewProductModal = () => {
                 price,
                 stock,
               )
-
-              // Upload product image, update product url
-
-              // axios
-              //   .post('/api/image', formData, {
-              //     headers: {
-              //       productid: '61806fd6ae0e565cbafa9418',
-              //     },
-              //   })
-              //   .then((data) => {
-              //     console.log(data)
-              //   })
-              //   .catch((err) => console.log(err))
+              console.log(createdProduct.data)
             }}
           >
             <label htmlFor="category-select">Select a category</label>
