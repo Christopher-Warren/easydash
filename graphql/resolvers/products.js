@@ -13,25 +13,26 @@ module.exports = {
   createProduct: async ({ productInput }) => {
     if (!productInput.subcategory) throw new Error('Please enter a Subcategory')
     // Ensure that the input category exists
-    const foundCategory = await Category.findOne({
+    let foundCategory = await Category.findOne({
       name: productInput.category,
     })
-    if (!foundCategory) throw new Error('Please enter a Category')
+
+    if (!foundCategory) {
+      foundCategory = await Category.create({
+        name: productInput.category.toLowerCase(),
+      })
+    }
 
     // If a subcategory was entered, create the subcategory
     // and assign it to the product
-    let foundSubcategory
-    if (productInput.subcategory) {
-      foundSubcategory = await Subcategory.findOne({
+    let foundSubcategory = await Subcategory.findOne({
+      name: productInput.subcategory,
+    })
+    if (!foundSubcategory) {
+      foundSubcategory = await Subcategory.create({
         name: productInput.subcategory,
+        category: foundCategory._id,
       })
-      // console.log(foundSubcategory)
-      if (!foundSubcategory) {
-        foundSubcategory = await Subcategory.create({
-          name: productInput.subcategory,
-          category: foundCategory._id,
-        })
-      }
     }
 
     // Create the product, with category _id

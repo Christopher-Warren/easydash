@@ -1,7 +1,7 @@
 import InfoCard from '../InfoCard'
 import ModalContainer from './ModalContainer'
 
-import { useQuery, gql, useLazyQuery } from '@apollo/client'
+import { useQuery, gql, useLazyQuery, useMutation } from '@apollo/client'
 import FormInput from '../FormInput'
 import { Fragment, useEffect, useRef, useState } from 'react'
 
@@ -15,6 +15,14 @@ const NewProductModal = () => {
         subcategories {
           name
         }
+      }
+    }
+  `)
+
+  const [createCategory] = useMutation(gql`
+    mutation createCategory($name: String!) {
+      createCategory(name: $name) {
+        name
       }
     }
   `)
@@ -44,7 +52,7 @@ const NewProductModal = () => {
   }, [data])
 
   const formData = new FormData()
-
+  console.log(newCategoryInput.length)
   return (
     <ModalContainer>
       <div className="w-full left-0 z-30">
@@ -52,19 +60,35 @@ const NewProductModal = () => {
           <form
             onSubmit={(e: any) => {
               e.preventDefault()
+              // Check if new categories/subcategories are being created
 
-              axios
-                .post('/api/image', formData, {
-                  headers: {
-                    productid: '61806fd6ae0e565cbafa9418',
-                  },
-                })
-                .then((data) => {
-                  console.log(data)
-                })
-                .catch((err) => console.log(err))
+              if (newCategoryInput.length > 0) {
+                createCategory({ variables: newCategoryInput })
+              }
 
-              console.log('data', formData.get('file'))
+              // Create product
+
+              console.log(
+                category,
+                subcategory,
+                name,
+                description,
+                price,
+                stock,
+              )
+
+              // Upload product image, update product url
+
+              // axios
+              //   .post('/api/image', formData, {
+              //     headers: {
+              //       productid: '61806fd6ae0e565cbafa9418',
+              //     },
+              //   })
+              //   .then((data) => {
+              //     console.log(data)
+              //   })
+              //   .catch((err) => console.log(err))
             }}
           >
             <label htmlFor="category-select">Select a category</label>
@@ -97,8 +121,7 @@ const NewProductModal = () => {
                   return (
                     <Fragment key={index}>
                       <option>{category.name}</option>
-                      {/* Subcategory does not follow this same pattern
-                          where the new-category option is rendered outside of the map statement */}
+
                       {index === data.categories.length - 1 && (
                         <option value="new-category">New Category</option>
                       )}
