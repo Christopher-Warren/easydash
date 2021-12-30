@@ -11,6 +11,7 @@ module.exports = {
     return products
   },
   createProduct: async ({ productInput }) => {
+    console.log(productInput)
     if (!productInput.subcategory) throw new Error('Please enter a Subcategory')
     // Ensure that the input category exists
     let foundCategory = await Category.findOne({

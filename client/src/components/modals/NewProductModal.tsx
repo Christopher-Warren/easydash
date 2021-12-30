@@ -75,13 +75,19 @@ const NewProductModal = () => {
   }, [data])
 
   const formData = new FormData()
-  console.log(newCategoryInput.length)
+
+  // @TODO: Need to handle these edge cases
+  // • When user tries to submit new category or new subcategory
+  // • When user does NOT include an image
+  // • When 'new-category' is selected, it should be 'New Category' instead,
+  //   similar to 'New Subcategory'
+
   return (
     <ModalContainer>
       <div className="w-full left-0 z-30">
         <InfoCard title="New Product">
           <form
-            onSubmit={async (e: any) => {
+            onSubmit={(e: any) => {
               e.preventDefault()
               // Check if new categories/subcategories are being created
               // Create product
@@ -97,19 +103,21 @@ const NewProductModal = () => {
                   price,
                   stock,
                 },
-              }).then(({ data }) => {
-                console.log('CREATED: ', createdProduct)
-                axios
-                  .post('/api/image', formData, {
-                    headers: {
-                      productid: data.createProduct._id,
-                    },
-                  })
-                  .then((data) => {
-                    console.log(data)
-                  })
-                  .catch((err) => console.log(err))
               })
+                .then(({ data }) => {
+                  console.log('CREATED: ', createdProduct)
+                  axios
+                    .post('/api/image', formData, {
+                      headers: {
+                        productid: data.createProduct._id,
+                      },
+                    })
+                    .then((data) => {
+                      console.log(data)
+                    })
+                    .catch((err) => console.log('ERROR!', err))
+                })
+                .catch((err) => console.log('ERROR!?!?!?1', err))
 
               console.log(
                 category,
@@ -119,7 +127,6 @@ const NewProductModal = () => {
                 price,
                 stock,
               )
-              console.log(createdProduct.data)
             }}
           >
             <label htmlFor="category-select">Select a category</label>
