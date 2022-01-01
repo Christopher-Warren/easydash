@@ -13,6 +13,11 @@ module.exports = {
   createProduct: async ({ productInput }) => {
     console.log(productInput)
     if (!productInput.subcategory) throw new Error('Please enter a Subcategory')
+    if (productInput.category === 'new-category')
+      throw new Error(`Category "new-category" is unavailible`)
+
+    if (productInput.subcategory === 'new-subcategory')
+      throw new Error(`Subcategory "new-subcategory" is unavailible`)
     // Ensure that the input category exists
     let foundCategory = await Category.findOne({
       name: productInput.category,

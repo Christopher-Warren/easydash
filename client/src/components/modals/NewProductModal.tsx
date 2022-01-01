@@ -82,10 +82,29 @@ const NewProductModal = () => {
   // • When 'new-category' is selected, it should be 'New Category' instead,
   //   similar to 'New Subcategory'
 
+  // prevent user from using value 'new-category'
+
+  // when submitting empty new category, newCategoryInput = false
+  // thus a category of 'new-category' is created instead of ''
+  console.log(subcategory)
   return (
     <ModalContainer>
       <div className="w-full left-0 z-30">
         <InfoCard title="New Product">
+          <div className="text-red-800">
+            {category} {subcategory}
+            <br />
+            {'input: ' + newCategoryInput}
+            <select
+              onChange={(e) => {
+                console.log(e.currentTarget.selectedOptions[0].id)
+              }}
+            >
+              <option id="1234">thing</option>
+              <option id="1619167">thing2</option>
+            </select>
+          </div>
+
           <form
             onSubmit={(e: any) => {
               e.preventDefault()
@@ -105,7 +124,7 @@ const NewProductModal = () => {
                 },
               })
                 .then(({ data }) => {
-                  console.log('CREATED: ', createdProduct)
+                  console.log('CREATED: ', data)
                   axios
                     .post('/api/image', formData, {
                       headers: {
@@ -145,12 +164,17 @@ const NewProductModal = () => {
                   setSubcategory('')
                 } else {
                   // If selecting new category
+
                   setSelectedCategory(-1)
                   setSubcategory('new-subcategory')
                 }
                 // Handle case where Category has no Subcategories
-                if (data.categories[selectedIndex]?.subcategories.length === 0)
+                if (
+                  data.categories[selectedIndex]?.subcategories.length === 0
+                ) {
                   setSubcategory('new-subcategory')
+                }
+
                 setCategory(e.currentTarget.value)
               }}
             >
@@ -173,10 +197,9 @@ const NewProductModal = () => {
               value={newCategoryInput}
               onChange={(e) => setNewCategoryInput(e.currentTarget.value)}
               disabled={category !== 'new-category'}
+              required
             ></input>
-
             {/* Subcategory */}
-
             <label htmlFor="subcategory-select">Select a category</label>
             <select
               id="subcategory-select"
@@ -205,19 +228,18 @@ const NewProductModal = () => {
                   value="new-subcategory"
                   onClick={(e) => setSubcategory(e.currentTarget.value)}
                 >
-                  New Category
+                  New Subcategory
                 </option>
               )}
             </select>
-
             <input
               className="bg-gray-600 disabled:opacity-40"
               name="new cat"
               value={newSubCategoryInput}
               onChange={(e) => setNewSubCategoryInput(e.currentTarget.value)}
               disabled={subcategory !== 'new-subcategory'}
+              required
             ></input>
-
             <input
               placeholder="name"
               value={name}
@@ -233,7 +255,6 @@ const NewProductModal = () => {
               value={price}
               onChange={(e) => setPrice(parseInt(e.currentTarget.value))}
             ></input>
-
             <input
               placeholder="stock"
               value={stock}
