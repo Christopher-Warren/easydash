@@ -29,6 +29,7 @@ module.exports = (app) =>
     if (!productId) {
       throw new Error('productId is ' + req.body.productId)
     }
+    console.log(images)
 
     const imgUrls = []
     const imageNames = []

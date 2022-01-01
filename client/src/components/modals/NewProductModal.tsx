@@ -65,16 +65,23 @@ const NewProductModal = () => {
   // Track page loads
   const pageLoads = useRef(0)
 
+  // Temp preview image
+  const [selectedImg, setSelectedImg] = useState(0)
+  const [imgUrls, setImgUrls] = useState([])
+
   // Initialize Async State
   useEffect(() => {
-    if (data && pageLoads.current < 1) {
+    if (data && data.categories[0] && pageLoads.current < 1) {
       pageLoads.current++
       setCategory(data.categories[0].name)
       setSubcategory(data.categories[0].subcategories[0].name)
     }
+    if (data && !data.categories[0] && pageLoads.current < 1) {
+      setCategory('new-category')
+      setSubcategory('new-subcategory')
+      console.log('no data')
+    }
   }, [data])
-
-  const formData = new FormData()
 
   // @TODO: Need to handle these edge cases
   // • When user tries to submit new category or new subcategory
@@ -86,12 +93,15 @@ const NewProductModal = () => {
 
   // when submitting empty new category, newCategoryInput = false
   // thus a category of 'new-category' is created instead of ''
-  console.log(subcategory)
+
+  const fileInput = document.getElementById('file_input') as any
+  const images = Object.values(fileInput.files)
+
   return (
     <ModalContainer>
       <div className="w-full left-0 z-30">
         <InfoCard title="New Product">
-          <div className="text-red-800">
+          {/* <div className="text-red-800">
             {category} {subcategory}
             <br />
             {'input: ' + newCategoryInput}
@@ -103,13 +113,17 @@ const NewProductModal = () => {
               <option id="1234">thing</option>
               <option id="1619167">thing2</option>
             </select>
-          </div>
+          </div> */}
 
           <form
+            id="123"
             onSubmit={(e: any) => {
               e.preventDefault()
-              // Check if new categories/subcategories are being created
-              // Create product
+              const formData = new FormData()
+
+              images.forEach((file: any) => {
+                formData.append('photos', file)
+              })
 
               createProduct({
                 variables: {
@@ -124,7 +138,7 @@ const NewProductModal = () => {
                 },
               })
                 .then(({ data }) => {
-                  console.log('CREATED: ', data)
+                  console.log('CREATED: ', formData)
                   axios
                     .post('/api/image', formData, {
                       headers: {
@@ -132,7 +146,7 @@ const NewProductModal = () => {
                       },
                     })
                     .then((data) => {
-                      console.log(data)
+                      console.log('DATA!', data)
                     })
                     .catch((err) => console.log('ERROR!', err))
                 })
@@ -184,12 +198,13 @@ const NewProductModal = () => {
                     <Fragment key={index}>
                       <option>{category.name}</option>
 
-                      {index === data.categories.length - 1 && (
-                        <option value="new-category">New Category</option>
-                      )}
+                      {/* {index === data.categories.length - 1 && (
+                        
+                      )} */}
                     </Fragment>
                   )
                 })}
+              <option value="new-category">New Category</option>
             </select>
             <input
               className="bg-gray-600 disabled:opacity-40"
@@ -261,15 +276,41 @@ const NewProductModal = () => {
               onChange={(e) => setStock(parseInt(e.currentTarget.value))}
             ></input>
             <input
+              id="file_input"
               type="file"
               multiple
               accept=".jpg,.gif,.jpeg,.png"
               onChange={(e: any) => {
-                formData.delete('photos')
-                formData.append('photos', e.currentTarget.files[0])
+                // Preview images
+                setImgUrls((prev) => {
+                  const arr: any = []
+                  images.forEach((image: any) => {
+                    arr.push(URL.createObjectURL(image))
+                  })
+                  return arr
+                })
               }}
             ></input>
             <button type="submit">submit</button>
+            {imgUrls && (
+              <img
+                className=" object-contain"
+                src={imgUrls[selectedImg]}
+                alt="img"
+              ></img>
+            )}
+            {imgUrls &&
+              imgUrls.map((url, index) => {
+                return (
+                  <img
+                    className="w-1/4 h-10 inline-block object-contain"
+                    onClick={(e) => setSelectedImg(index)}
+                    src={url}
+                    alt="img"
+                    key={index}
+                  ></img>
+                )
+              })}
           </form>
         </InfoCard>
       </div>
