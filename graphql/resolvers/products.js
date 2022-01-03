@@ -32,11 +32,11 @@ module.exports = {
     // If a subcategory was entered, create the subcategory
     // and assign it to the product
     let foundSubcategory = await Subcategory.findOne({
-      name: productInput.subcategory,
+      name: productInput.subcategory.toLowerCase(),
     })
     if (!foundSubcategory) {
       foundSubcategory = await Subcategory.create({
-        name: productInput.subcategory,
+        name: productInput.subcategory.toLowerCase(),
         category: foundCategory._id,
       })
     }
@@ -44,7 +44,7 @@ module.exports = {
     // Create the product, with category _id
     const createdProduct = await Product.create({
       name: productInput.name,
-      category: foundCategory._id,
+      category: foundCategory._id.toLowerCase(),
       subcategory: foundSubcategory._id,
       description: productInput.description,
       price: productInput.price,

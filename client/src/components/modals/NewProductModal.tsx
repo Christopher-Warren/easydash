@@ -65,12 +65,151 @@ const NewProductModal = () => {
   // Track page loads
   const pageLoads = useRef(0)
 
+  // Experimental
+
   // Temp preview image
   const [selectedImg, setSelectedImg] = useState(0)
   const [imgUrls, setImgUrls] = useState([])
 
-  // Initialize Async State
+  // Event Handlers
+  const handleFileOnChange = (e: any) => {
+    setImgUrls((prev) => {
+      const arr: any = []
+
+      const fileInput = document.getElementById('file_input') as any
+      const images = fileInput && Object.values(fileInput.files)
+
+      images.forEach((image: any) => {
+        arr.push(URL.createObjectURL(image))
+      })
+      return arr
+    })
+  }
+
+  const handleCategorySelect = (e: any) => {
+    const selectedIndex = e.target.options.selectedIndex
+
+    if (selectedIndex < data.categories.length) {
+      // If selecting valid category
+      setSelectedCategory(selectedIndex)
+      setNewCategoryInput('')
+
+      // Resets subcategory <Select />
+      setSubcategory('')
+    } else {
+      // If selecting new category
+
+      setSelectedCategory(-1)
+      setSubcategory('new-subcategory')
+    }
+    // Handle case where Category has no Subcategories
+    if (data.categories[selectedIndex]?.subcategories.length === 0) {
+      setSubcategory('new-subcategory')
+    }
+
+    setCategory(e.currentTarget.value)
+  }
+
+  const handleSubcategorySelect = (e: any) => {
+    const selectedIndex = e.currentTarget.options.selectedIndex
+
+    if (selectedIndex < data.categories.length) {
+      setNewCategoryInput('')
+    }
+    setSubcategory(e.currentTarget.value)
+  }
+
+  const handleFormSubmit = (e: any) => {
+    e.preventDefault()
+    const formData = new FormData()
+    const fileInput = document.getElementById('file_input') as any
+    const images = fileInput && Object.values(fileInput.files)
+
+    images.forEach((file: any) => {
+      formData.append('photos', file)
+    })
+
+    // this should throw an error
+    // formData.append('photos', fileInput.files)
+
+    createProduct({
+      variables: {
+        name,
+        category: newCategoryInput ? newCategoryInput : category,
+        subcategory: newSubCategoryInput ? newCategoryInput : subcategory,
+        description,
+        price,
+        stock,
+      },
+    })
+      .then(({ data }) => {
+        axios.post('/api/image', formData, {
+          headers: {
+            productid: data.createProduct._id,
+          },
+        })
+      })
+      .catch((err) => console.log('ERROR: ', err))
+  }
+
+  // Render Methods
+  const renderSubcategories = () => {
+    return data.categories[selectedCategory]?.subcategories.map(
+      (subcategory: any, index: number, arr: any) => {
+        return (
+          <Fragment key={index}>
+            <option>{subcategory.name}</option>
+            {index === arr.length - 1 && (
+              <option
+                value="new-subcategory"
+                onClick={(e) => setSubcategory(e.currentTarget.value)}
+              >
+                New Subcategory
+              </option>
+            )}
+          </Fragment>
+        )
+      },
+    )
+  }
+
+  const renderCategories = () => {
+    return data.categories.map((category: any, index: number) => {
+      return (
+        <Fragment key={index}>
+          <option>{category.name}</option>
+        </Fragment>
+      )
+    })
+  }
+
+  const renderImagePreview = () => {
+    return (
+      imgUrls &&
+      imgUrls.map((url, index) => {
+        return (
+          <Fragment key={index}>
+            {index === 0 && (
+              <img
+                className=" object-contain"
+                src={imgUrls[selectedImg]}
+                alt="img"
+              ></img>
+            )}
+            <img
+              className="w-1/4 h-10 inline-block object-contain"
+              onClick={(e) => setSelectedImg(index)}
+              src={url}
+              alt="img"
+            ></img>
+          </Fragment>
+        )
+      })
+    )
+  }
+
   useEffect(() => {
+    // Initialize Async State
     if (data && data.categories[0] && pageLoads.current < 1) {
       pageLoads.current++
       setCategory(data.categories[0].name)
@@ -79,131 +218,21 @@ const NewProductModal = () => {
     if (data && !data.categories[0] && pageLoads.current < 1) {
       setCategory('new-category')
       setSubcategory('new-subcategory')
-      console.log('no data')
     }
   }, [data])
-
-  // @TODO: Need to handle these edge cases
-  // • When user tries to submit new category or new subcategory
-  // • When user does NOT include an image
-  // • When 'new-category' is selected, it should be 'New Category' instead,
-  //   similar to 'New Subcategory'
-
-  // prevent user from using value 'new-category'
-
-  // when submitting empty new category, newCategoryInput = false
-  // thus a category of 'new-category' is created instead of ''
-
-  const fileInput = document.getElementById('file_input') as any
-  const images = Object.values(fileInput.files)
 
   return (
     <ModalContainer>
       <div className="w-full left-0 z-30">
         <InfoCard title="New Product">
-          {/* <div className="text-red-800">
-            {category} {subcategory}
-            <br />
-            {'input: ' + newCategoryInput}
-            <select
-              onChange={(e) => {
-                console.log(e.currentTarget.selectedOptions[0].id)
-              }}
-            >
-              <option id="1234">thing</option>
-              <option id="1619167">thing2</option>
-            </select>
-          </div> */}
-
-          <form
-            id="123"
-            onSubmit={(e: any) => {
-              e.preventDefault()
-              const formData = new FormData()
-
-              images.forEach((file: any) => {
-                formData.append('photos', file)
-              })
-
-              createProduct({
-                variables: {
-                  name,
-                  category: newCategoryInput ? newCategoryInput : category,
-                  subcategory: newSubCategoryInput
-                    ? newCategoryInput
-                    : subcategory,
-                  description,
-                  price,
-                  stock,
-                },
-              })
-                .then(({ data }) => {
-                  console.log('CREATED: ', formData)
-                  axios
-                    .post('/api/image', formData, {
-                      headers: {
-                        productid: data.createProduct._id,
-                      },
-                    })
-                    .then((data) => {
-                      console.log('DATA!', data)
-                    })
-                    .catch((err) => console.log('ERROR!', err))
-                })
-                .catch((err) => console.log('ERROR!?!?!?1', err))
-
-              console.log(
-                category,
-                subcategory,
-                name,
-                description,
-                price,
-                stock,
-              )
-            }}
-          >
+          <form onSubmit={handleFormSubmit}>
             <label htmlFor="category-select">Select a category</label>
             <select
               id="category-select"
               value={category}
-              onChange={(e) => {
-                const selectedIndex = e.target.options.selectedIndex
-
-                if (selectedIndex < data.categories.length) {
-                  // If selecting valid category
-                  setSelectedCategory(selectedIndex)
-                  setNewCategoryInput('')
-
-                  // Resets subcategory <Select />
-                  setSubcategory('')
-                } else {
-                  // If selecting new category
-
-                  setSelectedCategory(-1)
-                  setSubcategory('new-subcategory')
-                }
-                // Handle case where Category has no Subcategories
-                if (
-                  data.categories[selectedIndex]?.subcategories.length === 0
-                ) {
-                  setSubcategory('new-subcategory')
-                }
-
-                setCategory(e.currentTarget.value)
-              }}
+              onChange={handleCategorySelect}
             >
-              {data &&
-                data.categories.map((category: any, index: number) => {
-                  return (
-                    <Fragment key={index}>
-                      <option>{category.name}</option>
-
-                      {/* {index === data.categories.length - 1 && (
-                        
-                      )} */}
-                    </Fragment>
-                  )
-                })}
+              {data && renderCategories()}
               <option value="new-category">New Category</option>
             </select>
             <input
@@ -219,33 +248,9 @@ const NewProductModal = () => {
             <select
               id="subcategory-select"
               value={subcategory}
-              onChange={(e) => {
-                const selectedIndex = e.currentTarget.options.selectedIndex
-
-                if (selectedIndex < data.categories.length) {
-                  setNewCategoryInput('')
-                }
-                setSubcategory(e.currentTarget.value)
-              }}
+              onChange={handleSubcategorySelect}
             >
-              {data &&
-                data.categories[selectedCategory]?.subcategories.map(
-                  (subcategory: any, index: number) => {
-                    return (
-                      <Fragment key={index}>
-                        <option>{subcategory.name}</option>
-                      </Fragment>
-                    )
-                  },
-                )}
-              {data && (
-                <option
-                  value="new-subcategory"
-                  onClick={(e) => setSubcategory(e.currentTarget.value)}
-                >
-                  New Subcategory
-                </option>
-              )}
+              {data && renderSubcategories()}
             </select>
             <input
               className="bg-gray-600 disabled:opacity-40"
@@ -280,37 +285,11 @@ const NewProductModal = () => {
               type="file"
               multiple
               accept=".jpg,.gif,.jpeg,.png"
-              onChange={(e: any) => {
-                // Preview images
-                setImgUrls((prev) => {
-                  const arr: any = []
-                  images.forEach((image: any) => {
-                    arr.push(URL.createObjectURL(image))
-                  })
-                  return arr
-                })
-              }}
+              onChange={handleFileOnChange}
             ></input>
             <button type="submit">submit</button>
-            {imgUrls && (
-              <img
-                className=" object-contain"
-                src={imgUrls[selectedImg]}
-                alt="img"
-              ></img>
-            )}
-            {imgUrls &&
-              imgUrls.map((url, index) => {
-                return (
-                  <img
-                    className="w-1/4 h-10 inline-block object-contain"
-                    onClick={(e) => setSelectedImg(index)}
-                    src={url}
-                    alt="img"
-                    key={index}
-                  ></img>
-                )
-              })}
+
+            {renderImagePreview()}
           </form>
         </InfoCard>
       </div>
