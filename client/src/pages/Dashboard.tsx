@@ -8,13 +8,28 @@ import {
   Switch,
   Route,
   NavLink,
+  useLocation,
+  Redirect,
 } from 'react-router-dom'
 import Products from './dashboard/Products'
 
 import Modals from './modals/Modals'
+import { useEffect } from 'react'
+
+import { store } from '../redux/store'
+import { addError } from '../redux/error/errorSlice'
 
 const Dashboard = ({ logout, userId }: any) => {
-  // document.body.style.overflow = 'visible'
+  let location = useLocation()
+
+  useEffect(() => {
+    console.log('location changed')
+
+    // if (true) {
+    //   store.dispatch(addError('Not authorized'))
+    //   // return <Redirect to="/"></Redirect>
+    // }
+  }, [location])
 
   return (
     <>

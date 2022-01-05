@@ -1,28 +1,40 @@
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom'
 
 import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
 import ErrorNotifs from './components/ErrorNotifs'
 
-import useLogin from './hooks/useLogin'
+import useLogin from './hooks/useAdminLogin'
 
 import FormButton from './components/PrimaryButton'
 
 function App() {
-  const { login, loading, user, userId, error, logout } = useLogin()
+  const { login, loading, user, isAdmin, userId, error, logout } = useLogin()
+
+  // Check isAdmin here, and redirect customer to '/' if they arent an admin
+
+  const renderDashboard = () => {
+    if (user.isLoggedIn && isAdmin) {
+      return <Dashboard logout={logout} userId={userId} />
+    }
+
+    if (user.isLoggedIn && !isAdmin) {
+      return <Redirect to="/" />
+    }
+
+    return <Login login={login} loginError={error} loading={loading} />
+  }
 
   return (
     <Router>
       <Switch>
         {/* Admin Dashboard Entry */}
-        <Route path="/dashboard">
-          {/* {<LoadingSpinner />} */}
-          {user.isLoggedIn ? (
-            <Dashboard logout={logout} userId={userId} />
-          ) : (
-            <Login login={login} loginError={error} loading={loading} />
-          )}
-        </Route>
+        <Route path="/dashboard">{renderDashboard()}</Route>
         {/* Customer Entry */}
         <Route path="/" exact>
           {user.isLoggedIn && (

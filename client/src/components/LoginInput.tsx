@@ -33,7 +33,7 @@ interface InputProps {
   minLength?: number
 }
 
-const FormInput = ({
+const LoginInput = ({
   children,
   id,
   name,
@@ -81,4 +81,4 @@ const FormInput = ({
   )
 }
 
-export default FormInput
+export default LoginInput

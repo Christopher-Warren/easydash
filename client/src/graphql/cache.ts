@@ -9,6 +9,12 @@ export const cache: InMemoryCache = new InMemoryCache({
             return isLoggedInVar()
           },
         },
+        isAdmin: {
+          read() {
+            return isAdminVar()
+          },
+        },
+
         cartItems: {
           read() {
             return cartItemsVar()
@@ -18,6 +24,28 @@ export const cache: InMemoryCache = new InMemoryCache({
     },
   },
 })
+
+// Initializes to true if localStorage includes a 'token' key,
+// false otherwise
+const isAdmin = localStorage.getItem('role') === 'ADMIN' || false
+
+let isAdmin2 = false
+if (
+  localStorage.getItem('role') === 'ADMIN' ||
+  localStorage.getItem('role') === 'USER'
+) {
+  console.log('huh')
+  isAdmin2 = true
+} else {
+  isAdmin2 = false
+}
+console.log(
+  'well: ',
+  localStorage.getItem('role') === 'ADMIN' ||
+    localStorage.getItem('role') === 'USER',
+)
+console.log('role: ', localStorage.getItem('role'))
+export const isAdminVar = makeVar<boolean>(isAdmin2)
 
 // Initializes to true if localStorage includes a 'token' key,
 // false otherwise

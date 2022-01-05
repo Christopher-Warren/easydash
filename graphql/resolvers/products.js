@@ -4,7 +4,7 @@ const Category = require('../../models/category')
 const Subcategory = require('../../models/subcategory')
 
 module.exports = {
-  products: async () => {
+  products: async ({ isAuth }) => {
     const products = await Product.find({})
       .populate('category')
       .populate('subcategory')

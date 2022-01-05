@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import PrimaryButton from '../PrimaryButton'
-import FormInput from '../FormInput'
+import FormInput from '../LoginInput'
 
 import { validatePassword } from '../../utils/validatePassword'
 import { useMutation, gql } from '@apollo/client'

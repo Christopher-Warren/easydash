@@ -1,5 +1,5 @@
 import PrimaryButton from '../components/PrimaryButton'
-import FormInput from '../components/FormInput'
+import FormInput from '../components/LoginInput'
 import logo from '../assets/logobanner.png'
 import { BrowserRouter as Switch, Route, Link } from 'react-router-dom'
 

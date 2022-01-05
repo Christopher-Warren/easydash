@@ -1,12 +1,12 @@
 import { useMutation, useQuery, gql } from '@apollo/client'
 
-import { isLoggedInVar } from '../graphql/cache'
+import { isLoggedInVar, isAdminVar } from '../graphql/cache'
 
 import { store } from '../redux/store'
 import { addError } from '../redux/error/errorSlice'
 
-const useLogin = () => {
-  const [login, { loading, error }] = useMutation(
+const useAdminLogin = () => {
+  const [login, { loading, error, data }] = useMutation(
     gql`
       mutation Login($email: String!, $password: String!) {
         login(email: $email, password: $password) {
@@ -18,6 +18,12 @@ const useLogin = () => {
     `,
     {
       onCompleted: ({ login }) => {
+        console.log(login.role)
+        if (login.role === 'ADMIN' || login.role === 'USER') {
+          localStorage.setItem('role', login.role)
+          isAdminVar(true)
+        }
+
         localStorage.setItem('user', login.email as string)
         isLoggedInVar(true)
       },
@@ -27,6 +33,11 @@ const useLogin = () => {
   const IS_LOGGED_IN = gql`
     query IsUserLoggedIn {
       isLoggedIn @client
+    }
+  `
+  const IS_ADMIN = gql`
+    query IsAdmin {
+      isAdmin @client
     }
   `
   const LOGOUT = gql`
@@ -39,15 +50,21 @@ const useLogin = () => {
   const userId = localStorage.getItem('user')
   const [logout] = useMutation(LOGOUT, {
     onCompleted: (data) => {
+      isAdminVar(false)
       isLoggedInVar(false)
+      localStorage.removeItem('role')
       localStorage.removeItem('user')
+
       store.dispatch(addError(data.logout.message))
     },
   })
 
   const { data: user } = useQuery(IS_LOGGED_IN)
+  const { data: isAdminData } = useQuery(IS_ADMIN)
+  const isAdmin = isAdminData.isAdmin
+  console.log(isAdmin)
 
-  return { login, user, loading, userId, error, logout }
+  return { login, user, isAdmin, loading, userId, error, logout }
 }
 
-export default useLogin
+export default useAdminLogin

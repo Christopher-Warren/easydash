@@ -2,7 +2,7 @@ import InfoCard from '../InfoCard'
 import ModalContainer from './ModalContainer'
 
 import { useQuery, gql, useLazyQuery, useMutation } from '@apollo/client'
-import FormInput from '../FormInput'
+import FormInput from '../LoginInput'
 import { Fragment, useEffect, useRef, useState } from 'react'
 
 import axios from 'axios'

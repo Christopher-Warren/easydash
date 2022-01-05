@@ -15,8 +15,10 @@ module.exports = {
       // then save the role in our db
       if (userInput.email === process.env.ADMIN_ROLE) {
         role = 'ADMIN'
-      } else {
+      } else if (userInput.email === process.env.USER_ROLE) {
         role = 'USER'
+      } else {
+        role = 'CUSTOMER'
       }
       const user = new User({
         email: userInput.email,
