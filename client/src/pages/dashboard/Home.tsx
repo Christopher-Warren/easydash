@@ -12,8 +12,6 @@ const Home = ({ userId }: any) => {
     }
   `)
 
-  console.log('asdasd', userId)
-
   /* <p className="bg-white border border-gray-200 rounded-md p-2">
         hello, world
       </p> */

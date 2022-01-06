@@ -101,8 +101,6 @@ module.exports = {
         .populate('subcategories')
     }
 
-    console.log('products.js: category', category)
-
     return categories
   },
   createCategory: async ({ name }) => {

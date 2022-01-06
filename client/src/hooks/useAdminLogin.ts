@@ -18,7 +18,6 @@ const useAdminLogin = () => {
     `,
     {
       onCompleted: ({ login }) => {
-        console.log(login.role)
         if (login.role === 'ADMIN' || login.role === 'USER') {
           localStorage.setItem('role', login.role)
           isAdminVar(true)
@@ -62,7 +61,6 @@ const useAdminLogin = () => {
   const { data: user } = useQuery(IS_LOGGED_IN)
   const { data: isAdminData } = useQuery(IS_ADMIN)
   const isAdmin = isAdminData.isAdmin
-  console.log(isAdmin)
 
   return { login, user, isAdmin, loading, userId, error, logout }
 }

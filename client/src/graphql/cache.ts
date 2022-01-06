@@ -34,17 +34,11 @@ if (
   localStorage.getItem('role') === 'ADMIN' ||
   localStorage.getItem('role') === 'USER'
 ) {
-  console.log('huh')
   isAdmin2 = true
 } else {
   isAdmin2 = false
 }
-console.log(
-  'well: ',
-  localStorage.getItem('role') === 'ADMIN' ||
-    localStorage.getItem('role') === 'USER',
-)
-console.log('role: ', localStorage.getItem('role'))
+
 export const isAdminVar = makeVar<boolean>(isAdmin2)
 
 // Initializes to true if localStorage includes a 'token' key,

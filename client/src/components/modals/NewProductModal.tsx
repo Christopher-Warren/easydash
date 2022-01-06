@@ -129,6 +129,7 @@ const NewProductModal = () => {
       formData.append('photos', file)
     })
 
+    // BUG
     // this should throw an error
     // formData.append('photos', fileInput.files)
 
