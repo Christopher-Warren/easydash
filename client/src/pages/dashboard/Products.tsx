@@ -65,7 +65,7 @@ const Products = ({ userId }: any) => {
 
                       {item.images[0] && (
                         <img
-                          className="w-14"
+                          className="w-14 h-14 object-cover object-center"
                           src={item.images[0]}
                           alt={item.name + ' Image'}
                         ></img>

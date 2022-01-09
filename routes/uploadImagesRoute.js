@@ -29,7 +29,6 @@ module.exports = (app) =>
     if (!productId) {
       throw new Error('productId is ' + req.body.productId)
     }
-    console.log(images)
 
     const imgUrls = []
     const imageNames = []
@@ -65,6 +64,7 @@ module.exports = (app) =>
             Bucket: 'easydashbucket',
             Key: `product_photos/${productId}/${imageNames[index]}`,
             Body: uploadedImage,
+            ContentType: image.mimetype,
             ACL: 'public-read',
           },
           (err, data) => {
