@@ -137,7 +137,7 @@ const NewProductModal = () => {
       variables: {
         name,
         category: newCategoryInput ? newCategoryInput : category,
-        subcategory: newSubCategoryInput ? newCategoryInput : subcategory,
+        subcategory: newSubCategoryInput ? newSubCategoryInput : subcategory,
         description,
         price,
         stock,
@@ -155,10 +155,23 @@ const NewProductModal = () => {
 
   // Render Methods
   const renderSubcategories = () => {
+    console.log(data.categories[selectedCategory])
+    if (data.categories[selectedCategory] === undefined) {
+      return (
+        <option
+          value="new-subcategory"
+          onClick={(e) => setSubcategory(e.currentTarget.value)}
+        >
+          New Subcategory
+        </option>
+      )
+    }
+
     return data.categories[selectedCategory]?.subcategories.map(
       (subcategory: any, index: number, arr: any) => {
         return (
           <Fragment key={index}>
+            {console.log(index, arr.length)}
             <option>{subcategory.name}</option>
             {index === arr.length - 1 && (
               <option

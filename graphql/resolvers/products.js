@@ -4,10 +4,11 @@ const Category = require('../../models/category')
 const Subcategory = require('../../models/subcategory')
 
 module.exports = {
-  products: async ({ isAuth }) => {
+  products: async (arg1, { isAdmin }) => {
     const products = await Product.find({})
       .populate('category')
       .populate('subcategory')
+
     return products
   },
   createProduct: async ({ productInput }) => {
@@ -44,7 +45,7 @@ module.exports = {
     // Create the product, with category _id
     const createdProduct = await Product.create({
       name: productInput.name,
-      category: foundCategory._id.toLowerCase(),
+      category: foundCategory._id,
       subcategory: foundSubcategory._id,
       description: productInput.description,
       price: productInput.price,

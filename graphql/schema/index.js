@@ -68,6 +68,7 @@ module.exports = buildSchema(`
             description: String!
             price: Float!
             createdAt: String!
+            images: [String]
             stock: Float!
         }
 
