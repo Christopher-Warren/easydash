@@ -10,6 +10,7 @@ import { toggleModal } from '../../redux/modal/modalSlice'
 
 import { Forms } from '../../enums/index'
 import LoadingSpinner from '../../components/LoadingSpinner'
+import TableCard from '../../components/TableCard'
 
 const Products = ({ userId }: any) => {
   const { data, loading, error } = useQuery(gql`
@@ -23,6 +24,8 @@ const Products = ({ userId }: any) => {
         subcategory {
           name
         }
+        price
+        stock
       }
     }
   `)
@@ -49,39 +52,96 @@ const Products = ({ userId }: any) => {
         </SecondaryButton>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 my-5 text-gray-800 relative">
-        <div className="col-span-12 ">
-          <InfoCard>
-            <h1 className="text-xl relative ">All Products</h1>
+      <TableCard>
+        <table className="w-full">
+          <thead>
+            <tr className="text-gray-800 text-xl">
+              <th className="px-5 py-3">
+                <input type="checkbox" className=""></input>
+              </th>
+              <th></th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Stock</th>
+              <th className="pr-3">Price</th>
+            </tr>
+          </thead>
+          <tbody className="text-gray-800">
             {!loading &&
               !error &&
               data.products.map((item: any, index: any) => {
                 console.log(item)
                 return (
-                  <div className=" " key={index}>
-                    <div className="border-b border-gray-300 w-full absolute left-0 overflow-hidden" />
-                    <div className="">
-                      <h2 className="text-lg leading-none">{item.name}</h2>
+                  <tr className="relative hover:bg-purple-200 ">
+                    <td className="px-5 py-3 w-0">
+                      <input type="checkbox" className=""></input>
+                    </td>
 
+                    <td className="w-16">
+                      <img
+                        className="w-12 h-12 object-cover object-center font-light"
+                        src={item.images[0] ? item.images[0] : ''}
+                        alt={item.name + ' '}
+                      ></img>
+                    </td>
+
+                    <td className="">
+                      <div className="border-t border-gray-200 w-screen  absolute left-0 top-0 " />
+                      <div className="relative py-2">
+                        <div>
+                          <h2 className="text-lg  leading-none">{item.name}</h2>
+                          <span className="text-sm font text-gray-700 ">
+                            {item.category.name}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div className=" relative">{item.subcategory.name}</div>
+                    </td>
+                    <td>
+                      <div className=" relative">{item.stock}</div>
+                    </td>
+                    <td className="">
+                      <div className=" relative">{item.price}</div>
+                    </td>
+                  </tr>
+                )
+              })}
+          </tbody>
+        </table>
+
+        {/* <h1 className="text-2xl relative p-3">All Products</h1>
+            {!loading &&
+              !error &&
+              data.products.map((item: any, index: any) => {
+                console.log(item)
+                return (
+                  <div className="hover:bg-purple-200 relative" key={index}>
+                    <div className="border-t border-gray-200 w-full absolute left-0 top-0" />
+
+                    <div className="p-2 flex">
+                      <input type="checkbox" className="w-4 mr-4"></input>
                       {item.images[0] && (
                         <img
-                          className="w-14 h-14 object-cover object-center"
+                          className="w-12 h-12 object-cover object-center"
                           src={item.images[0]}
                           alt={item.name + ' Image'}
                         ></img>
                       )}
+                      <div>
+                        <h2 className="text-xl leading-none">{item.name}</h2>
+                        <span className="text-sm font-light ">
+                          {item.category.name}
+                        </span>
+                      </div>
 
-                      <div className="text-sm ">{item.category.name}</div>
                       <div className="text-sm ">{item.subcategory.name}</div>
                     </div>
-
-                    <div className=" border-t border-gray-300 w-full absolute left-0 overflow-hidden" />
                   </div>
                 )
-              })}
-          </InfoCard>
-        </div>
-      </div>
+              })} */}
+      </TableCard>
     </PageWrapper>
   )
 }
