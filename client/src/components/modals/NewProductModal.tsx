@@ -221,9 +221,8 @@ const NewProductModal = () => {
       })
     )
   }
-
+  // Initialize Async State
   useEffect(() => {
-    // Initialize Async State
     if (data && data.categories[0] && pageLoads.current < 1) {
       pageLoads.current++
       setCategory(data.categories[0].name)
