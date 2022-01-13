@@ -32,10 +32,10 @@ const Products = ({ userId }: any) => {
   `)
   const dispatch = useAppDispatch()
 
-  const [isChecked, setIsChecked] = useState<undefined | any[]>(undefined)
+  const [isChecked, setIsChecked] = useState<undefined | any[]>([])
 
   const useCheck = (data: any, state: any) => {
-    if (data && !state) {
+    if (data && state.length === 0) {
       // can set initial state
       return true
     } else {
@@ -47,9 +47,14 @@ const Products = ({ userId }: any) => {
 
   if (isloaded) {
     // Initialize async state
-
+    console.log('init')
     setIsChecked(data.products.map(() => false))
   }
+
+  // The warning is coming from the fact that isChecked is initially
+  // rendered as an empty array, causing our input to start with an unidentified
+  // value.
+  // We need to find a better way to handle our async state.
 
   const renderTable = () => {
     if (loading) {
@@ -211,13 +216,14 @@ const Products = ({ userId }: any) => {
           <thead>
             <tr className="text-gray-800 text-xl">
               <td className="px-6 py-3 w-0">
-                <input
+                {/* <input
                   type="checkbox"
                   className="w-4 h-4"
-                  onChange={() =>
+                  checked={isChecked?.every((val) => val === true) || false}
+                  onChange={() => {
                     setIsChecked((state) => state?.map((val) => !val))
-                  }
-                ></input>
+                  }}
+                ></input> */}
               </td>
               <th></th>
               <th>Name</th>
