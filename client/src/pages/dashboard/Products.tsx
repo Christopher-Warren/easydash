@@ -122,7 +122,7 @@ const Products = ({ userId }: any) => {
             }`}
             key={index}
           >
-            <td className="">
+            <td className="w-14 px-5 py-2">
               <input
                 type="checkbox"
                 className="w-4 h-4"
@@ -173,7 +173,7 @@ const Products = ({ userId }: any) => {
                 )}
               </div>
             </td>
-            <td className="">
+            <td className="px-5">
               <div className="border-t border-gray-200 w-screen  absolute left-0 top-0 " />
               <div className="relative py-2">
                 <div className="">
@@ -190,7 +190,7 @@ const Products = ({ userId }: any) => {
             <td className="">
               <div className=" relative">{item.stock}</div>
             </td>
-            <td className="text-right">
+            <td className="text-right px-8">
               <div className=" relative">{item.price}</div>
             </td>
           </tr>
@@ -221,14 +221,14 @@ const Products = ({ userId }: any) => {
       </div>
 
       <TableCard>
-        <table className="table-fixed w-full">
+        <table className="table-fixed w-full capitalize">
           <thead>
             <tr
               className={`text-gray-800 text-xl ${
                 isChecked.some((val) => val === true) && 'bg-purple-50'
               }`}
             >
-              <th className="w-4">
+              <th className="w-14 px-5 py-3">
                 <input
                   type="checkbox"
                   className="w-4 h-4"
@@ -255,17 +255,28 @@ const Products = ({ userId }: any) => {
                   strokeWidth="1"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="w-8"
+                  className="w-8 opacity-0"
                 >
                   <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                   <circle cx="8.5" cy="8.5" r="1.5"></circle>
                   <polyline points="21 15 16 10 5 21"></polyline>
                 </svg>
               </th>
-              <th className="">Name</th>
-              <th className="">Category</th>
-              <th className="">Stock</th>
-              <th className="text-right">Price</th>
+              {isChecked.some((val) => val === true) ? (
+                <>
+                  <th className="lg:w-5/12"></th>
+                  <th className="w-3/12"></th>
+                  <th className="w-1/12"></th>
+                  <th className="text-right pr-8"></th>
+                </>
+              ) : (
+                <>
+                  <th className="lg:w-5/12 px-5">Name</th>
+                  <th className="w-3/12">Category</th>
+                  <th className="w-1/12">Stock</th>
+                  <th className="text-right pr-8">Price</th>
+                </>
+              )}
             </tr>
           </thead>
           <tbody className="text-gray-800 w-full">{renderTable()}</tbody>
