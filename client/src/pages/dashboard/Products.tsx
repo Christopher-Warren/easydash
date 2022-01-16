@@ -13,6 +13,8 @@ import LoadingSpinner from '../../components/LoadingSpinner'
 import TableCard from '../../components/TableCard'
 import { useEffect, useRef, useState } from 'react'
 
+import '../../assets/css/tables.css'
+
 const Products = ({ userId }: any) => {
   const { data, loading, error } = useQuery(gql`
     query getCategories {
@@ -27,12 +29,13 @@ const Products = ({ userId }: any) => {
         }
         price
         stock
+        _id
       }
     }
   `)
   const dispatch = useAppDispatch()
 
-  const [isChecked, setIsChecked] = useState<undefined | any[]>([])
+  const [isChecked, setIsChecked] = useState<boolean[]>([])
 
   const useCheck = (data: any, state: any) => {
     if (data && state.length === 0) {
@@ -51,11 +54,6 @@ const Products = ({ userId }: any) => {
     setIsChecked(data.products.map(() => false))
   }
 
-  // The warning is coming from the fact that isChecked is initially
-  // rendered as an empty array, causing our input to start with an unidentified
-  // value.
-  // We need to find a better way to handle our async state.
-
   const renderTable = () => {
     if (loading) {
       let skeleton = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -66,11 +64,16 @@ const Products = ({ userId }: any) => {
             className="relative pointer-events-none animate-pulse"
             key={index}
           >
-            <td className="px-6 py-5 w-0">
-              <input type="checkbox" className="w-4 h-4"></input>
+            <td className="">
+              <input
+                type="checkbox"
+                className="w-4 h-4"
+                checked={false}
+                onChange={(e) => null}
+              ></input>
             </td>
 
-            <td className="w-0 pr-2 text-gray-500">
+            <td className="  text-gray-500">
               <div className="border p-1 rounded-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -93,19 +96,19 @@ const Products = ({ userId }: any) => {
               <div className="border-t border-gray-200 w-screen  absolute left-0 top-0 " />
               <div className="relative py-2">
                 <div className="">
-                  <div className="textLg  leading-none bg-gray-300 roundedLg w-64 h-4 mb-2"></div>
-                  <div className="bg-gray-300 roundedLg w-1/4 h-4"></div>
+                  <div className="textLg  leading-none bg-gray-300 rounded-lg w-64 h-4 mb-2"></div>
+                  <div className="bg-gray-300 rounded-lg w-1/4 h-4"></div>
                 </div>
               </div>
             </td>
             <td>
-              <div className=" relative bg-gray-300 roundedLg w-1/4 h-4"></div>
+              <div className=" relative bg-gray-300 rounded-lg w-1/4 h-4"></div>
             </td>
             <td>
-              <div className=" relative bg-gray-300 roundedLg w-1/4 h-4"></div>
+              <div className=" relative bg-gray-300 rounded-lg w-1/4 h-4"></div>
             </td>
-            <td className="text-right pr-5">
-              <div className=" relative bg-gray-300 roundedLg h-4"></div>
+            <td className="">
+              <div className=" relative bg-gray-300 rounded-lg h-4"></div>
             </td>
           </tr>
         )
@@ -113,11 +116,17 @@ const Products = ({ userId }: any) => {
     } else if (!loading && !error) {
       return data.products.map((item: any, index: any) => {
         return (
-          <tr className="relative hover:bg-purple-200" key={index}>
-            <td className="px-6 py-5 w-0">
+          <tr
+            className={`relative hover:bg-purple-200 ${
+              isChecked[index] && 'bg-purple-50'
+            }`}
+            key={index}
+          >
+            <td className="">
               <input
                 type="checkbox"
                 className="w-4 h-4"
+                // value={item._id}
                 checked={isChecked && isChecked[index]}
                 onChange={() =>
                   setIsChecked((state) => {
@@ -130,12 +139,13 @@ const Products = ({ userId }: any) => {
               ></input>
             </td>
 
-            <td className="w-0 pr-2 text-gray-500">
-              <div className="border p-1 rounded-sm">
+            <td className=" text-gray-500">
+              <div className="border rounded-sm">
                 {item.images[0] ? (
                   <img
-                    className="w-8 h-8 object-cover object-center fontLight rounded-sm"
-                    src={item.images[0]}
+                    className=" object-cover object-center font-light rounded-sm w-8 h-8 p-0.5"
+                    // src={item.images[0]}
+                    src="https://via.placeholder.com/150"
                     alt={item.name + ' '}
                   ></img>
                 ) : (
@@ -144,10 +154,10 @@ const Products = ({ userId }: any) => {
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="1.2"
+                    strokeWidth="1"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className=" w-8  "
+                    className=""
                   >
                     <rect
                       x="3"
@@ -163,25 +173,24 @@ const Products = ({ userId }: any) => {
                 )}
               </div>
             </td>
-
-            <td>
+            <td className="">
               <div className="border-t border-gray-200 w-screen  absolute left-0 top-0 " />
               <div className="relative py-2">
-                <div className="w-64">
-                  <h2 className="textLg  leading-none">{item.name}</h2>
+                <div className="">
+                  <h2 className="text-lg  leading-none">{item.name}</h2>
                   <span className="text-sm font text-gray-700 ">
                     {item.category.name}
                   </span>
                 </div>
               </div>
             </td>
-            <td>
+            <td className="">
               <div className=" relative">{item.subcategory.name}</div>
             </td>
-            <td>
+            <td className="">
               <div className=" relative">{item.stock}</div>
             </td>
-            <td className="text-right pr-5">
+            <td className="text-right">
               <div className=" relative">{item.price}</div>
             </td>
           </tr>
@@ -193,7 +202,7 @@ const Products = ({ userId }: any) => {
   return (
     <PageWrapper>
       <h1 className="text-4xl text-gray-700 font-medium ">Products</h1>
-      <span className="text-gray-600 trackingWider ">
+      <span className="text-gray-600 tracking-wider ">
         These are products that you currently have listed for sale
       </span>
       <div className="flex my-5">
@@ -212,27 +221,54 @@ const Products = ({ userId }: any) => {
       </div>
 
       <TableCard>
-        <table className="w-full ">
+        <table className="table-fixed w-full">
           <thead>
-            <tr className="text-gray-800 text-xl">
-              <td className="px-6 py-3 w-0">
-                {/* <input
+            <tr
+              className={`text-gray-800 text-xl ${
+                isChecked.some((val) => val === true) && 'bg-purple-50'
+              }`}
+            >
+              <th className="w-4">
+                <input
                   type="checkbox"
                   className="w-4 h-4"
-                  checked={isChecked?.every((val) => val === true) || false}
+                  checked={
+                    isChecked.length > 0 &&
+                    isChecked.some((val) => val === true)
+                  }
                   onChange={() => {
-                    setIsChecked((state) => state?.map((val) => !val))
+                    if (isChecked.every((val) => val === true)) {
+                      setIsChecked((state) => state.map((val) => false))
+                    } else {
+                      setIsChecked((state) => state.map((val) => true))
+                    }
                   }}
-                ></input> */}
-              </td>
-              <th></th>
-              <th>Name</th>
-              <th>Category</th>
-              <th>Stock</th>
-              <th className="pr-5 w-0">Price</th>
+                ></input>
+              </th>
+
+              <th className="w-max">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-8"
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+              </th>
+              <th className="">Name</th>
+              <th className="">Category</th>
+              <th className="">Stock</th>
+              <th className="text-right">Price</th>
             </tr>
           </thead>
-          <tbody className="text-gray-800 ">{renderTable()}</tbody>
+          <tbody className="text-gray-800 w-full">{renderTable()}</tbody>
         </table>
       </TableCard>
     </PageWrapper>
