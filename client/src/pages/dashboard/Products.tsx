@@ -55,77 +55,20 @@ const Products = ({ userId }: any) => {
   }
 
   const renderTable = () => {
-    if (loading) {
-      let skeleton = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-
-      return skeleton.map((item: any, index: any) => {
-        return (
-          <tr
-            className="relative pointer-events-none animate-pulse"
-            key={index}
-          >
-            <td className="">
-              <input
-                type="checkbox"
-                className="w-4 h-4"
-                checked={false}
-                onChange={(e) => null}
-              ></input>
-            </td>
-
-            <td className="  text-gray-500">
-              <div className="border p-1 rounded-sm">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="w-8"
-                >
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                  <polyline points="21 15 16 10 5 21"></polyline>
-                </svg>
-              </div>
-            </td>
-
-            <td className=" ">
-              <div className="border-t border-gray-200 w-screen  absolute left-0 top-0 " />
-              <div className="relative py-2">
-                <div className="">
-                  <div className="textLg  leading-none bg-gray-300 rounded-lg w-64 h-4 mb-2"></div>
-                  <div className="bg-gray-300 rounded-lg w-1/4 h-4"></div>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className=" relative bg-gray-300 rounded-lg w-1/4 h-4"></div>
-            </td>
-            <td>
-              <div className=" relative bg-gray-300 rounded-lg w-1/4 h-4"></div>
-            </td>
-            <td className="">
-              <div className=" relative bg-gray-300 rounded-lg h-4"></div>
-            </td>
-          </tr>
-        )
-      })
-    } else if (!loading && !error) {
+    if (!loading && !error) {
       return data.products.map((item: any, index: any) => {
         return (
           <tr
-            className={`relative hover:bg-purple-200 ${
+            className={` hover:bg-purple-200 ${
               isChecked[index] && 'bg-purple-50'
             }`}
             key={index}
           >
-            <td className="w-14 px-5 py-2">
+            <td className="relative w-8 px-4 py-3">
+              <div className="border-b  border-gray-200 w-screen absolute  left-0  top-0 " />
               <input
                 type="checkbox"
-                className="w-4 h-4"
+                className="lg:w-4 w-5 h-5 lg:h-4"
                 // value={item._id}
                 checked={isChecked && isChecked[index]}
                 onChange={() =>
@@ -139,11 +82,11 @@ const Products = ({ userId }: any) => {
               ></input>
             </td>
 
-            <td className=" text-gray-500">
-              <div className="border rounded-sm">
+            <td className=" text-gray-500 md:table-cell hidden px-3">
+              <div className="border rounded-sm w-10 h-10 p-1">
                 {item.images[0] ? (
                   <img
-                    className=" object-cover object-center font-light rounded-sm w-8 h-8 p-0.5"
+                    className=" object-cover object-center font-light rounded-sm"
                     // src={item.images[0]}
                     src="https://via.placeholder.com/150"
                     alt={item.name + ' '}
@@ -173,12 +116,11 @@ const Products = ({ userId }: any) => {
                 )}
               </div>
             </td>
-            <td className="px-5">
-              <div className="border-t border-gray-200 w-screen  absolute left-0 top-0 " />
-              <div className="relative py-2">
+            <td className="px-5 relative">
+              <div className="py-2">
                 <div className="">
-                  <h2 className="text-lg  leading-none">{item.name}</h2>
-                  <span className="text-sm font text-gray-700 ">
+                  <h2 className="text-base  leading-none">{item.name}</h2>
+                  <span className="text-xs font text-gray-700 ">
                     {item.category.name}
                   </span>
                 </div>
@@ -190,8 +132,8 @@ const Products = ({ userId }: any) => {
             <td className="">
               <div className=" relative">{item.stock}</div>
             </td>
-            <td className="text-right px-8">
-              <div className=" relative">{item.price}</div>
+            <td className="text-right lg:pr-8 pr-3.5">
+              <div className=" relative">$999.99</div>
             </td>
           </tr>
         )
@@ -224,14 +166,14 @@ const Products = ({ userId }: any) => {
         <table className="table-fixed w-full capitalize">
           <thead>
             <tr
-              className={`text-gray-800 text-xl ${
+              className={`text-gray-700 text-base ${
                 isChecked.some((val) => val === true) && 'bg-purple-50'
               }`}
             >
-              <th className="w-14 px-5 py-3">
+              <th className="relative w-8 px-4 py-3 ">
                 <input
                   type="checkbox"
-                  className="w-4 h-4"
+                  className="lg:w-4 w-5 h-5 lg:h-4 mt-1"
                   checked={
                     isChecked.length > 0 &&
                     isChecked.some((val) => val === true)
@@ -246,7 +188,7 @@ const Products = ({ userId }: any) => {
                 ></input>
               </th>
 
-              <th className="w-max">
+              <th className="w-10 md:table-cell hidden">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -264,22 +206,24 @@ const Products = ({ userId }: any) => {
               </th>
               {isChecked.some((val) => val === true) ? (
                 <>
-                  <th className="lg:w-5/12"></th>
+                  <th className="lg:w-5/12 px-5"></th>
                   <th className="w-3/12"></th>
                   <th className="w-1/12"></th>
-                  <th className="text-right pr-8"></th>
+                  <th className="text-right lg:pr-8 pr-3.5"></th>
                 </>
               ) : (
                 <>
                   <th className="lg:w-5/12 px-5">Name</th>
                   <th className="w-3/12">Category</th>
                   <th className="w-1/12">Stock</th>
-                  <th className="text-right pr-8">Price</th>
+                  <th className="text-right lg:pr-8 pr-3.5">Price</th>
                 </>
               )}
             </tr>
           </thead>
-          <tbody className="text-gray-800 w-full">{renderTable()}</tbody>
+          <tbody className="w-full text-gray-700 text-base">
+            {renderTable()}
+          </tbody>
         </table>
       </TableCard>
     </PageWrapper>
