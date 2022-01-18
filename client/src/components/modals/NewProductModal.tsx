@@ -1,4 +1,4 @@
-import InfoCard from '../InfoCard'
+import InfoCard from '../cards/InfoCard'
 import ModalContainer from './ModalContainer'
 
 import { useQuery, gql, useLazyQuery, useMutation } from '@apollo/client'

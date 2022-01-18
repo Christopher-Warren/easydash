@@ -1,7 +1,7 @@
 import { useQuery, gql } from '@apollo/client'
 
 import PageWrapper from '../../components/PageWrapper'
-import InfoCard from '../../components/InfoCard'
+import InfoCard from '../../components/cards/InfoCard'
 
 const Home = ({ userId }: any) => {
   const { data, loading, error } = useQuery(gql`
@@ -45,12 +45,10 @@ const Home = ({ userId }: any) => {
 
   return (
     <PageWrapper>
-      <h1 className="text-4xl text-gray-700 font-medium">Hello, {userId}</h1>
-      <span className="text-gray-600 tracking-wider">
-        Welcome to your store's dashboard
-      </span>
+      <h1 className="text-4xl font-medium">Hello, {userId}</h1>
+      <span className=" tracking-wider">Welcome to your store's dashboard</span>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 my-5 text-gray-800">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 my-5 ">
         <div className="col-span-1  lg:col-span-9 grid grid-cols-2 gap-4">
           <div className="col-span-2 md:col-auto">
             <InfoCard title="Sales">

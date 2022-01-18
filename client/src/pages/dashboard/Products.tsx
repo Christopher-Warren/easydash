@@ -1,16 +1,16 @@
 import { useQuery, gql } from '@apollo/client'
 
 import PageWrapper from '../../components/PageWrapper'
-import InfoCard from '../../components/InfoCard'
+import InfoCard from '../../components/cards/InfoCard'
 import PrimaryButton from '../../components/PrimaryButton'
 import SecondaryButton from '../../components/SecondaryButton'
 
 import { useAppDispatch } from '../../redux/hooks'
 import { toggleModal } from '../../redux/modal/modalSlice'
 
-import { Forms } from '../../enums/index'
+import { ModalFormIDs } from '../modals/Modals'
 import LoadingSpinner from '../../components/LoadingSpinner'
-import TableCard from '../../components/TableCard'
+import TableCard from '../../components/cards/TableCard'
 import { useEffect, useRef, useState } from 'react'
 
 import '../../assets/css/tables.css'
@@ -58,16 +58,17 @@ const Products = ({ userId }: any) => {
       return data.products.map((item: any, index: any) => {
         return (
           <tr
-            className={` hover:bg-purple-200 ${
-              isChecked[index] && 'bg-purple-50'
+            className={` hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800  ${
+              isChecked[index] &&
+              'bg-purple-50 dark:bg-gray-700/50 odd:dark:bg-gray-700/50'
             }`}
             key={index}
           >
             <td className="relative w-8 px-4 py-3 ">
-              <div className="border-b  border-gray-200 w-screen absolute  left-0  top-0 " />
+              <div className="border-b border-gray-200 dark:border-gray-100/25 w-screen absolute  left-0  top-0 " />
               <input
                 type="checkbox"
-                className="lg:w-4 w-5 h-5 lg:h-4 accent-purple-700 "
+                className="lg:w-4 w-5 h-5 lg:h-4 accent-purple-500 "
                 // value={item._id}
                 checked={isChecked && isChecked[index]}
                 onChange={() =>
@@ -81,13 +82,13 @@ const Products = ({ userId }: any) => {
               ></input>
             </td>
 
-            <td className=" text-gray-500 md:table-cell hidden px-3">
-              <div className="border rounded-sm w-10 h-10 p-1">
+            <td className=" md:table-cell hidden px-3">
+              <div className="border dark:border-gray-100/25 rounded-sm dark:text-gray-100/60 w-10 h-10 p-1 ">
                 {item.images[0] ? (
                   <img
-                    className=" object-cover object-center font-light rounded-sm"
+                    className="object-cover object-center font-light rounded-sm"
                     // src={item.images[0]}
-                    src="https://via.placeholder.com/150"
+                    src="https://via.placeholder.com/40"
                     alt={item.name + ' '}
                   ></img>
                 ) : (
@@ -116,23 +117,23 @@ const Products = ({ userId }: any) => {
               </div>
             </td>
             <td className="px-5 relative">
-              <div className="py-2">
+              <div className="py-2.5">
                 <div className="">
-                  <h2 className="text-base  leading-none">{item.name}</h2>
-                  <span className="text-xs font text-gray-700 ">
-                    {item.category.name}
+                  <h2 className="text-base  leading-tight">{item.name}</h2>
+                  <span className="text-xs font tracking-wider">
+                    {item.subcategory.name}
                   </span>
                 </div>
               </div>
             </td>
             <td className="">
-              <div className=" relative">{item.subcategory.name}</div>
+              <div className=" relative">{item.category.name}</div>
             </td>
             <td className="">
               <div className=" relative">{item.stock}</div>
             </td>
             <td className="text-right lg:pr-8 pr-3.5">
-              <div className=" relative">$999.99</div>
+              <div className="relative dark:text-green-200">$999.99</div>
             </td>
           </tr>
         )
@@ -142,14 +143,14 @@ const Products = ({ userId }: any) => {
 
   return (
     <PageWrapper>
-      <h1 className="text-4xl text-gray-700 font-medium ">Products</h1>
-      <span className="text-gray-600 tracking-wider ">
+      <h1 className="text-4xl  font-medium ">Products</h1>
+      <span className=" tracking-wider dark:text-gray-100">
         These are products that you currently have listed for sale
       </span>
       <div className="flex my-5">
         <PrimaryButton
           className="px-5 py-1.5 mr-5"
-          id={Forms.newProduct}
+          id={ModalFormIDs.newProduct}
           handleClick={(e: any) => {
             dispatch(toggleModal(e.target.id))
           }}
@@ -165,14 +166,15 @@ const Products = ({ userId }: any) => {
         <table className="table-fixed w-full capitalize">
           <thead>
             <tr
-              className={`text-gray-700 text-base ${
-                isChecked.some((val) => val === true) && 'bg-purple-50'
+              className={`text-base dark:text-gray-400 text-gray-500 ${
+                isChecked.some((val) => val === true) &&
+                'bg-purple-50 dark:bg-gray-700'
               }`}
             >
               <th className="relative w-8 px-4 py-3 ">
                 <input
                   type="checkbox"
-                  className="lg:w-4 w-5 h-5 lg:h-4 mt-1 accent-purple-700"
+                  className="lg:w-4 w-5 h-5 lg:h-4 mt-1 accent-purple-500"
                   checked={
                     isChecked.length > 0 &&
                     isChecked.some((val) => val === true)
@@ -214,15 +216,13 @@ const Products = ({ userId }: any) => {
                 <>
                   <th className="lg:w-5/12 px-5">Name</th>
                   <th className="w-3/12">Category</th>
-                  <th className="w-1/12">Stock</th>
+                  <th className="w-1/12">Qty.</th>
                   <th className="text-right lg:pr-8 pr-3.5">Price</th>
                 </>
               )}
             </tr>
           </thead>
-          <tbody className="w-full text-gray-700 text-base">
-            {renderTable()}
-          </tbody>
+          <tbody className="w-full  text-base">{renderTable()}</tbody>
         </table>
       </TableCard>
     </PageWrapper>

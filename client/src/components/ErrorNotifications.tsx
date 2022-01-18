@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { removeError } from '../redux/error/errorSlice'
 import { useEffect, useRef } from 'react'
 
-const ErrorNotifs = () => {
+const ErrorNotifications = () => {
   const ref: any = useRef(0)
 
   const appError = useAppSelector((state) => state.error.value)
@@ -66,4 +66,4 @@ const ErrorNotifs = () => {
   )
 }
 
-export default ErrorNotifs
+export default ErrorNotifications

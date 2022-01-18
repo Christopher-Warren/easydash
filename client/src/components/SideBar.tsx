@@ -6,8 +6,8 @@ const SideBar = () => {
   const [sideToggle, setSideToggle] = useState(false)
   return (
     <div
-      className={`fixed top-0 w-20 h-28 z-10  transition-all duration-200 overflow-hidden lg:h-screen lg:border-r lg:shadow-xl
-      ${sideToggle && 'h-screen border-r shadow-xl bg-white'}`}
+      className={`fixed top-0 w-20 h-28 z-10  transition-all duration-200 overflow-hidden lg:h-screen bg-white dark:bg-gray-800 border-r dark:border-gray-100/25 lg:border-r lg:shadow-xl
+      ${sideToggle && 'h-screen border-r shadow-xl '}`}
     >
       <div className="lg:mt-32 mt-10 ">
         {/* MOBILE-ONLY Menu Button */}
@@ -17,7 +17,7 @@ const SideBar = () => {
           className="mx-auto -m-4 hidden lg:block"
         />
         <button
-          className="w-16 h-16  flex justify-center items-center text-purple-500  lg:hidden"
+          className="w-16 h-16  flex justify-center items-center   lg:hidden"
           onClick={() => {
             setSideToggle(!sideToggle)
           }}
