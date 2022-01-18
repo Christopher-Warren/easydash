@@ -3,21 +3,11 @@ import PrimaryButton from '../components/PrimaryButton'
 
 import Home from './dashboard/Home'
 
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  NavLink,
-  useLocation,
-  Redirect,
-} from 'react-router-dom'
+import { BrowserRouter as Router, Route, useLocation } from 'react-router-dom'
 import Products from './dashboard/Products'
 
 import Modals from './modals/Modals'
 import { useEffect } from 'react'
-
-import { store } from '../redux/store'
-import { addError } from '../redux/error/errorSlice'
 
 const Dashboard = ({ logout, userId }: any) => {
   let location = useLocation()
@@ -36,7 +26,7 @@ const Dashboard = ({ logout, userId }: any) => {
         <Modals />
         <SideBar />
       </Route>
-      <div className="lg:ml-20">
+      <div className="lg:pl-20">
         <Route path="/dashboard" exact>
           <Home userId={userId} />
           {/* Need to use this button in Products page */}

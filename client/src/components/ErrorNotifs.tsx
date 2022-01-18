@@ -36,7 +36,7 @@ const ErrorNotifs = () => {
             <li
               id={`error-${index}`}
               key={index}
-              className={`text-white py-2 px-5 min-w-max border border-red-400 rounded text-lg mt-4 error-fade-in bg-opacity-75
+              className={`text-white py-2 px-5 min-w-max border border-gray-200 rounded text-lg mt-4 error-fade-in bg-opacity-75
               ${success ? 'bg-green-500' : 'bg-red-500'}
              
               `}

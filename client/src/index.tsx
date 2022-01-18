@@ -14,7 +14,9 @@ ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
       <Provider store={store}>
-        <App />
+        <div className="dark dark:bg-gray-900 bg-purple-50 h-screen overflow-y-scroll">
+          <App />
+        </div>
       </Provider>
     </ApolloProvider>
   </React.StrictMode>,

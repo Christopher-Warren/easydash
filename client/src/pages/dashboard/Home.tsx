@@ -76,9 +76,9 @@ const Home = ({ userId }: any) => {
           </div>
         </div>
         <div className="col-span-1 lg:col-span-3 ">
-          <div className="lg:absolute ">
+          <div className="lg:absolute">
             <InfoCard title="Activity" titleClassName="pb-4 relative">
-              <div className="bg-gray-200 absolute h-px  left-0 w-full"></div>
+              <div className="bg-gray-200 absolute h-px left-0 w-full"></div>
               <ol className="text-lg py-4">
                 <li>Order #109582 Processed</li>
                 <li>Order #109582 Processed</li>

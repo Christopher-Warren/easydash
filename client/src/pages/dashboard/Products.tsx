@@ -50,7 +50,6 @@ const Products = ({ userId }: any) => {
 
   if (isloaded) {
     // Initialize async state
-    console.log('init')
     setIsChecked(data.products.map(() => false))
   }
 
@@ -64,11 +63,11 @@ const Products = ({ userId }: any) => {
             }`}
             key={index}
           >
-            <td className="relative w-8 px-4 py-3">
+            <td className="relative w-8 px-4 py-3 ">
               <div className="border-b  border-gray-200 w-screen absolute  left-0  top-0 " />
               <input
                 type="checkbox"
-                className="lg:w-4 w-5 h-5 lg:h-4"
+                className="lg:w-4 w-5 h-5 lg:h-4 accent-purple-700 "
                 // value={item._id}
                 checked={isChecked && isChecked[index]}
                 onChange={() =>
@@ -173,7 +172,7 @@ const Products = ({ userId }: any) => {
               <th className="relative w-8 px-4 py-3 ">
                 <input
                   type="checkbox"
-                  className="lg:w-4 w-5 h-5 lg:h-4 mt-1"
+                  className="lg:w-4 w-5 h-5 lg:h-4 mt-1 accent-purple-700"
                   checked={
                     isChecked.length > 0 &&
                     isChecked.some((val) => val === true)
