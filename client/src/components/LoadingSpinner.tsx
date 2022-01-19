@@ -29,9 +29,9 @@ const LoadingSpinner = () => {
       </svg> */
 
   return (
-    <div className="w-full h-full absolute top-0 left-0 flex justify-center items-center z-50 text-purple-500">
+    <div className="w-full h-full absolute top-0 left-0 flex justify-center items-center z-50 text-purple-500 visible">
       <svg
-        className="loader"
+        className="loader w-32"
         viewBox="0 0 100 100"
         xmlns="http://www.w3.org/2000/svg"
       >

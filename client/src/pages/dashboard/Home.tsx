@@ -46,7 +46,7 @@ const Home = ({ userId }: any) => {
   return (
     <PageWrapper>
       <h1 className="text-4xl font-medium">Hello, {userId}</h1>
-      <span className=" tracking-wider">Welcome to your store's dashboard</span>
+      <span className="tracking-wider">Welcome to your store's dashboard</span>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 my-5 ">
         <div className="col-span-1  lg:col-span-9 grid grid-cols-2 gap-4">

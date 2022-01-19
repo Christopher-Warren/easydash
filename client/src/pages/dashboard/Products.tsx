@@ -2,8 +2,8 @@ import { useQuery, gql } from '@apollo/client'
 
 import PageWrapper from '../../components/PageWrapper'
 import InfoCard from '../../components/cards/InfoCard'
-import PrimaryButton from '../../components/PrimaryButton'
-import SecondaryButton from '../../components/SecondaryButton'
+import PrimaryButton from '../../components/buttons/PrimaryButton'
+import SecondaryButton from '../../components/buttons/SecondaryButton'
 
 import { useAppDispatch } from '../../redux/hooks'
 import { toggleModal } from '../../redux/modal/modalSlice'
@@ -149,7 +149,7 @@ const Products = ({ userId }: any) => {
       </span>
       <div className="flex my-5">
         <PrimaryButton
-          className="px-5 py-1.5 mr-5"
+          padding="px-5 py-1.5 mr-5"
           id={ModalFormIDs.newProduct}
           handleClick={(e: any) => {
             dispatch(toggleModal(e.target.id))
@@ -157,7 +157,7 @@ const Products = ({ userId }: any) => {
         >
           NEW PRODUCT
         </PrimaryButton>
-        <SecondaryButton className="px-5 py-1.5">
+        <SecondaryButton padding="px-5 py-1.5">
           MANAGE CATEGORIES
         </SecondaryButton>
       </div>
@@ -168,7 +168,7 @@ const Products = ({ userId }: any) => {
             <tr
               className={`text-base dark:text-gray-400 text-gray-500 ${
                 isChecked.some((val) => val === true) &&
-                'bg-purple-50 dark:bg-gray-700'
+                'bg-purple-50 dark:bg-gray-700 last-of-type:'
               }`}
             >
               <th className="relative w-8 px-4 py-3 ">

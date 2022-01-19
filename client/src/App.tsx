@@ -7,11 +7,11 @@ import {
 
 import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
-import ErrorNotifs from './components/ErrorNotifications'
+import ErrorNotifs from './components/modals/ErrorNotifications'
 
 import useLogin from './hooks/useAdminLogin'
 
-import FormButton from './components/PrimaryButton'
+import FormButton from './components/buttons/PrimaryButton'
 
 function App() {
   const { login, loading, user, isAdmin, userId, error, logout } = useLogin()

@@ -11,6 +11,8 @@ const ModalContainer = ({ children }: any) => {
       className="bg-black bg-opacity-50 fixed top-0  h-screen w-full z-20 lg:pl-20 overflow-y-scroll"
       id="overlay"
       onClick={(e: any) => {
+        // When user clicks 'overlay' element, trigger
+        // an event that closes the modal
         if (e.target.id === 'overlay') {
           dispatch(toggleModal(null))
         }

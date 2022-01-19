@@ -1,6 +1,6 @@
-import { useAppDispatch, useAppSelector } from '../redux/hooks'
+import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 
-import { removeError } from '../redux/error/errorSlice'
+import { removeError } from '../../redux/error/errorSlice'
 import { useEffect, useRef } from 'react'
 
 const ErrorNotifications = () => {

@@ -1,4 +1,4 @@
-import PrimaryButton from '../components/PrimaryButton'
+import PrimaryButton from '../components/buttons/PrimaryButton'
 import FormInput from '../components/LoginInput'
 import logo from '../assets/logobanner.png'
 import { BrowserRouter as Switch, Route, Link } from 'react-router-dom'
@@ -78,9 +78,10 @@ const Login = ({ login, loading }: any) => {
           </defs>
         </svg>
       </div>
-      {/* max-w-lg p-4 flex-grow mb-56 lg:ml-96  */}
 
-      <div className="max-w-lg flex-grow lg:mr-40 xl:mr-96  lg:p-0 p-4 ">
+      <div
+        className={`max-w-lg flex-grow lg:mr-40 xl:mr-96 transition-none lg:p-0 p-4 `}
+      >
         <Switch>
           <Route path="/dashboard" exact>
             <form
@@ -99,35 +100,42 @@ const Login = ({ login, loading }: any) => {
               }}
             >
               {loading && <LoadingSpinner />}
-              <img
-                className="lg:mx-0 mx-auto"
-                src={logo}
-                alt="Easy Dash Logo"
-              />
-              <FormInput id="email" name="email" type="email" required>
-                Email Address
-              </FormInput>
-              <FormInput id="password" name="password" type="password" required>
-                Password
-              </FormInput>
-              <div className="flex justify-between -mt-1 text-gray-600">
-                <div>
-                  <span> No Account? </span>
-                  <Link
-                    to="/dashboard/register"
-                    className="text-blue-700 underline"
-                  >
-                    Create One!
-                  </Link>
+
+              <div className={loading && 'hidden'}>
+                <img
+                  className="lg:mx-0 mx-auto"
+                  src={logo}
+                  alt="Easy Dash Logo"
+                />
+                <FormInput id="email" name="email" type="email" required>
+                  Email Address
+                </FormInput>
+                <FormInput
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                >
+                  Password
+                </FormInput>
+                <div className="flex justify-between -mt-1 text-gray-600">
+                  <div>
+                    <span> No Account? </span>
+                    <Link
+                      to="/dashboard/register"
+                      className="text-blue-700 underline"
+                    >
+                      Create One!
+                    </Link>
+                  </div>
+                  <a href="/dashboard" className="text-blue-700 underline">
+                    Forgot Password?
+                  </a>
                 </div>
-                <a href="/dashboard" className="text-blue-700 underline">
-                  Forgot Password?
-                </a>
-              </div>
-              <div className="flex justify-end my-6 ">
-                <PrimaryButton className="px-10 py-1.5" type="submit">
-                  LOGIN
-                </PrimaryButton>
+
+                <div className="flex justify-end my-6">
+                  <PrimaryButton padding="px-10 py-1.5">LOGIN</PrimaryButton>
+                </div>
               </div>
             </form>
           </Route>
