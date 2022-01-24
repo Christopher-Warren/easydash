@@ -118,17 +118,17 @@ const Login = ({ login, loading }: any) => {
                 >
                   Password
                 </FormInput>
-                <div className="flex justify-between -mt-1 text-gray-600">
+                <div className="flex justify-between -mt-1 text-blue-500 only-of-type:a">
                   <div>
-                    <span> No Account? </span>
-                    <Link
-                      to="/dashboard/register"
-                      className="text-blue-700 underline"
-                    >
+                    <span className="dark:text-gray-500 text-gray-600">
+                      {' '}
+                      No Account?{' '}
+                    </span>
+                    <Link to="/dashboard/register" className="underline">
                       Create One!
                     </Link>
                   </div>
-                  <a href="/dashboard" className="text-blue-700 underline">
+                  <a href="/dashboard" className="underline">
                     Forgot Password?
                   </a>
                 </div>

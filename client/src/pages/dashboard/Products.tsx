@@ -50,7 +50,7 @@ const Products = ({ userId }: any) => {
 
   if (isloaded) {
     // Initialize async state
-    setIsChecked(data.products.map(() => false))
+    // setIsChecked(data.products.map(() => false))
   }
 
   const renderTable = () => {
@@ -133,7 +133,7 @@ const Products = ({ userId }: any) => {
               <div className=" relative">{item.stock}</div>
             </td>
             <td className="text-right lg:pr-8 pr-3.5">
-              <div className="relative dark:text-green-200">$999.99</div>
+              <div className="relative dark:text-green-200">{`$${item.price}`}</div>
             </td>
           </tr>
         )
@@ -207,7 +207,7 @@ const Products = ({ userId }: any) => {
               </th>
               {isChecked.some((val) => val === true) ? (
                 <>
-                  <th className="lg:w-5/12 px-5"></th>
+                  <th className="lg:w-5/12 px-5">Selected 10 items</th>
                   <th className="w-3/12"></th>
                   <th className="w-1/12"></th>
                   <th className="text-right lg:pr-8 pr-3.5"></th>

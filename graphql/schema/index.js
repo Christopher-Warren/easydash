@@ -72,6 +72,8 @@ module.exports = buildSchema(`
             stock: Float!
         }
 
+       
+
 
         type Subcategory {
             _id: ID!
@@ -99,6 +101,8 @@ module.exports = buildSchema(`
         type RootMutation {
             createProduct(productInput: ProductInput): Product
             createCategory(name: String!): Category
+
+            deleteProducts(productIds: [ID]!): ID
 
             createEvent(eventInput: EventInput): Event
             createUser(userInput: UserInput): User

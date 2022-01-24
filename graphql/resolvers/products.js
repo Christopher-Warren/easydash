@@ -90,6 +90,19 @@ module.exports = {
       subcategory: updateSubcat,
     }
   },
+  deleteProducts: async ({ productIds }) => {
+    // Product.findByIdAndDelete({ _id: productIds }).then((res) =>
+    //   console.log(res),
+    // )
+    //
+    console.log(productIds)
+
+    Product.deleteMany({ _id: { $in: productIds } }).then((res) =>
+      console.log(res),
+    )
+
+    return 'asd'
+  },
   categories: async ({ category }) => {
     let categories
     if (category) {
@@ -104,6 +117,7 @@ module.exports = {
 
     return categories
   },
+
   createCategory: async ({ name }) => {
     const foundCategory = await Category.findOne({ name })
 
