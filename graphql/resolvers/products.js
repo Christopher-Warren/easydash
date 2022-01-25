@@ -12,7 +12,7 @@ module.exports = {
     return products
   },
   createProduct: async ({ productInput }) => {
-    console.log(productInput)
+    if (!isAdmin) throw new Error('You do not have permission')
     if (!productInput.subcategory) throw new Error('Please enter a Subcategory')
     if (productInput.category === 'new-category')
       throw new Error(`Category "new-category" is unavailible`)
@@ -90,18 +90,30 @@ module.exports = {
       subcategory: updateSubcat,
     }
   },
-  deleteProducts: async ({ productIds }) => {
-    // Product.findByIdAndDelete({ _id: productIds }).then((res) =>
-    //   console.log(res),
-    // )
-    //
-    console.log(productIds)
+  modifyProduct: async ({ productInput }, { isAdmin }) => {
+    if (!isAdmin) throw new Error('You do not have permission')
 
-    Product.deleteMany({ _id: { $in: productIds } }).then((res) =>
-      console.log(res),
+    const modifiedProduct = await Product.findByIdAndUpdate(
+      productInput._id,
+      {
+        name: productInput?.name,
+        price: productInput?.price,
+        description: productInput?.description,
+        stock: productInput?.stock,
+      },
+      { returnDocument: 'after' },
     )
+      .populate('category')
+      .populate('subcategory')
 
-    return 'asd'
+    return modifiedProduct
+  },
+  deleteProducts: async ({ productIds }, { isAdmin }) => {
+    if (!isAdmin) throw new Error('You do not have permission')
+
+    const res = await Product.deleteMany({ _id: { $in: productIds } })
+
+    return res.deletedCount
   },
   categories: async ({ category }) => {
     let categories

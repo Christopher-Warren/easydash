@@ -52,12 +52,23 @@ module.exports = buildSchema(`
         }
 
         input ProductInput {
+            _id: ID
             name: String!
             category: String!
             subcategory: String!
             description: String!
             price: Float!
             stock: Float!
+        }
+
+        input ModifyProductInput {
+            _id: ID!
+            name: String
+            category: String
+            subcategory: String
+            description: String
+            price: Float
+            stock: Float
         }
 
         type Product {
@@ -102,7 +113,9 @@ module.exports = buildSchema(`
             createProduct(productInput: ProductInput): Product
             createCategory(name: String!): Category
 
-            deleteProducts(productIds: [ID]!): ID
+            deleteProducts(productIds: [ID]!): String
+
+            modifyProduct(productInput: ModifyProductInput): Product
 
             createEvent(eventInput: EventInput): Event
             createUser(userInput: UserInput): User
