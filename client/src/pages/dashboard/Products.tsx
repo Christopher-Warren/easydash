@@ -38,7 +38,7 @@ const Products = ({ userId }: any) => {
   const [isChecked, setIsChecked] = useState<boolean[]>([])
 
   const useCheck = (data: any, state: any) => {
-    if (data && state.length === 0) {
+    if (data && data.products.length > 0 && state.length === 0) {
       // can set initial state
       return true
     } else {
@@ -50,7 +50,7 @@ const Products = ({ userId }: any) => {
 
   if (isloaded) {
     // Initialize async state
-    // setIsChecked(data.products.map(() => false))
+    setIsChecked(data.products.map(() => false))
   }
 
   const renderTable = () => {
@@ -207,7 +207,11 @@ const Products = ({ userId }: any) => {
               </th>
               {isChecked.some((val) => val === true) ? (
                 <>
-                  <th className="lg:w-5/12 px-5">Selected 10 items</th>
+                  <th className="lg:w-5/12 px-5">
+                    Selected {isChecked.filter((val) => val === true).length}{' '}
+                    item
+                    {isChecked.filter((val) => val === true).length > 1 && 's'}
+                  </th>
                   <th className="w-3/12"></th>
                   <th className="w-1/12"></th>
                   <th className="text-right lg:pr-8 pr-3.5"></th>
