@@ -11,7 +11,7 @@ module.exports = {
 
     return products
   },
-  createProduct: async ({ productInput }) => {
+  createProduct: async ({ productInput }, { isAdmin }) => {
     if (!isAdmin) throw new Error('You do not have permission')
     if (!productInput.subcategory) throw new Error('Please enter a Subcategory')
     if (productInput.category === 'new-category')
@@ -92,6 +92,23 @@ module.exports = {
   },
   modifyProduct: async ({ productInput }, { isAdmin }) => {
     if (!isAdmin) throw new Error('You do not have permission')
+
+    const product = await Product.findById(productInput._id)
+
+    const category = await Category.findById(product.category)
+    console.log(category)
+
+    if (productInput.category) {
+      // find old category and remove product from it's products array
+      const updatedCategory = category.products.map((val) => {
+        if (val._id.toString() === product.id) return
+        return val
+      })
+      console.log(updatedCategory)
+      await Category.findByIdAndUpdate(category._id, {
+        products: updatedCategory,
+      })
+    }
 
     const modifiedProduct = await Product.findByIdAndUpdate(
       productInput._id,
