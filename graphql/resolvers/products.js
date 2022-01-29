@@ -92,23 +92,71 @@ module.exports = {
   },
   modifyProduct: async ({ productInput }, { isAdmin }) => {
     if (!isAdmin) throw new Error('You do not have permission')
+    console.log('Looking for... ', productInput._id)
 
     const product = await Product.findById(productInput._id)
 
-    const category = await Category.findById(product.category)
-    console.log(category)
+    const badId = '61f1cc7d9b487aa2926a9666'
 
+    // If a category is entered, check to see if it already exists
     if (productInput.category) {
-      // find old category and remove product from it's products array
-      const updatedCategory = category.products.map((val) => {
-        if (val._id.toString() === product.id) return
-        return val
-      })
-      console.log(updatedCategory)
-      await Category.findByIdAndUpdate(category._id, {
-        products: updatedCategory,
-      })
+      const oldCategory = await Category.findById(product.category)
+      const oldSubcategory = await Subcategory.findById(product.subcategory)
+      const category = await Category.findOne({ name: productInput.category })
+
+      // const subcategory = await Subcategory.findOne({name: productInput.})
+
+      if (category) {
+        // Category exists, add product to data unless
+        // the product is a duplicate entry
+
+        // Need to handle Subcategory when this condition is met.
+        if (!category.products.includes(productInput._id)) {
+          category.products.push(productInput._id)
+          category.save()
+        }
+        // Update Product Category
+        product.category = category._id
+        product.save()
+      } else {
+        // Category does not exist, create a new one
+        // and add product to it.
+        // Since Category is new, a new Subcategory is needed
+        if (!productInput.subcategory)
+          throw new Error(
+            'You must enter a Subcategory when creating a new Category',
+          )
+        const newCategory = await Category.create({
+          name: productInput.category,
+          products: [productInput._id],
+        })
+
+        const newSubcategory = await Subcategory.create({
+          name: productInput.subcategory,
+          category: newCategory._id,
+          products: [productInput._id],
+        })
+
+        newCategory.subcategories = [newSubcategory._id]
+        newCategory.save()
+        // Update Product Category
+        product.category = newCategory._id
+        product.subcategory = newSubcategory._id
+
+        product.save()
+      }
+      const updatedProducts = oldCategory.products.filter(
+        (val) => val == product._id,
+      )
+      // Remove product ID entry from previous category
+      oldCategory.products = updatedProducts
+      oldSubcategory.products = updatedProducts
+
+      oldCategory.save()
+      oldSubcategory.save()
     }
+
+    // category.save()
 
     const modifiedProduct = await Product.findByIdAndUpdate(
       productInput._id,
