@@ -23,7 +23,6 @@ module.exports = {
     let foundCategory = await Category.findOne({
       name: productInput.category.toLowerCase(),
     })
-    console.log(foundCategory)
 
     if (!foundCategory) {
       foundCategory = await Category.create({
@@ -105,14 +104,12 @@ module.exports = {
         name: productInput.subcategory,
       })
 
-      // const subcategory = await Subcategory.findOne({name: productInput.})
-
       if (category) {
         // Category exists, add product to data unless
         // the product is a duplicate entry
         let newSubcategory
 
-        if (!subcategory) {
+        if (!subcategory && productInput.subcategory) {
           newSubcategory = await Subcategory.create({
             name: productInput.subcategory,
             category: category._id,
@@ -166,18 +163,32 @@ module.exports = {
 
         product.save()
       }
-      const updatedCategoryProducts = oldCategory.products.filter(
-        (val) => val == product._id,
-      )
+
+      // Handle deletion of stale categories and subcategories
+      if (oldCategory) {
+        const updatedCategoryProducts = oldCategory.products.filter(
+          (val) => val == product._id,
+        )
+
+        oldCategory.products = updatedCategoryProducts
+
+        oldCategory.save().then(async (data) => {
+          const cleanCategory = await Category.deleteMany({ products: [] })
+          console.log(cleanCategory)
+        })
+      }
+
       const updatedSubategoryProducts = oldSubcategory.products.filter(
         (val) => val == product._id,
       )
       // Remove product ID entry from previous category
-      oldCategory.products = updatedCategoryProducts
+
       oldSubcategory.products = updatedSubategoryProducts
 
-      oldCategory.save()
-      oldSubcategory.save()
+      oldSubcategory.save().then(async (data) => {
+        const cleanSubcategory = await Subcategory.deleteMany({ products: [] })
+        console.log(cleanSubcategory)
+      })
     }
 
     const modifiedProduct = await Product.findByIdAndUpdate(
@@ -192,6 +203,11 @@ module.exports = {
     )
       .populate('category')
       .populate('subcategory')
+
+    // const cleanCategory = await Category.deleteMany({ products: [] })
+    // const cleanSubcategory = await Subcategory.deleteMany({ products: [] })
+    // console.log(cleanCategory)
+    // console.log(cleanSubcategory)
 
     return modifiedProduct
   },
