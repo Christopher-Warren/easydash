@@ -103,20 +103,43 @@ module.exports = {
       const oldCategory = await Category.findById(product.category)
       const oldSubcategory = await Subcategory.findById(product.subcategory)
       const category = await Category.findOne({ name: productInput.category })
+      const subcategory = await Subcategory.findOne({
+        name: productInput.subcategory,
+      })
 
       // const subcategory = await Subcategory.findOne({name: productInput.})
 
       if (category) {
         // Category exists, add product to data unless
         // the product is a duplicate entry
+        let newSubcategory
 
-        // Need to handle Subcategory when this condition is met.
+        if (!subcategory) {
+          newSubcategory = await Subcategory.create({
+            name: productInput.subcategory,
+            category: category._id,
+            products: [productInput._id],
+          })
+        } else {
+          if (!subcategory.products.includes(productInput._id)) {
+            subcategory.products.push(productInput._id)
+            subcategory.category = category._id
+            subcategory.save()
+          }
+        }
+
         if (!category.products.includes(productInput._id)) {
           category.products.push(productInput._id)
+          category.subcategories.push(
+            newSubcategory ? newSubcategory._id : subcategory._id,
+          )
           category.save()
         }
         // Update Product Category
         product.category = category._id
+        product.subcategory = newSubcategory
+          ? newSubcategory._id
+          : subcategory._id
         product.save()
       } else {
         // Category does not exist, create a new one
@@ -145,12 +168,15 @@ module.exports = {
 
         product.save()
       }
-      const updatedProducts = oldCategory.products.filter(
+      const updatedCategoryProducts = oldCategory.products.filter(
+        (val) => val == product._id,
+      )
+      const updatedSubategoryProducts = oldSubcategory.products.filter(
         (val) => val == product._id,
       )
       // Remove product ID entry from previous category
-      oldCategory.products = updatedProducts
-      oldSubcategory.products = updatedProducts
+      oldCategory.products = updatedCategoryProducts
+      oldSubcategory.products = updatedSubategoryProducts
 
       oldCategory.save()
       oldSubcategory.save()
