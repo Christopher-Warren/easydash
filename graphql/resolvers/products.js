@@ -21,8 +21,9 @@ module.exports = {
       throw new Error(`Subcategory "new-subcategory" is unavailible`)
     // Ensure that the input category exists
     let foundCategory = await Category.findOne({
-      name: productInput.category,
+      name: productInput.category.toLowerCase(),
     })
+    console.log(foundCategory)
 
     if (!foundCategory) {
       foundCategory = await Category.create({
@@ -92,11 +93,8 @@ module.exports = {
   },
   modifyProduct: async ({ productInput }, { isAdmin }) => {
     if (!isAdmin) throw new Error('You do not have permission')
-    console.log('Looking for... ', productInput._id)
 
     const product = await Product.findById(productInput._id)
-
-    const badId = '61f1cc7d9b487aa2926a9666'
 
     // If a category is entered, check to see if it already exists
     if (productInput.category) {
@@ -182,8 +180,6 @@ module.exports = {
       oldSubcategory.save()
     }
 
-    // category.save()
-
     const modifiedProduct = await Product.findByIdAndUpdate(
       productInput._id,
       {
@@ -202,9 +198,32 @@ module.exports = {
   deleteProducts: async ({ productIds }, { isAdmin }) => {
     if (!isAdmin) throw new Error('You do not have permission')
 
-    const res = await Product.deleteMany({ _id: { $in: productIds } })
+    const removedProducts = productIds.map(async (productId) => {
+      const product = await Product.findOneAndDelete({ _id: productId })
 
-    return res.deletedCount
+      const category = await Category.findOne({ products: productId })
+      const subcategory = await Subcategory.findOne({ products: productId })
+
+      const removedProductsCategoryArr = category.products.filter((val) => {
+        return val != productId
+      })
+
+      const removedProductsSubcategoryArr = subcategory.products.filter(
+        (val) => {
+          return val != productId
+        },
+      )
+
+      category.products = removedProductsCategoryArr
+      subcategory.products = removedProductsSubcategoryArr
+
+      category.save()
+      subcategory.save()
+      deletedCount++
+      return product
+    })
+
+    return removedProducts.length.toString()
   },
   categories: async ({ category }) => {
     let categories
