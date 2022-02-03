@@ -70,6 +70,7 @@ module.exports = {
         ? [...foundCategory.subcategories]
         : [...foundCategory.subcategories, foundSubcategory._id],
     }).populate('products')
+    console.log('here')
 
     const updateSubcat = await Subcategory.findByIdAndUpdate(
       foundSubcategory._id,
@@ -94,122 +95,6 @@ module.exports = {
     if (!isAdmin) throw new Error('You do not have permission')
 
     const product = await Product.findById(productInput._id)
-
-    // If a category is entered, check to see if it already exists
-    if (productInput.category) {
-      const oldCategory = await Category.findById(product.category)
-      const oldSubcategory = await Subcategory.findById(product.subcategory)
-      const category = await Category.findOne({ name: productInput.category })
-      const subcategory = await Subcategory.findOne({
-        name: productInput.subcategory,
-      })
-
-      if (category) {
-        // Category exists, add product to data unless
-        // the product is a duplicate entry
-        let newSubcategory
-
-        if (!subcategory && productInput.subcategory) {
-          newSubcategory = await Subcategory.create({
-            name: productInput.subcategory,
-            category: category._id,
-            products: [productInput._id],
-          })
-        } else {
-          if (!subcategory.products.includes(productInput._id)) {
-            subcategory.products.push(productInput._id)
-            subcategory.category = category._id
-            subcategory.save()
-          }
-        }
-
-        if (!category.products.includes(productInput._id)) {
-          category.products.push(productInput._id)
-          category.subcategories.push(
-            newSubcategory ? newSubcategory._id : subcategory._id,
-          )
-          category.save()
-        }
-        // Update Product Category
-        product.category = category._id
-        product.subcategory = newSubcategory
-          ? newSubcategory._id
-          : subcategory._id
-        product.save()
-      } else {
-        // Category does not exist, create a new one
-        // and add product to it.
-        // Since Category is new, a new Subcategory is needed
-        if (!productInput.subcategory)
-          throw new Error(
-            'You must enter a Subcategory when creating a new Category',
-          )
-        const newCategory = await Category.create({
-          name: productInput.category,
-          products: [productInput._id],
-        })
-
-        const newSubcategory = await Subcategory.create({
-          name: productInput.subcategory,
-          category: newCategory._id,
-          products: [productInput._id],
-        })
-
-        newCategory.subcategories = [newSubcategory._id]
-        newCategory.save()
-        // Update Product Category
-        product.category = newCategory._id
-        product.subcategory = newSubcategory._id
-
-        product.save()
-      }
-
-      // Handle deletion of stale categories and subcategories
-      if (oldCategory) {
-        const updatedCategoryProducts = oldCategory.products.filter(
-          (val) => val == product._id,
-        )
-
-        oldCategory.products = updatedCategoryProducts
-
-        oldCategory.save().then(async (data) => {
-          const cleanCategory = await Category.deleteMany({ products: [] })
-          console.log(cleanCategory)
-        })
-      }
-
-      const updatedSubategoryProducts = oldSubcategory.products.filter(
-        (val) => val == product._id,
-      )
-      // Remove product ID entry from previous category
-
-      oldSubcategory.products = updatedSubategoryProducts
-
-      oldSubcategory.save().then(async (data) => {
-        const cleanSubcategory = await Subcategory.deleteMany({ products: [] })
-        console.log(cleanSubcategory)
-      })
-    }
-
-    const modifiedProduct = await Product.findByIdAndUpdate(
-      productInput._id,
-      {
-        name: productInput?.name,
-        price: productInput?.price,
-        description: productInput?.description,
-        stock: productInput?.stock,
-      },
-      { returnDocument: 'after' },
-    )
-      .populate('category')
-      .populate('subcategory')
-
-    // const cleanCategory = await Category.deleteMany({ products: [] })
-    // const cleanSubcategory = await Subcategory.deleteMany({ products: [] })
-    // console.log(cleanCategory)
-    // console.log(cleanSubcategory)
-
-    return modifiedProduct
   },
   deleteProducts: async ({ productIds }, { isAdmin }) => {
     if (!isAdmin) throw new Error('You do not have permission')
