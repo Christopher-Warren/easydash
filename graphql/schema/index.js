@@ -51,6 +51,16 @@ module.exports = buildSchema(`
             stock: Float
         }
 
+        input CategoryInput {
+            _id: ID!
+            name: String
+        }
+
+        input SubcategoryInput {
+            _id: ID!
+            name: String
+        }
+
         type Product {
             _id: ID!
             name: String!

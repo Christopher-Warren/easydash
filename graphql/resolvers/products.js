@@ -94,7 +94,98 @@ module.exports = {
   modifyProduct: async ({ productInput }, { isAdmin }) => {
     if (!isAdmin) throw new Error('You do not have permission')
 
+    if (!productInput.subcategory && productInput.category)
+      throw new Error('Must enter a subcategory when changing category.')
+
     const product = await Product.findById(productInput._id)
+    const categoryInput = await Category.findOne({
+      name: productInput.category,
+    })
+    const subcategoryInput = await Subcategory.findOne({
+      name: productInput.subcategory,
+    })
+    let newCategoryID
+    let newSubcategoryID
+
+    if (categoryInput?.id != product.category && productInput.category) {
+      console.log('category changes needed...')
+      //remove product from categpry and save
+      if (categoryInput) {
+        newCategoryID = categoryInput._id
+      } else {
+        const newCat = await Category.create({
+          name: productInput.category,
+          subcategories: [],
+          products: [],
+        })
+        newCategoryID = newCat._id
+      }
+    }
+
+    if (
+      subcategoryInput?.id != product.subcategory &&
+      productInput.subcategory
+    ) {
+      console.log('subcategory changes needed...')
+
+      const subcategoryExists = categoryInput?.subcategories.includes(
+        subcategoryInput?.id,
+      )
+
+      if (subcategoryInput && subcategoryExists) {
+        newSubcategoryID = subcategoryInput._id
+      } else {
+        // when creating new subcategory, initialize it with a category
+
+        const newSub = await Subcategory.create({
+          name: productInput.subcategory,
+          category: categoryInput ? categoryInput._id : product._id,
+          products: [],
+        })
+        newSubcategoryID = newSub._id
+      }
+    }
+    // Add subcategory to new category
+    const updatedCategory = await Category.findById(newCategoryID)
+    const updatedSubcategory = await Subcategory.findById(newSubcategoryID)
+
+    if (updatedCategory) {
+      if (!updatedCategory.subcategories.includes(newSubcategoryID)) {
+        updatedCategory.subcategories.push(newSubcategoryID)
+      }
+      if (!updatedCategory.products.includes(product._id)) {
+        updatedCategory.products.push(product._id)
+      }
+      // Remove product from previous category
+      const previousCategory = await Category.findById(product.category)
+      previousCategory.products = previousCategory.products.filter((item) => {
+        item != product.id
+      })
+
+      await previousCategory.save()
+
+      product.category = updatedCategory._id
+
+      await updatedCategory.save()
+    }
+
+    // Assign category to subcategory & assign product to subcategory
+    if (updatedSubcategory) {
+      if (!updatedSubcategory.products.includes(product._id)) {
+        updatedSubcategory.products.push(product._id)
+      }
+
+      // remove product from previous subcategory
+
+      product.subcategory = updatedSubcategory._id
+
+      await updatedSubcategory.save()
+    }
+
+    // remove product from old category
+
+    await product.save()
+    // console.log('UPDATE: ', updatedCategory)
   },
   deleteProducts: async ({ productIds }, { isAdmin }) => {
     if (!isAdmin) throw new Error('You do not have permission')
