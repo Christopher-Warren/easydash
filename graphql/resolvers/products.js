@@ -2,6 +2,7 @@ const Product = require('../../models/product')
 
 const Category = require('../../models/category')
 const Subcategory = require('../../models/subcategory')
+const normalizeInputs = require('../../utils/normalizeInputs')
 
 module.exports = {
   products: async (arg1, { isAdmin }) => {
@@ -97,6 +98,8 @@ module.exports = {
     if (!productInput.subcategory && productInput.category)
       throw new Error('Must enter a subcategory when changing category.')
 
+    normalizeInputs(productInput)
+
     const product = await Product.findById(productInput._id)
     const categoryInput = await Category.findOne({
       name: productInput.category,
@@ -176,16 +179,35 @@ module.exports = {
       }
 
       // remove product from previous subcategory
+      const previousSubcategory = await Subcategory.findById(
+        product.subcategory,
+      )
+      previousSubcategory.products = previousSubcategory.products.filter(
+        (item) => {
+          item != product.id
+        },
+      )
+
+      await previousSubcategory.save()
 
       product.subcategory = updatedSubcategory._id
 
       await updatedSubcategory.save()
     }
 
-    // remove product from old category
-
     await product.save()
-    // console.log('UPDATE: ', updatedCategory)
+
+    const finalProduct = await Product.findById(productInput._id)
+      .populate('category')
+      .populate('subcategory')
+
+    // Delete any Category/Subcategory that has no products
+    const categoryCleanup = await Category.findOneAndDelete({ products: [] })
+    const subcategoryCleanup = await Subcategory.findOneAndDelete({
+      products: [],
+    })
+
+    return finalProduct
   },
   deleteProducts: async ({ productIds }, { isAdmin }) => {
     if (!isAdmin) throw new Error('You do not have permission')
