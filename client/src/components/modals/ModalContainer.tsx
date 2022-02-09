@@ -3,6 +3,7 @@ import PageWrapper from '../PageWrapper'
 import { toggleModal } from '../../redux/modal/modalSlice'
 
 import { useAppDispatch } from '../../redux/hooks'
+import customPrompt from '../../utils/customPrompt'
 
 const ModalContainer = ({ children }: any) => {
   const dispatch = useAppDispatch()
@@ -11,10 +12,19 @@ const ModalContainer = ({ children }: any) => {
       className="bg-black bg-opacity-20 fixed top-0  h-screen w-full z-20 lg:pl-20 overflow-y-scroll"
       id="overlay"
       onClick={(e: any) => {
-        // When user clicks 'overlay' element, trigger
-        // an event that closes the modal
-        if (e.target.id === 'overlay') {
+        const dispatchToggle = () => {
           dispatch(toggleModal(null))
+        }
+
+        const opts = {
+          title: 'Are you sure?',
+          body: 'If you are, all changes will be lost',
+          confirm: 'yes',
+          cancel: 'no',
+        }
+
+        if (e.target.id === 'overlay') {
+          customPrompt(opts, dispatchToggle)
         }
       }}
     >
