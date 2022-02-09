@@ -236,7 +236,7 @@ const NewProductModal = () => {
 
   return (
     <ModalContainer>
-      <div className="w-full left-0 z-30">
+      <div className="w-full left-0 z-30 modal">
         <InfoCard title="New Product">
           <form onSubmit={handleFormSubmit}>
             <label htmlFor="category-select">Select a category</label>

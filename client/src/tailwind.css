@@ -34,8 +34,23 @@ td {
   color: white;
 }
 
-/* Custom Loader Styling */
+/* Modal Animation */
+.modal {
+  animation-duration: 200ms;
+  animation-name: slidein;
+}
 
+@keyframes slidein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Custom Loader Styling */
 svg .loader-ring {
   transform-origin: 50px 50px;
   animation: starting-fill 0.5s forwards,

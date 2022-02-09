@@ -214,7 +214,23 @@ const Products = ({ userId }: any) => {
                   </th>
                   <th className="w-3/12"></th>
                   <th className="w-1/12"></th>
-                  <th className="text-right lg:pr-8 pr-3.5"></th>
+                  <th className="text-right lg:pr-8 pr-3.5">
+                    <button className=" p-1 rounded-full bg-red-400 text-white hover:bg-red-500 transition-colors">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="inline w-6 h-6 scale-90"
+                      >
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                      </svg>
+                    </button>
+                  </th>
                 </>
               ) : (
                 <>
