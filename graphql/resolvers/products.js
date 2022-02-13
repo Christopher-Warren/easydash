@@ -212,6 +212,8 @@ module.exports = {
   deleteProducts: async ({ productIds }, { isAdmin }) => {
     if (!isAdmin) throw new Error('You do not have permission')
 
+    console.log(productIds)
+    let deletedCount = 0
     const removedProducts = productIds.map(async (productId) => {
       const product = await Product.findOneAndDelete({ _id: productId })
 
@@ -231,8 +233,8 @@ module.exports = {
       category.products = removedProductsCategoryArr
       subcategory.products = removedProductsSubcategoryArr
 
-      category.save()
-      subcategory.save()
+      category.update()
+      subcategory.update()
       deletedCount++
       return product
     })

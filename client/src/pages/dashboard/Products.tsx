@@ -67,17 +67,21 @@ const Products = ({ userId }: any) => {
         title: 'Are you sure you wish to delete these items?',
         body: 'X items will be deleted',
         confirm: 'DELETE',
-        cancel: 'GO BACK',
+        cancel: 'BACK',
       },
       () => {
-        console.log(isChecked)
         const filterIds = data.products.filter((item: any, idx: any) => {
           if (isChecked[idx]) return item._id
         })
         const selectedProducts = filterIds.map((item: any) => item._id)
 
-        // selected products will be input into [deleteProducts]
         console.log(selectedProducts)
+
+        deleteProducts({
+          variables: {
+            productIds: selectedProducts,
+          },
+        })
       },
     )
   }
