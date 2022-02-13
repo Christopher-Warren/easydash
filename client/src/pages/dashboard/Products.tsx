@@ -1,4 +1,4 @@
-import { useQuery, gql } from '@apollo/client'
+import { useQuery, gql, useMutation } from '@apollo/client'
 
 import PageWrapper from '../../components/PageWrapper'
 import InfoCard from '../../components/cards/InfoCard'
@@ -14,6 +14,7 @@ import TableCard from '../../components/cards/TableCard'
 import { useEffect, useRef, useState } from 'react'
 
 import '../../assets/css/tables.css'
+import customPrompt from '../../utils/customPrompt'
 
 const Products = ({ userId }: any) => {
   const { data, loading, error } = useQuery(gql`
@@ -33,6 +34,13 @@ const Products = ({ userId }: any) => {
       }
     }
   `)
+
+  const [deleteProducts] = useMutation(gql`
+    mutation deleteProducts($productIds: [ID]!) {
+      deleteProducts(productIds: $productIds)
+    }
+  `)
+
   const dispatch = useAppDispatch()
 
   const [isChecked, setIsChecked] = useState<boolean[]>([])
@@ -53,12 +61,33 @@ const Products = ({ userId }: any) => {
     setIsChecked(data.products.map(() => false))
   }
 
-  const renderTable = () => {
+  const handleDelete = (e: any) => {
+    customPrompt(
+      {
+        title: 'Are you sure you wish to delete these items?',
+        body: 'X items will be deleted',
+        confirm: 'DELETE',
+        cancel: 'GO BACK',
+      },
+      () => {
+        console.log(isChecked)
+        const filterIds = data.products.filter((item: any, idx: any) => {
+          if (isChecked[idx]) return item._id
+        })
+        const selectedProducts = filterIds.map((item: any) => item._id)
+
+        // selected products will be input into [deleteProducts]
+        console.log(selectedProducts)
+      },
+    )
+  }
+
+  const renderTableItems = () => {
     if (!loading && !error) {
       return data.products.map((item: any, index: any) => {
         return (
           <tr
-            className={` hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800  ${
+            className={` hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 ${
               isChecked[index] &&
               'bg-purple-50 dark:bg-gray-700/50 odd:dark:bg-gray-700/50'
             }`}
@@ -215,7 +244,10 @@ const Products = ({ userId }: any) => {
                   <th className="w-3/12"></th>
                   <th className="w-1/12"></th>
                   <th className="text-right lg:pr-8 pr-3.5">
-                    <button className=" p-1 rounded-full bg-red-400 text-white hover:bg-red-500 transition-colors">
+                    <button
+                      className=" p-1 rounded-full bg-red-400 text-white hover:bg-red-500 transition-colors"
+                      onClick={handleDelete}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -242,7 +274,7 @@ const Products = ({ userId }: any) => {
               )}
             </tr>
           </thead>
-          <tbody className="w-full  text-base">{renderTable()}</tbody>
+          <tbody className="w-full  text-base">{renderTableItems()}</tbody>
         </table>
       </TableCard>
     </PageWrapper>

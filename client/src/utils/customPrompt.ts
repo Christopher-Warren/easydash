@@ -1,4 +1,11 @@
-const customPrompt = (options: any, action: any) => {
+interface CustomPrompt {
+  title: string
+  body: string
+  confirm: string
+  cancel: string
+}
+
+const customPrompt = (options: CustomPrompt, action: any) => {
   // window.confirm(message)
   const container = document.createElement('div')
   container.id = 'prompt'
@@ -8,7 +15,7 @@ const customPrompt = (options: any, action: any) => {
   // and give it some content
   const newContent = document.createElement('div')
   newContent.className =
-    'bg-slate-900 rounded-md text-gray-200 modal py-3 px-5 w-96 text-center text-xl  font-semibold shadow-lg'
+    'bg-gray-50  rounded-md text-gray-900 modal py-3 px-5 w-96 text-center text-xl  font-semibold shadow-lg'
   newContent.textContent = options.title
 
   const actionText = document.createElement('p')
@@ -33,7 +40,7 @@ const customPrompt = (options: any, action: any) => {
 
   const cancelButton = document.createElement('button')
   cancelButton.className =
-    'px-2 py-1 bg-purple-500 rounded  font-semibold hover:bg-purple-400 tracking-wide w-24'
+    'px-2 py-1 bg-purple-500 text-white rounded  font-semibold hover:bg-purple-400 tracking-wide w-24'
   cancelButton.textContent = options.cancel
   // Cancel Event
   cancelButton.onclick = (e) => {
