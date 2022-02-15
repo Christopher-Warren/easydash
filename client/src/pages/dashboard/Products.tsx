@@ -24,26 +24,7 @@ import customPrompt from '../../utils/customPrompt'
 import { addError } from '../../redux/error/errorSlice'
 
 const Products = ({ products }: { products: QueryResult }) => {
-  console.log(products)
-  const { data, loading, error, refetch } = useQuery(
-    gql`
-      query getProducts {
-        products {
-          name
-          images
-          category {
-            name
-          }
-          subcategory {
-            name
-          }
-          price
-          stock
-          _id
-        }
-      }
-    `,
-  )
+  const { data, loading, error, refetch } = products
 
   const [deleteProducts] = useMutation(gql`
     mutation deleteProducts($productIds: [ID]!) {
@@ -55,20 +36,9 @@ const Products = ({ products }: { products: QueryResult }) => {
 
   const [isChecked, setIsChecked] = useState<boolean[]>([])
 
-  const useCheck = (data: any, state: any) => {
-    if (data && data.products.length > 0 && state.length === 0) {
-      // can set initial state
-      return true
-    } else {
-      // not set state
-      return false
-    }
-  }
-  const isloaded = useCheck(data, isChecked)
-
-  if (isloaded) {
-    // Initialize async state
-    setIsChecked(data.products.map(() => false))
+  // Ensure isChecked is always in sync with data
+  if (data && isChecked.length !== data.products.length) {
+    setIsChecked(() => data.products.map(() => false))
   }
 
   const handleDelete = (e: any) => {
@@ -90,9 +60,7 @@ const Products = ({ products }: { products: QueryResult }) => {
             productIds: selectedProducts,
           },
         }).then((data: any) => {
-          refetch().then(({ data }: any) => {
-            setIsChecked(data.products.map(() => false))
-          })
+          refetch()
         })
       },
     )

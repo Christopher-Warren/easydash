@@ -1,16 +1,24 @@
 import InfoCard from '../cards/InfoCard'
 import ModalContainer from './ModalContainer'
 
-import { useQuery, gql, useLazyQuery, useMutation } from '@apollo/client'
+import {
+  useQuery,
+  gql,
+  useLazyQuery,
+  useMutation,
+  QueryResult,
+} from '@apollo/client'
 import FormInput from '../LoginInput'
 import { Fragment, useEffect, useRef, useState } from 'react'
 
 import { toggleModal } from '../../redux/modal/modalSlice'
+import { addError } from '../../redux/error/errorSlice'
 import { useAppDispatch } from '../../redux/hooks'
 
 import axios from 'axios'
 
-const NewProductModal = () => {
+const NewProductModal = ({ products }: { products: QueryResult }) => {
+  const { refetch } = products
   const { data, loading, error } = useQuery(gql`
     query getCategories($category: String) {
       categories(category: $category) {
@@ -60,10 +68,10 @@ const NewProductModal = () => {
 
   const [category, setCategory] = useState('')
   const [subcategory, setSubcategory] = useState('')
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
-  const [price, setPrice] = useState(0)
-  const [stock, setStock] = useState(0)
+  const [name, setName] = useState('potato')
+  const [description, setDescription] = useState('yum')
+  const [price, setPrice] = useState(12)
+  const [stock, setStock] = useState(10)
 
   // Track page loads
   const pageLoads = useRef(0)
@@ -153,6 +161,8 @@ const NewProductModal = () => {
       })
       .then(() => {
         dispatch(toggleModal(null))
+        refetch()
+        dispatch(addError('Product successfully created.'))
       })
       .catch((err) => console.log('ERROR: ', err))
   }

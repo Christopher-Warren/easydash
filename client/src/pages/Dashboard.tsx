@@ -34,7 +34,7 @@ const Dashboard = ({ logout, userId }: any) => {
   return (
     <>
       <Route path="/dashboard">
-        <Modals />
+        <Modals products={products} />
         <SideBar />
       </Route>
       <div className="lg:pl-20">
