@@ -7,9 +7,30 @@ import { BrowserRouter as Router, Route, useLocation } from 'react-router-dom'
 import Products from './dashboard/Products'
 
 import Modals from './modals/Modals'
-import { useEffect } from 'react'
+
+import { useQuery, gql } from '@apollo/client'
 
 const Dashboard = ({ logout, userId }: any) => {
+  const products = useQuery(
+    gql`
+      query getProducts {
+        products {
+          name
+          images
+          category {
+            name
+          }
+          subcategory {
+            name
+          }
+          price
+          stock
+          _id
+        }
+      }
+    `,
+  )
+
   return (
     <>
       <Route path="/dashboard">
@@ -30,7 +51,7 @@ const Dashboard = ({ logout, userId }: any) => {
         </Route>
 
         <Route path="/dashboard/products" exact>
-          <Products></Products>
+          <Products products={products}></Products>
         </Route>
       </div>
     </>

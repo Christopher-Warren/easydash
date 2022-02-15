@@ -5,6 +5,9 @@ import { useQuery, gql, useLazyQuery, useMutation } from '@apollo/client'
 import FormInput from '../LoginInput'
 import { Fragment, useEffect, useRef, useState } from 'react'
 
+import { toggleModal } from '../../redux/modal/modalSlice'
+import { useAppDispatch } from '../../redux/hooks'
+
 import axios from 'axios'
 
 const NewProductModal = () => {
@@ -86,6 +89,8 @@ const NewProductModal = () => {
     })
   }
 
+  const dispatch = useAppDispatch()
+
   const handleCategorySelect = (e: any) => {
     const selectedIndex = e.target.options.selectedIndex
 
@@ -129,10 +134,6 @@ const NewProductModal = () => {
       formData.append('photos', file)
     })
 
-    // BUG
-    // this should throw an error
-    // formData.append('photos', fileInput.files)
-
     createProduct({
       variables: {
         name,
@@ -150,12 +151,14 @@ const NewProductModal = () => {
           },
         })
       })
+      .then(() => {
+        dispatch(toggleModal(null))
+      })
       .catch((err) => console.log('ERROR: ', err))
   }
 
   // Render Methods
   const renderSubcategories = () => {
-    console.log(data.categories[selectedCategory])
     if (data.categories[selectedCategory] === undefined) {
       return (
         <option
@@ -171,7 +174,6 @@ const NewProductModal = () => {
       (subcategory: any, index: number, arr: any) => {
         return (
           <Fragment key={index}>
-            {console.log(index, arr.length)}
             <option>{subcategory.name}</option>
             {index === arr.length - 1 && (
               <option

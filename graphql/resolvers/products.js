@@ -71,7 +71,6 @@ module.exports = {
         ? [...foundCategory.subcategories]
         : [...foundCategory.subcategories, foundSubcategory._id],
     }).populate('products')
-    console.log('here')
 
     const updateSubcat = await Subcategory.findByIdAndUpdate(
       foundSubcategory._id,
@@ -111,7 +110,6 @@ module.exports = {
     let newSubcategoryID
 
     if (categoryInput?.id != product.category && productInput.category) {
-      console.log('category changes needed...')
       //remove product from categpry and save
       if (categoryInput) {
         newCategoryID = categoryInput._id
@@ -129,8 +127,6 @@ module.exports = {
       subcategoryInput?.id != product.subcategory &&
       productInput.subcategory
     ) {
-      console.log('subcategory changes needed...')
-
       const subcategoryExists = categoryInput?.subcategories.includes(
         subcategoryInput?.id,
       )
@@ -212,7 +208,6 @@ module.exports = {
   deleteProducts: async ({ productIds }, { isAdmin }) => {
     if (!isAdmin) throw new Error('You do not have permission')
 
-    console.log(productIds)
     let deletedCount = 0
     const removedProducts = productIds.map(async (productId) => {
       const product = await Product.findOneAndDelete({ _id: productId })

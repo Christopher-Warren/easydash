@@ -1,4 +1,10 @@
-import { useQuery, gql, useMutation } from '@apollo/client'
+import {
+  useQuery,
+  gql,
+  useMutation,
+  NetworkStatus,
+  QueryResult,
+} from '@apollo/client'
 
 import PageWrapper from '../../components/PageWrapper'
 import InfoCard from '../../components/cards/InfoCard'
@@ -11,29 +17,33 @@ import { toggleModal } from '../../redux/modal/modalSlice'
 import { ModalFormIDs } from '../modals/Modals'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import TableCard from '../../components/cards/TableCard'
-import { useEffect, useRef, useState } from 'react'
+import React, { ReactPropTypes, useEffect, useRef, useState } from 'react'
 
 import '../../assets/css/tables.css'
 import customPrompt from '../../utils/customPrompt'
+import { addError } from '../../redux/error/errorSlice'
 
-const Products = ({ userId }: any) => {
-  const { data, loading, error } = useQuery(gql`
-    query getCategories {
-      products {
-        name
-        images
-        category {
+const Products = ({ products }: { products: QueryResult }) => {
+  console.log(products)
+  const { data, loading, error, refetch } = useQuery(
+    gql`
+      query getProducts {
+        products {
           name
+          images
+          category {
+            name
+          }
+          subcategory {
+            name
+          }
+          price
+          stock
+          _id
         }
-        subcategory {
-          name
-        }
-        price
-        stock
-        _id
       }
-    }
-  `)
+    `,
+  )
 
   const [deleteProducts] = useMutation(gql`
     mutation deleteProducts($productIds: [ID]!) {
@@ -70,17 +80,19 @@ const Products = ({ userId }: any) => {
         cancel: 'BACK',
       },
       () => {
-        const filterIds = data.products.filter((item: any, idx: any) => {
-          if (isChecked[idx]) return item._id
-        })
+        const filterIds = data.products.filter(
+          (item: any, idx: any) => isChecked[idx],
+        )
         const selectedProducts = filterIds.map((item: any) => item._id)
-
         console.log(selectedProducts)
-
         deleteProducts({
           variables: {
             productIds: selectedProducts,
           },
+        }).then((data: any) => {
+          refetch().then(({ data }: any) => {
+            setIsChecked(data.products.map(() => false))
+          })
         })
       },
     )
@@ -180,6 +192,7 @@ const Products = ({ userId }: any) => {
       <span className=" tracking-wider dark:text-gray-100">
         These are products that you currently have listed for sale
       </span>
+
       <div className="flex my-5">
         <PrimaryButton
           padding="px-5 py-1.5 mr-5"
@@ -278,6 +291,7 @@ const Products = ({ userId }: any) => {
               )}
             </tr>
           </thead>
+
           <tbody className="w-full  text-base">{renderTableItems()}</tbody>
         </table>
       </TableCard>
