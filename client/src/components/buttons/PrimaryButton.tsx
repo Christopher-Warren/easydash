@@ -1,11 +1,19 @@
-const PrimaryButton = ({ handleClick, children, padding, id }: any) => {
+const PrimaryButton = ({
+  handleClick,
+  children,
+  padding,
+  id,
+  className,
+  type,
+}: any) => {
   return (
     <button
       onClick={handleClick}
       id={id}
+      type={type}
       className={`flex justify-around font-semibold text-md tracking-wide rounded
       ${padding}
-
+      ${className}
     bg-purple-600 text-white 
     hover:bg-purple-700 hover:shadow-md 
       focus:shadow-md focus:outline-purple-500 focus:accent-purple-400

@@ -5,7 +5,7 @@ import { toggleModal } from '../../redux/modal/modalSlice'
 import { useAppDispatch } from '../../redux/hooks'
 import customPrompt from '../../utils/customPrompt'
 
-const ModalContainer = ({ children }: any) => {
+const ModalContainer = ({ children, size }: any) => {
   const dispatch = useAppDispatch()
   return (
     <div
@@ -28,7 +28,9 @@ const ModalContainer = ({ children }: any) => {
         }
       }}
     >
-      <PageWrapper>{children}</PageWrapper>
+      <div className={`max-w-${size} mx-auto`}>
+        <PageWrapper>{children}</PageWrapper>
+      </div>
     </div>
   )
 }
