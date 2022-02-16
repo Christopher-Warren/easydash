@@ -16,6 +16,7 @@ import { addError } from '../../redux/error/errorSlice'
 import { useAppDispatch } from '../../redux/hooks'
 
 import axios from 'axios'
+import PrimaryButton from '../buttons/PrimaryButton'
 
 const NewProductModal = ({ products }: { products: QueryResult }) => {
   const { refetch } = products
@@ -217,22 +218,55 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
           <Fragment key={index}>
             {index === 0 && (
               <img
-                className=" object-contain"
+                className="object-contain w-full"
                 src={imgUrls[selectedImg]}
                 alt="img"
               ></img>
             )}
-            <img
-              className="w-1/4 h-10 inline-block object-contain"
-              onClick={(e) => setSelectedImg(index)}
-              src={url}
-              alt="img"
-            ></img>
+            <div className="border border-purple-400">
+              <img
+                className="w-1/4 aspect-square inline object-contain"
+                onClick={(e) => setSelectedImg(index)}
+                src={url}
+                alt="img"
+              ></img>
+            </div>
           </Fragment>
         )
       })
     )
   }
+
+  const renderImagePreview2 = () => {
+    if (!imgUrls) return
+
+    const images = imgUrls.map((url, index) => {
+      return (
+        <Fragment key={index}>
+          <img
+            className=" h-20 w-20 object-cover"
+            onClick={(e) => setSelectedImg(index)}
+            src={url}
+            alt="img"
+          ></img>
+        </Fragment>
+      )
+    })
+
+    return (
+      <div className="col-span-2 grid grid-cols-12">
+        <img
+          className="col-span-9 w-full h-64 object-cover"
+          src={imgUrls[selectedImg]}
+          alt="img"
+        ></img>
+        <div className="col-span-3 h-64  overflow-y-auto overflow-x-none">
+          {images}
+        </div>
+      </div>
+    )
+  }
+
   // Initialize Async State
   useEffect(() => {
     if (data && data.categories[0] && pageLoads.current < 1) {
@@ -247,54 +281,67 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
   }, [data])
 
   return (
-    <ModalContainer>
-      <div className="w-full left-0 z-30 modal">
+    <ModalContainer size="3xl">
+      <div className="w-full left-0 z-30 modal ">
         <InfoCard title="New Product">
-          <form onSubmit={handleFormSubmit}>
-            <label htmlFor="category-select">Select a category</label>
-            <select
-              id="category-select"
-              value={category}
-              onChange={handleCategorySelect}
-            >
-              {data && renderCategories()}
-              <option value="new-category">New Category</option>
-            </select>
+          <form
+            className="grid grid-cols-4 gap-3 my-4"
+            onSubmit={handleFormSubmit}
+          >
             <input
-              className="bg-gray-600 disabled:opacity-40"
-              name="new cat"
-              value={newCategoryInput}
-              onChange={(e) => setNewCategoryInput(e.currentTarget.value)}
-              disabled={category !== 'new-category'}
-              required
-            ></input>
-            {/* Subcategory */}
-            <label htmlFor="subcategory-select">Select a category</label>
-            <select
-              id="subcategory-select"
-              value={subcategory}
-              onChange={handleSubcategorySelect}
-            >
-              {data && renderSubcategories()}
-            </select>
-            <input
-              className="bg-gray-600 disabled:opacity-40"
-              name="new cat"
-              value={newSubCategoryInput}
-              onChange={(e) => setNewSubCategoryInput(e.currentTarget.value)}
-              disabled={subcategory !== 'new-subcategory'}
-              required
-            ></input>
-            <input
+              autoFocus
               placeholder="name"
+              className="col-span-full order-first"
               value={name}
               onChange={(e) => setName(e.currentTarget.value)}
             ></input>
-            <input
-              placeholder="description"
-              value={description}
-              onChange={(e) => setDescription(e.currentTarget.value)}
-            ></input>
+
+            <div className="row-span-3 grid gap-3 md:col-span-2 col-span-full">
+              <label htmlFor="category-select" className="block">
+                Select a category
+              </label>
+              <select
+                id="category-select"
+                className="w-full"
+                value={category}
+                onChange={handleCategorySelect}
+              >
+                {data && renderCategories()}
+                <option value="new-category">New Category</option>
+              </select>
+
+              <input
+                className="bg-gray-600 disabled:opacity-40 w-full"
+                name="new cat"
+                value={newCategoryInput}
+                onChange={(e) => setNewCategoryInput(e.currentTarget.value)}
+                disabled={category !== 'new-category'}
+                required
+              ></input>
+            </div>
+            {/* Subcategory */}
+            <div className=" row-span-3 grid gap-3 md:col-span-2 col-span-full">
+              <label htmlFor="subcategory-select" className="">
+                Select a category
+              </label>
+              <select
+                id="subcategory-select"
+                className=""
+                value={subcategory}
+                onChange={handleSubcategorySelect}
+              >
+                {data && renderSubcategories()}
+              </select>
+              <input
+                className="bg-gray-600 disabled:opacity-40"
+                name="new cat"
+                value={newSubCategoryInput}
+                onChange={(e) => setNewSubCategoryInput(e.currentTarget.value)}
+                disabled={subcategory !== 'new-subcategory'}
+                required
+              ></input>
+            </div>
+
             <input
               placeholder="price"
               value={price}
@@ -305,16 +352,28 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
               value={stock}
               onChange={(e) => setStock(parseInt(e.currentTarget.value))}
             ></input>
+
+            <textarea
+              placeholder="description"
+              className="col-span-2 row-span-2 resize-none"
+              value={description}
+              onChange={(e) => setDescription(e.currentTarget.value)}
+            ></textarea>
+
+            {renderImagePreview2()}
+
             <input
+              className="col-span-full"
               id="file_input"
               type="file"
               multiple
               accept=".jpg,.gif,.jpeg,.png"
               onChange={handleFileOnChange}
             ></input>
-            <button type="submit">submit</button>
 
-            {renderImagePreview()}
+            <PrimaryButton type="submit" className="">
+              CREATE
+            </PrimaryButton>
           </form>
         </InfoCard>
       </div>
