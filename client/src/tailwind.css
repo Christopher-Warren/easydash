@@ -8,12 +8,7 @@
 ::selection {
   background-color: #a78bfa5b;
 }
-h1,
-h2 {
-  font-family: 'Rubik', sans-serif;
-}
-
-span {
+* {
   font-family: 'Rubik', sans-serif;
 }
 

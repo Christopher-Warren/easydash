@@ -11,7 +11,7 @@ const PrimaryButton = ({
       onClick={handleClick}
       id={id}
       type={type}
-      className={`flex justify-around font-semibold text-md tracking-wide rounded
+      className={`flex justify-around font-semibold text-md tracking-wide leading-relaxed rounded
       ${padding}
       ${className}
     bg-purple-600 text-white 

@@ -28,7 +28,7 @@ const ModalContainer = ({ children, size }: any) => {
         }
       }}
     >
-      <div className={`max-w-${size} mx-auto`}>
+      <div className={`${size} mx-auto`}>
         <PageWrapper>{children}</PageWrapper>
       </div>
     </div>

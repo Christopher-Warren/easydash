@@ -18,6 +18,9 @@ import { useAppDispatch } from '../../redux/hooks'
 import axios from 'axios'
 import PrimaryButton from '../buttons/PrimaryButton'
 
+import img from '../../assets/feather/image.svg'
+import SecondaryButton from '../buttons/SecondaryButton'
+
 const NewProductModal = ({ products }: { products: QueryResult }) => {
   const { refetch } = products
   const { data, loading, error } = useQuery(gql`
@@ -81,7 +84,7 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
 
   // Temp preview image
   const [selectedImg, setSelectedImg] = useState(0)
-  const [imgUrls, setImgUrls] = useState([])
+  const [imgUrls, setImgUrls] = useState([img])
 
   // Event Handlers
   const handleFileOnChange = (e: any) => {
@@ -254,7 +257,7 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
     })
 
     return (
-      <div className="col-span-2 grid grid-cols-12">
+      <div className="col-span-2 row-span-6 grid grid-cols-12">
         <img
           className="col-span-9 w-full h-64 object-cover"
           src={imgUrls[selectedImg]}
@@ -281,17 +284,17 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
   }, [data])
 
   return (
-    <ModalContainer size="3xl">
-      <div className="w-full left-0 z-30 modal ">
-        <InfoCard title="New Product">
+    <ModalContainer size="max-w-3xl">
+      <div className="w-full left-0 z-30 modal">
+        <InfoCard p="px-10 py-10" title="New Product">
           <form
-            className="grid grid-cols-4 gap-3 my-4"
+            className="grid grid-cols-4  gap-x-4 gap-y-4 mt-4"
             onSubmit={handleFormSubmit}
           >
             <input
               autoFocus
               placeholder="name"
-              className="col-span-full order-first"
+              className="col-span-full self-center"
               value={name}
               onChange={(e) => setName(e.currentTarget.value)}
             ></input>
@@ -342,28 +345,29 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
               ></input>
             </div>
 
+            {renderImagePreview2()}
+
             <input
+              className="row-span-1"
               placeholder="price"
               value={price}
               onChange={(e) => setPrice(parseInt(e.currentTarget.value))}
             ></input>
             <input
+              className="row-span-1"
               placeholder="stock"
               value={stock}
               onChange={(e) => setStock(parseInt(e.currentTarget.value))}
             ></input>
-
             <textarea
               placeholder="description"
-              className="col-span-2 row-span-2 resize-none"
+              className="resize-none row-span-6 col-span-2"
               value={description}
               onChange={(e) => setDescription(e.currentTarget.value)}
             ></textarea>
 
-            {renderImagePreview2()}
-
             <input
-              className="col-span-full"
+              className="col-span-2"
               id="file_input"
               type="file"
               multiple
@@ -371,8 +375,15 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
               onChange={handleFileOnChange}
             ></input>
 
-            <PrimaryButton type="submit" className="">
-              CREATE
+            <SecondaryButton red padding="py-2" className="col-start-1">
+              Back
+            </SecondaryButton>
+            <PrimaryButton
+              padding="py-2 "
+              type="submit"
+              className="col-start-4"
+            >
+              Create
             </PrimaryButton>
           </form>
         </InfoCard>
