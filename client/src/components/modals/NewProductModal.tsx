@@ -20,6 +20,8 @@ import PrimaryButton from '../buttons/PrimaryButton'
 
 import img from '../../assets/feather/image.svg'
 import SecondaryButton from '../buttons/SecondaryButton'
+import SelectPrimary from '../inputs/SelectPrimary'
+import TextInput from '../inputs/TextInput'
 
 const NewProductModal = ({ products }: { products: QueryResult }) => {
   const { refetch } = products
@@ -72,10 +74,10 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
 
   const [category, setCategory] = useState('')
   const [subcategory, setSubcategory] = useState('')
-  const [name, setName] = useState('potato')
-  const [description, setDescription] = useState('yum')
-  const [price, setPrice] = useState(12)
-  const [stock, setStock] = useState(10)
+  const [name, setName] = useState('')
+  const [description, setDescription] = useState('')
+  const [price, setPrice] = useState(0)
+  const [stock, setStock] = useState(0)
 
   // Track page loads
   const pageLoads = useRef(0)
@@ -213,33 +215,6 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
     })
   }
 
-  const renderImagePreview = () => {
-    return (
-      imgUrls &&
-      imgUrls.map((url, index) => {
-        return (
-          <Fragment key={index}>
-            {index === 0 && (
-              <img
-                className="object-contain w-full"
-                src={imgUrls[selectedImg]}
-                alt="img"
-              ></img>
-            )}
-            <div className="border border-purple-400">
-              <img
-                className="w-1/4 aspect-square inline object-contain"
-                onClick={(e) => setSelectedImg(index)}
-                src={url}
-                alt="img"
-              ></img>
-            </div>
-          </Fragment>
-        )
-      })
-    )
-  }
-
   const renderImagePreview2 = () => {
     if (!imgUrls) return
 
@@ -291,74 +266,68 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
             className="grid grid-cols-4  gap-x-4 gap-y-4 mt-4"
             onSubmit={handleFormSubmit}
           >
-            <input
+            <TextInput
               autoFocus
               placeholder="name"
               className="col-span-full self-center"
               value={name}
               onChange={(e) => setName(e.currentTarget.value)}
-            ></input>
+            ></TextInput>
 
             <div className="row-span-3 grid gap-3 md:col-span-2 col-span-full">
-              <label htmlFor="category-select" className="block">
-                Select a category
-              </label>
-              <select
+              <SelectPrimary
                 id="category-select"
-                className="w-full"
+                className=""
                 value={category}
                 onChange={handleCategorySelect}
               >
                 {data && renderCategories()}
                 <option value="new-category">New Category</option>
-              </select>
+              </SelectPrimary>
 
-              <input
-                className="bg-gray-600 disabled:opacity-40 w-full"
+              <TextInput
+                className="  "
                 name="new cat"
                 value={newCategoryInput}
                 onChange={(e) => setNewCategoryInput(e.currentTarget.value)}
                 disabled={category !== 'new-category'}
                 required
-              ></input>
+              ></TextInput>
             </div>
             {/* Subcategory */}
             <div className=" row-span-3 grid gap-3 md:col-span-2 col-span-full">
-              <label htmlFor="subcategory-select" className="">
-                Select a category
-              </label>
-              <select
+              <SelectPrimary
                 id="subcategory-select"
                 className=""
                 value={subcategory}
                 onChange={handleSubcategorySelect}
               >
                 {data && renderSubcategories()}
-              </select>
-              <input
-                className="bg-gray-600 disabled:opacity-40"
+              </SelectPrimary>
+              <TextInput
+                className=""
                 name="new cat"
                 value={newSubCategoryInput}
                 onChange={(e) => setNewSubCategoryInput(e.currentTarget.value)}
                 disabled={subcategory !== 'new-subcategory'}
                 required
-              ></input>
+              ></TextInput>
             </div>
 
             {renderImagePreview2()}
 
-            <input
+            <TextInput
               className="row-span-1"
               placeholder="price"
               value={price}
               onChange={(e) => setPrice(parseInt(e.currentTarget.value))}
-            ></input>
-            <input
+            ></TextInput>
+            <TextInput
               className="row-span-1"
               placeholder="stock"
               value={stock}
               onChange={(e) => setStock(parseInt(e.currentTarget.value))}
-            ></input>
+            ></TextInput>
             <textarea
               placeholder="description"
               className="resize-none row-span-6 col-span-2"
@@ -366,14 +335,14 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
               onChange={(e) => setDescription(e.currentTarget.value)}
             ></textarea>
 
-            <input
+            <TextInput
               className="col-span-2"
               id="file_input"
               type="file"
               multiple
               accept=".jpg,.gif,.jpeg,.png"
               onChange={handleFileOnChange}
-            ></input>
+            ></TextInput>
 
             <SecondaryButton red padding="py-2" className="col-start-1">
               Back

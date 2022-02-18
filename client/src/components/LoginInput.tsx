@@ -33,14 +33,7 @@ interface InputProps {
   minLength?: number
 }
 
-const LoginInput = ({
-  children,
-  id,
-  name,
-  type,
-  required,
-  minLength,
-}: InputProps) => {
+const LoginInput = ({ children, id, name, type, required, minLength }: any) => {
   const [active, setActive] = useState(() => {
     return false
   })
