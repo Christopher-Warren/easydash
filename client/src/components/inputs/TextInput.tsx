@@ -1,3 +1,5 @@
+import { Fragment } from 'react'
+
 const TextInput = ({
   value,
   onChange,
@@ -5,19 +7,24 @@ const TextInput = ({
   disabled,
   className,
   id,
+  placeholder,
 }: React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLInputElement>,
   HTMLInputElement
 >) => {
   return (
-    <input
-      id={id}
-      autoFocus={autoFocus}
-      className={`self-center border-b-2 focus:border-purple-400 outline-none ${disabled} row-span-1 ${className}`}
-      value={value}
-      onChange={onChange}
-      disabled={disabled}
-    ></input>
+    <Fragment>
+      <input
+        id={id}
+        autoFocus={autoFocus}
+        className={`self-center border-b-2 focus:border-purple-400 outline-none ${disabled} row-span-1 ${className} `}
+        value={value}
+        onChange={onChange}
+        disabled={disabled}
+        placeholder={placeholder}
+      ></input>
+      <label className="absolute ml-.5 -mt-4">name</label>
+    </Fragment>
   )
 }
 

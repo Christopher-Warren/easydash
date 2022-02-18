@@ -22,6 +22,7 @@ import img from '../../assets/feather/image.svg'
 import SecondaryButton from '../buttons/SecondaryButton'
 import SelectPrimary from '../inputs/SelectPrimary'
 import TextInput from '../inputs/TextInput'
+import TextArea from '../inputs/TextArea'
 
 const NewProductModal = ({ products }: { products: QueryResult }) => {
   const { refetch } = products
@@ -288,6 +289,7 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
               <TextInput
                 className="  "
                 name="new cat"
+                placeholder="Enter New Category"
                 value={newCategoryInput}
                 onChange={(e) => setNewCategoryInput(e.currentTarget.value)}
                 disabled={category !== 'new-category'}
@@ -328,21 +330,21 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
               value={stock}
               onChange={(e) => setStock(parseInt(e.currentTarget.value))}
             ></TextInput>
-            <textarea
-              placeholder="description"
-              className="resize-none row-span-6 col-span-2"
+            <TextArea
+              placeholder="Description"
+              className=""
               value={description}
               onChange={(e) => setDescription(e.currentTarget.value)}
-            ></textarea>
+            ></TextArea>
 
-            <TextInput
+            <input
               className="col-span-2"
               id="file_input"
               type="file"
               multiple
               accept=".jpg,.gif,.jpeg,.png"
               onChange={handleFileOnChange}
-            ></TextInput>
+            ></input>
 
             <SecondaryButton red padding="py-2" className="col-start-1">
               Back
