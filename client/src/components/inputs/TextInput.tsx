@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 
 const TextInput = ({
   value,
@@ -12,6 +12,11 @@ const TextInput = ({
   React.InputHTMLAttributes<HTMLInputElement>,
   HTMLInputElement
 >) => {
+  const [isFocused, setIsFocused] = useState(autoFocus)
+
+  // All of the label elements positions are starting from the PARENT
+  // instead of the <input />
+
   return (
     <Fragment>
       <input
@@ -22,8 +27,10 @@ const TextInput = ({
         onChange={onChange}
         disabled={disabled}
         placeholder={placeholder}
+        onBlur={(e) => setIsFocused(false)}
+        onFocus={(e) => setIsFocused(true)}
       ></input>
-      <label className="absolute ml-.5 -mt-4">name</label>
+      <label className={`absolute ml-.5  ${isFocused && ' -mt-4'}`}>name</label>
     </Fragment>
   )
 }
