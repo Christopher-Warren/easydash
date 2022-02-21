@@ -1,4 +1,4 @@
-const InfoCard = ({ children, title, titleClassName, p }: any) => {
+const InfoCardSmall = ({ children, title, titleClassName, p }: any) => {
   return (
     <div
       className={`bg-white dark:bg-gray-800 border dark:border-gray-100/25 rounded-md p-3 ${p}`}
@@ -13,4 +13,4 @@ const InfoCard = ({ children, title, titleClassName, p }: any) => {
   )
 }
 
-export default InfoCard
+export default InfoCardSmall

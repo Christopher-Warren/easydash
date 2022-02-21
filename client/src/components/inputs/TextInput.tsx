@@ -1,4 +1,10 @@
-import { Fragment, useState } from 'react'
+interface InputProps
+  extends React.DetailedHTMLProps<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+  > {
+  containerClassName?: string
+}
 
 const TextInput = ({
   value,
@@ -8,30 +14,34 @@ const TextInput = ({
   className,
   id,
   placeholder,
-}: React.DetailedHTMLProps<
-  React.InputHTMLAttributes<HTMLInputElement>,
-  HTMLInputElement
->) => {
-  const [isFocused, setIsFocused] = useState(autoFocus)
-
-  // All of the label elements positions are starting from the PARENT
-  // instead of the <input />
-
+  containerClassName,
+}: InputProps) => {
   return (
-    <Fragment>
+    <div className={`relative ${containerClassName}`}>
       <input
         id={id}
         autoFocus={autoFocus}
-        className={`self-center border-b-2 focus:border-purple-400 outline-none ${disabled} row-span-1 ${className} `}
+        className={`peer border-b-2   focus:border-purple-300 px-1 pt-3.5  outline-none disabled:bg-gray-50 disabled:cursor-not-allowed ${className} w-full  
+        placeholder-transparent`}
         value={value}
         onChange={onChange}
         disabled={disabled}
         placeholder={placeholder}
-        onBlur={(e) => setIsFocused(false)}
-        onFocus={(e) => setIsFocused(true)}
       ></input>
-      <label className={`absolute ml-.5  ${isFocused && ' -mt-4'}`}>name</label>
-    </Fragment>
+      <label
+        htmlFor={id}
+        className="absolute transition-all left-0 px-1 pt-3.5  -top-5 text-sm text-gray-400 pointer-events-none
+        peer-focus:-top-5
+        peer-focus:text-sm
+        peer-focus:text-purple-400
+
+        peer-placeholder-shown:text-gray-400
+        peer-placeholder-shown:text-base
+        peer-placeholder-shown:top-0"
+      >
+        {placeholder}
+      </label>
+    </div>
   )
 }
 

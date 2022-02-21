@@ -5,10 +5,10 @@ const SelectInput = ({ id, className, value, onChange, children }: any) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full ">
       <select
         id={id}
-        className={`${className} bg-transparent border-b-2  border-gray-200 focus:border-purple-400  py-1.5  outline-none appearance-none w-full
+        className={`${className} h-10  bg-transparent border-b-2  border-gray-200 focus:border-purple-400  py-1.5  outline-none appearance-none w-full
       `}
         value={value}
         onBlur={(e) => setIsOpen(false)}

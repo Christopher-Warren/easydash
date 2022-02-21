@@ -1,7 +1,7 @@
 import { useQuery, gql } from '@apollo/client'
 
 import PageWrapper from '../../components/PageWrapper'
-import InfoCard from '../../components/cards/InfoCard'
+import InfoCard from '../../components/cards/InfoCardSmall'
 
 const Home = ({ userId }: any) => {
   const { data, loading, error } = useQuery(gql`

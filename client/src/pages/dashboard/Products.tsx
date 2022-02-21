@@ -7,7 +7,7 @@ import {
 } from '@apollo/client'
 
 import PageWrapper from '../../components/PageWrapper'
-import InfoCard from '../../components/cards/InfoCard'
+import InfoCard from '../../components/cards/InfoCardSmall'
 import PrimaryButton from '../../components/buttons/PrimaryButton'
 import SecondaryButton from '../../components/buttons/SecondaryButton'
 

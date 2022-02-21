@@ -1,4 +1,4 @@
-import InfoCard from '../cards/InfoCard'
+import InfoCard from '../cards/InfoCardSmall'
 import ModalContainer from './ModalContainer'
 
 import {
@@ -23,6 +23,7 @@ import SecondaryButton from '../buttons/SecondaryButton'
 import SelectPrimary from '../inputs/SelectPrimary'
 import TextInput from '../inputs/TextInput'
 import TextArea from '../inputs/TextArea'
+import InfoCardLarge from '../cards/InfoCardLarge'
 
 const NewProductModal = ({ products }: { products: QueryResult }) => {
   const { refetch } = products
@@ -216,14 +217,14 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
     })
   }
 
-  const renderImagePreview2 = () => {
+  const renderImagePreview = () => {
     if (!imgUrls) return
 
     const images = imgUrls.map((url, index) => {
       return (
         <Fragment key={index}>
           <img
-            className=" h-20 w-20 object-cover"
+            className=" h-20 w-20 object-cover "
             onClick={(e) => setSelectedImg(index)}
             src={url}
             alt="img"
@@ -233,9 +234,9 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
     })
 
     return (
-      <div className="col-span-2 row-span-6 grid grid-cols-12">
+      <div className="md:col-span-2 col-span-full row-span-6 grid grid-cols-12">
         <img
-          className="col-span-9 w-full h-64 object-cover"
+          className="col-span-9 w-full h-64 object-cover "
           src={imgUrls[selectedImg]}
           alt="img"
         ></img>
@@ -262,20 +263,22 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
   return (
     <ModalContainer size="max-w-3xl">
       <div className="w-full left-0 z-30 modal">
-        <InfoCard p="px-10 py-10" title="New Product">
+        <InfoCardLarge title="Create A New Product">
           <form
-            className="grid grid-cols-4  gap-x-4 gap-y-4 mt-4"
+            className="grid grid-cols-4  gap-x-10 gap-y-10"
             onSubmit={handleFormSubmit}
           >
             <TextInput
               autoFocus
-              placeholder="name"
-              className="col-span-full self-center"
+              placeholder="Name"
+              id="name"
+              containerClassName="col-span-full"
+              // className="col-span-full self-center"
               value={name}
               onChange={(e) => setName(e.currentTarget.value)}
             ></TextInput>
 
-            <div className="row-span-3 grid gap-3 md:col-span-2 col-span-full">
+            <div className="grid gap-10 md:col-span-2 col-span-full">
               <SelectPrimary
                 id="category-select"
                 className=""
@@ -289,7 +292,7 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
               <TextInput
                 className="  "
                 name="new cat"
-                placeholder="Enter New Category"
+                placeholder="New Category"
                 value={newCategoryInput}
                 onChange={(e) => setNewCategoryInput(e.currentTarget.value)}
                 disabled={category !== 'new-category'}
@@ -297,7 +300,7 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
               ></TextInput>
             </div>
             {/* Subcategory */}
-            <div className=" row-span-3 grid gap-3 md:col-span-2 col-span-full">
+            <div className="grid gap-10 md:col-span-2 col-span-full">
               <SelectPrimary
                 id="subcategory-select"
                 className=""
@@ -309,6 +312,7 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
               <TextInput
                 className=""
                 name="new cat"
+                placeholder="New Subcategory"
                 value={newSubCategoryInput}
                 onChange={(e) => setNewSubCategoryInput(e.currentTarget.value)}
                 disabled={subcategory !== 'new-subcategory'}
@@ -316,48 +320,49 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
               ></TextInput>
             </div>
 
-            {renderImagePreview2()}
+            {renderImagePreview()}
 
             <TextInput
-              className="row-span-1"
-              placeholder="price"
+              containerClassName="col-span-2 md:col-span-1"
+              placeholder="Price"
               value={price}
               onChange={(e) => setPrice(parseInt(e.currentTarget.value))}
             ></TextInput>
             <TextInput
-              className="row-span-1"
-              placeholder="stock"
+              containerClassName="col-span-2 md:col-span-1"
+              placeholder="Stock"
               value={stock}
               onChange={(e) => setStock(parseInt(e.currentTarget.value))}
             ></TextInput>
             <TextArea
               placeholder="Description"
-              className=""
+              containerClassName="row-span-6 md:col-span-2 col-span-full"
               value={description}
               onChange={(e) => setDescription(e.currentTarget.value)}
             ></TextArea>
 
             <input
-              className="col-span-2"
+              className="md:col-span-2 col-span-full file:mr-4 file:py-2 file:px-4
+              file:rounded-full file:border-0
+              file:text-sm file:font-semibold
+              file:bg-violet-50 file:text-purple-700
+              hover:file:bg-purple-100"
               id="file_input"
               type="file"
               multiple
               accept=".jpg,.gif,.jpeg,.png"
               onChange={handleFileOnChange}
             ></input>
-
-            <SecondaryButton red padding="py-2" className="col-start-1">
-              Back
-            </SecondaryButton>
-            <PrimaryButton
-              padding="py-2 "
-              type="submit"
-              className="col-start-4"
-            >
-              Create
-            </PrimaryButton>
+            <div className="col-span-full flex justify-between">
+              <SecondaryButton red padding="px-10 py-2">
+                Back
+              </SecondaryButton>
+              <PrimaryButton padding="px-10 py-2" type="submit">
+                Create
+              </PrimaryButton>
+            </div>
           </form>
-        </InfoCard>
+        </InfoCardLarge>
       </div>
     </ModalContainer>
   )
