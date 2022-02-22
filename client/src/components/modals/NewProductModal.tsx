@@ -234,7 +234,7 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
     })
 
     return (
-      <div className="md:col-span-2 col-span-full row-span-6 grid grid-cols-12">
+      <div className="md:col-span-2 col-span-full row-span-6 grid grid-cols-12 h-fit">
         <img
           className="col-span-9 w-full h-64 object-cover "
           src={imgUrls[selectedImg]}
@@ -243,6 +243,18 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
         <div className="col-span-3 h-64  overflow-y-auto overflow-x-none">
           {images}
         </div>
+        <input
+          className="col-span-full file:mr-4 file:py-2 file:px-4
+              file:rounded-full file:border-0 w-full 
+              file:text-sm file:font-semibold 
+              file:bg-violet-50 file:text-purple-700
+              hover:file:bg-purple-100"
+          id="file_input"
+          type="file"
+          multiple
+          accept=".jpg,.gif,.jpeg,.png"
+          onChange={handleFileOnChange}
+        ></input>
       </div>
     )
   }
@@ -341,18 +353,6 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
               onChange={(e) => setDescription(e.currentTarget.value)}
             ></TextArea>
 
-            <input
-              className="md:col-span-2 col-span-full file:mr-4 file:py-2 file:px-4
-              file:rounded-full file:border-0
-              file:text-sm file:font-semibold
-              file:bg-violet-50 file:text-purple-700
-              hover:file:bg-purple-100"
-              id="file_input"
-              type="file"
-              multiple
-              accept=".jpg,.gif,.jpeg,.png"
-              onChange={handleFileOnChange}
-            ></input>
             <div className="col-span-full flex justify-between">
               <SecondaryButton red padding="px-10 py-2">
                 Back
