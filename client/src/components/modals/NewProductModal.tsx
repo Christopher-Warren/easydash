@@ -161,6 +161,7 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
       },
     })
       .then(({ data }) => {
+        console.log(data.createProduct._id)
         axios.post('/api/image', formData, {
           headers: {
             productid: data.createProduct._id,

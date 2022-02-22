@@ -99,9 +99,9 @@ const Products = ({ products }: { products: QueryResult }) => {
               <div className="border dark:border-gray-100/25 rounded-sm dark:text-gray-100/60 w-10 h-10 p-1 ">
                 {item.images[0] ? (
                   <img
-                    className="object-cover object-center font-light rounded-sm"
-                    // src={item.images[0]}
-                    src="https://via.placeholder.com/40"
+                    className="object-cover object-center font-light rounded-sm h-full w-full"
+                    src={item.images[0]}
+                    // src="https://via.placeholder.com/40"
                     alt={item.name + ' '}
                   ></img>
                 ) : (
