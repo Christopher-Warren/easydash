@@ -18,6 +18,7 @@ import { useAppDispatch } from '../../redux/hooks'
 import axios from 'axios'
 import PrimaryButton from '../buttons/PrimaryButton'
 
+// initial state for images
 import img from '../../assets/feather/image.svg'
 import SecondaryButton from '../buttons/SecondaryButton'
 import SelectPrimary from '../inputs/SelectPrimary'
@@ -148,11 +149,38 @@ const NewProductModal = ({
   // Track page loads
   const pageLoads = useRef(0)
 
-  // Experimental
-
   // Temp preview image
   const [selectedImg, setSelectedImg] = useState(0)
   const [imgUrls, setImgUrls] = useState([img])
+
+  // Monitor changes to conditionally
+  // render a customPrompt
+  let hasChanges = false
+  if (selectedProduct) {
+    // Check changes for simple state
+    if (name !== selectedProduct.name) hasChanges = true
+    if (price !== selectedProduct.price) hasChanges = true
+    if (stock !== selectedProduct.stock) hasChanges = true
+    if (description !== selectedProduct.description) hasChanges = true
+
+    // Check changes for complex state
+    if (category) {
+      if (category !== selectedProduct.category.name) hasChanges = true
+    }
+
+    if (subcategory) {
+      if (subcategory !== selectedProduct.subcategory.name) hasChanges = true
+    }
+  } else {
+    // When creating a new product, check for
+    // appropriate changes
+    if (name || price || description) {
+      hasChanges = true
+    }
+
+    // Check image changes
+    if (imgUrls[0] !== img) hasChanges = true
+  }
 
   // Event Handlers
   const handleFileOnChange = (e: any) => {
@@ -381,6 +409,7 @@ const NewProductModal = ({
   return (
     <ModalContainer
       size="max-w-3xl"
+      hasChanges={hasChanges}
       opts={{
         title: 'Are you sure you wish to go back?',
         body: 'All changes will be lost',

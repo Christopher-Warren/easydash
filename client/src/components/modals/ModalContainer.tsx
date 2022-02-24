@@ -5,8 +5,11 @@ import { toggleModal } from '../../redux/modal/modalSlice'
 import { useAppDispatch } from '../../redux/hooks'
 import customPrompt from '../../utils/customPrompt'
 
-const ModalContainer = ({ children, size, opts }: any) => {
+const ModalContainer = ({ children, size, opts, hasChanges }: any) => {
   const dispatch = useAppDispatch()
+
+  // console.log(hasChanges)
+
   return (
     <div
       className="bg-black bg-opacity-20 fixed top-0  h-screen w-full z-20 lg:pl-20 overflow-y-scroll transition-opacity duration-200"
@@ -17,7 +20,8 @@ const ModalContainer = ({ children, size, opts }: any) => {
         }
 
         if (e.target.id === 'overlay') {
-          customPrompt(opts, dispatchToggle)
+          if (hasChanges) customPrompt(opts, dispatchToggle)
+          if (!hasChanges) dispatchToggle()
         }
       }}
     >
