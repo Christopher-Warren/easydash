@@ -25,6 +25,7 @@ const Dashboard = ({ logout, userId }: any) => {
           }
           price
           stock
+          description
           _id
         }
       }

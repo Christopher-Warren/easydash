@@ -190,6 +190,9 @@ module.exports = {
 
       await updatedSubcategory.save()
     }
+    product.name = productInput?.name
+    product.price = productInput?.price
+    product.description = productInput?.description
 
     await product.save()
 

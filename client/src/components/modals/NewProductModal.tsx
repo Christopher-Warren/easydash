@@ -84,6 +84,45 @@ const NewProductModal = ({
       }
     }
   `)
+
+  const [modifyProduct, { data: modifyProductData }] = useMutation(gql`
+    mutation modifyProduct(
+      $_id: ID!
+      $name: String
+      $category: String
+      $description: String
+      $price: Float
+      $subcategory: String
+      $stock: Float
+    ) {
+      modifyProduct(
+        productInput: {
+          _id: $_id
+          name: $name
+          category: $category
+          description: $description
+          price: $price
+          subcategory: $subcategory
+          stock: $stock
+        }
+      ) {
+        _id
+        name
+        description
+        price
+        stock
+        subcategory {
+          _id
+          name
+        }
+        category {
+          name
+          _id
+        }
+      }
+    }
+  `)
+
   // Gets data for the currently selected product
   // if the user is editing a preexisting one.
   const [selectedProduct] = products.data.products.filter(
@@ -167,39 +206,67 @@ const NewProductModal = ({
 
   const handleFormSubmit = (e: any) => {
     e.preventDefault()
-    const formData = new FormData()
-    const fileInput = document.getElementById('file_input') as any
-    const images = fileInput && Object.values(fileInput.files)
 
-    images.forEach((file: any) => {
-      formData.append('photos', file)
-    })
-
-    // if we are editing existing item, use a different fn
-
-    createProduct({
-      variables: {
-        name,
-        category: newCategoryInput ? newCategoryInput : category,
-        subcategory: newSubCategoryInput ? newSubCategoryInput : subcategory,
-        description,
-        price,
-        stock,
-      },
-    })
-      .then(({ data }) => {
-        axios.post('/api/image', formData, {
-          headers: {
-            productid: data.createProduct._id,
-          },
+    if (productId) {
+      // If a productId exists, we know we are updating
+      // a previously created product.
+      modifyProduct({
+        variables: {
+          _id: productId,
+          name,
+          category: newCategoryInput ? newCategoryInput : category,
+          subcategory: newSubCategoryInput ? newSubCategoryInput : subcategory,
+          description,
+          price,
+          stock,
+        },
+      })
+        .then(({ data }) => {
+          // axios.post('/api/image', formData, {
+          //   headers: {
+          //     productid: data.createProduct._id,
+          //   },
+          // })
         })
+        .then(() => {
+          dispatch(toggleModal({ value: null }))
+          refetch()
+          dispatch(addError('Product successfully changed.'))
+        })
+        .catch((err) => console.log('ERROR: ', err))
+    } else {
+      const formData = new FormData()
+      const fileInput = document.getElementById('file_input') as any
+      const images = fileInput && Object.values(fileInput.files)
+
+      images.forEach((file: any) => {
+        formData.append('photos', file)
       })
-      .then(() => {
-        dispatch(toggleModal({ value: null }))
-        refetch()
-        dispatch(addError('Product successfully created.'))
+
+      createProduct({
+        variables: {
+          name,
+          category: newCategoryInput ? newCategoryInput : category,
+          subcategory: newSubCategoryInput ? newSubCategoryInput : subcategory,
+          description,
+          price,
+          stock,
+        },
       })
-      .catch((err) => console.log('ERROR: ', err))
+        .then(({ data }) => {
+          axios.post('/api/image', formData, {
+            headers: {
+              productid: data.createProduct._id,
+            },
+          })
+        })
+        .then(() => {
+          dispatch(toggleModal({ value: null }))
+          refetch()
+          dispatch(addError('Product successfully created.'))
+        })
+        .catch((err) => console.log('ERROR: ', err))
+    }
   }
 
   // Render Methods
@@ -407,7 +474,7 @@ const NewProductModal = ({
                 Back
               </SecondaryButton>
               <PrimaryButton padding="px-10 py-2" type="submit">
-                Create
+                {selectedProduct ? 'Save' : 'Create'}
               </PrimaryButton>
             </div>
           </form>
