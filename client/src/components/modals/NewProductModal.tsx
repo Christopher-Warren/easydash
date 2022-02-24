@@ -25,12 +25,28 @@ import TextInput from '../inputs/TextInput'
 import TextArea from '../inputs/TextArea'
 import InfoCardLarge from '../cards/InfoCardLarge'
 
-const NewProductModal = ({ products }: { products: QueryResult }) => {
+/* 
+  This module has two purposes
+  1) Create a new product
+  2) Edit a preexisting product, checked via productId
+
+*/
+
+const NewProductModal = ({
+  products,
+  productId,
+}: {
+  products: QueryResult
+  productId?: string
+}) => {
   const { refetch } = products
   const { data, loading, error } = useQuery(gql`
     query getCategories($category: String) {
       categories(category: $category) {
         name
+        products {
+          _id
+        }
         subcategories {
           name
         }
@@ -68,18 +84,27 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
       }
     }
   `)
+  // Gets data for the currently selected product
+  // if the user is editing a preexisting one.
+  const [selectedProduct] = products.data.products.filter(
+    (val: any, index: any) => {
+      return val._id === productId
+    },
+  )
 
   const [selectedCategory, setSelectedCategory] = useState(0)
   const [newCategoryInput, setNewCategoryInput] = useState<any>('')
   const [newSubCategoryInput, setNewSubCategoryInput] = useState<any>('')
   // State for Form Data
-
+  const [name, setName] = useState(selectedProduct?.name || '')
   const [category, setCategory] = useState('')
   const [subcategory, setSubcategory] = useState('')
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
-  const [price, setPrice] = useState(0)
-  const [stock, setStock] = useState(0)
+
+  const [description, setDescription] = useState(
+    selectedProduct?.description || '',
+  )
+  const [price, setPrice] = useState(selectedProduct?.price || 0)
+  const [stock, setStock] = useState(selectedProduct?.stock || 0)
 
   // Track page loads
   const pageLoads = useRef(0)
@@ -150,6 +175,8 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
       formData.append('photos', file)
     })
 
+    // if we are editing existing item, use a different fn
+
     createProduct({
       variables: {
         name,
@@ -161,7 +188,6 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
       },
     })
       .then(({ data }) => {
-        console.log(data.createProduct._id)
         axios.post('/api/image', formData, {
           headers: {
             productid: data.createProduct._id,
@@ -169,7 +195,7 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
         })
       })
       .then(() => {
-        dispatch(toggleModal(null))
+        dispatch(toggleModal({ value: null }))
         refetch()
         dispatch(addError('Product successfully created.'))
       })
@@ -264,19 +290,41 @@ const NewProductModal = ({ products }: { products: QueryResult }) => {
   useEffect(() => {
     if (data && data.categories[0] && pageLoads.current < 1) {
       pageLoads.current++
-      setCategory(data.categories[0].name)
-      setSubcategory(data.categories[0].subcategories[0].name)
+
+      if (selectedProduct) {
+        setCategory(selectedProduct.category.name)
+        setSubcategory(selectedProduct.subcategory.name)
+        const thing = data.categories.findIndex((el: any) => {
+          return el.name === selectedProduct.category.name
+        })
+
+        setSelectedCategory(thing)
+      } else {
+        setCategory(data.categories[0].name)
+        setSubcategory(data.categories[0].subcategories[0].name)
+      }
     }
+
     if (data && !data.categories[0] && pageLoads.current < 1) {
       setCategory('new-category')
       setSubcategory('new-subcategory')
     }
-  }, [data])
+  }, [data, selectedProduct])
 
   return (
-    <ModalContainer size="max-w-3xl">
-      <div className="w-full left-0 z-30 modal">
-        <InfoCardLarge title="Create A New Product">
+    <ModalContainer
+      size="max-w-3xl"
+      opts={{
+        title: 'Are you sure you wish to go back?',
+        body: 'All changes will be lost',
+        confirm: 'Back',
+        cancel: 'Stay',
+      }}
+    >
+      <div className="w-full left-0 z-30 modal-anims">
+        <InfoCardLarge
+          title={productId ? 'Edit Product' : 'Create a New Product'}
+        >
           <form
             className="grid grid-cols-4  gap-x-10 gap-y-10"
             onSubmit={handleFormSubmit}

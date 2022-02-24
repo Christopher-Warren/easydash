@@ -5,7 +5,7 @@ import { toggleModal } from '../../redux/modal/modalSlice'
 import { useAppDispatch } from '../../redux/hooks'
 import customPrompt from '../../utils/customPrompt'
 
-const ModalContainer = ({ children, size }: any) => {
+const ModalContainer = ({ children, size, opts }: any) => {
   const dispatch = useAppDispatch()
   return (
     <div
@@ -13,14 +13,7 @@ const ModalContainer = ({ children, size }: any) => {
       id="overlay"
       onClick={(e: any) => {
         const dispatchToggle = () => {
-          dispatch(toggleModal(null))
-        }
-
-        const opts = {
-          title: 'Are you sure?',
-          body: 'If you are, all changes will be lost',
-          confirm: 'yes',
-          cancel: 'no',
+          dispatch(toggleModal({ value: null }))
         }
 
         if (e.target.id === 'overlay') {

@@ -71,11 +71,19 @@ const Products = ({ products }: { products: QueryResult }) => {
       return data.products.map((item: any, index: any) => {
         return (
           <tr
-            className={` hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 ${
+            className={` hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 cursor-pointer ${
               isChecked[index] &&
               'bg-purple-50 dark:bg-gray-700/50 odd:dark:bg-gray-700/50'
             }`}
             key={index}
+            onClick={() =>
+              dispatch(
+                toggleModal({
+                  value: ModalFormIDs.editProduct,
+                  productId: item._id,
+                }),
+              )
+            }
           >
             <td className="relative w-8 px-4 py-3 ">
               <div className="border-b border-gray-200 dark:border-gray-100/25 w-screen absolute  left-0  top-0 " />
@@ -164,9 +172,8 @@ const Products = ({ products }: { products: QueryResult }) => {
       <div className="flex my-5">
         <PrimaryButton
           padding="px-5 py-1.5 mr-5"
-          id={ModalFormIDs.newProduct}
           handleClick={(e: any) => {
-            dispatch(toggleModal(e.target.id))
+            dispatch(toggleModal({ value: ModalFormIDs.newProduct }))
           }}
         >
           NEW PRODUCT

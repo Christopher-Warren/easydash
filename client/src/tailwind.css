@@ -30,12 +30,12 @@ td {
 }
 
 /* Modal Animation */
-.modal {
+.modal-anims {
   animation-duration: 200ms;
-  animation-name: slidein;
+  animation-name: fadein;
 }
 
-@keyframes slidein {
+@keyframes fadein {
   from {
     opacity: 0;
   }
