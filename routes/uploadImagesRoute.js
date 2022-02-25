@@ -7,7 +7,7 @@ const Product = require('../models/product')
 const upload = multer({ dest: 'tmp/' })
 
 module.exports = (app) =>
-  app.post('/api/image', upload.array('photos', 12), (req, res) => {
+  app.post('/api/image', upload.array('photos', 12), async (req, res) => {
     /* This route is dependant on including a productId in 
     the body of the request. This must be addressed in
     the front-end api calls.
@@ -26,9 +26,13 @@ module.exports = (app) =>
 
     const images = req.files
 
+    if (images.length == 0) throw new Error('No images were selected')
+
     if (!productId) {
       throw new Error('productId is ' + req.body.productId)
     }
+
+    const s3 = new S3({ apiVersion: '2006-03-01' })
 
     const imgUrls = []
     const imageNames = []
@@ -58,7 +62,6 @@ module.exports = (app) =>
       const uploadedImage = fs.readFileSync(image.path)
 
       return new Promise((resolve, reject) => {
-        const s3 = new S3({ apiVersion: '2006-03-01' })
         s3.upload(
           {
             Bucket: 'easydashbucket',
@@ -80,9 +83,22 @@ module.exports = (app) =>
       })
     })
     Promise.all(uploadedImages)
-      .then((data) => {
-        const mongoImages = Product.findByIdAndUpdate(productId, {
-          images: imgUrls,
+      .then(async (data) => {
+        const getProductImagesS3 = async (productId) => {
+          const S3URL = 'https://easydashbucket.s3.amazonaws.com/'
+          const s3 = new S3({ apiVersion: '2006-03-01', region: 'us-east-2' })
+          const data = await s3
+            .listObjects({
+              Bucket: 'easydashbucket',
+              Prefix: `product_photos/${productId}`,
+            })
+            .promise()
+          return data.Contents.map((value) => S3URL + value.Key)
+        }
+        const images = await getProductImagesS3(productId)
+
+        const mongoImages = await Product.findByIdAndUpdate(productId, {
+          images: images,
         })
         return mongoImages
       })

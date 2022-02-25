@@ -250,11 +250,19 @@ const NewProductModal = ({
         },
       })
         .then(({ data }) => {
-          // axios.post('/api/image', formData, {
-          //   headers: {
-          //     productid: data.createProduct._id,
-          //   },
-          // })
+          const formData = new FormData()
+          const fileInput = document.getElementById('file_input') as any
+          const images = fileInput && Object.values(fileInput.files)
+
+          images.forEach((file: any) => {
+            formData.append('photos', file)
+          })
+
+          axios.post('/api/image', formData, {
+            headers: {
+              productid: data.modifyProduct._id,
+            },
+          })
         })
         .then(() => {
           dispatch(toggleModal({ value: null }))
@@ -263,6 +271,7 @@ const NewProductModal = ({
         })
         .catch((err) => console.log('ERROR: ', err))
     } else {
+      // No productId, create a new product
       const formData = new FormData()
       const fileInput = document.getElementById('file_input') as any
       const images = fileInput && Object.values(fileInput.files)
