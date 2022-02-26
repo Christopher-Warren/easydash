@@ -27,7 +27,7 @@ import TextArea from '../inputs/TextArea'
 import InfoCardLarge from '../cards/InfoCardLarge'
 
 /* 
-  This module has two purposes
+  This module has two actions
   1) Create a new product
   2) Edit a preexisting product, checked via productId
 
@@ -151,11 +151,12 @@ const NewProductModal = ({
 
   // Temp preview image
   const [selectedImg, setSelectedImg] = useState(0)
-  const [imgUrls, setImgUrls] = useState([img])
+  const [imgUrls, setImgUrls] = useState([])
 
   // Monitor changes to conditionally
   // render a customPrompt
   let hasChanges = false
+
   if (selectedProduct) {
     // Check changes for simple state
     if (name !== selectedProduct.name) hasChanges = true
@@ -178,22 +179,21 @@ const NewProductModal = ({
       hasChanges = true
     }
 
-    // Check image changes
-    if (imgUrls[0] !== img) hasChanges = true
+    if (imgUrls[0]) hasChanges = true
   }
 
   // Event Handlers
   const handleFileOnChange = (e: any) => {
     setImgUrls((prev) => {
-      const arr: any = []
-
       const fileInput = document.getElementById('file_input') as any
       const images = fileInput && Object.values(fileInput.files)
 
-      images.forEach((image: any) => {
-        arr.push(URL.createObjectURL(image))
+      const newImages = images.map((image: any) => {
+        return URL.createObjectURL(image)
       })
-      return arr
+      const newarr = prev.concat(newImages)
+
+      return newarr
     })
   }
 
@@ -368,7 +368,7 @@ const NewProductModal = ({
       <div className="md:col-span-2 col-span-full row-span-6 grid grid-cols-12 h-fit">
         <img
           className="col-span-9 w-full h-64 object-cover "
-          src={imgUrls[selectedImg]}
+          src={imgUrls[selectedImg] || img}
           alt="img"
         ></img>
         <div className="col-span-3 h-64  overflow-y-auto overflow-x-none">
@@ -398,11 +398,14 @@ const NewProductModal = ({
       if (selectedProduct) {
         setCategory(selectedProduct.category.name)
         setSubcategory(selectedProduct.subcategory.name)
-        const thing = data.categories.findIndex((el: any) => {
+        const categoryIndex = data.categories.findIndex((el: any) => {
           return el.name === selectedProduct.category.name
         })
 
-        setSelectedCategory(thing)
+        if (selectedProduct.images.length > 0)
+          setImgUrls(selectedProduct.images)
+
+        setSelectedCategory(categoryIndex)
       } else {
         setCategory(data.categories[0].name)
         setSubcategory(data.categories[0].subcategories[0].name)
