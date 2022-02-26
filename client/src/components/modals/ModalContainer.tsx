@@ -8,7 +8,7 @@ import customPrompt from '../../utils/customPrompt'
 const ModalContainer = ({ children, size, opts, hasChanges }: any) => {
   const dispatch = useAppDispatch()
 
-  // console.log(hasChanges)
+  console.log(hasChanges)
 
   return (
     <div

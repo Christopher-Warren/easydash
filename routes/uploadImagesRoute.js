@@ -103,6 +103,7 @@ module.exports = (app) =>
         return mongoImages
       })
       .then((data) => {
+        console.log('image uploaded')
         res.json({ message: 'Image upload success', images: imgUrls })
       })
       .catch((err) => {
