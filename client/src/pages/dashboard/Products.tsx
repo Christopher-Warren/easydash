@@ -76,14 +76,15 @@ const Products = ({ products }: { products: QueryResult }) => {
               'bg-purple-50 dark:bg-gray-700/50 odd:dark:bg-gray-700/50'
             }`}
             key={index}
-            onClick={() =>
+            onClick={(e: any) => {
+              if (e.target.type === 'checkbox') return
               dispatch(
                 toggleModal({
                   value: ModalFormIDs.editProduct,
                   productId: item._id,
                 }),
               )
-            }
+            }}
           >
             <td className="relative w-8 px-4 py-3 ">
               <div className="border-b border-gray-200 dark:border-gray-100/25 w-screen absolute  left-0  top-0 " />
