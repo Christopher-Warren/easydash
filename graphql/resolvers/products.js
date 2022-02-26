@@ -4,6 +4,8 @@ const Category = require('../../models/category')
 const Subcategory = require('../../models/subcategory')
 const normalizeInputs = require('../../utils/normalizeInputs')
 
+const S3 = require('aws-sdk/clients/s3')
+
 module.exports = {
   products: async (arg1, { isAdmin }) => {
     const products = await Product.find({})
@@ -210,32 +212,49 @@ module.exports = {
   },
   deleteProducts: async ({ productIds }, { isAdmin }) => {
     if (!isAdmin) throw new Error('You do not have permission')
+    const s3 = new S3({ apiVersion: '2006-03-01', region: 'us-east-2' })
 
     let deletedCount = 0
     const removedProducts = productIds.map(async (productId) => {
       const product = await Product.findOneAndDelete({ _id: productId })
 
-      const category = await Category.findOne({ products: productId })
-      const subcategory = await Subcategory.findOne({ products: productId })
+      const data = await s3
+        .listObjects({
+          Bucket: 'easydashbucket',
+          Prefix: `product_photos/${productId}`,
+        })
+        .promise()
 
-      const removedProductsCategoryArr = category.products.filter((val) => {
-        return val != productId
+      const imageKeys = data.Contents.map((val) => {
+        return { Key: val.Key }
       })
 
-      const removedProductsSubcategoryArr = subcategory.products.filter(
-        (val) => {
-          return val != productId
-        },
-      )
+      let deletedImages
+      if (imageKeys.length > 0) {
+        deletedImages = await s3
+          .deleteObjects({
+            Bucket: 'easydashbucket',
+            Delete: { Objects: imageKeys },
+          })
+          .promise()
+      }
 
-      category.products = removedProductsCategoryArr
-      subcategory.products = removedProductsSubcategoryArr
-
-      category.update()
-      subcategory.update()
       deletedCount++
+
       return product
     })
+
+    const removedCategoryProducts = await Category.updateMany(
+      { products: { $in: productIds } },
+      { $pull: { products: { $in: productIds } } },
+    )
+    const removedSubcategoryProducts = await Subcategory.updateMany(
+      { products: { $in: productIds } },
+      { $pull: { products: { $in: productIds } } },
+    )
+
+    const oldcat = await Category.deleteMany({ products: [] })
+    const oldsub = await Subcategory.deleteMany({ products: [] })
 
     return removedProducts.length.toString()
   },

@@ -13,9 +13,15 @@ module.exports = (app) =>
           Prefix: `product_photos/${productId}`,
         })
         .promise()
+
+      const sortImages = data.Contents.sort(
+        (a, b) => a.LastModified - b.LastModified,
+      ).map((value) => S3URL + value.Key)
+
       return data.Contents.map((value) => S3URL + value.Key)
     }
 
     const test = await getProductImagesS3(productId)
+    console.log(test)
     res.send(test)
   })

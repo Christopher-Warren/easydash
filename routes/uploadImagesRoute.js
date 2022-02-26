@@ -96,6 +96,7 @@ module.exports = (app) =>
           return data.Contents.map((value) => S3URL + value.Key)
         }
         const images = await getProductImagesS3(productId)
+        console.log(images)
 
         const mongoImages = await Product.findByIdAndUpdate(productId, {
           images: images,
