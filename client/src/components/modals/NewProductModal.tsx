@@ -147,6 +147,9 @@ const NewProductModal = ({
   const [price, setPrice] = useState(selectedProduct?.price || 0)
   const [stock, setStock] = useState(selectedProduct?.stock || 0)
 
+  // State to track upload progress
+  const [progress, setProgress] = useState(0)
+
   // Track page loads
   const pageLoads = useRef(0)
 
@@ -264,7 +267,11 @@ const NewProductModal = ({
               headers: {
                 productid: data.modifyProduct._id,
               },
-              onUploadProgress: (prog) => console.log(prog),
+              onUploadProgress: (prog) => {
+                console.log(prog.p)
+
+                setProgress((prog.loaded / prog.total) * 100)
+              },
             })
             .then(() => {
               dispatch(toggleModal({ value: null }))
@@ -537,6 +544,7 @@ const NewProductModal = ({
               </PrimaryButton>
             </div>
           </form>
+          <progress max="100" value={progress}></progress>
         </InfoCardLarge>
       </div>
     </ModalContainer>
