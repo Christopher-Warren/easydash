@@ -11,7 +11,7 @@ import ErrorNotifs from './components/modals/ErrorNotifications'
 
 import useLogin from './hooks/useAdminLogin'
 
-import FormButton from './components/buttons/PrimaryButton'
+import PrimaryButton from './components/buttons/PrimaryButton'
 
 function App() {
   const { login, loading, user, isAdmin, userId, error, logout } = useLogin()
@@ -40,9 +40,9 @@ function App() {
           {user.isLoggedIn && (
             <div>
               <h1>You are logged in!</h1>
-              <FormButton type="button" handleClick={logout}>
+              <PrimaryButton type="button" onClick={logout}>
                 Logout
-              </FormButton>
+              </PrimaryButton>
             </div>
           )}
 

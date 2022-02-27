@@ -42,11 +42,7 @@ const Dashboard = ({ logout, userId }: any) => {
         <Route path="/dashboard" exact>
           <Home userId={userId} />
           {/* Need to use this button in Products page */}
-          <PrimaryButton
-            className="py-2 px-4"
-            type="button"
-            handleClick={logout}
-          >
+          <PrimaryButton className="py-2 px-4" type="button" onClick={logout}>
             Logout
           </PrimaryButton>
         </Route>

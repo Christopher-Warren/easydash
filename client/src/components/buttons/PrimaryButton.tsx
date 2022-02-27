@@ -1,5 +1,5 @@
 const PrimaryButton = ({
-  handleClick,
+  onClick,
   children,
   padding,
   id,
@@ -8,7 +8,7 @@ const PrimaryButton = ({
 }: any) => {
   return (
     <button
-      onClick={handleClick}
+      onClick={onClick}
       id={id}
       type={type}
       className={`flex justify-around font-semibold text-md tracking-wide leading-relaxed rounded

@@ -25,6 +25,7 @@ import SelectPrimary from '../inputs/SelectPrimary'
 import TextInput from '../inputs/TextInput'
 import TextArea from '../inputs/TextArea'
 import InfoCardLarge from '../cards/InfoCardLarge'
+import customPrompt from '../../utils/customPrompt'
 
 /* 
   This module has two actions
@@ -258,17 +259,20 @@ const NewProductModal = ({
             formData.append('photos', file)
           })
 
-          axios.post('/api/image', formData, {
-            headers: {
-              productid: data.modifyProduct._id,
-            },
-          })
+          axios
+            .post('/api/image', formData, {
+              headers: {
+                productid: data.modifyProduct._id,
+              },
+              onUploadProgress: (prog) => console.log(prog),
+            })
+            .then(() => {
+              dispatch(toggleModal({ value: null }))
+              refetch()
+              dispatch(addError('Product successfully changed.'))
+            })
         })
-        .then(() => {
-          dispatch(toggleModal({ value: null }))
-          refetch()
-          dispatch(addError('Product successfully changed.'))
-        })
+
         .catch((err) => console.log('ERROR: ', err))
     } else {
       // No productId, create a new product
@@ -291,16 +295,17 @@ const NewProductModal = ({
         },
       })
         .then(({ data }) => {
-          axios.post('/api/image', formData, {
-            headers: {
-              productid: data.createProduct._id,
-            },
-          })
-        })
-        .then(() => {
-          dispatch(toggleModal({ value: null }))
-          refetch()
-          dispatch(addError('Product successfully created.'))
+          axios
+            .post('/api/image', formData, {
+              headers: {
+                productid: data.createProduct._id,
+              },
+            })
+            .then(() => {
+              dispatch(toggleModal({ value: null }))
+              refetch()
+              dispatch(addError('Product successfully created.'))
+            })
         })
         .catch((err) => console.log('ERROR: ', err))
     }
@@ -418,16 +423,18 @@ const NewProductModal = ({
     }
   }, [data, selectedProduct])
 
+  const closePromptOpts = {
+    title: 'Are you sure you wish to go back?',
+    body: 'All changes will be lost',
+    confirm: 'Back',
+    cancel: 'Stay',
+  }
+
   return (
     <ModalContainer
       size="max-w-3xl"
       hasChanges={hasChanges}
-      opts={{
-        title: 'Are you sure you wish to go back?',
-        body: 'All changes will be lost',
-        confirm: 'Back',
-        cancel: 'Stay',
-      }}
+      opts={closePromptOpts}
     >
       <div className="w-full left-0 z-30 modal-anims">
         <InfoCardLarge
@@ -511,7 +518,18 @@ const NewProductModal = ({
             ></TextArea>
 
             <div className="col-span-full flex justify-between">
-              <SecondaryButton red padding="px-10 py-2">
+              <SecondaryButton
+                red
+                padding="px-10 py-2"
+                onClick={(e: any) => {
+                  const dispatchToggle = () => {
+                    dispatch(toggleModal({ value: null }))
+                  }
+
+                  if (hasChanges) customPrompt(closePromptOpts, dispatchToggle)
+                  if (!hasChanges) dispatchToggle()
+                }}
+              >
                 Back
               </SecondaryButton>
               <PrimaryButton padding="px-10 py-2" type="submit">

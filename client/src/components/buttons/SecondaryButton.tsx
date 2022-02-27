@@ -1,14 +1,14 @@
 const SecondaryButton = ({
   type,
   children,
-  handleClick,
+  onClick,
   padding,
   id,
   red,
 }: any) => {
   return (
     <button
-      onClick={handleClick}
+      onClick={onClick}
       id={id}
       className={`flex justify-around bg-transparent shadow border leading-relaxed tracking-wide
       ${

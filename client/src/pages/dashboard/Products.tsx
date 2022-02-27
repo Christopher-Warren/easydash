@@ -173,7 +173,9 @@ const Products = ({ products }: { products: QueryResult }) => {
       <div className="flex my-5">
         <PrimaryButton
           padding="px-5 py-1.5 mr-5"
-          handleClick={(e: any) => {
+          onClick={(e: any) => {
+            e.preventDefault()
+
             dispatch(toggleModal({ value: ModalFormIDs.newProduct }))
           }}
         >
