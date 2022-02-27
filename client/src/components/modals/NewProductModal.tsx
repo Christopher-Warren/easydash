@@ -268,8 +268,6 @@ const NewProductModal = ({
                 productid: data.modifyProduct._id,
               },
               onUploadProgress: (prog) => {
-                console.log(prog.p)
-
                 setProgress((prog.loaded / prog.total) * 100)
               },
             })
@@ -306,6 +304,9 @@ const NewProductModal = ({
             .post('/api/image', formData, {
               headers: {
                 productid: data.createProduct._id,
+              },
+              onUploadProgress: (prog) => {
+                setProgress((prog.loaded / prog.total) * 100)
               },
             })
             .then(() => {

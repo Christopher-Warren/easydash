@@ -8,6 +8,7 @@ const upload = multer({ dest: 'tmp/' })
 
 module.exports = (app) =>
   app.post('/api/image', upload.array('photos', 12), async (req, res) => {
+    if (!req.isAdmin) throw new Error('You do not have permission')
     /* This route is dependant on including a productId in 
     the body of the request. This must be addressed in
     the front-end api calls.
