@@ -27,7 +27,7 @@ module.exports = (app) =>
 
     const images = req.files
 
-    if (images.length == 0) throw new Error('No images were selected')
+    // if (images.length == 0) throw new Error('No images were selected')
 
     if (!productId) {
       throw new Error('productId is ' + req.body.productId)

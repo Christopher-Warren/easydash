@@ -153,8 +153,9 @@ const NewProductModal = ({
   // Track page loads
   const pageLoads = useRef(0)
 
+  // State to manage deletion of images
+  const [selectedImgs, setSelectedImgs] = useState([])
   // Temp preview image
-  const [selectedImg, setSelectedImg] = useState(0)
   const [imgUrls, setImgUrls] = useState([])
 
   // Monitor changes to conditionally
@@ -368,8 +369,18 @@ const NewProductModal = ({
       return (
         <Fragment key={index}>
           <img
-            className=" h-20 w-20 object-cover "
-            onClick={(e) => setSelectedImg(index)}
+            className={` h-20 w-20 object-cover ${
+              selectedImgs.includes(url) && 'border-red-500 border-8'
+            }`}
+            onClick={(e) => {
+              if (selectedImgs.includes(url)) {
+                setSelectedImgs((prev) => {
+                  return prev.filter((val) => val !== url)
+                })
+              } else {
+                setSelectedImgs([...selectedImgs, url])
+              }
+            }}
             src={url}
             alt="img"
           ></img>
@@ -378,11 +389,12 @@ const NewProductModal = ({
     })
 
     return (
-      <div className="md:col-span-2 col-span-full row-span-6 grid grid-cols-12 h-fit">
+      <div className="md:col-span-2 col-span-full row-span-6 grid grid-cols-12 h-fit ">
         <img
-          className="col-span-9 w-full h-64 object-cover "
-          src={imgUrls[selectedImg] || img}
+          className="col-span-9 w-full h-64 object-cover"
+          src={imgUrls[0] || img}
           alt="img"
+          onClick={(e) => console.log(e.currentTarget)}
         ></img>
         <div className="col-span-3 h-64  overflow-y-auto overflow-x-none">
           {images}

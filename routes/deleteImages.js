@@ -1,27 +1,38 @@
 const S3 = require('aws-sdk/clients/s3')
+const Product = require('../models/product')
 
 module.exports = (app) =>
   app.post('/api/image/delete', async (req, res) => {
     const productId = req.headers.productid
+    if (!productId) throw new Error('Product not specified.')
 
-    const getProductImagesS3 = async (productId) => {
-      const S3URL = 'https://easydashbucket.s3.amazonaws.com/'
-      const s3 = new S3({ apiVersion: '2006-03-01', region: 'us-east-2' })
-      const data = await s3
-        .listObjects({
-          Bucket: 'easydashbucket',
-          Prefix: `product_photos/${productId}`,
-        })
-        .promise()
+    if (!req.isAdmin) throw new Error('You do not have permission.')
 
-      const sortImages = data.Contents.sort(
-        (a, b) => a.LastModified - b.LastModified,
-      ).map((value) => S3URL + value.Key)
+    const S3URL = 'https://easydashbucket.s3.amazonaws.com/'
+    const s3 = new S3({ apiVersion: '2006-03-01', region: 'us-east-2' })
 
-      return data.Contents.map((value) => S3URL + value.Key)
-    }
+    const imgKeys = req.body.map((img) => {
+      const parsekey = img.split('/')
+      const key = parsekey[parsekey.length - 1]
+      return { Key: `product_photos/${productId}/${key}` }
+    })
 
-    const test = await getProductImagesS3(productId)
-    console.log(test)
-    res.send(test)
+    const deletedImages = await s3
+      .deleteObjects({
+        Bucket: 'easydashbucket',
+        Delete: { Objects: imgKeys },
+      })
+      .promise()
+      .then(async () => {
+        const product = await Product.findByIdAndUpdate(
+          productId,
+          {
+            $pull: { images: { $in: req.body } },
+          },
+          { new: true },
+        )
+        return product
+      })
+
+    res.send(deletedImages.images)
   })
