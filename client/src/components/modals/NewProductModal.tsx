@@ -189,17 +189,23 @@ const NewProductModal = ({
 
   // Event Handlers
   const handleFileOnChange = (e: any) => {
-    setImgUrls((prev) => {
-      const fileInput = document.getElementById('file_input') as any
-      const images = fileInput && Object.values(fileInput.files)
+    const fileInput = document.getElementById('file_input') as any
+    const images = fileInput && Object.values(fileInput.files)
 
-      const newImages = images.map((image: any) => {
-        return URL.createObjectURL(image)
-      })
-      const newarr = prev.concat(newImages)
-
-      return newarr
+    const newImages = images.map((image: any) => {
+      return URL.createObjectURL(image)
     })
+
+    // we need to upload files immediately, and refetch product
+    // then, we can add an option to delete, or "manage" files.
+
+    // no "X files selected" text should be shown.
+
+    // Currently, we need a productId to upload photos, so we are waiting
+    // until the product is created before uploading photos
+    // this will prevent us from uploading photos "onChange"
+
+    // Alternatively, we can create a temporary "Draft" product type
   }
 
   const dispatch = useAppDispatch()
@@ -254,7 +260,7 @@ const NewProductModal = ({
           stock,
         },
       })
-        .then(({ data }) => {
+        .then(async ({ data }) => {
           const formData = new FormData()
           const fileInput = document.getElementById('file_input') as any
           const images = fileInput && Object.values(fileInput.files)
@@ -263,7 +269,7 @@ const NewProductModal = ({
             formData.append('photos', file)
           })
 
-          axios
+          await axios
             .post('/api/image', formData, {
               headers: {
                 productid: data.modifyProduct._id,
@@ -271,6 +277,16 @@ const NewProductModal = ({
               onUploadProgress: (prog) => {
                 setProgress((prog.loaded / prog.total) * 100)
               },
+            })
+            .then(async () => {
+              console.log('deleeee')
+              if (selectedImgs) {
+                await axios.post('/api/image/delete', selectedImgs, {
+                  headers: {
+                    productid: selectedProduct._id,
+                  },
+                })
+              }
             })
             .then(() => {
               dispatch(toggleModal({ value: null }))
@@ -301,6 +317,7 @@ const NewProductModal = ({
         },
       })
         .then(({ data }) => {
+          // Upload images
           axios
             .post('/api/image', formData, {
               headers: {
@@ -310,12 +327,14 @@ const NewProductModal = ({
                 setProgress((prog.loaded / prog.total) * 100)
               },
             })
+
             .then(() => {
               dispatch(toggleModal({ value: null }))
               refetch()
               dispatch(addError('Product successfully created.'))
             })
         })
+
         .catch((err) => console.log('ERROR: ', err))
     }
   }
@@ -389,18 +408,18 @@ const NewProductModal = ({
     })
 
     return (
-      <div className="md:col-span-2 col-span-full row-span-6 grid grid-cols-12 h-fit ">
+      <div className="md:col-span-2 col-span-full row-span-6 grid grid-cols-12 h-fit">
         <img
           className="col-span-9 w-full h-64 object-cover"
           src={imgUrls[0] || img}
           alt="img"
           onClick={(e) => console.log(e.currentTarget)}
         ></img>
-        <div className="col-span-3 h-64  overflow-y-auto overflow-x-none">
+        <div className="col-span-3 h-64  overflow-y-auto overflow-x-none ">
           {images}
         </div>
         <input
-          className="col-span-full file:mr-4 file:py-2 file:px-4
+          className="col-span-full file:mr-4 file:py-2 file:px-4 pt-6
               file:rounded-full file:border-0 w-full 
               file:text-sm file:font-semibold 
               file:bg-violet-50 file:text-purple-700
@@ -488,7 +507,7 @@ const NewProductModal = ({
               <TextInput
                 className="  "
                 name="new cat"
-                placeholder="New Category"
+                placeholder={category !== 'new-category' ? '' : 'New Category'}
                 value={newCategoryInput}
                 onChange={(e) => setNewCategoryInput(e.currentTarget.value)}
                 disabled={category !== 'new-category'}
@@ -508,7 +527,9 @@ const NewProductModal = ({
               <TextInput
                 className=""
                 name="new cat"
-                placeholder="New Subcategory"
+                placeholder={
+                  subcategory !== 'new-subcategory' ? '' : 'New Subcategory'
+                }
                 value={newSubCategoryInput}
                 onChange={(e) => setNewSubCategoryInput(e.currentTarget.value)}
                 disabled={subcategory !== 'new-subcategory'}
