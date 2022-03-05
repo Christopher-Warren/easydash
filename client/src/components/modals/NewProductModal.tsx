@@ -279,8 +279,7 @@ const NewProductModal = ({
               },
             })
             .then(async () => {
-              console.log('deleeee')
-              if (selectedImgs) {
+              if (selectedImgs.length > 0) {
                 await axios.post('/api/image/delete', selectedImgs, {
                   headers: {
                     productid: selectedProduct._id,
@@ -316,9 +315,9 @@ const NewProductModal = ({
           stock,
         },
       })
-        .then(({ data }) => {
+        .then(async ({ data }) => {
           // Upload images
-          axios
+          await axios
             .post('/api/image', formData, {
               headers: {
                 productid: data.createProduct._id,
@@ -418,8 +417,16 @@ const NewProductModal = ({
         <div className="col-span-3 h-64  overflow-y-auto overflow-x-none ">
           {images}
         </div>
+        <progress
+          // need to style a custom progress bar
+          // use margin on siblings instead
+          className="col-span-full my-6 bg-transparent rounded-md  border border-gray-200 animate-pulse"
+          max="100"
+          value={progress}
+        ></progress>
+        <div className="w-full"></div>
         <input
-          className="col-span-full file:mr-4 file:py-2 file:px-4 pt-6
+          className="col-span-full file:mr-4 file:py-2 file:px-4
               file:rounded-full file:border-0 w-full 
               file:text-sm file:font-semibold 
               file:bg-violet-50 file:text-purple-700
@@ -475,7 +482,7 @@ const NewProductModal = ({
       hasChanges={hasChanges}
       opts={closePromptOpts}
     >
-      <div className="w-full left-0 z-30 modal-anims">
+      <div className="w-full left-0 z-30 modal-anims  transition-all duration-100">
         <InfoCardLarge
           title={productId ? 'Edit Product' : 'Create a New Product'}
         >
@@ -493,7 +500,7 @@ const NewProductModal = ({
               onChange={(e) => setName(e.currentTarget.value)}
             ></TextInput>
 
-            <div className="grid gap-10 md:col-span-2 col-span-full">
+            <div className="grid gap-10 md:col-span-2 col-span-full  transition-all duration-100">
               <SelectPrimary
                 id="category-select"
                 className=""
@@ -505,7 +512,6 @@ const NewProductModal = ({
               </SelectPrimary>
 
               <TextInput
-                className="  "
                 name="new cat"
                 placeholder={category !== 'new-category' ? '' : 'New Category'}
                 value={newCategoryInput}
@@ -578,7 +584,6 @@ const NewProductModal = ({
               </PrimaryButton>
             </div>
           </form>
-          <progress max="100" value={progress}></progress>
         </InfoCardLarge>
       </div>
     </ModalContainer>

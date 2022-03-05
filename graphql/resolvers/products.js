@@ -99,6 +99,12 @@ module.exports = {
     if (!productInput.subcategory && productInput.category)
       throw new Error('Must enter a subcategory when changing category.')
 
+    if (productInput.category === 'new-category')
+      throw new Error(`Category "new-category" is unavailible`)
+
+    if (productInput.subcategory === 'new-subcategory')
+      throw new Error(`Subcategory "new-subcategory" is unavailible`)
+
     normalizeInputs(productInput)
 
     const product = await Product.findById(productInput._id)
