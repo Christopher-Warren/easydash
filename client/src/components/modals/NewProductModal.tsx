@@ -26,6 +26,7 @@ import TextInput from '../inputs/TextInput'
 import TextArea from '../inputs/TextArea'
 import InfoCardLarge from '../cards/InfoCardLarge'
 import customPrompt from '../../utils/customPrompt'
+import Progress from '../progress/Progress'
 
 /* 
   This module has two actions
@@ -417,16 +418,9 @@ const NewProductModal = ({
         <div className="col-span-3 h-64  overflow-y-auto overflow-x-none ">
           {images}
         </div>
-        <progress
-          // need to style a custom progress bar
-          // use margin on siblings instead
-          className="col-span-full my-6 bg-transparent rounded-md  border border-gray-200 animate-pulse"
-          max="100"
-          value={progress}
-        ></progress>
-        <div className="w-full"></div>
+
         <input
-          className="col-span-full file:mr-4 file:py-2 file:px-4
+          className="col-span-full my-4 file:mr-4 file:py-2 file:px-4
               file:rounded-full file:border-0 w-full 
               file:text-sm file:font-semibold 
               file:bg-violet-50 file:text-purple-700
@@ -563,6 +557,7 @@ const NewProductModal = ({
               value={description}
               onChange={(e) => setDescription(e.currentTarget.value)}
             ></TextArea>
+            <Progress className="col-span-full" progress={progress}></Progress>
 
             <div className="col-span-full flex justify-between">
               <SecondaryButton
