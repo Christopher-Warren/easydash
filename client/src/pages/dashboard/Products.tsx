@@ -1,13 +1,6 @@
-import {
-  useQuery,
-  gql,
-  useMutation,
-  NetworkStatus,
-  QueryResult,
-} from '@apollo/client'
+import { gql, useMutation, QueryResult } from '@apollo/client'
 
 import PageWrapper from '../../components/PageWrapper'
-import InfoCard from '../../components/cards/InfoCardSmall'
 import PrimaryButton from '../../components/buttons/PrimaryButton'
 import SecondaryButton from '../../components/buttons/SecondaryButton'
 
@@ -15,13 +8,14 @@ import { useAppDispatch } from '../../redux/hooks'
 import { toggleModal } from '../../redux/modal/modalSlice'
 
 import { ModalFormIDs } from '../modals/Modals'
-import LoadingSpinner from '../../components/LoadingSpinner'
+
 import TableCard from '../../components/cards/TableCard'
-import React, { ReactPropTypes, useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 
 import '../../assets/css/tables.css'
 import customPrompt from '../../utils/customPrompt'
-import { addError } from '../../redux/error/errorSlice'
+
+import SelectInput from '../../components/inputs/SelectPrimary'
 
 const Products = ({ products }: { products: QueryResult }) => {
   const { data, loading, error, refetch } = products
@@ -66,12 +60,12 @@ const Products = ({ products }: { products: QueryResult }) => {
     )
   }
 
-  const renderTableItems = () => {
+  const RenderTableItems = () => {
     if (!loading && !error) {
       return data.products.map((item: any, index: any) => {
         return (
           <tr
-            className={` hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 cursor-pointer ${
+            className={` hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 cursor-pointer  ${
               isChecked[index] &&
               'bg-purple-50 dark:bg-gray-700/50 odd:dark:bg-gray-700/50'
             }`}
@@ -104,7 +98,7 @@ const Products = ({ products }: { products: QueryResult }) => {
               ></input>
             </td>
 
-            <td className=" md:table-cell hidden px-3">
+            <td className=" md:table-cell hidden  px-3 ">
               <div className="border dark:border-gray-100/25 rounded-sm dark:text-gray-100/60 w-10 h-10 p-1 ">
                 {item.images[0] ? (
                   <img
@@ -160,6 +154,8 @@ const Products = ({ products }: { products: QueryResult }) => {
           </tr>
         )
       })
+    } else {
+      return null
     }
   }
 
@@ -187,7 +183,7 @@ const Products = ({ products }: { products: QueryResult }) => {
       </div>
 
       <TableCard>
-        <table className="table-fixed w-full capitalize">
+        <table className="table-fixed w-full capitalize ">
           <thead>
             <tr
               className={`text-base dark:text-gray-400 text-gray-500 ${
@@ -270,7 +266,32 @@ const Products = ({ products }: { products: QueryResult }) => {
             </tr>
           </thead>
 
-          <tbody className="w-full  text-base">{renderTableItems()}</tbody>
+          <tbody className="text-base">
+            <RenderTableItems />
+          </tbody>
+          <tfoot className="h-14">
+            {/* Working with tables is extremely hacky, it may be better to use
+            custom css instead of tailwind for tables */}
+            <tr className="relative h-full ">
+              <td className="absolute w-full h-full ">
+                <div className="border-b border-gray-200 dark:border-gray-100/25 w-screen absolute left-0  top-0 " />
+
+                <div className="flex items-center px-4 h-full justify-between">
+                  <div className="flex items-center">
+                    <span className="normal-case pr-2">No. of products</span>
+                    <SelectInput className="" containerClassName="w-12">
+                      <option>10</option>
+                    </SelectInput>
+                  </div>
+
+                  <div>
+                    <button className="px-3">{'<'}</button>
+                    <button className="px-3">{'>'}</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </TableCard>
     </PageWrapper>

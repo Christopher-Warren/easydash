@@ -7,11 +7,18 @@ const normalizeInputs = require('../../utils/normalizeInputs')
 const S3 = require('aws-sdk/clients/s3')
 
 module.exports = {
-  products: async (arg1, { isAdmin }) => {
+  products: async ({ input }, { isAdmin }) => {
+    const limit = input?.limit ? input.limit : 5
+
     const products = await Product.find({})
+      .limit(limit)
       .populate('category')
       .populate('subcategory')
 
+    const mappedProducts = products.map((product, index) => {
+      return product.name + ' ' + index
+    })
+    console.log(mappedProducts)
     return products
   },
   createProduct: async ({ productInput }, { isAdmin }) => {

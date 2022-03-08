@@ -61,6 +61,11 @@ module.exports = buildSchema(`
             name: String
         }
 
+        input GetProductInput {
+            limit: Float
+
+        }
+
         type Product {
             _id: ID!
             name: String!
@@ -72,6 +77,8 @@ module.exports = buildSchema(`
             images: [String]
             stock: Float!
         }
+
+
 
        
 
@@ -93,11 +100,12 @@ module.exports = buildSchema(`
 
 
         type RootQuery {
-          
             validateToken: AuthData
             categories(category: String): [Category!]
-            products: [Product!]
+            products(input: GetProductInput): [Product!]
         }
+
+
         type RootMutation {
             createProduct(productInput: ProductInput): Product
             createCategory(name: String!): Category

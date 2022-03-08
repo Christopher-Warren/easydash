@@ -3,7 +3,7 @@ import PrimaryButton from '../components/buttons/PrimaryButton'
 
 import Home from './dashboard/Home'
 
-import { BrowserRouter as Router, Route, useLocation } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import Products from './dashboard/Products'
 
 import Modals from './modals/Modals'
@@ -13,8 +13,8 @@ import { useQuery, gql } from '@apollo/client'
 const Dashboard = ({ logout, userId }: any) => {
   const products = useQuery(
     gql`
-      query getProducts {
-        products {
+      query getProducts($input: GetProductInput) {
+        products(input: $input) {
           name
           images
           category {

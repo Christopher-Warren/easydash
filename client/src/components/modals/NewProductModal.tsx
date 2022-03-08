@@ -1,14 +1,7 @@
-import InfoCard from '../cards/InfoCardSmall'
 import ModalContainer from './ModalContainer'
 
-import {
-  useQuery,
-  gql,
-  useLazyQuery,
-  useMutation,
-  QueryResult,
-} from '@apollo/client'
-import FormInput from '../LoginInput'
+import { useQuery, gql, useMutation, QueryResult } from '@apollo/client'
+
 import { Fragment, useEffect, useRef, useState } from 'react'
 
 import { toggleModal } from '../../redux/modal/modalSlice'
@@ -43,7 +36,7 @@ const NewProductModal = ({
   productId?: string
 }) => {
   const { refetch } = products
-  const { data, loading, error } = useQuery(gql`
+  const { data } = useQuery(gql`
     query getCategories($category: String) {
       categories(category: $category) {
         name
@@ -57,7 +50,7 @@ const NewProductModal = ({
     }
   `)
 
-  const [createProduct, { data: createdProduct }] = useMutation(gql`
+  const [createProduct] = useMutation(gql`
     mutation createProduct(
       $name: String!
       $category: String!
@@ -88,7 +81,7 @@ const NewProductModal = ({
     }
   `)
 
-  const [modifyProduct, { data: modifyProductData }] = useMutation(gql`
+  const [modifyProduct] = useMutation(gql`
     mutation modifyProduct(
       $_id: ID!
       $name: String
@@ -196,17 +189,6 @@ const NewProductModal = ({
     const newImages = images.map((image: any) => {
       return URL.createObjectURL(image)
     })
-
-    // we need to upload files immediately, and refetch product
-    // then, we can add an option to delete, or "manage" files.
-
-    // no "X files selected" text should be shown.
-
-    // Currently, we need a productId to upload photos, so we are waiting
-    // until the product is created before uploading photos
-    // this will prevent us from uploading photos "onChange"
-
-    // Alternatively, we can create a temporary "Draft" product type
   }
 
   const dispatch = useAppDispatch()

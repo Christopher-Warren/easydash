@@ -1,11 +1,18 @@
 import { useState } from 'react'
 import chevron from '../../assets/feather/chevron-down.svg'
 
-const SelectInput = ({ id, className, value, onChange, children }: any) => {
+const SelectPrimary = ({
+  id,
+  className,
+  value,
+  onChange,
+  children,
+  containerClassName,
+}: any) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className="relative w-full ">
+    <div className={`relative ${containerClassName}`}>
       <select
         id={id}
         className={`${className} h-10  bg-transparent border-b-2  border-gray-200 focus:border-purple-400  py-1.5  outline-none appearance-none w-full
@@ -28,4 +35,4 @@ const SelectInput = ({ id, className, value, onChange, children }: any) => {
   )
 }
 
-export default SelectInput
+export default SelectPrimary
