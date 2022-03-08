@@ -63,8 +63,12 @@ module.exports = buildSchema(`
 
         input GetProductInput {
             limit: Float
-
+            skip: Float
+            sort: String
+            order: String
         }
+
+       
 
         type Product {
             _id: ID!

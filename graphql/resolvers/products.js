@@ -9,16 +9,23 @@ const S3 = require('aws-sdk/clients/s3')
 module.exports = {
   products: async ({ input }, { isAdmin }) => {
     const limit = input?.limit ? input.limit : 5
+    const skip = input?.skip ? input.skip : 0
+
+    const sort = input?.sort ? input.sort : null
+    const order = input?.order ? input.order : null
+
+    console.log(sort, order)
 
     const products = await Product.find({})
-      .limit(limit)
       .populate('category')
       .populate('subcategory')
-
+      .skip(skip)
+      .limit(limit)
+      .sort({ category: { name: 'asc' } })
     const mappedProducts = products.map((product, index) => {
-      return product.name + ' ' + index
+      return product.category.name + ' ' + index
     })
-    console.log(mappedProducts)
+    console.log(products)
     return products
   },
   createProduct: async ({ productInput }, { isAdmin }) => {
@@ -29,25 +36,30 @@ module.exports = {
 
     if (productInput.subcategory === 'new-subcategory')
       throw new Error(`Subcategory "new-subcategory" is unavailible`)
+
+    normalizeInputs(productInput)
+
     // Ensure that the input category exists
     let foundCategory = await Category.findOne({
-      name: productInput.category.toLowerCase(),
+      name: productInput.category,
     })
+
+    console.log(foundCategory)
 
     if (!foundCategory) {
       foundCategory = await Category.create({
-        name: productInput.category.toLowerCase(),
+        name: productInput.category,
       })
     }
 
     // If a subcategory was entered, create the subcategory
     // and assign it to the product
     let foundSubcategory = await Subcategory.findOne({
-      name: productInput.subcategory.toLowerCase(),
+      name: productInput.subcategory,
     })
     if (!foundSubcategory) {
       foundSubcategory = await Subcategory.create({
-        name: productInput.subcategory.toLowerCase(),
+        name: productInput.subcategory,
         category: foundCategory._id,
       })
     }

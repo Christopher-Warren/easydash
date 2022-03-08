@@ -10,7 +10,7 @@ import { toggleModal } from '../../redux/modal/modalSlice'
 import { ModalFormIDs } from '../modals/Modals'
 
 import TableCard from '../../components/cards/TableCard'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import '../../assets/css/tables.css'
 import customPrompt from '../../utils/customPrompt'
@@ -28,12 +28,28 @@ const Products = ({ products }: { products: QueryResult }) => {
 
   const dispatch = useAppDispatch()
 
+  // Products State
   const [isChecked, setIsChecked] = useState<boolean[]>([])
+  const [limit, setLimit] = useState(5)
+  const [skip, setSkip] = useState(0)
+  const [sort, setSort] = useState<null | string>(null)
+  const [order, setOrder] = useState<null | string>(null)
 
   // Ensure isChecked is always in sync with data
   if (data && isChecked.length !== data.products.length) {
     setIsChecked(() => data.products.map(() => false))
   }
+
+  useEffect(() => {
+    refetch({
+      input: {
+        limit: limit,
+        skip: skip,
+        sort: sort,
+        order: order,
+      },
+    })
+  }, [refetch, limit, skip, sort, order])
 
   const handleDelete = (e: any) => {
     customPrompt(
@@ -48,7 +64,6 @@ const Products = ({ products }: { products: QueryResult }) => {
           (item: any, idx: any) => isChecked[idx],
         )
         const selectedProducts = filterIds.map((item: any) => item._id)
-        console.log(selectedProducts)
         deleteProducts({
           variables: {
             productIds: selectedProducts,
@@ -58,6 +73,15 @@ const Products = ({ products }: { products: QueryResult }) => {
         })
       },
     )
+  }
+
+  const handleSort = (string: string) => {
+    setSort(string)
+    if (order === null || order === 'desc' || string !== sort) {
+      setOrder('asc')
+    } else {
+      setOrder('desc')
+    }
   }
 
   const RenderTableItems = () => {
@@ -97,7 +121,6 @@ const Products = ({ products }: { products: QueryResult }) => {
                 }
               ></input>
             </td>
-
             <td className=" md:table-cell hidden  px-3 ">
               <div className="border dark:border-gray-100/25 rounded-sm dark:text-gray-100/60 w-10 h-10 p-1 ">
                 {item.images[0] ? (
@@ -257,10 +280,90 @@ const Products = ({ products }: { products: QueryResult }) => {
                 </>
               ) : (
                 <>
-                  <th className="lg:w-5/12 px-5">Name</th>
-                  <th className="w-3/12">Category</th>
-                  <th className="w-1/12">Qty.</th>
-                  <th className="text-right lg:pr-8 pr-3.5">Price</th>
+                  <th
+                    onClick={() => handleSort('name')}
+                    className="lg:w-5/12 px-5 hover:text-gray-700"
+                  >
+                    Name
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className={` ml-1 mb-0.5 w-4 inline
+                      ${sort !== 'name' && 'hidden'}
+                      ${order === 'asc' ? 'rotate-0' : 'rotate-180 '}`}
+                    >
+                      <line x1="12" y1="19" x2="12" y2="5"></line>
+                      <polyline points="5 12 12 5 19 12"></polyline>
+                    </svg>
+                  </th>
+                  <th
+                    onClick={() => handleSort('category')}
+                    className="w-3/12 hover:text-gray-700"
+                  >
+                    Category
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className={` ml-1 mb-0.5 w-4 inline
+                      ${sort !== 'category' && 'hidden'}
+                      ${order === 'asc' ? 'rotate-0' : 'rotate-180 '}`}
+                    >
+                      <line x1="12" y1="19" x2="12" y2="5"></line>
+                      <polyline points="5 12 12 5 19 12"></polyline>
+                    </svg>
+                  </th>
+                  <th
+                    onClick={() => handleSort('stock')}
+                    className="w-1/12 hover:text-gray-700"
+                  >
+                    Qty.
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className={` ml-1 mb-0.5 w-4 inline
+                      ${sort !== 'stock' && 'hidden'}
+                      ${order === 'asc' ? 'rotate-0' : 'rotate-180 '}`}
+                    >
+                      <line x1="12" y1="19" x2="12" y2="5"></line>
+                      <polyline points="5 12 12 5 19 12"></polyline>
+                    </svg>
+                  </th>
+                  <th
+                    onClick={() => handleSort('price')}
+                    className="text-right lg:pr-8 pr-3.5 hover:text-gray-700"
+                  >
+                    Price
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className={` ml-1 mb-0.5 w-4 inline
+                      ${sort !== 'price' && 'hidden'}
+                      ${order === 'asc' ? 'rotate-0' : 'rotate-180 '}`}
+                    >
+                      <line x1="12" y1="19" x2="12" y2="5"></line>
+                      <polyline points="5 12 12 5 19 12"></polyline>
+                    </svg>
+                  </th>
                 </>
               )}
             </tr>
@@ -279,14 +382,39 @@ const Products = ({ products }: { products: QueryResult }) => {
                 <div className="flex items-center px-4 h-full justify-between">
                   <div className="flex items-center">
                     <span className="normal-case pr-2">No. of products</span>
-                    <SelectInput className="" containerClassName="w-12">
+                    <SelectInput
+                      className=""
+                      containerClassName="w-12"
+                      onChange={(e: any) => {
+                        setLimit(parseInt(e.currentTarget.value))
+                        setSkip(0)
+                      }}
+                    >
+                      <option>5</option>
                       <option>10</option>
+                      <option>20</option>
                     </SelectInput>
                   </div>
 
                   <div>
-                    <button className="px-3">{'<'}</button>
-                    <button className="px-3">{'>'}</button>
+                    <button
+                      disabled={skip === 0}
+                      onClick={(e: any) =>
+                        setSkip((prev: number) => prev - limit)
+                      }
+                      className="px-3 disabled:text-gray-300"
+                    >
+                      {'<'}
+                    </button>
+                    <button
+                      disabled={products.data?.products.length < limit}
+                      onClick={(e: any) =>
+                        setSkip((prev: number) => prev + limit)
+                      }
+                      className="px-3 disabled:text-gray-300"
+                    >
+                      {'>'}
+                    </button>
                   </div>
                 </div>
               </td>
