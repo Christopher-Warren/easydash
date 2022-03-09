@@ -5,13 +5,17 @@ const SideBar = () => {
   const [sideToggle, setSideToggle] = useState(false)
   return (
     <div
-      className={`fixed top-0 w-20 h-28 z-10 dark:border-gray-100/25 transition-all duration-200  overflow-hidden lg:h-screen lg:border-r lg:shadow-xl
+      className={`fixed top-0 w-20  h-28 z-10 bg-white dark:border-gray-100/25 transition-all duration-200  overflow-hidden lg:h-screen lg:border-r lg:shadow-xl
       ${
-        sideToggle &&
-        '!h-screen border-r shadow-xl bg-white dark:bg-gray-800  dark:border-gray-100/25 '
-      }`}
+        sideToggle
+          ? '!h-screen border-r shadow-xl  dark:bg-gray-800  dark:border-gray-100/25 '
+          : 'bg-transparent'
+      }
+      
+      
+      `}
     >
-      <div className="lg:mt-32 mt-10 ">
+      <div className="lg:mt-32 mt-10">
         {/* MOBILE-ONLY Menu Button */}
         <img
           src="/mstile-150x150.png"
@@ -19,14 +23,14 @@ const SideBar = () => {
           className="mx-auto -m-4 hidden lg:block"
         />
         <button
-          className="w-16 h-16 flex justify-center items-center text-purple-500 lg:hidden"
+          className="relative w-16 h-16 flex justify-center items-center  text-purple-500 lg:hidden"
           onClick={() => {
             setSideToggle(!sideToggle)
           }}
         >
           {!sideToggle ? (
             <svg
-              className="w-12 h-12 border-2 border-purple-400 rounded-full shadow dark:shadow-purple-500/50 bg-white dark:bg-gray-900 p-2.5"
+              className="w-12 h-12 border-2 active:bg-slate-200 border-purple-400 rounded-full shadow dark:shadow-purple-500/50 bg-white dark:bg-gray-900 p-2.5"
               xmlns="http://www.w3.org/2000/svg"
               stroke="none"
               fill="currentColor"
@@ -39,7 +43,7 @@ const SideBar = () => {
           ) : (
             <>
               <svg
-                className="w-12 h-12 border-2 border-purple-400 rounded-full p-2.5 "
+                className="w-12 h-12 border-2 active:bg-slate-200 border-purple-400 rounded-full p-2.5 "
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 stroke="currentColor"
