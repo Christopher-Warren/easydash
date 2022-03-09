@@ -14,18 +14,16 @@ module.exports = {
     const sort = input?.sort ? input.sort : null
     const order = input?.order ? input.order : null
 
-    console.log(sort, order)
+    // Will have to use Model.aggregate in order
+    // to sort document based off subdocuments
 
     const products = await Product.find({})
       .populate('category')
       .populate('subcategory')
       .skip(skip)
       .limit(limit)
-      .sort({ category: { name: 'asc' } })
-    const mappedProducts = products.map((product, index) => {
-      return product.category.name + ' ' + index
-    })
-    console.log(products)
+      .sort({ [sort]: order })
+
     return products
   },
   createProduct: async ({ productInput }, { isAdmin }) => {
