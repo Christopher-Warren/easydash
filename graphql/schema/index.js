@@ -65,7 +65,7 @@ module.exports = buildSchema(`
             limit: Float
             skip: Float
             sort: String
-            order: String
+            order: Float
         }
 
        

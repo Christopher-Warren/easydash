@@ -33,7 +33,7 @@ const Products = ({ products }: { products: QueryResult }) => {
   const [limit, setLimit] = useState(5)
   const [skip, setSkip] = useState(0)
   const [sort, setSort] = useState<null | string>(null)
-  const [order, setOrder] = useState<null | string>(null)
+  const [order, setOrder] = useState<null | number>(null)
 
   // Ensure isChecked is always in sync with data
   if (data && isChecked.length !== data.products.length) {
@@ -77,10 +77,10 @@ const Products = ({ products }: { products: QueryResult }) => {
 
   const handleSort = (string: string) => {
     setSort(string)
-    if (order === null || order === 'desc' || string !== sort) {
-      setOrder('asc')
+    if (order === -1 || string !== sort) {
+      setOrder(1)
     } else {
-      setOrder('desc')
+      setOrder(-1)
     }
   }
 
@@ -295,14 +295,14 @@ const Products = ({ products }: { products: QueryResult }) => {
                       strokeLinejoin="round"
                       className={` ml-1 mb-0.5 w-4 inline
                       ${sort !== 'name' && 'hidden'}
-                      ${order === 'asc' ? 'rotate-0' : 'rotate-180 '}`}
+                      ${order === 1 ? 'rotate-0' : 'rotate-180 '}`}
                     >
                       <line x1="12" y1="19" x2="12" y2="5"></line>
                       <polyline points="5 12 12 5 19 12"></polyline>
                     </svg>
                   </th>
                   <th
-                    onClick={() => handleSort('category')}
+                    onClick={() => handleSort('category.name')}
                     className="w-3/12 hover:text-gray-700"
                   >
                     Category
@@ -315,8 +315,8 @@ const Products = ({ products }: { products: QueryResult }) => {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       className={` ml-1 mb-0.5 w-4 inline
-                      ${sort !== 'category' && 'hidden'}
-                      ${order === 'asc' ? 'rotate-0' : 'rotate-180 '}`}
+                      ${sort !== 'category.name' && 'hidden'}
+                      ${order === 1 ? 'rotate-0' : 'rotate-180 '}`}
                     >
                       <line x1="12" y1="19" x2="12" y2="5"></line>
                       <polyline points="5 12 12 5 19 12"></polyline>
@@ -337,7 +337,7 @@ const Products = ({ products }: { products: QueryResult }) => {
                       strokeLinejoin="round"
                       className={` ml-1 mb-0.5 w-4 inline
                       ${sort !== 'stock' && 'hidden'}
-                      ${order === 'asc' ? 'rotate-0' : 'rotate-180 '}`}
+                      ${order === 1 ? 'rotate-0' : 'rotate-180 '}`}
                     >
                       <line x1="12" y1="19" x2="12" y2="5"></line>
                       <polyline points="5 12 12 5 19 12"></polyline>
@@ -358,7 +358,7 @@ const Products = ({ products }: { products: QueryResult }) => {
                       strokeLinejoin="round"
                       className={` ml-1 mb-0.5 w-4 inline
                       ${sort !== 'price' && 'hidden'}
-                      ${order === 'asc' ? 'rotate-0' : 'rotate-180 '}`}
+                      ${order === 1 ? 'rotate-0' : 'rotate-180 '}`}
                     >
                       <line x1="12" y1="19" x2="12" y2="5"></line>
                       <polyline points="5 12 12 5 19 12"></polyline>

@@ -12,17 +12,47 @@ module.exports = {
     const skip = input?.skip ? input.skip : 0
 
     const sort = input?.sort ? input.sort : null
-    const order = input?.order ? input.order : null
+    const order = input?.order ? input.order : 1
 
     // Will have to use Model.aggregate in order
     // to sort document based off subdocuments
 
-    const products = await Product.find({})
-      .populate('category')
-      .populate('subcategory')
-      .skip(skip)
-      .limit(limit)
-      .sort({ [sort]: order })
+    const products = await Product.aggregate([
+      // {localField} should be a field from this Product Model
+      // {foreignField} should be a field on the {from} collection
+      // {as} specifies where the found data should be temporarily inserted
+
+      // {$lookup} expects that {localField} and {foreignField} are an exact match
+
+      // {$unwind} takes the data up by one level, removing the enclosing []
+
+      // In order to sort product.category.name, "category.name" is to be
+      // the expected sort value.
+
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'category',
+          foreignField: '_id',
+          as: 'category',
+        },
+      },
+      {
+        $lookup: {
+          from: 'subcategories',
+          localField: 'subcategory',
+          foreignField: '_id',
+          as: 'subcategory',
+        },
+      },
+      { $unwind: '$category' },
+      { $unwind: '$subcategory' },
+      {
+        $sort: { [sort]: order },
+      },
+      { $skip: skip },
+      { $limit: limit },
+    ])
 
     return products
   },
