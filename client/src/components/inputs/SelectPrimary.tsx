@@ -16,7 +16,7 @@ const SelectPrimary = ({
     <div className={`relative ${containerClassName} `}>
       <select
         id={id}
-        className={`${className} peer capitalize  bg-transparent border-b-2  border-gray-200 focus:border-purple-400  py-1.5  outline-none appearance-none w-full
+        className={`${className} peer capitalize dark:children:text-gray-50 dark:children:bg-gray-700 bg-transparent border-b-2  border-gray-200 focus:border-purple-400  py-1.5  outline-none appearance-none w-full
       `}
         value={value}
         onBlur={(e) => setIsOpen(false)}
@@ -25,7 +25,7 @@ const SelectPrimary = ({
       >
         {children}
       </select>
-      <span className="text-gray-400  -my-4 mx-1 absolute top-0 left-0 text-sm peer-focus:text-purple-400">
+      <span className="text-gray-400   -my-4 mx-1 absolute top-0 left-0 text-sm peer-focus:text-purple-400">
         {label}
       </span>
       <div
@@ -33,7 +33,19 @@ const SelectPrimary = ({
           isOpen ? 'rotate-180' : 'rotate-0'
         }`}
       >
-        <img src={chevron} alt="" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
       </div>
     </div>
   )

@@ -375,7 +375,7 @@ const NewProductModal = ({
       return (
         <Fragment key={index}>
           <img
-            className={` h-20 w-20 object-cover ${
+            className={` h-20 w-20  object-cover ${
               selectedImgs.includes(url) && 'border-red-500 border-8'
             }`}
             onClick={(e) => {
@@ -410,8 +410,10 @@ const NewProductModal = ({
           className="col-span-full my-4 file:mr-4 file:py-2 file:px-4
               file:rounded-full file:border-0 w-full 
               file:text-sm file:font-semibold 
-              file:bg-violet-50 file:text-purple-700
-              hover:file:bg-purple-100"
+              file:bg-purple-50 file:text-purple-700
+              hover:file:bg-purple-100
+              dark:file:bg-purple-600 dark:file:text-purple-50
+              "
           id="file_input"
           type="file"
           multiple
@@ -494,7 +496,7 @@ const NewProductModal = ({
               </SelectPrimary>
 
               <TextInput
-                name="new cat"
+                containerClassName="mt-5"
                 placeholder={category !== 'new-category' ? '' : 'New Category'}
                 value={newCategoryInput}
                 onChange={(e) => setNewCategoryInput(e.currentTarget.value)}
@@ -506,7 +508,6 @@ const NewProductModal = ({
             <div className="  md:col-span-2 col-span-full">
               <SelectPrimary
                 id="subcategory-select"
-                className=""
                 value={subcategory}
                 onChange={handleSubcategorySelect}
                 label="Subcategory"
@@ -514,8 +515,7 @@ const NewProductModal = ({
                 {data && renderSubcategories()}
               </SelectPrimary>
               <TextInput
-                className=""
-                name="new cat"
+                containerClassName="mt-5"
                 placeholder={
                   subcategory !== 'new-subcategory' ? '' : 'New Subcategory'
                 }

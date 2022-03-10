@@ -25,7 +25,7 @@ const TextInput = ({
       <input
         id={id}
         autoFocus={autoFocus}
-        className={`peer border-b-2 focus:border-purple-300 px-1 mt-3.5  outline-none disabled:bg-gray-50 disabled:cursor-not-allowed ${className} w-full  
+        className={`peer border-b-2 focus:border-purple-300 px-1 mt-3.5  outline-none disabled:bg-gray-50 bg-transparent disabled:cursor-not-allowed ${className} w-full  
         placeholder-transparent disabled:hidden`}
         value={value}
         onChange={onChange}

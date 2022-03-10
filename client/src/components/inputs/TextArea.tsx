@@ -21,7 +21,7 @@ const TextArea = ({
       <textarea
         id={id}
         autoFocus={autoFocus}
-        className={`peer h-full border-2 p-1.5 focus:border-purple-300 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed ${className} w-full  placeholder-transparent`}
+        className={`peer h-full border-2 p-1.5 bg-transparent focus:border-purple-300 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed ${className} w-full  placeholder-transparent`}
         value={value}
         onChange={onChange}
         disabled={disabled}
