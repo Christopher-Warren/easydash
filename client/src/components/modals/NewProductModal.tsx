@@ -338,7 +338,10 @@ const NewProductModal = ({
       (subcategory: any, index: number, arr: any) => {
         return (
           <Fragment key={index}>
-            <option>{subcategory.name}</option>
+            <option>
+              {subcategory.name.charAt(0).toUpperCase() +
+                subcategory.name.slice(1)}
+            </option>
             {index === arr.length - 1 && (
               <option
                 value="new-subcategory"
@@ -357,7 +360,9 @@ const NewProductModal = ({
     return data.categories.map((category: any, index: number) => {
       return (
         <Fragment key={index}>
-          <option>{category.name}</option>
+          <option>
+            {category.name.charAt(0).toUpperCase() + category.name.slice(1)}
+          </option>
         </Fragment>
       )
     })
@@ -463,7 +468,7 @@ const NewProductModal = ({
           title={productId ? 'Edit Product' : 'Create a New Product'}
         >
           <form
-            className="grid grid-cols-4  gap-x-10 gap-y-10"
+            className="grid grid-cols-4  gap-10"
             onSubmit={handleFormSubmit}
           >
             <TextInput
@@ -476,12 +481,13 @@ const NewProductModal = ({
               onChange={(e) => setName(e.currentTarget.value)}
             ></TextInput>
 
-            <div className="grid gap-10 md:col-span-2 col-span-full  transition-all duration-100">
+            <div className="md:col-span-2 col-span-full  transition-all duration-100">
               <SelectPrimary
                 id="category-select"
                 className=""
                 value={category}
                 onChange={handleCategorySelect}
+                label="Category"
               >
                 {data && renderCategories()}
                 <option value="new-category">New Category</option>
@@ -497,12 +503,13 @@ const NewProductModal = ({
               ></TextInput>
             </div>
             {/* Subcategory */}
-            <div className="grid gap-10 md:col-span-2 col-span-full">
+            <div className="  md:col-span-2 col-span-full">
               <SelectPrimary
                 id="subcategory-select"
                 className=""
                 value={subcategory}
                 onChange={handleSubcategorySelect}
+                label="Subcategory"
               >
                 {data && renderSubcategories()}
               </SelectPrimary>
