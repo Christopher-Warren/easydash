@@ -282,7 +282,7 @@ const Products = ({ products }: { products: QueryResult }) => {
                 <>
                   <th
                     onClick={() => handleSort('name')}
-                    className="lg:w-5/12 px-5 hover:text-gray-700"
+                    className="lg:w-5/12 px-5 hover:text-gray-700 dark:hover:text-gray-200"
                   >
                     Name
                     <svg
@@ -303,7 +303,7 @@ const Products = ({ products }: { products: QueryResult }) => {
                   </th>
                   <th
                     onClick={() => handleSort('category.name')}
-                    className="w-3/12 hover:text-gray-700"
+                    className="w-3/12 hover:text-gray-700 dark:hover:text-gray-200"
                   >
                     Category
                     <svg
@@ -324,7 +324,7 @@ const Products = ({ products }: { products: QueryResult }) => {
                   </th>
                   <th
                     onClick={() => handleSort('stock')}
-                    className="w-1/12 hover:text-gray-700"
+                    className="w-1/12 hover:text-gray-700 dark:hover:text-gray-200"
                   >
                     Qty.
                     <svg
@@ -345,7 +345,7 @@ const Products = ({ products }: { products: QueryResult }) => {
                   </th>
                   <th
                     onClick={() => handleSort('price')}
-                    className="text-right lg:pr-8 pr-3.5 hover:text-gray-700"
+                    className="text-right lg:pr-8 pr-3.5 hover:text-gray-700 dark:hover:text-gray-200"
                   >
                     Price
                     <svg
@@ -373,8 +373,6 @@ const Products = ({ products }: { products: QueryResult }) => {
             <RenderTableItems />
           </tbody>
           <tfoot className="h-14">
-            {/* Working with tables is extremely hacky, it may be better to use
-            custom css instead of tailwind for tables */}
             <tr className="relative h-full ">
               <td className="absolute w-full h-full ">
                 <div className="border-b border-gray-200 dark:border-gray-100/25 w-screen absolute left-0  top-0 " />
@@ -396,24 +394,50 @@ const Products = ({ products }: { products: QueryResult }) => {
                     </SelectInput>
                   </div>
 
-                  <div>
+                  <div className="flex ">
                     <button
                       disabled={skip === 0}
                       onClick={(e: any) =>
                         setSkip((prev: number) => prev - limit)
                       }
-                      className="px-3 disabled:text-gray-300"
+                      className="p-0.5 active:outline hover:outline hover:outline-gray-500 disabled:outline-transparent dark:outline-gray-600 outline-2 rounded-sm  disabled:text-gray-300 dark:disabled:text-gray-700 dark:disabled:outline-transparent"
                     >
-                      {'<'}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        className=""
+                      >
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                      </svg>
                     </button>
                     <button
                       disabled={products.data?.products.length < limit}
                       onClick={(e: any) =>
                         setSkip((prev: number) => prev + limit)
                       }
-                      className="px-3 disabled:text-gray-300"
+                      className="ml-4 p-0.5 active:outline hover:outline hover:outline-gray-500 disabled:outline-transparent dark:outline-gray-600 outline-2 rounded-sm  disabled:text-gray-300 dark:disabled:text-gray-700 dark:disabled:outline-transparent"
                     >
-                      {'>'}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        className=""
+                      >
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                      </svg>
                     </button>
                   </div>
                 </div>
