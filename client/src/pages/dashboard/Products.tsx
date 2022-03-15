@@ -16,9 +16,11 @@ import '../../assets/css/tables.css'
 import customPrompt from '../../utils/customPrompt'
 
 import SelectInput from '../../components/inputs/SelectPrimary'
+import LoadingSpinner from '../../components/LoadingSpinner'
+import SelectButton from '../../components/buttons/SelectButton'
 
 const Products = ({ products }: { products: QueryResult }) => {
-  const { data, loading, error, refetch } = products
+  const { data, loading, error, refetch, networkStatus } = products
 
   const [deleteProducts] = useMutation(gql`
     mutation deleteProducts($productIds: [ID]!) {
@@ -69,6 +71,7 @@ const Products = ({ products }: { products: QueryResult }) => {
             productIds: selectedProducts,
           },
         }).then((data: any) => {
+          setIsChecked((data) => data.map((i) => false))
           refetch()
         })
       },
@@ -178,7 +181,70 @@ const Products = ({ products }: { products: QueryResult }) => {
         )
       })
     } else {
-      return null
+      const skeleton = Array.from(Array(limit).keys())
+      return skeleton.map((i) => {
+        return (
+          <tr
+            className="hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800"
+            key={i}
+          >
+            <td className="relative w-8 px-4 py-3 ">
+              <div className="border-b border-gray-200 dark:border-gray-100/25 w-screen absolute  left-0  top-0 " />
+              <input
+                type="checkbox"
+                className="lg:w-4 w-5 h-5 lg:h-4 accent-purple-500 "
+              ></input>
+            </td>
+            <td className=" md:table-cell hidden  px-3 ">
+              <div className="border dark:border-gray-100/25 rounded-sm dark:text-gray-100/60 w-10 h-10 p-1 ">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className=""
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+              </div>
+            </td>
+            <td className="px-5 relative">
+              <div className="py-2.5">
+                <div className="">
+                  <h2 className="text-base  leading-tight bg-gray-600 animate-pulse rounded-full text-transparent">
+                    loading
+                  </h2>
+                  <span className="text-xs font tracking-wider bg-gray-600 animate-pulse rounded-full text-transparent">
+                    loading
+                  </span>
+                </div>
+              </div>
+            </td>
+            <td className="">
+              <div className=" relative bg-gray-600 animate-pulse rounded-full text-transparent w-1/2">
+                loading
+              </div>
+            </td>
+            <td className="">
+              <div className=" relative bg-gray-600 animate-pulse rounded-full text-transparent w-full">
+                loading
+              </div>
+            </td>
+            <td className="text-right lg:pr-8 pr-3.5">
+              <div className="relative dark:text-green-200  !text-transparent flex justify-end">
+                <span className="w-2/4 bg-gray-600 animate-pulse rounded-full">
+                  loading
+                </span>
+              </div>
+            </td>
+          </tr>
+        )
+      })
     }
   }
 
@@ -188,6 +254,7 @@ const Products = ({ products }: { products: QueryResult }) => {
       <span className=" tracking-wider dark:text-gray-100">
         These are products that you currently have listed for sale
       </span>
+      {(loading || networkStatus === 4) && <LoadingSpinner />}
 
       <div className="flex my-5">
         <PrimaryButton
@@ -198,20 +265,41 @@ const Products = ({ products }: { products: QueryResult }) => {
             dispatch(toggleModal({ value: ModalFormIDs.newProduct }))
           }}
         >
-          NEW PRODUCT
+          New Product
         </PrimaryButton>
         <SecondaryButton padding="px-5 py-1.5">
-          MANAGE CATEGORIES
+          Manage Categories
         </SecondaryButton>
       </div>
 
       <TableCard>
-        <table className="table-fixed w-full capitalize ">
+        <table className="table-auto w-full capitalize ">
           <thead>
+            <tr className="">
+              <th className="relative w-8 px-4 py-3 " colSpan={6}>
+                <div className="flex">
+                  <SelectButton
+                    className="py-1 px-4 mr-4"
+                    options={<div></div>}
+                  >
+                    Filter (1)
+                  </SelectButton>
+                  <input
+                    className="rounded bg-gray-900 text-gray-300 px-2 py-0.5 
+                  w-full flex-1 
+                focus:outline-purple-500 focus:accent-purple-400"
+                    type="search"
+                    placeholder="Search for some products..."
+                  ></input>
+                </div>
+                <div className="border-b border-gray-200 dark:border-gray-100/25 w-screen absolute left-0  bottom-0 " />
+              </th>
+            </tr>
+
             <tr
               className={`text-base dark:text-gray-400 text-gray-500 ${
                 isChecked.some((val) => val === true) &&
-                'bg-purple-50 dark:bg-gray-700 last-of-type:'
+                'bg-purple-50 dark:bg-gray-700 '
               }`}
             >
               <th className="relative w-8 px-4 py-3 ">
@@ -409,9 +497,9 @@ const Products = ({ products }: { products: QueryResult }) => {
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                         className=""
                       >
                         <polyline points="15 18 9 12 15 6"></polyline>
@@ -431,9 +519,9 @@ const Products = ({ products }: { products: QueryResult }) => {
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                         className=""
                       >
                         <polyline points="9 18 15 12 9 6"></polyline>

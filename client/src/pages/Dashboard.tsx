@@ -30,6 +30,9 @@ const Dashboard = ({ logout, userId }: any) => {
         }
       }
     `,
+    {
+      notifyOnNetworkStatusChange: true,
+    },
   )
 
   return (
