@@ -14,10 +14,11 @@ module.exports = {
     const sort = input?.sort ? input.sort : null
     const order = input?.order ? input.order : 1
 
-    // Will have to use Model.aggregate in order
-    // to sort document based off subdocuments
+    const search = input?.search || null
 
-    const products = await Product.aggregate([
+    const filter = input?.filter
+
+    const stages = [
       // {localField} should be a field from this Product Model
       // {foreignField} should be a field on the {from} collection
       // {as} specifies where the found data should be temporarily inserted
@@ -28,6 +29,12 @@ module.exports = {
 
       // In order to sort product.category.name, "category.name" is to be
       // the expected sort value.
+
+      // Can filter by
+      // • Category
+      // • Subcategory
+      // • X stock
+      // • X price
 
       {
         $lookup: {
@@ -48,11 +55,86 @@ module.exports = {
       { $unwind: '$category' },
       { $unwind: '$subcategory' },
       {
+        $match: {
+          price: { $gte: 10, $lte: 20 },
+        },
+      },
+      {
+        $match: {
+          'category.name': { $eq: 'zebra' },
+        },
+      },
+      {
         $sort: { [sort]: order },
       },
       { $skip: skip },
       { $limit: limit },
-    ])
+    ]
+
+    // if (input.filter) {
+    //   const filterStage = {
+    //     $match: {
+    //       [input.filter.field]: input.filter.query,
+    //     },
+    //   }
+
+    //   stages.push(filterStage)
+    // }
+
+    function generateFilterStages(filter) {
+      function parseQueryOperators(filter) {
+        if (!filter) return
+
+        filter.forEach((filter) => {
+          for (const key of Object.keys(filter.query)) {
+            filter.query['$' + key] = filter.query[key]
+            delete filter.query[key]
+          }
+        })
+      }
+
+      parseQueryOperators(filter)
+
+      filter.forEach((i) => {
+        const filterStage = {
+          $match: {
+            [i.field]: i.query,
+          },
+        }
+
+        stages.push(filterStage)
+      })
+    }
+
+    generateFilterStages(filter)
+
+    if (search) {
+      stages.unshift({
+        $search: {
+          text: {
+            path: 'name',
+            query: search,
+            fuzzy: {},
+          },
+        },
+      })
+
+      stages.push({
+        $project: {
+          _id: 1,
+          name: 1,
+          category: 1,
+          subcategory: 1,
+          description: 1,
+          stock: 1,
+          price: 1,
+          images: 1,
+          searchScore: { $meta: 'searchScore' },
+        },
+      })
+    }
+
+    const products = await Product.aggregate(stages)
 
     return products
   },
@@ -71,8 +153,6 @@ module.exports = {
     let foundCategory = await Category.findOne({
       name: productInput.category,
     })
-
-    console.log(foundCategory)
 
     if (!foundCategory) {
       foundCategory = await Category.create({

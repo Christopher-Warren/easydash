@@ -61,12 +61,31 @@ module.exports = buildSchema(`
             name: String
         }
 
+
+
+        input FilterOptions {
+            eq: String
+            gte: Float
+            lte: Float
+        }
+
+        input Filter {
+            field: String
+            query: FilterOptions
+        }
+
+
+
         input GetProductInput {
             limit: Float
             skip: Float
             sort: String
             order: Float
+            search: String
+            filter: [Filter]
         }
+
+    
 
        
 
@@ -80,6 +99,7 @@ module.exports = buildSchema(`
             createdAt: String!
             images: [String]
             stock: Float!
+            searchScore: Float
         }
 
 
