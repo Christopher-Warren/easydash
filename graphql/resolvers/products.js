@@ -54,16 +54,16 @@ module.exports = {
       },
       { $unwind: '$category' },
       { $unwind: '$subcategory' },
-      {
-        $match: {
-          price: { $gte: 10, $lte: 20 },
-        },
-      },
-      {
-        $match: {
-          'category.name': { $eq: 'zebra' },
-        },
-      },
+      // {
+      //   $match: {
+      //     price: { $gte: 10, $lte: 20 },
+      //   },
+      // },
+      // {
+      //   $match: {
+      //     'category.name': { $eq: 'zebra' },
+      //   },
+      // },
       {
         $sort: { [sort]: order },
       },
@@ -82,9 +82,8 @@ module.exports = {
     // }
 
     function generateFilterStages(filter) {
+      if (!filter) return
       function parseQueryOperators(filter) {
-        if (!filter) return
-
         filter.forEach((filter) => {
           for (const key of Object.keys(filter.query)) {
             filter.query['$' + key] = filter.query[key]
@@ -392,6 +391,9 @@ module.exports = {
     return removedProducts.length.toString()
   },
   categories: async ({ category }) => {
+    // Need 2 endpoints 'getAllCategories' and 'getAllSubcategories'
+    // whose only purpose is to get and return information, allowing
+    // the front end to populate data for filtering
     let categories
     if (category) {
       categories = await Category.find({ name: category })
@@ -402,7 +404,6 @@ module.exports = {
         .populate('products')
         .populate('subcategories')
     }
-
     return categories
   },
 
