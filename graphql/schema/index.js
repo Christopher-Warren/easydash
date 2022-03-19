@@ -125,14 +125,15 @@ module.exports = buildSchema(`
 
         type RootQuery {
             validateToken: AuthData
-            categories(category: String): [Category!]
+            getAllCategories: [Category!]
+         
             products(input: GetProductInput): [Product!]
         }
 
 
         type RootMutation {
             createProduct(productInput: ProductInput): Product
-            createCategory(name: String!): Category
+            
 
             deleteProducts(productIds: [ID]!): String
 

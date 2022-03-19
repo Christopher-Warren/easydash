@@ -280,7 +280,7 @@ const Products = ({ products }: { products: QueryResult }) => {
                 <div className="flex">
                   <SelectButton
                     className="py-1 px-4 mr-4"
-                    options={<div></div>}
+                    options={<button>thigns</button>}
                   >
                     Filter (1)
                   </SelectButton>

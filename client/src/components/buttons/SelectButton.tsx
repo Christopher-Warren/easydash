@@ -8,11 +8,17 @@ const SelectButton = ({
   className,
   type,
 }: any) => {
-  const [hide, setHide] = useState(false)
+  const [hide, setHide] = useState(true)
+
   return (
     <div className="relative">
       <button
-        onClick={() => setHide(!hide)}
+        onClick={(e: any) => {
+          setHide(!hide)
+        }}
+        onBlur={(e: any) => {
+          setHide(true)
+        }}
         id={id}
         type={type}
         className={`flex  justify-around font-medium text-md tracking-wide leading-relaxed rounded
@@ -28,12 +34,19 @@ const SelectButton = ({
         {children}
       </button>
       <div
+        onMouseDown={(e) => {
+          e.preventDefault()
+        }}
         className={`absolute p-2 rounded ${
           hide &&
           'h-0 w-0 opacity-0 overflow-hidden pointer-events-none bg-transparent'
         } text-black z-40  bg-white`}
       >
         {options}
+        <div>silly</div>
+        <button onClick={(e) => console.log('wat')}>
+          Click me - shouldn't close
+        </button>
       </div>
     </div>
   )

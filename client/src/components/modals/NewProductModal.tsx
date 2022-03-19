@@ -37,14 +37,13 @@ const NewProductModal = ({
 }) => {
   const { refetch } = products
   const { data } = useQuery(gql`
-    query getCategories($category: String) {
-      categories(category: $category) {
+    query getAllCategories {
+      getAllCategories {
         name
-        products {
-          _id
-        }
+        _id
         subcategories {
           name
+          _id
         }
       }
     }
@@ -196,7 +195,7 @@ const NewProductModal = ({
   const handleCategorySelect = (e: any) => {
     const selectedIndex = e.target.options.selectedIndex
 
-    if (selectedIndex < data.categories.length) {
+    if (selectedIndex < data.getAllCategories.length) {
       // If selecting valid category
       setSelectedCategory(selectedIndex)
       setNewCategoryInput('')
@@ -210,7 +209,7 @@ const NewProductModal = ({
       setSubcategory('new-subcategory')
     }
     // Handle case where Category has no Subcategories
-    if (data.categories[selectedIndex]?.subcategories.length === 0) {
+    if (data.getAllCategories[selectedIndex]?.subcategories.length === 0) {
       setSubcategory('new-subcategory')
     }
 
@@ -220,7 +219,7 @@ const NewProductModal = ({
   const handleSubcategorySelect = (e: any) => {
     const selectedIndex = e.currentTarget.options.selectedIndex
 
-    if (selectedIndex < data.categories.length) {
+    if (selectedIndex < data.getAllCategories.length) {
       setNewCategoryInput('')
     }
     setSubcategory(e.currentTarget.value)
@@ -323,7 +322,7 @@ const NewProductModal = ({
 
   // Render Methods
   const renderSubcategories = () => {
-    if (data.categories[selectedCategory] === undefined) {
+    if (data.getAllCategories[selectedCategory] === undefined) {
       return (
         <option
           value="new-subcategory"
@@ -334,7 +333,7 @@ const NewProductModal = ({
       )
     }
 
-    return data.categories[selectedCategory]?.subcategories.map(
+    return data.getAllCategories[selectedCategory]?.subcategories.map(
       (subcategory: any, index: number, arr: any) => {
         return (
           <Fragment key={index}>
@@ -357,7 +356,7 @@ const NewProductModal = ({
   }
 
   const renderCategories = () => {
-    return data.categories.map((category: any, index: number) => {
+    return data.getAllCategories.map((category: any, index: number) => {
       return (
         <Fragment key={index}>
           <option>
@@ -426,13 +425,13 @@ const NewProductModal = ({
 
   // Initialize Async State
   useEffect(() => {
-    if (data && data.categories[0] && pageLoads.current < 1) {
+    if (data && data.getAllCategories[0] && pageLoads.current < 1) {
       pageLoads.current++
 
       if (selectedProduct) {
         setCategory(selectedProduct.category.name)
         setSubcategory(selectedProduct.subcategory.name)
-        const categoryIndex = data.categories.findIndex((el: any) => {
+        const categoryIndex = data.getAllCategories.findIndex((el: any) => {
           return el.name === selectedProduct.category.name
         })
 
@@ -441,12 +440,12 @@ const NewProductModal = ({
 
         setSelectedCategory(categoryIndex)
       } else {
-        setCategory(data.categories[0].name)
-        setSubcategory(data.categories[0].subcategories[0].name)
+        setCategory(data.getAllCategories[0].name)
+        setSubcategory(data.getAllCategories[0].subcategories[0].name)
       }
     }
 
-    if (data && !data.categories[0] && pageLoads.current < 1) {
+    if (data && !data.getAllCategories[0] && pageLoads.current < 1) {
       setCategory('new-category')
       setSubcategory('new-subcategory')
     }

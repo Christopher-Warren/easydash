@@ -390,37 +390,15 @@ module.exports = {
 
     return removedProducts.length.toString()
   },
-  categories: async ({ category }) => {
+  getAllCategories: async ({ category }) => {
     // Need 2 endpoints 'getAllCategories' and 'getAllSubcategories'
     // whose only purpose is to get and return information, allowing
     // the front end to populate data for filtering
-    let categories
-    if (category) {
-      categories = await Category.find({ name: category })
-        .populate('products')
-        .populate('subcategories')
-    } else {
-      categories = await Category.find()
-        .populate('products')
-        .populate('subcategories')
-    }
+
+    const categories = await Category.find()
+      .populate('products')
+      .populate('subcategories')
+
     return categories
-  },
-
-  createCategory: async ({ name }) => {
-    const foundCategory = await Category.findOne({ name })
-
-    if (foundCategory) {
-      throw new Error('A category with this name already exists')
-    }
-
-    const createdCategory = await Category.create({
-      name: name.toLowerCase(),
-    })
-
-    return {
-      _id: createdCategory._id,
-      name: createdCategory.name,
-    }
   },
 }
