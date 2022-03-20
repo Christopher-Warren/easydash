@@ -1,3 +1,4 @@
+import { gql, useQuery } from '@apollo/client'
 import { useState } from 'react'
 
 const SelectButton = ({
@@ -8,17 +9,38 @@ const SelectButton = ({
   className,
   type,
 }: any) => {
-  const [hide, setHide] = useState(true)
+  const [hide, setHide] = useState(false)
+
+  const { data } = useQuery(gql`
+    query getAllCategories {
+      getAllCategories {
+        name
+        _id
+        subcategories {
+          name
+          _id
+        }
+      }
+    }
+  `)
+
+  const renderCategories = () => {
+    if (!data) return
+    return data.getAllCategories.map((i: any) => {
+      console.log(i.subcategories)
+      return i.name
+    })
+  }
 
   return (
     <div className="relative">
       <button
-        onClick={(e: any) => {
-          setHide(!hide)
-        }}
-        onBlur={(e: any) => {
-          setHide(true)
-        }}
+        // onClick={(e: any) => {
+        //   setHide(!hide)
+        // }}
+        // onBlur={(e: any) => {
+        //   setHide(true)
+        // }}
         id={id}
         type={type}
         className={`flex  justify-around font-medium text-md tracking-wide leading-relaxed rounded
@@ -37,16 +59,82 @@ const SelectButton = ({
         onMouseDown={(e) => {
           e.preventDefault()
         }}
-        className={`absolute p-2 rounded ${
+        className={`absolute p-2 rounded-sm  ${
           hide &&
           'h-0 w-0 opacity-0 overflow-hidden pointer-events-none bg-transparent'
         } text-black z-40  bg-white`}
       >
-        {options}
-        <div>silly</div>
-        <button onClick={(e) => console.log('wat')}>
-          Click me - shouldn't close
-        </button>
+        <div className="px-4">
+          <div className=" flex">
+            <input
+              className=""
+              id="categories"
+              placeholder="aaa"
+              type="checkbox"
+            ></input>
+            <label className="ml-2 text-xl" htmlFor="categories">
+              Category
+            </label>
+          </div>
+          <ul className="border text-right">
+            <li>thing</li>
+            <li>thing</li>
+            <li>thing</li>
+          </ul>
+
+          <div className=" flex">
+            <input
+              className=""
+              id="categories"
+              placeholder="aaa"
+              type="checkbox"
+            ></input>
+            <label className="ml-2 text-xl" htmlFor="categories">
+              Subategory
+            </label>
+          </div>
+          <ul className="border text-right">
+            <li>thing</li>
+            <li>thing</li>
+            <li>thing</li>
+          </ul>
+        </div>
+
+        <div className=" flex">
+          <input
+            className=""
+            id="categories"
+            placeholder="aaa"
+            type="checkbox"
+          ></input>
+          <label className="ml-2 text-xl" htmlFor="categories">
+            Price
+          </label>
+        </div>
+        <ul className="border text-right">
+          <li>thing</li>
+          <li>thing</li>
+          <li>thing</li>
+        </ul>
+
+        <div className=" flex">
+          <input
+            className=""
+            id="categories"
+            placeholder="aaa"
+            type="checkbox"
+          ></input>
+          <label className="ml-2 text-xl" htmlFor="categories">
+            Quantity
+          </label>
+        </div>
+        <ul className="border text-right">
+          <li>thing</li>
+          <li>thing</li>
+          <li>thing</li>
+        </ul>
+
+        {/* {renderCategories()} */}
       </div>
     </div>
   )
