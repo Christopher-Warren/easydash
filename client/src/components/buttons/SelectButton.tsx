@@ -1,5 +1,4 @@
 import { gql, useQuery } from '@apollo/client'
-import e from 'express'
 import { useRef, useState } from 'react'
 
 const SelectButton = ({
@@ -43,11 +42,13 @@ const SelectButton = ({
   return (
     <div className="relative">
       <button
-        // onBlur={(e: any) => {
-        //   setHide(true)
-        // }}
+        onBlur={(e: any) => {
+          console.log('shouldnt fine')
+          if (e.target === e.currentTarget) {
+            setHide(!hide)
+          }
+        }}
         onClick={(e: any) => {
-          console.log('only button')
           e.preventDefault()
           if (e.target === e.currentTarget) {
             setHide(!hide)
@@ -68,7 +69,8 @@ const SelectButton = ({
         {children}
       </button>
       <div
-        className={`absolute p-2 rounded-sm  ${
+        onMouseDown={(e) => e.preventDefault()}
+        className={`absolute p-2 rounded-sm overflow-hidden  ${
           hide &&
           'h-0 w-0 opacity-0 overflow-hidden pointer-events-none bg-transparent'
         } text-black z-40  bg-white`}
@@ -76,6 +78,8 @@ const SelectButton = ({
         <div className="px-4 w-max">
           <div className="flex flex-wrap">
             <input
+              name="checkbox"
+              id="checkbox"
               onChange={(e) => {
                 setChecked(!checked)
               }}
@@ -83,12 +87,16 @@ const SelectButton = ({
               className="peer "
               type="checkbox"
             ></input>
-            <label className="ml-2 text-xl inline-block ">Category</label>
+            <label
+              onClick={() => setChecked(!checked)}
+              className="ml-2 text-xl inline-block "
+            >
+              Category
+            </label>
 
             <ul
               style={{ height: checked ? height : '0px' }}
-              className={`border text-right w-full transition-all duration-1000 peer-checked:opacity-100 
-      `}
+              className=" relative text-right w-full transition-all duration-1000 opacity-0 peer-checked:opacity-100"
               ref={listRef}
             >
               <div className="">
@@ -99,6 +107,7 @@ const SelectButton = ({
                 <li>thing</li>
                 <li>thing</li>
               </div>
+              <div className="absolute bg-red-200 w-screen h-full top-0 -left-1/2 -z-10"></div>
             </ul>
           </div>
         </div>
