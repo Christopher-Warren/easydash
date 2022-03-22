@@ -45,7 +45,7 @@ const SelectButton = ({
       <button
         onBlur={(e: any) => {
           if (e.target === e.currentTarget) {
-            setHide(!hide)
+            setHide(true)
           }
         }}
         onClick={(e: any) => {
@@ -70,14 +70,18 @@ const SelectButton = ({
       </button>
       <div
         onMouseDown={(e) => e.preventDefault()}
-        className={`absolute p-2 rounded-sm overflow-hidden  ${
-          hide &&
-          'h-0 w-0 opacity-0 overflow-hidden pointer-events-none bg-transparent'
-        } text-black z-40  bg-white`}
+        className={`absolute rounded-sm overflow-hidden shadow-md shadow-gray-900
+      dark:bg-gray-600 dark:text-white
+    text-black z-40  bg-white
+      ${hide && 'h-0 w-0 opacity-0'} `}
       >
-        <div className="border border-red-500 flex flex-wrap px-4 w-max">
+        <div className="flex flex-wrap w-min px-3 py-2">
+          <h1 className="text-xl text-center text-gray-400 w-full ">Filter</h1>
           <SelectOption name="category"></SelectOption>
-          <SelectOption name="category 2"></SelectOption>
+          <SelectOption name="subcategory"></SelectOption>
+
+          <SelectOption name="price"></SelectOption>
+          <SelectOption name="qty."></SelectOption>
         </div>
 
         {/* {renderCategories()} */}
