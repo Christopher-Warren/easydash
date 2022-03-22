@@ -278,9 +278,10 @@ const Products = ({ products }: { products: QueryResult }) => {
             <tr className="">
               <th className="relative w-8 px-4 py-3 " colSpan={6}>
                 <div className="flex">
-                  <SelectButton className="py-1 px-4 mr-4">
-                    Filter (1)
-                  </SelectButton>
+                  <SelectButton
+                    buttonText="Filter"
+                    className="py-1 px-4 mr-4"
+                  ></SelectButton>
                   <input
                     className="rounded bg-gray-900 text-gray-300 px-2 py-0.5 
                   w-full flex-1 
