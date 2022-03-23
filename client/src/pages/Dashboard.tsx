@@ -35,6 +35,8 @@ const Dashboard = ({ logout, userId }: any) => {
     },
   )
 
+  console.log('products', products)
+
   return (
     <>
       <Route path="/dashboard">

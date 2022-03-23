@@ -242,6 +242,7 @@ module.exports = {
     })
     let newCategoryID
     let newSubcategoryID
+    // console.log(subcategoryInput)
 
     if (categoryInput?.id != product.category && productInput.category) {
       //remove product from categpry and save
@@ -283,6 +284,7 @@ module.exports = {
     const updatedSubcategory = await Subcategory.findById(newSubcategoryID)
 
     if (updatedCategory) {
+      console.log('test')
       if (!updatedCategory.subcategories.includes(newSubcategoryID)) {
         updatedCategory.subcategories.push(newSubcategoryID)
       }
@@ -330,15 +332,17 @@ module.exports = {
 
     await product.save()
 
+    console.log(newSubcategoryID)
+
     const finalProduct = await Product.findById(productInput._id)
       .populate('category')
       .populate('subcategory')
 
     // Delete any Category/Subcategory that has no products
-    const categoryCleanup = await Category.findOneAndDelete({ products: [] })
-    const subcategoryCleanup = await Subcategory.findOneAndDelete({
-      products: [],
-    })
+    // const categoryCleanup = await Category.findOneAndDelete({ products: [] })
+    // const subcategoryCleanup = await Subcategory.findOneAndDelete({
+    //   products: [],
+    // })
 
     return finalProduct
   },

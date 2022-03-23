@@ -23,6 +23,7 @@ app.use(cookieParser())
 app.use(isAdmin)
 require('./routes/uploadImagesRoute')(app)
 require('./routes/deleteImages')(app)
+require('./routes/test')(app)
 
 app.use(
   '/graphql',

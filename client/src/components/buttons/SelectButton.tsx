@@ -11,34 +11,22 @@ const SelectButton = ({
   className,
   type,
 }: any) => {
-  const [hide, setHide] = useState(false)
+  const [hide, setHide] = useState(true)
 
-  // const { data } = useQuery(gql`
-  //   query getAllCategories {
-  //     getAllCategories {
-  //       name
-  //       _id
-  //       subcategories {
-  //         name
-  //         _id
-  //       }
-  //     }
-  //   }
-  // `)
+  const { data } = useQuery(gql`
+    query getAllCategories {
+      getAllCategories {
+        name
+        _id
+        subcategories {
+          name
+          _id
+        }
+      }
+    }
+  `)
 
-  // const renderCategories = () => {
-  //   if (!data) return
-  //   return data.getAllCategories.map((i: any) => {
-  //     console.log(i.subcategories)
-  //     return i.name
-  //   })
-  // }
-
-  // const [checked, setChecked] = useState(false)
-
-  // const listRef = useRef<any>(null)
-
-  // const height = listRef.current?.children[0].clientHeight
+  console.log(data)
 
   return (
     <div className="relative">
@@ -77,11 +65,13 @@ const SelectButton = ({
       >
         <div className="flex flex-wrap w-min px-3 py-2">
           <h1 className="text-xl text-center text-gray-400 w-full ">Filter</h1>
-          <SelectOption name="category"></SelectOption>
-          <SelectOption name="subcategory"></SelectOption>
+          <form>
+            <SelectOption data={data} name="category"></SelectOption>
+            <SelectOption data={data} name="subcategory"></SelectOption>
 
-          <SelectOption name="price"></SelectOption>
-          <SelectOption name="qty."></SelectOption>
+            <SelectOption data={data} name="price"></SelectOption>
+            <SelectOption data={data} name="qty."></SelectOption>
+          </form>
         </div>
 
         {/* {renderCategories()} */}
