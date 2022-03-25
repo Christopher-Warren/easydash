@@ -311,6 +311,15 @@ module.exports = {
         newSubcategory.save()
         newCategory.save()
       }
+
+      // Remove product from old category and subcategory
+
+      oldCategory.products = oldCategory.products.filter(
+        (product) => product.toString() !== ID,
+      )
+      oldSubcategory.products = oldSubcategory.products.filter(
+        (product) => product.toString() !== ID,
+      )
     }
 
     if (categoryName === oldCategory.name || !categoryName) {
@@ -329,10 +338,15 @@ module.exports = {
         oldCategory.subcategories.push(newSubcategory._id)
         modifiedProduct.subcategory = newSubcategory._id
       }
+      oldSubcategory.products = oldSubcategory.products.filter(
+        (product) => product.toString() !== ID,
+      )
     }
     existantCategory && existantCategory.save()
     existantSubcategory && existantSubcategory.save()
+
     oldCategory.save()
+    oldSubcategory.save()
 
     modifiedProduct.save()
 
