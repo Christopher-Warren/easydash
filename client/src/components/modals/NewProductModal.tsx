@@ -194,14 +194,23 @@ const NewProductModal = ({
 
   const handleCategorySelect = (e: any) => {
     const selectedIndex = e.target.options.selectedIndex
-
+    console.log(
+      data.getAllCategories.find((obj: any) => {
+        return obj.name === e.currentTarget.value.toLowerCase()
+      }),
+    )
     if (selectedIndex < data.getAllCategories.length) {
       // If selecting valid category
       setSelectedCategory(selectedIndex)
       setNewCategoryInput('')
 
       // Resets subcategory <Select />
-      setSubcategory('')
+
+      const subcategoryOfCategory = data.getAllCategories.find((obj: any) => {
+        return obj.name === e.currentTarget.value.toLowerCase()
+      })
+
+      setSubcategory(subcategoryOfCategory.subcategories[0].name)
     } else {
       // If selecting new category
 
@@ -214,6 +223,7 @@ const NewProductModal = ({
     }
 
     setCategory(e.currentTarget.value)
+    console.log(e.currentTarget.value)
   }
 
   const handleSubcategorySelect = (e: any) => {
@@ -231,6 +241,8 @@ const NewProductModal = ({
     if (productId) {
       // If a productId exists, we know we are updating
       // a previously created product.
+      console.log(newCategoryInput)
+      console.log(newSubCategoryInput, subcategory)
       modifyProduct({
         variables: {
           _id: productId,
@@ -428,9 +440,22 @@ const NewProductModal = ({
     if (data && data.getAllCategories[0] && pageLoads.current < 1) {
       pageLoads.current++
 
+      // This could be done better.
+      // We are currently setting the inital state of the selected product's
+      // category and subcategory to the value rendered in options, where
+      // the shown data is parsed to look better by making the first
+      // character uppercase, we need to allow for products to be able
+      // to have any combination of upper/lower characters.
       if (selectedProduct) {
-        setCategory(selectedProduct.category.name)
-        setSubcategory(selectedProduct.subcategory.name)
+        setCategory(
+          selectedProduct.category.name.charAt(0).toUpperCase() +
+            selectedProduct.category.name.slice(1),
+        )
+
+        setSubcategory(
+          selectedProduct.subcategory.name.charAt(0).toUpperCase() +
+            selectedProduct.subcategory.name.slice(1),
+        )
         const categoryIndex = data.getAllCategories.findIndex((el: any) => {
           return el.name === selectedProduct.category.name
         })

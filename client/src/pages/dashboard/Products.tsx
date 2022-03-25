@@ -90,6 +90,7 @@ const Products = ({ products }: { products: QueryResult }) => {
   const RenderTableItems = () => {
     if (!loading && !error) {
       return data.products.map((item: any, index: any) => {
+        console.log(item)
         return (
           <tr
             className={` hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 cursor-pointer  ${

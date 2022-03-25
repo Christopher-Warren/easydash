@@ -5,6 +5,7 @@ const Subcategory = require('../../models/subcategory')
 const normalizeInputs = require('../../utils/normalizeInputs')
 
 const S3 = require('aws-sdk/clients/s3')
+const subcategory = require('../../models/subcategory')
 
 module.exports = {
   products: async ({ input }, { isAdmin }) => {
@@ -231,119 +232,113 @@ module.exports = {
     if (productInput.subcategory === 'new-subcategory')
       throw new Error(`Subcategory "new-subcategory" is unavailible`)
 
+    // • need to delete modified product ID from old categories and data
+    // • need to delete any categories/subcategories that do not have
+    //   any products
+
     normalizeInputs(productInput)
+    const { _id: ID } = productInput
+    const { name } = productInput
+    const { description } = productInput
+    const { price } = productInput
+    const { stock } = productInput
+    const { category: categoryName } = productInput
+    const { subcategory: subcategoryName } = productInput
 
-    const product = await Product.findById(productInput._id)
-    const categoryInput = await Category.findOne({
-      name: productInput.category,
+    const modifiedProduct = await Product.findById(ID)
+
+    const oldCategory = await Category.findById(modifiedProduct.category)
+    const oldSubcategory = await Subcategory.findById(
+      modifiedProduct.subcategory,
+    )
+
+    if (name) modifiedProduct.name = name
+    if (description) modifiedProduct.description = description
+    if (price) modifiedProduct.price = price
+    if (stock) modifiedProduct.stock = stock
+
+    // Handle case where:
+    // New category is entered
+    const existantCategory = await Category.findOne({ name: categoryName })
+    const existantSubcategory = await Subcategory.findOne({
+      name: subcategoryName,
     })
-    const subcategoryInput = await Subcategory.findOne({
-      name: productInput.subcategory,
-    })
-    let newCategoryID
-    let newSubcategoryID
-    // console.log(subcategoryInput)
 
-    if (categoryInput?.id != product.category && productInput.category) {
-      //remove product from categpry and save
-      if (categoryInput) {
-        newCategoryID = categoryInput._id
-      } else {
-        const newCat = await Category.create({
-          name: productInput.category,
-          subcategories: [],
-          products: [],
+    if (categoryName && categoryName !== oldCategory.name) {
+      // When destination category and subcategory exist,
+      // update data, no new categories or subcategories
+      // are needed
+      if (existantCategory && existantSubcategory) {
+        existantCategory.products.push(ID)
+        existantSubcategory.products.push(ID)
+
+        modifiedProduct.category = existantCategory._id
+        modifiedProduct.subcategory = existantSubcategory._id
+      }
+      // Destination category exists, but a new subcategory
+      // needs to be created
+      if (existantCategory && !existantSubcategory) {
+        // create new subcategory and update data
+        const newSubcategory = await Subcategory.create({
+          name: subcategory,
+          category: existantCategory._id,
+          products: [ID],
         })
-        newCategoryID = newCat._id
+
+        existantCategory.subcategories.push(newSubcategory._id)
+        existantCategory.products.push(ID)
+
+        modifiedProduct.subcategory = newSubcategory._id
+        modifiedProduct.category = existantCategory._id
       }
-    }
 
-    if (
-      subcategoryInput?.id != product.subcategory &&
-      productInput.subcategory
-    ) {
-      const subcategoryExists = categoryInput?.subcategories.includes(
-        subcategoryInput?.id,
-      )
-
-      if (subcategoryInput && subcategoryExists) {
-        newSubcategoryID = subcategoryInput._id
-      } else {
-        // when creating new subcategory, initialize it with a category
-
-        const newSub = await Subcategory.create({
-          name: productInput.subcategory,
-          category: categoryInput ? categoryInput._id : product._id,
-          products: [],
+      // Case where brand new category is entered
+      if (!existantCategory) {
+        const newCategory = await Category.create({
+          name: categoryName,
+          products: [ID],
         })
-        newSubcategoryID = newSub._id
+        const newSubcategory = await Subcategory.create({
+          name: subcategoryName,
+          products: [ID],
+          category: newCategory._id,
+        })
+        newCategory.subcategories = [newSubcategory._id]
+
+        modifiedProduct.category = newCategory._id
+        modifiedProduct.subcategory = newSubcategory._id
+
+        newSubcategory.save()
+        newCategory.save()
       }
     }
-    // Add subcategory to new category
-    const updatedCategory = await Category.findById(newCategoryID)
-    const updatedSubcategory = await Subcategory.findById(newSubcategoryID)
 
-    if (updatedCategory) {
-      console.log('test')
-      if (!updatedCategory.subcategories.includes(newSubcategoryID)) {
-        updatedCategory.subcategories.push(newSubcategoryID)
+    if (categoryName === oldCategory.name || !categoryName) {
+      if (!subcategory) return
+
+      if (existantSubcategory) {
+        modifiedProduct.subcategory = existantSubcategory._id
+        existantSubcategory.products.push(ID)
       }
-      if (!updatedCategory.products.includes(product._id)) {
-        updatedCategory.products.push(product._id)
+      if (!existantSubcategory) {
+        const newSubcategory = await Subcategory.create({
+          name: subcategoryName,
+          category: modifiedProduct.category,
+          products: [ID],
+        })
+        oldCategory.subcategories.push(newSubcategory._id)
+        modifiedProduct.subcategory = newSubcategory._id
       }
-      // Remove product from previous category
-      const previousCategory = await Category.findById(product.category)
-      previousCategory.products = previousCategory.products.filter((item) => {
-        item != product.id
-      })
-
-      await previousCategory.save()
-
-      product.category = updatedCategory._id
-
-      await updatedCategory.save()
     }
+    existantCategory && existantCategory.save()
+    existantSubcategory && existantSubcategory.save()
+    oldCategory.save()
 
-    // Assign category to subcategory & assign product to subcategory
-    if (updatedSubcategory) {
-      if (!updatedSubcategory.products.includes(product._id)) {
-        updatedSubcategory.products.push(product._id)
-      }
+    modifiedProduct.save()
 
-      // remove product from previous subcategory
-      const previousSubcategory = await Subcategory.findById(
-        product.subcategory,
-      )
-      previousSubcategory.products = previousSubcategory.products.filter(
-        (item) => {
-          item != product.id
-        },
-      )
-
-      await previousSubcategory.save()
-
-      product.subcategory = updatedSubcategory._id
-
-      await updatedSubcategory.save()
-    }
-    product.name = productInput?.name
-    product.price = productInput?.price
-    product.description = productInput?.description
-
-    await product.save()
-
-    console.log(newSubcategoryID)
-
-    const finalProduct = await Product.findById(productInput._id)
+    const finalProduct = await Product.findById(ID)
       .populate('category')
       .populate('subcategory')
-
-    // Delete any Category/Subcategory that has no products
-    // const categoryCleanup = await Category.findOneAndDelete({ products: [] })
-    // const subcategoryCleanup = await Subcategory.findOneAndDelete({
-    //   products: [],
-    // })
-
     return finalProduct
   },
   deleteProducts: async ({ productIds }, { isAdmin }) => {
