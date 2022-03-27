@@ -26,8 +26,6 @@ const SelectButton = ({
     }
   `)
 
-  console.log(data)
-
   return (
     <div className="relative">
       <button

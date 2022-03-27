@@ -350,6 +350,8 @@ module.exports = {
 
     modifiedProduct.save()
 
+    // Remove categories that have no products
+
     const finalProduct = await Product.findById(ID)
       .populate('category')
       .populate('subcategory')

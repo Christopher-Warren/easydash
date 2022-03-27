@@ -194,11 +194,7 @@ const NewProductModal = ({
 
   const handleCategorySelect = (e: any) => {
     const selectedIndex = e.target.options.selectedIndex
-    console.log(
-      data.getAllCategories.find((obj: any) => {
-        return obj.name === e.currentTarget.value.toLowerCase()
-      }),
-    )
+
     if (selectedIndex < data.getAllCategories.length) {
       // If selecting valid category
       setSelectedCategory(selectedIndex)
@@ -223,7 +219,6 @@ const NewProductModal = ({
     }
 
     setCategory(e.currentTarget.value)
-    console.log(e.currentTarget.value)
   }
 
   const handleSubcategorySelect = (e: any) => {
@@ -241,8 +236,7 @@ const NewProductModal = ({
     if (productId) {
       // If a productId exists, we know we are updating
       // a previously created product.
-      console.log(newCategoryInput)
-      console.log(newSubCategoryInput, subcategory)
+
       modifyProduct({
         variables: {
           _id: productId,
@@ -411,7 +405,6 @@ const NewProductModal = ({
           className="col-span-9 w-full h-64 object-cover"
           src={imgUrls[0] || img}
           alt="img"
-          onClick={(e) => console.log(e.currentTarget)}
         ></img>
         <div className="col-span-3 h-64  overflow-y-auto overflow-x-none ">
           {images}

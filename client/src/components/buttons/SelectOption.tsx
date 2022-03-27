@@ -25,7 +25,7 @@ const SelectOption = ({ name, data }: any) => {
         const thing = data.getAllCategories.map((i: any) => {
           return i.subcategories
         })
-        console.log(thing)
+
         return <li>subcategories</li>
 
       default:
