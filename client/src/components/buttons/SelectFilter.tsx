@@ -2,7 +2,7 @@ import { gql, useQuery } from '@apollo/client'
 import { useRef, useState } from 'react'
 import SelectOption from './SelectOption'
 
-const SelectButton = ({
+const SelectFilter = ({
   options,
   buttonText,
   children,
@@ -78,17 +78,24 @@ const SelectButton = ({
             onSubmit={(e: any) => {
               e.preventDefault()
 
+              const categoryFilter = []
+              const subcategoryFilter = []
+
               for (let i = 0; i < e.currentTarget.length; i++) {
-                if (
-                  e.currentTarget[i].name.includes('option') &&
-                  e.currentTarget[i].checked
-                ) {
-                  console.log(e.currentTarget[i].value)
+                const isChecked = e.currentTarget[i].checked
+                const eleName = e.currentTarget[i].name
+
+                if (eleName === 'category option' && isChecked) {
+                  categoryFilter.push(e.currentTarget[i].value)
+                }
+                if (eleName === 'subcategory option' && isChecked) {
+                  subcategoryFilter.push(e.currentTarget[i].value)
                 }
               }
+              console.log(categoryFilter, subcategoryFilter)
             }}
           >
-            <button>click</button>
+            <button type="submit">Apply</button>
             <SelectOption data={data} name="category"></SelectOption>
             <SelectOption
               data={data}
@@ -107,4 +114,4 @@ const SelectButton = ({
   )
 }
 
-export default SelectButton
+export default SelectFilter

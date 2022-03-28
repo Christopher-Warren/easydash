@@ -17,7 +17,7 @@ import customPrompt from '../../utils/customPrompt'
 
 import SelectInput from '../../components/inputs/SelectPrimary'
 import LoadingSpinner from '../../components/LoadingSpinner'
-import SelectButton from '../../components/buttons/SelectButton'
+import SelectFilter from '../../components/buttons/SelectFilter'
 
 const Products = ({ products }: { products: QueryResult }) => {
   const { data, loading, error, refetch, networkStatus } = products
@@ -278,11 +278,11 @@ const Products = ({ products }: { products: QueryResult }) => {
             <tr className="">
               <th className="relative w-8 px-4 py-3 " colSpan={6}>
                 <div className="flex">
-                  <SelectButton
+                  <SelectFilter
                     buttonText="Filter"
                     className="py-1 px-4 mr-4"
                     refetch={refetch}
-                  ></SelectButton>
+                  ></SelectFilter>
                   <input
                     className="rounded bg-gray-900 text-gray-300 px-2 py-0.5 
                   w-full flex-1 

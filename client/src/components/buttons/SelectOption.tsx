@@ -7,68 +7,96 @@ const SelectOption = ({ name, data, subcategories }: any) => {
     listRef.current?.children.length *
     listRef.current?.children[0]?.clientHeight
 
-  const [categoriesState, setCategoriesState] = useState<any>([])
+  const CategoryList = ({ data }: any) => {
+    const [categoriesState, setCategoriesState] = useState<any>([])
 
-  // console.log(categoriesState)
+    if (!data) return null
+    const handleCategoriesState = (e: any) => {
+      const targetIndex = parseFloat(e.currentTarget.id)
+      if (categoriesState.length !== data.getAllCategories.length) {
+        setCategoriesState(
+          data.getAllCategories.map((category: any, index: number) => {
+            if (targetIndex === index) return true
+            return false
+          }),
+        )
+      }
+      if (categoriesState.length === data.getAllCategories.length) {
+        setCategoriesState((prev: any) =>
+          prev.map((category: any, index: number) => {
+            if (targetIndex === index) return !category
+            return category
+          }),
+        )
+      }
+    }
+    return data.getAllCategories.map((i: any, index: number) => {
+      return (
+        <li key={index} className="py-2">
+          <input
+            type="checkbox"
+            name="category option"
+            value={i.name}
+            onChange={handleCategoriesState}
+            id={index.toString()}
+            checked={categoriesState[index] ? true : false}
+            className="lg:w-4 w-5 h-5 lg:h-4 mt-1 accent-purple-500"
+          ></input>
+          <label htmlFor={index.toString()}>{i.name}</label>
+        </li>
+      )
+    })
+  }
 
-  const handleCategoriesState = (e: any) => {
-    if (!data) return
-    const targetIndex = parseFloat(e.currentTarget.id)
-    if (categoriesState.length !== data.getAllCategories.length) {
-      setCategoriesState(
-        data.getAllCategories.map((category: any, index: number) => {
-          if (targetIndex === index) return true
-          return false
-        }),
-      )
+  const SubcategoryList = ({ data }: any) => {
+    const [categoriesState, setCategoriesState] = useState<any>([])
+
+    if (!data) return null
+    const handleCategoriesState = (e: any) => {
+      const targetIndex = parseFloat(e.currentTarget.id)
+      if (categoriesState.length !== data.getAllSubcategories.length) {
+        setCategoriesState(
+          data.getAllSubcategories.map((category: any, index: number) => {
+            if (targetIndex === index) return true
+            return false
+          }),
+        )
+      }
+      if (categoriesState.length === data.getAllSubcategories.length) {
+        setCategoriesState((prev: any) =>
+          prev.map((category: any, index: number) => {
+            if (targetIndex === index) return !category
+            return category
+          }),
+        )
+      }
     }
-    if (categoriesState.length === data.getAllCategories.length) {
-      setCategoriesState((prev: any) =>
-        prev.map((category: any, index: number) => {
-          if (targetIndex === index) return !category
-          return category
-        }),
+    return data.getAllSubcategories.map((i: any, index: number) => {
+      return (
+        <li key={index} className="py-2">
+          <input
+            type="checkbox"
+            name="subcategory option"
+            value={i.name}
+            onChange={handleCategoriesState}
+            id={index.toString()}
+            checked={categoriesState[index] ? true : false}
+            className="lg:w-4 w-5 h-5 lg:h-4 mt-1 accent-purple-500"
+          ></input>
+          <label htmlFor={index.toString()}>{i.name}</label>
+        </li>
       )
-    }
+    })
   }
 
   const RenderOptions = () => {
     if (!data) return null
     switch (name) {
       case 'category':
-        const categoriesList = data.getAllCategories.map(
-          (i: any, index: number) => {
-            return (
-              <li key={index} className="py-2">
-                <input
-                  type="checkbox"
-                  name="category option"
-                  value={i.name}
-                  onChange={handleCategoriesState}
-                  id={index.toString()}
-                  checked={categoriesState[index]}
-                  className="lg:w-4 w-5 h-5 lg:h-4 mt-1 accent-purple-500"
-                ></input>
-                <label htmlFor={index.toString()}>{i.name}</label>
-              </li>
-            )
-          },
-        )
-
-        // console.log(categories)
-
-        return categoriesList
+        return <CategoryList data={data} />
 
       case 'subcategory':
-        if (!subcategories) return null
-
-        const subcategoriesList = subcategories.getAllSubcategories.map(
-          (subcategory: any, index: number) => {
-            return <li key={index}>{subcategory.name}</li>
-          },
-        )
-
-        return subcategoriesList
+        return <SubcategoryList data={subcategories} />
 
       default:
         return <li>nothing</li>
