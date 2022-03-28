@@ -10,9 +10,11 @@ const SelectButton = ({
   id,
   className,
   type,
+  refetch,
 }: any) => {
-  const [hide, setHide] = useState(true)
+  const [hide, setHide] = useState(false)
 
+  const [filter, setFilter] = useState([])
   const { data } = useQuery(gql`
     query getAllCategories {
       getAllCategories {
@@ -22,6 +24,15 @@ const SelectButton = ({
           name
           _id
         }
+      }
+    }
+  `)
+
+  const { data: subcategories } = useQuery(gql`
+    query getAllCategories {
+      getAllSubcategories {
+        name
+        _id
       }
     }
   `)
@@ -63,9 +74,19 @@ const SelectButton = ({
       >
         <div className="flex flex-wrap w-min px-3 py-2">
           <h1 className="text-xl text-center text-gray-400 w-full ">Filter</h1>
-          <form>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              console.log(e)
+            }}
+          >
+            <button>click</button>
             <SelectOption data={data} name="category"></SelectOption>
-            <SelectOption data={data} name="subcategory"></SelectOption>
+            <SelectOption
+              data={data}
+              name="subcategory"
+              subcategories={subcategories}
+            ></SelectOption>
 
             <SelectOption data={data} name="price"></SelectOption>
             <SelectOption data={data} name="qty."></SelectOption>
