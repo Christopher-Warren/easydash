@@ -9,7 +9,7 @@ const SelectOption = ({ name, data, subcategories }: any) => {
 
   const [categoriesState, setCategoriesState] = useState<any>([])
 
-  console.log(categoriesState)
+  // console.log(categoriesState)
 
   const handleCategoriesState = (e: any) => {
     if (!data) return
@@ -42,6 +42,8 @@ const SelectOption = ({ name, data, subcategories }: any) => {
               <li key={index} className="py-2">
                 <input
                   type="checkbox"
+                  name="category option"
+                  value={i.name}
                   onChange={handleCategoriesState}
                   id={index.toString()}
                   checked={categoriesState[index]}

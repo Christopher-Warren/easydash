@@ -75,9 +75,17 @@ const SelectButton = ({
         <div className="flex flex-wrap w-min px-3 py-2">
           <h1 className="text-xl text-center text-gray-400 w-full ">Filter</h1>
           <form
-            onSubmit={(e) => {
+            onSubmit={(e: any) => {
               e.preventDefault()
-              console.log(e)
+
+              for (let i = 0; i < e.currentTarget.length; i++) {
+                if (
+                  e.currentTarget[i].name.includes('option') &&
+                  e.currentTarget[i].checked
+                ) {
+                  console.log(e.currentTarget[i].value)
+                }
+              }
             }}
           >
             <button>click</button>
