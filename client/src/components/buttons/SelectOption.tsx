@@ -1,32 +1,72 @@
 import { useState, useRef } from 'react'
 
-const SelectOption = ({ name, data }: any) => {
+const SelectOption = ({ name, data, subcategories }: any) => {
   const [checked, setChecked] = useState(false)
   const listRef = useRef<any>(null)
   const height =
     listRef.current?.children.length *
     listRef.current?.children[0]?.clientHeight
 
+  const [categoriesState, setCategoriesState] = useState<any>([])
+
+  console.log(categoriesState)
+
+  const handleCategoriesState = (e: any) => {
+    if (!data) return
+    const targetIndex = parseFloat(e.currentTarget.id)
+    if (categoriesState.length !== data.getAllCategories.length) {
+      setCategoriesState(
+        data.getAllCategories.map((category: any, index: number) => {
+          if (targetIndex === index) return true
+          return false
+        }),
+      )
+    }
+    if (categoriesState.length === data.getAllCategories.length) {
+      setCategoriesState((prev: any) =>
+        prev.map((category: any, index: number) => {
+          if (targetIndex === index) return !category
+          return category
+        }),
+      )
+    }
+  }
+
   const RenderOptions = () => {
     if (!data) return null
     switch (name) {
       case 'category':
-        const categories = data.getAllCategories.map(
+        const categoriesList = data.getAllCategories.map(
           (i: any, index: number) => {
-            return <li key={index}>{i.name}</li>
+            return (
+              <li key={index} className="py-2">
+                <input
+                  type="checkbox"
+                  onChange={handleCategoriesState}
+                  id={index.toString()}
+                  checked={categoriesState[index]}
+                  className="lg:w-4 w-5 h-5 lg:h-4 mt-1 accent-purple-500"
+                ></input>
+                <label htmlFor={index.toString()}>{i.name}</label>
+              </li>
+            )
           },
         )
 
         // console.log(categories)
 
-        return categories
+        return categoriesList
 
       case 'subcategory':
-        const thing = data.getAllCategories.map((i: any) => {
-          return i.subcategories
-        })
+        if (!subcategories) return null
 
-        return <li>subcategories</li>
+        const subcategoriesList = subcategories.getAllSubcategories.map(
+          (subcategory: any, index: number) => {
+            return <li key={index}>{subcategory.name}</li>
+          },
+        )
+
+        return subcategoriesList
 
       default:
         return <li>nothing</li>

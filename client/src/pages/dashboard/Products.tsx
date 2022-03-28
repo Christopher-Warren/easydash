@@ -281,6 +281,7 @@ const Products = ({ products }: { products: QueryResult }) => {
                   <SelectButton
                     buttonText="Filter"
                     className="py-1 px-4 mr-4"
+                    refetch={refetch}
                   ></SelectButton>
                   <input
                     className="rounded bg-gray-900 text-gray-300 px-2 py-0.5 

@@ -62,7 +62,12 @@ module.exports = {
       // },
       // {
       //   $match: {
-      //     'category.name': { $eq: 'zebra' },
+      //     'category.name': { $in: ['food', 'apparel'] },
+      //   },
+      // },
+      // {
+      //   $match: {
+      //     'subcategory.name': { $in: ['shirt', 'apparel'] },
       //   },
       // },
       {
@@ -101,7 +106,7 @@ module.exports = {
             [i.field]: i.query,
           },
         }
-
+        console.log(filterStage)
         stages.push(filterStage)
       })
     }
@@ -415,5 +420,14 @@ module.exports = {
       .populate('subcategories')
 
     return categories
+  },
+  getAllSubcategories: async ({ category }) => {
+    // Need 2 endpoints 'getAllCategories' and 'getAllSubcategories'
+    // whose only purpose is to get and return information, allowing
+    // the front end to populate data for filtering
+
+    const subcategories = await Subcategory.find().populate('products')
+
+    return subcategories
   },
 }

@@ -64,7 +64,7 @@ module.exports = buildSchema(`
 
 
         input FilterOptions {
-            eq: String
+            in: [String]
             gte: Float
             lte: Float
         }
@@ -126,6 +126,7 @@ module.exports = buildSchema(`
         type RootQuery {
             validateToken: AuthData
             getAllCategories: [Category!]
+            getAllSubcategories: [Subcategory!]
          
             products(input: GetProductInput): [Product!]
         }
