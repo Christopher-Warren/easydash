@@ -88,10 +88,15 @@ module.exports = {
     // }
 
     function generateFilterStages(filter) {
+      // console.log('asdasd', filter)
       if (!filter) return
       function parseQueryOperators(filter) {
         filter.forEach((filter) => {
           for (const key of Object.keys(filter.query)) {
+            if (filter.query[key].length === 0) {
+              filter.query = null
+              return
+            }
             filter.query['$' + key] = filter.query[key]
             delete filter.query[key]
           }
@@ -101,17 +106,19 @@ module.exports = {
       parseQueryOperators(filter)
 
       filter.forEach((i) => {
+        if (!i.query) return
         const filterStage = {
           $match: {
             [i.field]: i.query,
           },
         }
-        console.log(filterStage)
+
         stages.push(filterStage)
       })
     }
 
     generateFilterStages(filter)
+    console.log(stages)
 
     if (search) {
       stages.unshift({

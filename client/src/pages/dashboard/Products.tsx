@@ -37,21 +37,25 @@ const Products = ({ products }: { products: QueryResult }) => {
   const [sort, setSort] = useState<null | string>(null)
   const [order, setOrder] = useState<null | number>(null)
 
+  const [filter, setFilter] = useState([])
+
   // Ensure isChecked is always in sync with data
   if (data && isChecked.length !== data.products.length) {
     setIsChecked(() => data.products.map(() => false))
   }
 
   useEffect(() => {
+    console.log('effect')
     refetch({
       input: {
         limit: limit,
         skip: skip,
         sort: sort,
         order: order,
+        filter: filter,
       },
     })
-  }, [refetch, limit, skip, sort, order])
+  }, [refetch, limit, skip, sort, order, filter])
 
   const handleDelete = (e: any) => {
     customPrompt(
@@ -92,7 +96,7 @@ const Products = ({ products }: { products: QueryResult }) => {
       return data.products.map((item: any, index: any) => {
         return (
           <tr
-            className={` hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 cursor-pointer  ${
+            className={` hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 cursor-pointer border-y dark:border-gray-100/25 border-gray-200  ${
               isChecked[index] &&
               'bg-purple-50 dark:bg-gray-700/50 odd:dark:bg-gray-700/50'
             }`}
@@ -107,8 +111,7 @@ const Products = ({ products }: { products: QueryResult }) => {
               )
             }}
           >
-            <td className="relative w-8 px-4 py-3 ">
-              <div className="border-b border-gray-200 dark:border-gray-100/25 w-screen absolute  left-0  top-0 " />
+            <td className="relative w-8 px-4">
               <input
                 type="checkbox"
                 className="lg:w-4 w-5 h-5 lg:h-4 accent-purple-500 "
@@ -185,11 +188,11 @@ const Products = ({ products }: { products: QueryResult }) => {
       return skeleton.map((i) => {
         return (
           <tr
-            className="hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800"
+            className="hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 border-y border-gray-200 dark:border-gray-100/25"
             key={i}
           >
             <td className="relative w-8 px-4 py-3 ">
-              <div className="border-b border-gray-200 dark:border-gray-100/25 w-screen absolute  left-0  top-0 " />
+              <div className="border-y border-gray-200 dark:border-gray-100/25 w-full absolute  left-0  top-0 " />
               <input
                 type="checkbox"
                 className="lg:w-4 w-5 h-5 lg:h-4 accent-purple-500 "
@@ -273,7 +276,7 @@ const Products = ({ products }: { products: QueryResult }) => {
       </div>
 
       <TableCard>
-        <table className="table-auto w-full capitalize ">
+        <table className="table-auto w-full capitalize">
           <thead>
             <tr className="">
               <th className="relative w-8 px-4 py-3 " colSpan={6}>
@@ -281,7 +284,8 @@ const Products = ({ products }: { products: QueryResult }) => {
                   <SelectFilter
                     buttonText="Filter"
                     className="py-1 px-4 mr-4"
-                    refetch={refetch}
+                    filter={filter}
+                    setFilter={setFilter}
                   ></SelectFilter>
                   <input
                     className="rounded bg-gray-900 text-gray-300 px-2 py-0.5 
@@ -291,7 +295,7 @@ const Products = ({ products }: { products: QueryResult }) => {
                     placeholder="Search for some products..."
                   ></input>
                 </div>
-                <div className="border-b border-gray-200 dark:border-gray-100/25 w-screen absolute left-0  bottom-0 " />
+                <div className="border-b border-gray-200 dark:border-gray-100/25 w-full absolute left-0  bottom-0 " />
               </th>
             </tr>
 
@@ -462,8 +466,6 @@ const Products = ({ products }: { products: QueryResult }) => {
           <tfoot className="h-14">
             <tr className="relative h-full ">
               <td className="absolute w-full h-full ">
-                <div className="border-b border-gray-200 dark:border-gray-100/25 w-screen absolute left-0  top-0 " />
-
                 <div className="flex items-center px-4 h-full justify-between">
                   <div className="flex items-center">
                     <span className="normal-case pr-2">No. of products</span>

@@ -10,11 +10,11 @@ const SelectFilter = ({
   id,
   className,
   type,
-  refetch,
+  filter,
+  setFilter,
 }: any) => {
   const [hide, setHide] = useState(false)
 
-  const [filter, setFilter] = useState([])
   const { data } = useQuery(gql`
     query getAllCategories {
       getAllCategories {
@@ -78,8 +78,8 @@ const SelectFilter = ({
             onSubmit={(e: any) => {
               e.preventDefault()
 
-              const categoryFilter = []
-              const subcategoryFilter = []
+              const categoryFilter: {}[] = []
+              const subcategoryFilter: {}[] = []
 
               for (let i = 0; i < e.currentTarget.length; i++) {
                 const isChecked = e.currentTarget[i].checked
@@ -92,7 +92,25 @@ const SelectFilter = ({
                   subcategoryFilter.push(e.currentTarget[i].value)
                 }
               }
-              console.log(categoryFilter, subcategoryFilter)
+
+              setFilter(() => {
+                const newFilter = [
+                  {
+                    field: 'category.name',
+                    query: {
+                      in: categoryFilter,
+                    },
+                  },
+                  {
+                    field: 'subcategory.name',
+                    query: {
+                      in: subcategoryFilter,
+                    },
+                  },
+                ]
+
+                return newFilter
+              })
             }}
           >
             <button type="submit">Apply</button>
