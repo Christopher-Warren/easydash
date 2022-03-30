@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { CategoryList } from '../filter/CategoryList'
 import { SubcategoryList } from '../filter/SubcategoryList'
+import TextInput from '../inputs/TextInput'
 
 const SelectOption = ({
   name,
@@ -38,9 +39,21 @@ const SelectOption = ({
         )
 
       case 'price':
+        const handle = (e: any) => {
+          e.preventDefault()
+          e.currentTarget.focus()
+          console.log(e.currentTarget)
+        }
         return (
-          <li>
-            <input></input>
+          <li className="py-2">
+            from
+            <TextInput name="min price option" onClick={handle}>
+              s
+            </TextInput>
+            to
+            <TextInput name="max price option" onClick={handle}>
+              s
+            </TextInput>
           </li>
         )
 

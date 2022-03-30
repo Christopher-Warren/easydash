@@ -10,11 +10,14 @@ const TextInput = ({
   value,
   onChange,
   autoFocus,
+  onFocus,
   disabled,
   className,
+  name,
   id,
   placeholder,
   containerClassName,
+  onClick,
 }: InputProps) => {
   return (
     <div
@@ -24,10 +27,13 @@ const TextInput = ({
     >
       <input
         id={id}
+        name={name}
         autoFocus={autoFocus}
         className={`peer border-b-2 focus:border-purple-300 px-1 mt-3.5  outline-none disabled:bg-gray-50 bg-transparent disabled:cursor-not-allowed ${className} w-full  
         placeholder-transparent disabled:hidden`}
         value={value}
+        onClick={onClick}
+        onFocus={onFocus}
         onChange={onChange}
         disabled={disabled}
         placeholder={placeholder}

@@ -37,27 +37,27 @@ module.exports = {
       // • X stock
       // • X price
 
-      {
-        $lookup: {
-          from: 'categories',
-          localField: 'category',
-          foreignField: '_id',
-          as: 'category',
-        },
-      },
-      {
-        $lookup: {
-          from: 'subcategories',
-          localField: 'subcategory',
-          foreignField: '_id',
-          as: 'subcategory',
-        },
-      },
-      { $unwind: '$category' },
-      { $unwind: '$subcategory' },
+      // {
+      //   $lookup: {
+      //     from: 'categories',
+      //     localField: 'category',
+      //     foreignField: '_id',
+      //     as: 'category',
+      //   },
+      // },
+      // {
+      //   $lookup: {
+      //     from: 'subcategories',
+      //     localField: 'subcategory',
+      //     foreignField: '_id',
+      //     as: 'subcategory',
+      //   },
+      // },
+      // { $unwind: '$category' },
+      // { $unwind: '$subcategory' },
       // {
       //   $match: {
-      //     price: { $gte: 10, $lte: 20 },
+      //     price: { $gte: 60, $lte: 70 },
       //   },
       // },
       // {
@@ -77,18 +77,7 @@ module.exports = {
       { $limit: limit },
     ]
 
-    // if (input.filter) {
-    //   const filterStage = {
-    //     $match: {
-    //       [input.filter.field]: input.filter.query,
-    //     },
-    //   }
-
-    //   stages.push(filterStage)
-    // }
-
     function generateFilterStages(filter) {
-      // console.log('asdasd', filter)
       if (!filter) return
       function parseQueryOperators(filter) {
         filter.forEach((filter) => {
@@ -113,12 +102,33 @@ module.exports = {
           },
         }
 
-        stages.push(filterStage)
+        stages.unshift(filterStage)
       })
     }
 
     generateFilterStages(filter)
-    console.log(stages)
+
+    // unshift lookup operations
+    stages.unshift(
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'category',
+          foreignField: '_id',
+          as: 'category',
+        },
+      },
+      {
+        $lookup: {
+          from: 'subcategories',
+          localField: 'subcategory',
+          foreignField: '_id',
+          as: 'subcategory',
+        },
+      },
+      { $unwind: '$category' },
+      { $unwind: '$subcategory' },
+    )
 
     if (search) {
       stages.unshift({
