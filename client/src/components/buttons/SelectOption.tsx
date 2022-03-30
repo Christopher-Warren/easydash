@@ -1,104 +1,48 @@
 import { useState, useRef } from 'react'
+import { CategoryList } from '../filter/CategoryList'
+import { SubcategoryList } from '../filter/SubcategoryList'
 
-// Needs a rewrite
-
-const SelectOption = ({ name, data, subcategories }: any) => {
+const SelectOption = ({
+  name,
+  categories,
+  subcategories,
+  categoriesState,
+  setCategoriesState,
+  subcategoriesState,
+  setSubcategoriesState,
+}: any) => {
   const [checked, setChecked] = useState(false)
   const listRef = useRef<any>(null)
   const height =
     listRef.current?.children.length *
     listRef.current?.children[0]?.clientHeight
 
-  const CategoryList = ({ data }: any) => {
-    const [categoriesState, setCategoriesState] = useState<any>([])
-
-    if (!data) return null
-    const handleCategoriesState = (e: any) => {
-      const targetIndex = parseFloat(e.currentTarget.id)
-      if (categoriesState.length !== data.getAllCategories.length) {
-        setCategoriesState(
-          data.getAllCategories.map((category: any, index: number) => {
-            if (targetIndex === index) return true
-            return false
-          }),
-        )
-      }
-      if (categoriesState.length === data.getAllCategories.length) {
-        setCategoriesState((prev: any) =>
-          prev.map((category: any, index: number) => {
-            if (targetIndex === index) return !category
-            return category
-          }),
-        )
-      }
-    }
-    return data.getAllCategories.map((i: any, index: number) => {
-      return (
-        <li key={index} className="py-2">
-          <input
-            type="checkbox"
-            name="category option"
-            value={i.name}
-            onChange={handleCategoriesState}
-            id={index.toString()}
-            checked={categoriesState[index] ? true : false}
-            className="lg:w-4 w-5 h-5 lg:h-4 mt-1 accent-purple-500"
-          ></input>
-          <label htmlFor={index.toString()}>{i.name}</label>
-        </li>
-      )
-    })
-  }
-
-  const SubcategoryList = ({ data }: any) => {
-    const [categoriesState, setCategoriesState] = useState<any>([])
-
-    if (!data) return null
-    const handleCategoriesState = (e: any) => {
-      const targetIndex = parseFloat(e.currentTarget.id)
-      if (categoriesState.length !== data.getAllSubcategories.length) {
-        setCategoriesState(
-          data.getAllSubcategories.map((category: any, index: number) => {
-            if (targetIndex === index) return true
-            return false
-          }),
-        )
-      }
-      if (categoriesState.length === data.getAllSubcategories.length) {
-        setCategoriesState((prev: any) =>
-          prev.map((category: any, index: number) => {
-            if (targetIndex === index) return !category
-            return category
-          }),
-        )
-      }
-    }
-    return data.getAllSubcategories.map((i: any, index: number) => {
-      return (
-        <li key={index} className="py-2">
-          <input
-            type="checkbox"
-            name="subcategory option"
-            value={i.name}
-            onChange={handleCategoriesState}
-            id={index.toString()}
-            checked={categoriesState[index] ? true : false}
-            className="lg:w-4 w-5 h-5 lg:h-4 mt-1 accent-purple-500"
-          ></input>
-          <label htmlFor={index.toString()}>{i.name}</label>
-        </li>
-      )
-    })
-  }
-
   const RenderOptions = () => {
-    if (!data) return null
     switch (name) {
       case 'category':
-        return <CategoryList data={data} />
+        return (
+          <CategoryList
+            categories={categories}
+            categoriesState={categoriesState}
+            setCategoriesState={setCategoriesState}
+          />
+        )
 
       case 'subcategory':
-        return <SubcategoryList data={subcategories} />
+        return (
+          <SubcategoryList
+            subcategories={subcategories}
+            subcategoriesState={subcategoriesState}
+            setSubcategoriesState={setSubcategoriesState}
+          />
+        )
+
+      case 'price':
+        return (
+          <li>
+            <input></input>
+          </li>
+        )
 
       default:
         return <li>nothing</li>

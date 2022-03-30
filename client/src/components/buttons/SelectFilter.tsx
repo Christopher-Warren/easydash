@@ -29,13 +29,18 @@ const SelectFilter = ({
   `)
 
   const { data: subcategories } = useQuery(gql`
-    query getAllCategories {
+    query getAllSubcategories {
       getAllSubcategories {
         name
         _id
       }
     }
   `)
+
+  // State for options
+
+  const [categoriesState, setCategoriesState] = useState<any>([])
+  const [subcategoriesState, setSubcategoriesState] = useState<any>([])
 
   return (
     <div className="relative">
@@ -113,16 +118,47 @@ const SelectFilter = ({
               })
             }}
           >
-            <button type="submit">Apply</button>
-            <SelectOption data={data} name="category"></SelectOption>
+            <div className="flex justify-between">
+              <button
+                onClick={(e) => {
+                  e.preventDefault()
+
+                  setSubcategoriesState([])
+                  setCategoriesState([])
+                  setFilter([])
+                }}
+              >
+                Clear
+              </button>
+              <button type="submit">Apply</button>
+            </div>
+
             <SelectOption
+              filter={filter}
+              categories={data}
+              categoriesState={categoriesState}
+              setCategoriesState={setCategoriesState}
+              name="category"
+            ></SelectOption>
+            <SelectOption
+              filter={filter}
               data={data}
               name="subcategory"
               subcategories={subcategories}
+              subcategoriesState={subcategoriesState}
+              setSubcategoriesState={setSubcategoriesState}
             ></SelectOption>
 
-            <SelectOption data={data} name="price"></SelectOption>
-            <SelectOption data={data} name="qty."></SelectOption>
+            <SelectOption
+              filter={filter}
+              data={data}
+              name="price"
+            ></SelectOption>
+            <SelectOption
+              filter={filter}
+              data={data}
+              name="qty."
+            ></SelectOption>
           </form>
         </div>
 
