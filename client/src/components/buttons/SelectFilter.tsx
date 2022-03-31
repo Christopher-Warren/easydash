@@ -1,5 +1,5 @@
 import { gql, useQuery } from '@apollo/client'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import SelectOption from './SelectOption'
 
 const SelectFilter = ({
@@ -41,6 +41,9 @@ const SelectFilter = ({
 
   const [categoriesState, setCategoriesState] = useState<any>([])
   const [subcategoriesState, setSubcategoriesState] = useState<any>([])
+
+  const [price, setPrice] = useState({ min: '', max: '' })
+  const [stock, setStock] = useState({ min: '', max: '' })
 
   return (
     <div className="relative">
@@ -86,6 +89,9 @@ const SelectFilter = ({
               const categoryFilter: {}[] = []
               const subcategoryFilter: {}[] = []
 
+              const priceFilter: any[] = []
+              const stockFilter: {}[] = []
+
               for (let i = 0; i < e.currentTarget.length; i++) {
                 const isChecked = e.currentTarget[i].checked
                 const eleName = e.currentTarget[i].name
@@ -112,6 +118,20 @@ const SelectFilter = ({
                       in: subcategoryFilter,
                     },
                   },
+                  {
+                    field: 'price',
+                    query: {
+                      gte: 60,
+                      lte: 70,
+                    },
+                  },
+                  // {
+                  //   field: 'stock',
+                  //   query: {
+                  //     gte: stockFilter[0],
+                  //     lte: stockFilter[1],
+                  //   },
+                  // },
                 ]
 
                 return newFilter
@@ -152,6 +172,8 @@ const SelectFilter = ({
             <SelectOption
               filter={filter}
               data={data}
+              price={price}
+              setPrice={setPrice}
               name="price"
             ></SelectOption>
             <SelectOption

@@ -82,8 +82,10 @@ module.exports = {
       function parseQueryOperators(filter) {
         filter.forEach((filter) => {
           for (const key of Object.keys(filter.query)) {
+            console.log(filter.query[key])
             if (filter.query[key].length === 0) {
               filter.query = null
+
               return
             }
             filter.query['$' + key] = filter.query[key]

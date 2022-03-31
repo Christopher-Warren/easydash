@@ -11,6 +11,9 @@ const SelectOption = ({
   setCategoriesState,
   subcategoriesState,
   setSubcategoriesState,
+
+  price,
+  setPrice,
 }: any) => {
   const [checked, setChecked] = useState(false)
   const listRef = useRef<any>(null)
@@ -39,19 +42,30 @@ const SelectOption = ({
         )
 
       case 'price':
-        const handle = (e: any) => {
-          e.preventDefault()
-          e.currentTarget.focus()
-          console.log(e.currentTarget)
-        }
+        console.log(price)
         return (
           <li className="py-2">
             from
-            <TextInput name="min price option" onClick={handle}>
+            <TextInput
+              name="min price option"
+              value={price.min}
+              onClick={(e) => e.stopPropagation()}
+              onChange={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                setPrice((prev: any) => {
+                  console.log()
+                  return { ...prev, min: e.target.value }
+                })
+              }}
+            >
               s
             </TextInput>
             to
-            <TextInput name="max price option" onClick={handle}>
+            <TextInput
+              name="max price option"
+              // value={price.max}
+            >
               s
             </TextInput>
           </li>
