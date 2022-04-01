@@ -2,6 +2,11 @@ import { gql, useQuery } from '@apollo/client'
 import { useEffect, useRef, useState } from 'react'
 import SelectOption from './SelectOption'
 
+// Handle errors
+import { toggleModal } from '../../redux/modal/modalSlice'
+import { addError } from '../../redux/error/errorSlice'
+import { useAppDispatch } from '../../redux/hooks'
+
 const SelectFilter = ({
   options,
   buttonText,
@@ -42,23 +47,23 @@ const SelectFilter = ({
   const [categoriesState, setCategoriesState] = useState<any>([])
   const [subcategoriesState, setSubcategoriesState] = useState<any>([])
 
-  const [price, setPrice] = useState({ min: '', max: '' })
-  const [stock, setStock] = useState({ min: '', max: '' })
+  const [price, setPrice] = useState({ min: 0, max: 0 })
+  const [stock, setStock] = useState({ min: 0, max: 0 })
+
+  // handle errors
+  const dispatch = useAppDispatch()
 
   return (
-    <div className="relative">
+    <div
+      // onBlur={(e: any) => {
+      //   if (!e.currentTarget.contains(e.relatedTarget)) {
+      //     setHide(true)
+      //   }
+      // }}
+      className="relative"
+    >
       <button
-        onBlur={(e: any) => {
-          if (e.target === e.currentTarget) {
-            setHide(true)
-          }
-        }}
-        onClick={(e: any) => {
-          e.preventDefault()
-          if (e.target === e.currentTarget) {
-            setHide(!hide)
-          }
-        }}
+        onClick={(e) => setHide(false)}
         id={id}
         type={type}
         className={`flex  justify-around font-medium text-md tracking-wide leading-relaxed rounded
@@ -73,8 +78,9 @@ const SelectFilter = ({
       >
         {buttonText}
       </button>
+
       <div
-        onMouseDown={(e) => e.preventDefault()}
+        tabIndex={0}
         className={`absolute rounded-sm overflow-hidden shadow-md shadow-gray-900
       dark:bg-gray-600 dark:text-white
     text-black z-40  bg-white
@@ -92,6 +98,15 @@ const SelectFilter = ({
               const priceFilter: any[] = []
               const stockFilter: {}[] = []
 
+              if (price.min > price.max) {
+                dispatch(addError('Min price should be less than max price'))
+                return
+              }
+              if (stock.min > stock.max) {
+                dispatch(addError('Min price should be less than max price'))
+                return
+              }
+
               for (let i = 0; i < e.currentTarget.length; i++) {
                 const isChecked = e.currentTarget[i].checked
                 const eleName = e.currentTarget[i].name
@@ -105,7 +120,7 @@ const SelectFilter = ({
               }
 
               setFilter(() => {
-                const newFilter = [
+                const newFilter: any = [
                   {
                     field: 'category.name',
                     query: {
@@ -118,21 +133,17 @@ const SelectFilter = ({
                       in: subcategoryFilter,
                     },
                   },
-                  {
+                ]
+
+                if (price.min && price.max > 0) {
+                  newFilter.push({
                     field: 'price',
                     query: {
-                      gte: 60,
-                      lte: 70,
+                      gte: price.min,
+                      lte: price.max,
                     },
-                  },
-                  // {
-                  //   field: 'stock',
-                  //   query: {
-                  //     gte: stockFilter[0],
-                  //     lte: stockFilter[1],
-                  //   },
-                  // },
-                ]
+                  })
+                }
 
                 return newFilter
               })
@@ -179,6 +190,8 @@ const SelectFilter = ({
             <SelectOption
               filter={filter}
               data={data}
+              stock={stock}
+              setStock={setStock}
               name="qty."
             ></SelectOption>
           </form>

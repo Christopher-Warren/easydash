@@ -45,6 +45,8 @@ td {
   }
 }
 
+/* Remove default styles from number input */
+
 /* Custom Loader Styling */
 svg .loader-ring {
   transform-origin: 50px 50px;

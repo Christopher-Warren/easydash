@@ -1,5 +1,7 @@
 import { useState, useRef } from 'react'
 import { CategoryList } from '../filter/CategoryList'
+import PriceFilter from '../filter/PriceFilter'
+import StockFilter from '../filter/StockFilter'
 import { SubcategoryList } from '../filter/SubcategoryList'
 import TextInput from '../inputs/TextInput'
 
@@ -14,67 +16,15 @@ const SelectOption = ({
 
   price,
   setPrice,
+
+  stock,
+  setStock,
 }: any) => {
   const [checked, setChecked] = useState(false)
   const listRef = useRef<any>(null)
   const height =
     listRef.current?.children.length *
     listRef.current?.children[0]?.clientHeight
-
-  const RenderOptions = () => {
-    switch (name) {
-      case 'category':
-        return (
-          <CategoryList
-            categories={categories}
-            categoriesState={categoriesState}
-            setCategoriesState={setCategoriesState}
-          />
-        )
-
-      case 'subcategory':
-        return (
-          <SubcategoryList
-            subcategories={subcategories}
-            subcategoriesState={subcategoriesState}
-            setSubcategoriesState={setSubcategoriesState}
-          />
-        )
-
-      case 'price':
-        console.log(price)
-        return (
-          <li className="py-2">
-            from
-            <TextInput
-              name="min price option"
-              value={price.min}
-              onClick={(e) => e.stopPropagation()}
-              onChange={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                setPrice((prev: any) => {
-                  console.log()
-                  return { ...prev, min: e.target.value }
-                })
-              }}
-            >
-              s
-            </TextInput>
-            to
-            <TextInput
-              name="max price option"
-              // value={price.max}
-            >
-              s
-            </TextInput>
-          </li>
-        )
-
-      default:
-        return <li>nothing</li>
-    }
-  }
 
   return (
     <div className="w-full pb-2 last-of-type:pb-0" key={name}>
@@ -120,7 +70,38 @@ const SelectOption = ({
           style={{ height: checked ? height : '0px' }}
           ref={listRef}
         >
-          <RenderOptions></RenderOptions>
+          {categoriesState && (
+            <CategoryList
+              name={name}
+              categories={categories}
+              categoriesState={categoriesState}
+              setCategoriesState={setCategoriesState}
+            ></CategoryList>
+          )}
+
+          {subcategoriesState && (
+            <SubcategoryList
+              subcategories={subcategories}
+              subcategoriesState={subcategoriesState}
+              setSubcategoriesState={setSubcategoriesState}
+            />
+          )}
+
+          {price && (
+            <PriceFilter
+              name={name}
+              price={price}
+              setPrice={setPrice}
+            ></PriceFilter>
+          )}
+
+          {stock && (
+            <StockFilter
+              name={name}
+              stock={stock}
+              setStock={setStock}
+            ></StockFilter>
+          )}
         </div>
         <div
           className={`absolute duration-1000  transition-opacity shadow-inner shadow-gray-800/60 ${
