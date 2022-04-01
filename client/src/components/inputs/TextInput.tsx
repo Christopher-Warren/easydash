@@ -18,6 +18,7 @@ const TextInput = ({
   placeholder,
   containerClassName,
   onClick,
+  type,
 }: InputProps) => {
   return (
     <div
@@ -28,8 +29,10 @@ const TextInput = ({
       <input
         id={id}
         name={name}
+        type={type}
+        key={name}
         autoFocus={autoFocus}
-        className={`peer border-b-2 focus:border-purple-300 px-1 mt-3.5  outline-none disabled:bg-gray-50 bg-transparent disabled:cursor-not-allowed ${className} w-full  
+        className={`peer border-b-2 focus:border-purple-300  px-1 mt-3.5 outline-none disabled:bg-gray-50 bg-transparent disabled:cursor-not-allowed ${className} w-full  
         placeholder-transparent disabled:hidden`}
         value={value}
         onClick={onClick}
@@ -39,8 +42,8 @@ const TextInput = ({
         placeholder={placeholder}
       ></input>
       <label
-        htmlFor={id}
-        className="absolute transition-all left-0 px-1 pt-3.5  -top-5 text-sm text-gray-400 pointer-events-none
+        htmlFor={name}
+        className="absolute transition-all appearance-none left-0 px-1 pt-3.5  -top-5 text-sm text-gray-400 pointer-events-none
         peer-focus:-top-5
         peer-focus:text-sm
         peer-focus:text-purple-400
