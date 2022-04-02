@@ -48,7 +48,7 @@ const SelectFilter = ({
   const [subcategoriesState, setSubcategoriesState] = useState<any>([])
 
   const [price, setPrice] = useState({ min: 0, max: 0 })
-  const [stock, setStock] = useState({ min: 0, max: 0 })
+  const [stock, setStock] = useState({ min: 0, max: 0, showOut: false })
 
   // handle errors
   const dispatch = useAppDispatch()
@@ -145,6 +145,26 @@ const SelectFilter = ({
                   })
                 }
 
+                if (price.min && price.max > 0) {
+                  newFilter.push({
+                    field: 'price',
+                    query: {
+                      gte: price.min,
+                      lte: price.max,
+                    },
+                  })
+                }
+
+                if ((stock.min > 0 && stock.max) || stock.max) {
+                  newFilter.push({
+                    field: 'stock',
+                    query: {
+                      gte: stock.min,
+                      lte: stock.max,
+                    },
+                  })
+                }
+
                 return newFilter
               })
             }}
@@ -157,6 +177,8 @@ const SelectFilter = ({
                   setSubcategoriesState([])
                   setCategoriesState([])
                   setFilter([])
+                  setPrice({ min: 0, max: 0 })
+                  setStock({ min: 0, max: 0, showOut: false })
                 }}
               >
                 Clear
