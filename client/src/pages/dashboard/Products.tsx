@@ -37,6 +37,8 @@ const Products = ({ products }: { products: QueryResult }) => {
   const [sort, setSort] = useState<null | string>(null)
   const [order, setOrder] = useState<null | number>(null)
 
+  const [search, setSearch] = useState('')
+
   const [filter, setFilter] = useState([])
 
   // Ensure isChecked is always in sync with data
@@ -45,7 +47,6 @@ const Products = ({ products }: { products: QueryResult }) => {
   }
 
   useEffect(() => {
-    console.log('effect')
     refetch({
       input: {
         limit: limit,
@@ -53,9 +54,10 @@ const Products = ({ products }: { products: QueryResult }) => {
         sort: sort,
         order: order,
         filter: filter,
+        search: search,
       },
     })
-  }, [refetch, limit, skip, sort, order, filter])
+  }, [refetch, limit, skip, sort, order, filter, search])
 
   const handleDelete = (e: any) => {
     customPrompt(
@@ -288,6 +290,10 @@ const Products = ({ products }: { products: QueryResult }) => {
                     setFilter={setFilter}
                   ></SelectFilter>
                   <input
+                    value={search}
+                    onChange={(e) => {
+                      setSearch(e.currentTarget.value)
+                    }}
                     className="rounded bg-gray-900 text-gray-300 px-2 py-0.5 
                   w-full flex-1 
                 focus:outline-purple-500 focus:accent-purple-400"
@@ -462,13 +468,33 @@ const Products = ({ products }: { products: QueryResult }) => {
 
           <tbody className="text-base">
             <RenderTableItems />
+
+            {limit > data?.products.length && (
+              <tr
+                className="dark:odd:bg-slate-800  border-y
+           dark:border-gray-100/25 border-gray-200 text-gray-400 
+          "
+              >
+                <td
+                  colSpan={6}
+                  className="relative w-8 px-4 h-14 text-center normal-case"
+                >
+                  {data.products.length === 0 &&
+                  (filter.length > 0 || search.length > 0)
+                    ? 'No matching products found'
+                    : 'There are no more products to show'}
+                </td>
+              </tr>
+            )}
           </tbody>
           <tfoot className="h-14">
             <tr className="relative h-full ">
               <td className="absolute w-full h-full ">
                 <div className="flex items-center px-4 h-full justify-between">
                   <div className="flex items-center">
-                    <span className="normal-case pr-2">No. of products</span>
+                    <span className="normal-case pr-2 text-gray-400">
+                      No. of products
+                    </span>
                     <SelectInput
                       className=""
                       containerClassName="w-12"

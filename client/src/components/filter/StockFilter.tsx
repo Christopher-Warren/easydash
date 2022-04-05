@@ -34,7 +34,7 @@ const StockFilter = ({ name, stock, setStock }: any) => {
       })
     }
   }
-  console.log(stock)
+
   return (
     <li className="py-3 ">
       <div className="mb-3">

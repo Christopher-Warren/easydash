@@ -18,7 +18,7 @@ const SelectFilter = ({
   filter,
   setFilter,
 }: any) => {
-  const [hide, setHide] = useState(false)
+  const [hide, setHide] = useState(true)
 
   const { data } = useQuery(gql`
     query getAllCategories {
@@ -55,11 +55,11 @@ const SelectFilter = ({
 
   return (
     <div
-      // onBlur={(e: any) => {
-      //   if (!e.currentTarget.contains(e.relatedTarget)) {
-      //     setHide(true)
-      //   }
-      // }}
+      onBlur={(e: any) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) {
+          setHide(true)
+        }
+      }}
       className="relative"
     >
       <button
