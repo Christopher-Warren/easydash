@@ -194,7 +194,7 @@ const Products = ({ products }: { products: QueryResult }) => {
             key={i}
           >
             <td className="relative w-8 px-4 py-3 ">
-              <div className="border-y border-gray-200 dark:border-gray-100/25 w-full absolute  left-0  top-0 " />
+              {/* <div className="border-y border-gray-200 dark:border-gray-100/25 w-full absolute  left-0  top-0 " /> */}
               <input
                 type="checkbox"
                 className="lg:w-4 w-5 h-5 lg:h-4 accent-purple-500 "
@@ -221,28 +221,28 @@ const Products = ({ products }: { products: QueryResult }) => {
             <td className="px-5 relative">
               <div className="py-2.5">
                 <div className="">
-                  <h2 className="text-base  leading-tight bg-gray-600 animate-pulse rounded-full text-transparent">
+                  <h2 className="text-base  leading-tight dark:bg-gray-700 bg-gray-200 animate-pulse rounded-full text-transparent">
                     loading
                   </h2>
-                  <span className="text-xs font tracking-wider bg-gray-600 animate-pulse rounded-full text-transparent">
+                  <span className="text-xs font tracking-wider dark:bg-gray-700 bg-gray-200 animate-pulse rounded-full text-transparent">
                     loading
                   </span>
                 </div>
               </div>
             </td>
             <td className="">
-              <div className=" relative bg-gray-600 animate-pulse rounded-full text-transparent w-1/2">
+              <div className=" relative dark:bg-gray-700 bg-gray-200 animate-pulse rounded-full text-transparent w-1/2">
                 loading
               </div>
             </td>
             <td className="">
-              <div className=" relative bg-gray-600 animate-pulse rounded-full text-transparent w-full">
+              <div className=" relative dark:bg-gray-700 bg-gray-200 animate-pulse rounded-full text-transparent w-full">
                 loading
               </div>
             </td>
             <td className="text-right lg:pr-8 pr-3.5">
               <div className="relative dark:text-green-200  !text-transparent flex justify-end">
-                <span className="w-2/4 bg-gray-600 animate-pulse rounded-full">
+                <span className="w-2/4 dark:bg-gray-700 bg-gray-200 animate-pulse rounded-full">
                   loading
                 </span>
               </div>
@@ -294,11 +294,11 @@ const Products = ({ products }: { products: QueryResult }) => {
                     onChange={(e) => {
                       setSearch(e.currentTarget.value)
                     }}
-                    className="rounded bg-gray-900 text-gray-300 px-2 py-0.5 
+                    className="rounded dark:bg-gray-900 dark:text-gray-300 px-2 py-0.5 
                   w-full flex-1 
-                focus:outline-purple-500 focus:accent-purple-400"
+                focus:outline-purple-500 focus:accent-purple-400 border"
                     type="search"
-                    placeholder="Search for some products..."
+                    placeholder="Search products..."
                   ></input>
                 </div>
                 <div className="border-b border-gray-200 dark:border-gray-100/25 w-full absolute left-0  bottom-0 " />
@@ -500,7 +500,9 @@ const Products = ({ products }: { products: QueryResult }) => {
                       containerClassName="w-12"
                       onChange={(e: any) => {
                         setLimit(parseInt(e.currentTarget.value))
+                        setIsChecked((val) => val.map(() => false))
                         setSkip(0)
+                        console.log()
                       }}
                     >
                       <option>5</option>
@@ -512,9 +514,10 @@ const Products = ({ products }: { products: QueryResult }) => {
                   <div className="flex ">
                     <button
                       disabled={skip === 0}
-                      onClick={(e: any) =>
+                      onClick={(e: any) => {
                         setSkip((prev: number) => prev - limit)
-                      }
+                        setIsChecked((val) => val.map(() => false))
+                      }}
                       className="p-0.5 active:outline hover:outline hover:outline-gray-500 disabled:outline-transparent dark:outline-gray-600 outline-2 rounded-sm  disabled:text-gray-300 dark:disabled:text-gray-700 dark:disabled:outline-transparent"
                     >
                       <svg
@@ -534,9 +537,10 @@ const Products = ({ products }: { products: QueryResult }) => {
                     </button>
                     <button
                       disabled={products.data?.products.length < limit}
-                      onClick={(e: any) =>
+                      onClick={(e: any) => {
                         setSkip((prev: number) => prev + limit)
-                      }
+                        setIsChecked((val) => val.map(() => false))
+                      }}
                       className="ml-4 p-0.5 active:outline hover:outline hover:outline-gray-500 disabled:outline-transparent dark:outline-gray-600 outline-2 rounded-sm  disabled:text-gray-300 dark:disabled:text-gray-700 dark:disabled:outline-transparent"
                     >
                       <svg

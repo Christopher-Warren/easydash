@@ -76,19 +76,20 @@ const SelectFilter = ({
       transition-color duration-200
       `}
       >
-        {buttonText}
+        {buttonText} {filter.length > 0 && filter.length}
       </button>
 
       <div
         tabIndex={0}
-        className={`absolute rounded-sm overflow-hidden shadow-md shadow-gray-900
-      dark:bg-gray-600 dark:text-white
+        className={`absolute rounded-sm overflow-hidden dark:shadow-md dark:shadow-gray-900
+      dark:bg-gray-600 dark:text-white shadow
     text-black z-40  bg-white
       ${hide && 'h-0 w-0 opacity-0'} `}
       >
         <div className="flex flex-wrap w-min px-3 py-2">
           <h1 className="text-xl text-center text-gray-400 w-full ">Filter</h1>
           <form
+            id="filter form"
             onSubmit={(e: any) => {
               e.preventDefault()
 
@@ -120,27 +121,22 @@ const SelectFilter = ({
               }
 
               setFilter(() => {
-                const newFilter: any = [
-                  {
+                const newFilter: any = []
+
+                if (categoryFilter.length > 0) {
+                  newFilter.push({
                     field: 'category.name',
                     query: {
                       in: categoryFilter,
                     },
-                  },
-                  {
+                  })
+                }
+
+                if (subcategoryFilter.length > 0) {
+                  newFilter.push({
                     field: 'subcategory.name',
                     query: {
                       in: subcategoryFilter,
-                    },
-                  },
-                ]
-
-                if (price.min && price.max > 0) {
-                  newFilter.push({
-                    field: 'price',
-                    query: {
-                      gte: price.min,
-                      lte: price.max,
                     },
                   })
                 }
@@ -170,7 +166,11 @@ const SelectFilter = ({
             }}
           >
             <div className="flex justify-between">
+              <button type="submit" className="order-2">
+                Apply
+              </button>
               <button
+                className="order-1"
                 onClick={(e) => {
                   e.preventDefault()
 
@@ -183,7 +183,6 @@ const SelectFilter = ({
               >
                 Clear
               </button>
-              <button type="submit">Apply</button>
             </div>
 
             <SelectOption
