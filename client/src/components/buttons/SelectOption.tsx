@@ -39,7 +39,7 @@ const SelectOption = ({
         type="checkbox"
       ></input>
       <label
-        className={`text-lg flex justify-between text-gray-500 items-center ${
+        className={`text-lg flex justify-between text-gray-500 dark:text-gray-200 items-center ${
           checked && 'dark:text-purple-300 text-purple-600'
         }`}
         htmlFor={name}

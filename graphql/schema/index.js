@@ -1,157 +1,49 @@
 const { buildSchema } = require('graphql')
+const authSchema = require('./authSchema')
+const ordersSchema = require('./ordersSchema')
+const productsSchema = require('./productsSchema')
 
-module.exports = buildSchema(`
+const schemaArray = [authSchema, productsSchema, ordersSchema]
 
-       
+const masterSchema = schemaArray.toString().split(',').join('')
 
+const schema = `
+
+  ${masterSchema}
+
+  type RootQuery {
+      # authSchema.js
+      validateToken: AuthData
+
+      # productsSchema.js
+      getAllCategories: [Category!]
+      getAllSubcategories: [Subcategory!]
+      products(input: GetProductInput): [Product!]
+
+      #ordersSchema.js
+      orders: [Order]
+  }
+  
+  type RootMutation {
+      # authSchema.js
+      createUser(userInput: UserInput): User
+      login(email: String!, password: String!): AuthData
+      logout: LogoutSuccessMessage
+
+      # productsSchema.js
+      createProduct(productInput: ProductInput): Product
+      deleteProducts(productIds: [ID]!): String
+      modifyProduct(productInput: ModifyProductInput): Product
       
-        type User {
-          _id: ID!
-          email: String!
-          password: String
-        }
-
-        type AuthData {
-            userId: ID!
-            email: String!
-            role: String!
-        }
-
-        type LogoutSuccessMessage {
-            message: String!
-        }
+      #ordersSchema.js
+      createOrder(orderInput: OrderInput) : Order
+  }
 
 
-     
+  schema {
+      query: RootQuery
+      mutation: RootMutation
+  }
+`
 
-       
-
-        input UserInput {
-          email: String!
-          password: String
-        }
-
-        input ProductInput {
-            _id: ID
-            name: String!
-            category: String!
-            subcategory: String!
-            description: String!
-            price: Float!
-            stock: Float!
-        }
-
-        input ModifyProductInput {
-            _id: ID!
-            name: String
-            category: String
-            subcategory: String
-            description: String
-            price: Float
-            stock: Float
-        }
-
-        input CategoryInput {
-            _id: ID!
-            name: String
-        }
-
-        input SubcategoryInput {
-            _id: ID!
-            name: String
-        }
-
-
-
-        input FilterOptions {
-            in: [String]
-            gte: Float
-            lte: Float
-        }
-
-        input Filter {
-            field: String
-            query: FilterOptions
-        }
-
-
-
-        input GetProductInput {
-            limit: Float
-            skip: Float
-            sort: String
-            order: Float
-            search: String
-            filter: [Filter]
-        }
-
-    
-
-       
-
-        type Product {
-            _id: ID!
-            name: String!
-            category: Category!
-            subcategory: Subcategory!
-            description: String!
-            price: Float!
-            createdAt: String!
-            images: [String]
-            stock: Float!
-            searchScore: Float
-        }
-
-
-
-       
-
-
-        type Subcategory {
-            _id: ID!
-            name: String
-            description: String
-            products: [Product!]
-        }
-
-        type Category {
-            _id: ID!
-            name: String!
-            description: String
-            subcategories: [Subcategory!]
-            products: [Product!]
-        }
-
-
-        type RootQuery {
-            validateToken: AuthData
-            getAllCategories: [Category!]
-            getAllSubcategories: [Subcategory!]
-         
-            products(input: GetProductInput): [Product!]
-        }
-
-
-        type RootMutation {
-            createProduct(productInput: ProductInput): Product
-            
-
-            deleteProducts(productIds: [ID]!): String
-
-            modifyProduct(productInput: ModifyProductInput): Product
-
-            
-            createUser(userInput: UserInput): User
-           
-            
-            login(email: String!, password: String!): AuthData
-            logout: LogoutSuccessMessage
-        }
-
-
-
-        schema {
-            query: RootQuery
-            mutation: RootMutation
-        }
-    `)
+module.exports = buildSchema(schema)

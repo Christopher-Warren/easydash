@@ -19,7 +19,7 @@ import SelectInput from '../../components/inputs/SelectPrimary'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import SelectFilter from '../../components/buttons/SelectFilter'
 
-const Products = ({ products }: { products: QueryResult }) => {
+const Orders = ({ products }: { products: QueryResult }) => {
   const { data, loading, error, refetch, networkStatus } = products
 
   const [deleteProducts] = useMutation(gql`
@@ -296,7 +296,7 @@ const Products = ({ products }: { products: QueryResult }) => {
                     }}
                     className="rounded dark:bg-gray-900 dark:text-gray-300 px-2 py-0.5 
                   w-full flex-1 
-                focus:outline-purple-500 focus:accent-purple-400 border dark:border-gray-600"
+                focus:outline-purple-500 focus:accent-purple-400 border"
                     type="search"
                     placeholder="Search products..."
                   ></input>
@@ -569,4 +569,4 @@ const Products = ({ products }: { products: QueryResult }) => {
   )
 }
 
-export default Products
+export default Orders

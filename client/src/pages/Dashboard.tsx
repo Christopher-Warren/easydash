@@ -53,6 +53,10 @@ const Dashboard = ({ logout, userId }: any) => {
         <Route path="/dashboard/products" exact>
           <Products products={products}></Products>
         </Route>
+
+        <Route path="/dashboard/orders" exact>
+          <Products products={products}></Products>
+        </Route>
       </div>
     </>
   )
