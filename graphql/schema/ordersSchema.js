@@ -3,10 +3,17 @@ type Order {
     _id: ID!
     orderNumber: Float!
     total: Float!
-    products: [Product!]!
-    status: Status
+    products: [OrderedProduct!]!
+    status: Status!
     billingInfo: BillingInfo
     shippingInfo: ShippingInfo
+    trackingNumber: String
+}
+
+type OrderedProduct {
+    product: Product!
+    qty: Float!
+    sum: Float!
 }
 
 type Status {
@@ -55,9 +62,22 @@ input ShippingInput {
 }
 
 input OrderInput {
-    products: [ID]
+    products: [OrderedProductInput!]!
     billingInput: BillingInput!
     shippingInput: ShippingInput!
+}
 
+input OrderedProductInput {
+    product: ID!
+    qty: Float!
+}
+
+input GetAllOrdersInput {
+    limit: Float
+    skip: Float
+    sort: String
+    order: Float
+    search: String
+    filter: [Filter]
 }
 `

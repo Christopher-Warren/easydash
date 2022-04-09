@@ -7,9 +7,13 @@ const orderSchema = new Schema({
   total: Number,
   products: [
     {
-      type: Schema.Types.ObjectId,
-      ref: 'Product',
-      required: true,
+      product: {
+        type: Schema.Types.ObjectId,
+        ref: 'Product',
+        required: true,
+      },
+      qty: Number,
+      sum: Number,
     },
   ],
   status: {
@@ -35,6 +39,7 @@ const orderSchema = new Schema({
     address: { type: String, required: true },
     address2: { type: String, required: true },
   },
+  tracking: String,
 })
 
 module.exports = mongoose.model('Order', orderSchema)

@@ -9,23 +9,35 @@ const Order = require('../../models/order')
 const S3 = require('aws-sdk/clients/s3')
 const subcategory = require('../../models/subcategory')
 
+const mongoose = require('mongoose')
+
 module.exports = {
   createOrder: async ({ orderInput }) => {
     let orderNumber = await Order.count()
     orderNumber += 100000
 
-    const products = await Product.find({ _id: orderInput.products })
-
-    const orderTotal = products.reduce((acc, object) => {
-      return acc + object.price
-    }, 0)
-
     const { billingInput } = orderInput
     const { shippingInput } = orderInput
 
+    // await orderInput.products.map(async (val) => {
+    //   const product = await Product.findOne({ _id: val.product })
+    //   if (val.qty > product.stock)
+    //     throw new Error(
+    //       'Selected qty. cannot exceed the amount of items in stock',
+    //     )
+    // })
+
+    for (const item of orderInput.products) {
+      const product = await Product.findOne({ _id: item.product })
+      if (product.stock < item.qty)
+        throw new Error(
+          'Selected qty. cannot exceed the amount of items in stock',
+        )
+    }
+
+    // Initialize order
     const order = await Order.create({
       orderNumber,
-      total: orderTotal,
       products: orderInput.products,
       status: {
         paid: false,
@@ -36,7 +48,72 @@ module.exports = {
       shippingInfo: shippingInput,
     })
 
+    // Populate products field so we can access the item prices
+    await order.populate({
+      path: 'products',
+      populate: {
+        path: 'product',
+        model: 'Product',
+      },
+    })
+
+    // Generate the sum of each ordered product & qty
+    const productSum = order.products.map((obj) => {
+      obj.sum = obj.product.price * obj.qty
+      return obj
+    })
+    order.products = productSum
+
+    // Generate the order total
+    const total = order.products.reduce((acc, obj) => {
+      return acc + obj.sum
+    }, 0)
+    order.total = total
+
+    // Remove product from stock
+    order.products.forEach(async (val) => {
+      const product = await Product.findOne({ _id: val.product._id })
+      product.stock -= val.qty
+
+      await product.save()
+    })
+
+    console.log('Creating order...')
+    await order.save()
+    await order.populate({
+      path: 'products',
+      populate: {
+        path: 'product',
+        model: 'Product',
+      },
+    })
+
     return order
+  },
+  getAllOrders: async ({ input }, { isAdmin }) => {
+    if (!isAdmin) throw new Error('You do not have permission')
+
+    const limit = input?.limit ? input.limit : 5
+    const skip = input?.skip ? input.skip : 0
+
+    const sort = input?.sort ? input.sort : null
+    const order = input?.order ? input.order : 1
+
+    const search = input?.search || null
+
+    const stages = []
+
+    const orders = await Order.aggregate([
+      {
+        $lookup: {
+          from: 'products',
+          localField: 'products',
+          foreignField: '_id',
+          as: 'products',
+        },
+      },
+    ])
+    return orders
   },
   orders: async ({ input }, { isAdmin }) => {
     const limit = input?.limit ? input.limit : 5
@@ -274,139 +351,7 @@ module.exports = {
       subcategory: updateSubcat,
     }
   },
-  modifyProduct: async ({ productInput }, { isAdmin }) => {
-    if (!isAdmin) throw new Error('You do not have permission')
 
-    if (!productInput.subcategory && productInput.category)
-      throw new Error('Must enter a subcategory when changing category.')
-
-    if (productInput.category === 'new-category')
-      throw new Error(`Category "new-category" is unavailible`)
-
-    if (productInput.subcategory === 'new-subcategory')
-      throw new Error(`Subcategory "new-subcategory" is unavailible`)
-
-    normalizeInputs(productInput)
-    const { _id: ID } = productInput
-    const { name } = productInput
-    const { description } = productInput
-    const { price } = productInput
-    const { stock } = productInput
-    const { category: categoryName } = productInput
-    const { subcategory: subcategoryName } = productInput
-
-    const modifiedProduct = await Product.findById(ID)
-
-    const oldCategory = await Category.findById(modifiedProduct.category)
-    const oldSubcategory = await Subcategory.findById(
-      modifiedProduct.subcategory,
-    )
-
-    if (name) modifiedProduct.name = name
-    if (description) modifiedProduct.description = description
-    if (price) modifiedProduct.price = price
-    if (stock) modifiedProduct.stock = stock
-
-    // Handle case where:
-    // New category is entered
-    const existantCategory = await Category.findOne({ name: categoryName })
-    const existantSubcategory = await Subcategory.findOne({
-      name: subcategoryName,
-    })
-
-    if (categoryName && categoryName !== oldCategory.name) {
-      // When destination category and subcategory exist,
-      // update data, no new categories or subcategories
-      // are needed
-      if (existantCategory && existantSubcategory) {
-        existantCategory.products.push(ID)
-        existantSubcategory.products.push(ID)
-
-        modifiedProduct.category = existantCategory._id
-        modifiedProduct.subcategory = existantSubcategory._id
-      }
-      // Destination category exists, but a new subcategory
-      // needs to be created
-      if (existantCategory && !existantSubcategory) {
-        // create new subcategory and update data
-        const newSubcategory = await Subcategory.create({
-          name: subcategory,
-          category: existantCategory._id,
-          products: [ID],
-        })
-
-        existantCategory.subcategories.push(newSubcategory._id)
-        existantCategory.products.push(ID)
-
-        modifiedProduct.subcategory = newSubcategory._id
-        modifiedProduct.category = existantCategory._id
-      }
-
-      // Case where brand new category is entered
-      if (!existantCategory) {
-        const newCategory = await Category.create({
-          name: categoryName,
-          products: [ID],
-        })
-        const newSubcategory = await Subcategory.create({
-          name: subcategoryName,
-          products: [ID],
-          category: newCategory._id,
-        })
-        newCategory.subcategories = [newSubcategory._id]
-
-        modifiedProduct.category = newCategory._id
-        modifiedProduct.subcategory = newSubcategory._id
-
-        newSubcategory.save()
-        newCategory.save()
-      }
-
-      // Remove product from old category and subcategory
-
-      oldCategory.products = oldCategory.products.filter(
-        (product) => product.toString() !== ID,
-      )
-      oldSubcategory.products = oldSubcategory.products.filter(
-        (product) => product.toString() !== ID,
-      )
-    }
-
-    if (categoryName === oldCategory.name || !categoryName) {
-      if (!subcategory) return
-
-      if (existantSubcategory) {
-        modifiedProduct.subcategory = existantSubcategory._id
-        existantSubcategory.products.push(ID)
-      }
-      if (!existantSubcategory) {
-        const newSubcategory = await Subcategory.create({
-          name: subcategoryName,
-          category: modifiedProduct.category,
-          products: [ID],
-        })
-        oldCategory.subcategories.push(newSubcategory._id)
-        modifiedProduct.subcategory = newSubcategory._id
-      }
-      oldSubcategory.products = oldSubcategory.products.filter(
-        (product) => product.toString() !== ID,
-      )
-    }
-    existantCategory && existantCategory.save()
-    existantSubcategory && existantSubcategory.save()
-
-    oldCategory.save()
-    oldSubcategory.save()
-
-    modifiedProduct.save()
-
-    // Remove categories that have no products
-
-    const finalProduct = await Product.findById(ID)
-      .populate('category')
-      .populate('subcategory')
-    return finalProduct
-  },
   deleteProducts: async ({ productIds }, { isAdmin }) => {
     if (!isAdmin) throw new Error('You do not have permission')
     const s3 = new S3({ apiVersion: '2006-03-01', region: 'us-east-2' })

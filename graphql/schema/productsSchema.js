@@ -53,6 +53,7 @@ type Product {
     searchScore: Float
 }
 
+
 type Subcategory {
     _id: ID!
     name: String

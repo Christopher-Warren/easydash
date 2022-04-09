@@ -21,7 +21,8 @@ const schema = `
       products(input: GetProductInput): [Product!]
 
       #ordersSchema.js
-      orders: [Order]
+      getAllOrders(input: GetAllOrdersInput): [Order!]
+
   }
   
   type RootMutation {
