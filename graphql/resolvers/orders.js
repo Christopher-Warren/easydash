@@ -19,14 +19,8 @@ module.exports = {
     const { billingInput } = orderInput
     const { shippingInput } = orderInput
 
-    // await orderInput.products.map(async (val) => {
-    //   const product = await Product.findOne({ _id: val.product })
-    //   if (val.qty > product.stock)
-    //     throw new Error(
-    //       'Selected qty. cannot exceed the amount of items in stock',
-    //     )
-    // })
-
+    // Prevent orders from being created
+    // if qty exceeds items in stock
     for (const item of orderInput.products) {
       const product = await Product.findOne({ _id: item.product })
       if (product.stock < item.qty)
@@ -78,7 +72,6 @@ module.exports = {
       await product.save()
     })
 
-    console.log('Creating order...')
     await order.save()
     await order.populate({
       path: 'products',
@@ -99,20 +92,74 @@ module.exports = {
     const sort = input?.sort ? input.sort : null
     const order = input?.order ? input.order : 1
 
+    const filter = input?.filter
+
     const search = input?.search || null
+    console.log(input.order)
 
-    const stages = []
-
-    const orders = await Order.aggregate([
+    const stages = [
       {
-        $lookup: {
-          from: 'products',
-          localField: 'products',
-          foreignField: '_id',
-          as: 'products',
-        },
+        $sort: { [sort]: order },
       },
-    ])
+      { $skip: skip },
+      { $limit: limit },
+      // {
+      //   $match: {
+      //     'status.paid': true,
+      //   },
+      // },
+    ]
+
+    function generateFilterStages(filter) {
+      if (!filter) return
+      function parseQueryOperators(filter) {
+        filter.forEach((filter) => {
+          for (const key of Object.keys(filter.query)) {
+            if (key !== 'boolean') {
+              if (filter.query[key].length === 0) {
+                filter.query = null
+
+                return
+              }
+
+              filter.query['$' + key] = filter.query[key]
+              delete filter.query[key]
+            }
+
+            if (key === 'boolean') {
+              filter.query = filter.query[key]
+              delete filter.query[key]
+            }
+          }
+        })
+      }
+
+      parseQueryOperators(filter)
+
+      filter.forEach((i) => {
+        if (!i.query) return
+        const filterStage = {
+          $match: {
+            [i.field]: i.query,
+          },
+        }
+
+        stages.unshift(filterStage)
+      })
+    }
+
+    generateFilterStages(filter)
+
+    if (search) {
+      stages.unshift({
+        $match: {
+          orderNumber: parseFloat(search),
+        },
+      })
+    }
+
+    const orders = await Order.aggregate(stages)
+    console.log(stages[0])
     return orders
   },
   orders: async ({ input }, { isAdmin }) => {
@@ -238,33 +285,6 @@ module.exports = {
       { $unwind: '$category' },
       { $unwind: '$subcategory' },
     )
-
-    if (search) {
-      stages.unshift({
-        $search: {
-          text: {
-            path: 'name',
-            query: search,
-            fuzzy: {},
-          },
-        },
-      })
-
-      stages.push({
-        $project: {
-          _id: 1,
-          name: 1,
-          category: 1,
-          subcategory: 1,
-          description: 1,
-          stock: 1,
-          price: 1,
-          images: 1,
-          searchScore: { $meta: 'searchScore' },
-        },
-      })
-    }
-
     const products = await Product.aggregate(stages)
 
     return products

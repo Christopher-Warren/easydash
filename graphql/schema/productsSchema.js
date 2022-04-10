@@ -73,7 +73,11 @@ input FilterOptions {
     in: [String]
     gte: Float
     lte: Float
+    boolean: Boolean
 }
+
+
+
 
 input Filter {
     query: FilterOptions
