@@ -9,6 +9,7 @@ import Products from './dashboard/Products'
 import Modals from './modals/Modals'
 
 import { useQuery, gql } from '@apollo/client'
+import Orders from './dashboard/Orders'
 
 const Dashboard = ({ logout, userId }: any) => {
   const products = useQuery(
@@ -35,6 +36,25 @@ const Dashboard = ({ logout, userId }: any) => {
     },
   )
 
+  const orders = useQuery(
+    gql`
+      query getAllOrders($input: GetAllOrdersInput) {
+        getAllOrders(input: $input) {
+          _id
+          orderNumber
+          total
+          status {
+            processed
+            paid
+            fulfilled
+          }
+        }
+      }
+    `,
+    {
+      notifyOnNetworkStatusChange: true,
+    },
+  )
   return (
     <>
       <Route path="/dashboard">
@@ -55,7 +75,7 @@ const Dashboard = ({ logout, userId }: any) => {
         </Route>
 
         <Route path="/dashboard/orders" exact>
-          <Products products={products}></Products>
+          <Orders products={products} orders={orders}></Orders>
         </Route>
       </div>
     </>

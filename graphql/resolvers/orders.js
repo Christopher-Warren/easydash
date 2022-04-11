@@ -95,7 +95,6 @@ module.exports = {
     const filter = input?.filter
 
     const search = input?.search || null
-    console.log(input.order)
 
     const stages = [
       {
@@ -159,7 +158,7 @@ module.exports = {
     }
 
     const orders = await Order.aggregate(stages)
-    console.log(stages[0])
+
     return orders
   },
   orders: async ({ input }, { isAdmin }) => {
