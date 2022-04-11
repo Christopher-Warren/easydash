@@ -21,6 +21,7 @@ const schema = `
       products(input: GetProductInput): [Product!]
 
       #ordersSchema.js
+      getOrder(input: ID!): Order
       getAllOrders(input: GetAllOrdersInput): [Order!]
 
   }

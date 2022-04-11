@@ -1,23 +1,25 @@
 import { gql, useMutation, QueryResult } from '@apollo/client'
 
-import PageWrapper from '../../components/PageWrapper'
-import PrimaryButton from '../../components/buttons/PrimaryButton'
-import SecondaryButton from '../../components/buttons/SecondaryButton'
+import PageWrapper from '../../../components/PageWrapper'
+import PrimaryButton from '../../../components/buttons/PrimaryButton'
+import SecondaryButton from '../../../components/buttons/SecondaryButton'
 
-import { useAppDispatch } from '../../redux/hooks'
-import { toggleModal } from '../../redux/modal/modalSlice'
+import { useAppDispatch } from '../../../redux/hooks'
+import { toggleModal } from '../../../redux/modal/modalSlice'
 
-import { ModalFormIDs } from '../modals/Modals'
+import { ModalFormIDs } from '../../modals/Modals'
 
-import TableCard from '../../components/cards/TableCard'
+import TableCard from '../../../components/cards/TableCard'
 import { useEffect, useState } from 'react'
 
-import '../../assets/css/tables.css'
-import customPrompt from '../../utils/customPrompt'
+import '../../../assets/css/tables.css'
+import customPrompt from '../../../utils/customPrompt'
 
-import SelectInput from '../../components/inputs/SelectPrimary'
-import LoadingSpinner from '../../components/LoadingSpinner'
-import SelectFilter from '../../components/buttons/SelectFilter'
+import SelectInput from '../../../components/inputs/SelectPrimary'
+import LoadingSpinner from '../../../components/LoadingSpinner'
+import SelectFilter from '../../../components/buttons/SelectFilter'
+
+import { useHistory } from 'react-router-dom'
 
 const Orders = ({ products, orders }: any) => {
   const { data, loading, error, refetch, networkStatus } = products
@@ -41,6 +43,8 @@ const Orders = ({ products, orders }: any) => {
   const [search, setSearch] = useState('')
 
   const [filter, setFilter] = useState([])
+
+  const history = useHistory()
 
   useEffect(() => {
     refetch2({
@@ -74,12 +78,7 @@ const Orders = ({ products, orders }: any) => {
             }
             key={index}
             onClick={(e: any) => {
-              dispatch(
-                toggleModal({
-                  value: ModalFormIDs.editProduct,
-                  productId: item._id,
-                }),
-              )
+              history.push(`/dashboard/orders/${item._id}`)
             }}
           >
             <td className="px-5 relative">
@@ -102,7 +101,6 @@ const Orders = ({ products, orders }: any) => {
               </div>
             </td>
             <td className="text-right lg:pr-8 pr-3.5">
-              {console.log(item)}
               <div className="relative dark:text-green-200">{`$${item?.total}`}</div>
             </td>
           </tr>
@@ -334,7 +332,6 @@ const Orders = ({ products, orders }: any) => {
                       onChange={(e: any) => {
                         setLimit(parseInt(e.currentTarget.value))
                         setSkip(0)
-                        console.log()
                       }}
                     >
                       <option>5</option>

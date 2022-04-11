@@ -7,11 +7,13 @@ const InfoCardLarge = ({ children, title, titleClassName, p }: any) => {
       duration-1000
       `}
     >
-      <h1
-        className={`${titleClassName} text-2xl text-gray-700 font-bold dark:text-white pb-5`}
-      >
-        {title}
-      </h1>
+      {title && (
+        <h1
+          className={`${titleClassName} text-2xl text-gray-700 font-bold dark:text-white pb-5`}
+        >
+          {title}
+        </h1>
+      )}
 
       {children}
     </div>

@@ -83,6 +83,17 @@ module.exports = {
 
     return order
   },
+  getOrder: async ({ input }) => {
+    const order = await Order.findById(input).populate({
+      path: 'products',
+      populate: {
+        path: 'product',
+        model: 'Product',
+      },
+    })
+
+    return order.populate('products')
+  },
   getAllOrders: async ({ input }, { isAdmin }) => {
     if (!isAdmin) throw new Error('You do not have permission')
 
@@ -235,7 +246,6 @@ module.exports = {
       function parseQueryOperators(filter) {
         filter.forEach((filter) => {
           for (const key of Object.keys(filter.query)) {
-            console.log(filter.query[key])
             if (filter.query[key].length === 0) {
               filter.query = null
 
