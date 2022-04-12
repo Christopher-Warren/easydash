@@ -159,7 +159,7 @@ function ViewOrder() {
       </div>
 
       <TableCard>
-        <table className="table-auto w-full capitalize">
+        <table className="w-full capitalize">
           <thead>
             <tr className={`text-base dark:text-gray-400 text-gray-500 h-14`}>
               <th className="w-10 md:table-cell hidden">
@@ -196,33 +196,100 @@ function ViewOrder() {
               </th>
             </tr>
           </thead>
-
           <tbody className="text-base">
             <RenderTableItems />
           </tbody>
         </table>
+        shipped pants
       </TableCard>
-      <div className="grid sm:grid-cols-12 gap-20 mt-14">
-        <InfoCardSmall className="col-span-5 " title="Payment status">
-          <div className="grid grid-cols-3    w-full  children:col-span-1">
-            <h2>subtotal</h2>
-            <h2>1 item</h2>
-            <h2 className="text-right">1515</h2>
+      <div className="grid md:grid-cols-12 grid-cols-2 gap-10 mt-10">
+        <InfoCardSmall
+          className="col-span-2 md:col-span-5 overflow-x-auto"
+          titleClassName="p-2 inline-block"
+        >
+          <div className="flex items-center  p-2">
+            <h1 className="text-2xl text-gray-700 dark:text-gray-50">
+              Payment status
+            </h1>
+            <span
+              className={`p-1 px-3 ml-5 text-sm  rounded-full text-gray-800 ${
+                order.status.paid ? 'bg-green-400' : 'bg-yellow-300'
+              }`}
+            >
+              {order.status.paid ? 'Fully paid' : 'Unpaid'}
+            </span>
+          </div>
 
-            <h2>taxes</h2>
-            <h2>1 item</h2>
-            <h2 className="text-right">1515</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <tbody>
+                <tr className="children:p-2">
+                  <td>Subtotal</td>
+                  <td>
+                    {order.products.reduce(
+                      (acc: any, { qty }: any) => acc + qty,
+                      0,
+                    )}{' '}
+                    item(s)
+                  </td>
+                  <td className="text-right">
+                    {'$' + Number(order.total).toFixed(2)}
+                  </td>
+                </tr>
 
-            <h2>subtotal</h2>
-            <h2>1 item</h2>
-            <h2 className="text-right">1515</h2>
-            <h2 className="!col-span-full text-right">total</h2>
+                <tr className="children:p-2">
+                  <td>Taxes</td>
+                  <td>Does not apply</td>
+                  <td className="text-right">{'$' + Number(0).toFixed(2)}</td>
+                </tr>
+
+                <tr className="children:p-2">
+                  <td>Shipping</td>
+                  <td>USPS</td>
+                  <td className="text-right">{'$' + Number(0).toFixed(2)}</td>
+                </tr>
+
+                <tr className="children:p-2 children:font-medium children:text-lg">
+                  <td colSpan={2}>Total</td>
+                  <td className="text-right">
+                    {'$' + Number(order.total).toFixed(2)}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </InfoCardSmall>
         <InfoCardSmall
-          className="col-span-7 h-32"
+          className="md:col-span-7 col-span-2 overflow-x-auto"
           title="Shipping"
-        ></InfoCardSmall>
+          titleClassName="p-2"
+        >
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <tbody className="">
+                <tr className="children:p-2">
+                  <td>subtotal</td>
+                  <td>desc</td>
+                  <td className="text-right">sum</td>
+                </tr>
+                <tr className="children:p-2">
+                  <td>subtotal</td>
+                  <td>desc</td>
+                  <td className="text-right">sum</td>
+                </tr>
+                <tr className="children:p-2">
+                  <td>subtotal</td>
+                  <td>desc</td>
+                  <td className="text-right">sum</td>
+                </tr>
+                <tr className="children:p-2">
+                  <td colSpan={2}>total</td>
+                  <td className="text-right">10000000</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </InfoCardSmall>
       </div>
     </PageWrapper>
   )
