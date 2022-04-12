@@ -98,7 +98,7 @@ const Products = ({ products }: { products: QueryResult }) => {
       return data.products.map((item: any, index: any) => {
         return (
           <tr
-            className={` hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 cursor-pointer border-y dark:border-gray-100/25 border-gray-200  ${
+            className={` hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 cursor-pointer border-y dark:border-gray-700 border-gray-200  ${
               isChecked[index] &&
               'bg-purple-50 dark:bg-gray-700/50 odd:dark:bg-gray-700/50'
             }`}
@@ -190,7 +190,7 @@ const Products = ({ products }: { products: QueryResult }) => {
       return skeleton.map((i) => {
         return (
           <tr
-            className="hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 border-y border-gray-200 dark:border-gray-100/25"
+            className="hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 border-y border-gray-200 dark:border-gray-700"
             key={i}
           >
             <td className="relative w-8 px-4 py-3 ">
@@ -301,7 +301,7 @@ const Products = ({ products }: { products: QueryResult }) => {
                     placeholder="Search products..."
                   ></input>
                 </div>
-                <div className="border-b border-gray-200 dark:border-gray-100/25 w-full absolute left-0  bottom-0 " />
+                <div className="border-b border-gray-200 dark:border-gray-700 w-full absolute left-0  bottom-0 " />
               </th>
             </tr>
 
@@ -472,7 +472,7 @@ const Products = ({ products }: { products: QueryResult }) => {
             {limit > data?.products.length && (
               <tr
                 className="dark:odd:bg-slate-800  border-y
-           dark:border-gray-100/25 border-gray-200 text-gray-400 
+           dark:border-gray-700 border-gray-200 text-gray-400 
           "
               >
                 <td
@@ -536,7 +536,7 @@ const Products = ({ products }: { products: QueryResult }) => {
                       </svg>
                     </button>
                     <button
-                      disabled={products.data?.products.length < limit}
+                      disabled={products.data?.products.length <= limit}
                       onClick={(e: any) => {
                         setSkip((prev: number) => prev + limit)
                         setIsChecked((val) => val.map(() => false))

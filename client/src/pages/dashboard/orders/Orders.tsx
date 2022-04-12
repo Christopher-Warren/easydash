@@ -74,7 +74,7 @@ const Orders = ({ products, orders }: any) => {
         return (
           <tr
             className={
-              ' hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 cursor-pointer border-y dark:border-gray-100/25 border-gray-200'
+              ' hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 cursor-pointer border-y dark:border-gray-700 border-gray-200'
             }
             key={index}
             onClick={(e: any) => {
@@ -111,7 +111,7 @@ const Orders = ({ products, orders }: any) => {
       return skeleton.map((i) => {
         return (
           <tr
-            className="hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 border-y border-gray-200 dark:border-gray-100/25"
+            className="hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 border-y border-gray-200 dark:border-gray-700"
             key={i}
           >
             <td className="relative w-8 px-4 py-3 ">
@@ -199,13 +199,13 @@ const Orders = ({ products, orders }: any) => {
                       setSearch(e.currentTarget.value)
                     }}
                     className="rounded dark:bg-gray-900 dark:text-gray-300 px-2 py-0.5 
-                  w-full flex-1 
-                focus:outline-purple-500 focus:accent-purple-400 border"
+                    w-full flex-1 
+                  focus:outline-purple-500 focus:accent-purple-400 border dark:border-gray-600"
                     type="search"
                     placeholder="Enter order number... "
                   ></input>
                 </div>
-                <div className="border-b border-gray-200 dark:border-gray-100/25 w-full absolute left-0  bottom-0 " />
+                <div className="border-b border-gray-200 dark:border-gray-700 w-full absolute left-0  bottom-0 " />
               </th>
             </tr>
 
@@ -300,20 +300,20 @@ const Orders = ({ products, orders }: any) => {
           <tbody className="text-base">
             <RenderTableItems />
 
-            {limit > data?.products.length && (
+            {limit > data2?.getAllOrders.length && (
               <tr
                 className="dark:odd:bg-slate-800  border-y
-           dark:border-gray-100/25 border-gray-200 text-gray-400 
+           dark:border-gray-700 border-gray-200 text-gray-400 
           "
               >
                 <td
                   colSpan={6}
                   className="relative w-8 px-4 h-14 text-center normal-case"
                 >
-                  {data.products.length === 0 &&
+                  {data2.getAllOrders.length === 0 &&
                   (filter.length > 0 || search.length > 0)
-                    ? 'No matching products found'
-                    : 'There are no more products to show'}
+                    ? 'No orders match the entered ID'
+                    : 'No more orders'}
                 </td>
               </tr>
             )}
@@ -324,7 +324,7 @@ const Orders = ({ products, orders }: any) => {
                 <div className="flex items-center px-4 h-full justify-between">
                   <div className="flex items-center">
                     <span className="normal-case pr-2 text-gray-400">
-                      No. of products
+                      No. of orders
                     </span>
                     <SelectInput
                       className=""
@@ -364,7 +364,7 @@ const Orders = ({ products, orders }: any) => {
                       </svg>
                     </button>
                     <button
-                      disabled={products.data?.products.length < limit}
+                      disabled={data2?.getAllOrders.length <= limit}
                       onClick={(e: any) => {
                         setSkip((prev: number) => prev + limit)
                       }}

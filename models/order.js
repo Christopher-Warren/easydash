@@ -4,7 +4,12 @@ const Schema = mongoose.Schema
 
 const orderSchema = new Schema({
   orderNumber: Number,
+  createdAt: {
+    type: Date,
+    required: true,
+  },
   total: Number,
+  tracking: String,
   products: [
     {
       product: {
@@ -39,7 +44,6 @@ const orderSchema = new Schema({
     address: { type: String, required: true },
     address2: { type: String, required: true },
   },
-  tracking: String,
 })
 
 module.exports = mongoose.model('Order', orderSchema)
