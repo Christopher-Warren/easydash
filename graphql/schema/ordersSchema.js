@@ -25,6 +25,7 @@ type BillingInfo {
     firstName: String!
     lastName: String!
     country: String!
+    state: String!
     city: String!
     zipcode: Float!
     address: String!
@@ -34,6 +35,7 @@ type ShippingInfo {
     firstName: String!
     lastName: String!
     country: String!
+    state: String!
     city: String!
     zipcode: Float!
     address: String!
@@ -46,6 +48,7 @@ input BillingInput {
     firstName: String!
     lastName: String!
     country: String!
+    state: String!
     city: String!
     zipcode: Float!
     address: String!
@@ -55,6 +58,7 @@ input ShippingInput {
     firstName: String!
     lastName: String!
     country: String!
+    state: String!
     city: String!
     zipcode: Float!
     address: String!
