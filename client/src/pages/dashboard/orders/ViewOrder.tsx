@@ -144,31 +144,36 @@ function ViewOrder() {
   return (
     <PageWrapper>
       <div className="flex">
-        <SecondaryButton
-          onClick={() => history.goBack()}
-          padding="px-5 py-1.5 mr-5"
-        >
+        <SecondaryButton onClick={() => history.goBack()} padding="px-5 py-1.5">
           {'<- Back'}
         </SecondaryButton>
       </div>
-      <div className="my-5 mt-14 dark:text-gray-100  relative">
-        <h1 className="text-4xl my-2 font-medium  ">
-          Order #{order.orderNumber}
-        </h1>
-        <span>Status: {order.status?.paid ? 'paid' : 'unpaid'}</span>
-        <div className="absolute top-0 right-0">
-          <div className="w-5 h-5 rounded-full bg-red-500 inline">as</div>
-          <div className="">
-            <p className="">Iamaverylongemail@long.com</p>
-            <a className="text-blue-500 hover:underline " href="/">
-              View Profile
-            </a>
+
+      {/* Head */}
+      <div className="md:flex my-6 dark:text-gray-100 justify-between">
+        <div className="">
+          <h1 className="text-4xl my-2 font-medium">
+            Order #{order.orderNumber}
+          </h1>
+          <span>Status: {order.status?.paid ? 'Paid' : 'Unpaid'}</span>
+        </div>
+        {/*  bg-white dark:bg-gray-800  dark:border-gray-700 dark:text-gray-200 rounded-md tracking-wide shadow-lg */}
+        <div className="my-6 md:my-0">
+          <div className="flex h-full px-4 py-2 items-center border bg-white dark:bg-gray-800  dark:border-gray-700 dark:text-gray-200 rounded-md tracking-wide shadow-lg">
+            <div className="w-10 h-10 rounded-full bg-teal-500 mr-3 inline-block"></div>
+            <div className="">
+              <p className="">Iamaverylongemail@long.com</p>
+              <a className="text-blue-500 hover:underline " href="/">
+                View Profile
+              </a>
+            </div>
           </div>
         </div>
       </div>
-
+      {/* Layout */}
       <div className="grid md:grid-cols-12 grid-cols-8 gap-6">
         <div className="col-span-8">
+          {/* Products */}
           <TableCard className="mb-6">
             <table className="capitalize">
               <thead>
@@ -223,6 +228,7 @@ function ViewOrder() {
             refund
           </TableCard>
 
+          {/* Shipping / Contact */}
           <div className="md:flex gap-6">
             <InfoCardSmall
               className="overflow-x-auto p-5  md:w-1/2 xl:w-7/12 mb-6 md:mb-0"
@@ -251,17 +257,6 @@ function ViewOrder() {
               title="Contact"
               titleClassName=""
             >
-              {/* <div className="leading-relaxed text-lg h-36">
-                <div className="capitalize">{`${order.shippingInfo.firstName} ${order.shippingInfo.lastName}`}</div>
-                <div>alongemailaddress.com</div>
-
-                <div className="">
-                  <a href="tel:+7064635857">Phone # (706) 463-5857</a>
-                  <br />
-                  <a href="tel:+7064635857">7064635857</a>
-                </div>
-              </div> */}
-
               <div className="my-2">{`${order.shippingInfo.firstName} ${order.shippingInfo.lastName}`}</div>
               <a className="my-2" href="/">
                 alongemailaddress@email.com
@@ -282,56 +277,58 @@ function ViewOrder() {
           </div>
         </div>
 
-        <div className="md:col-span-4 col-span-full">
-          <InfoCardSmall className="overflow-x-auto p-5" title="Payment">
-            <span
-              className={`p-1 px-3 ml-5 text-sm absolute right-0 top-0  rounded-full text-gray-800 ${
-                order.status.paid ? 'bg-green-400' : 'bg-yellow-300'
-              }`}
-            >
-              {order.status.paid ? 'Fully paid' : 'Unpaid'}
-            </span>
+        {/* Payment */}
+        <InfoCardSmall
+          className="overflow-x-auto p-5 md:col-span-4 col-span-full h-min"
+          title="Payment"
+        >
+          <span
+            className={`p-1 px-3 ml-5 text-sm absolute right-0 top-0  rounded-full text-gray-800 ${
+              order.status.paid ? 'bg-green-400' : 'bg-yellow-300'
+            }`}
+          >
+            {order.status.paid ? 'Fully paid' : 'Unpaid'}
+          </span>
 
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <tbody>
-                  <tr className="children:py-3">
-                    <td>Subtotal</td>
-                    <td>
-                      {order.products.reduce(
-                        (acc: any, { qty }: any) => acc + qty,
-                        0,
-                      )}{' '}
-                      item(s)
-                    </td>
-                    <td className="text-right">
-                      {'$' + Number(order.total).toFixed(2)}
-                    </td>
-                  </tr>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <tbody>
+                <tr className="children:py-3">
+                  <td>Subtotal</td>
+                  <td>
+                    {order.products.reduce(
+                      (acc: any, { qty }: any) => acc + qty,
+                      0,
+                    )}{' '}
+                    item(s)
+                  </td>
+                  <td className="text-right">
+                    {'$' + Number(order.total).toFixed(2)}
+                  </td>
+                </tr>
 
-                  <tr className="children:py-3">
-                    <td>Taxes</td>
-                    <td>Does not apply</td>
-                    <td className="text-right">{'$' + Number(0).toFixed(2)}</td>
-                  </tr>
+                <tr className="children:py-3">
+                  <td>Taxes</td>
+                  <td>Does not apply</td>
+                  <td className="text-right">{'$' + Number(0).toFixed(2)}</td>
+                </tr>
 
-                  <tr className="children:py-3">
-                    <td>Shipping</td>
-                    <td>USPS</td>
-                    <td className="text-right">{'$' + Number(0).toFixed(2)}</td>
-                  </tr>
+                <tr className="children:py-3">
+                  <td>Shipping</td>
+                  <td>USPS</td>
+                  <td className="text-right">{'$' + Number(0).toFixed(2)}</td>
+                </tr>
 
-                  <tr className="children:pt-3 children:font-medium children:text-lg">
-                    <td colSpan={2}>Total</td>
-                    <td className="text-right">
-                      {'$' + Number(order.total).toFixed(2)}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </InfoCardSmall>
-        </div>
+                <tr className="children:pt-3 children:font-medium children:text-lg">
+                  <td colSpan={2}>Total</td>
+                  <td className="text-right">
+                    {'$' + Number(order.total).toFixed(2)}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </InfoCardSmall>
       </div>
     </PageWrapper>
   )
