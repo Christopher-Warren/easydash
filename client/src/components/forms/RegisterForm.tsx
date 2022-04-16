@@ -73,7 +73,7 @@ const RegisterForm = () => {
           <div className="flex justify-between -mt-1 text-gray-600">
             <div>
               <span>Already have an account? </span>
-              <Link to="/dashboard/" className="text-blue-700 underline">
+              <Link to="/dashboard/login" className="text-blue-700 underline">
                 Login
               </Link>
             </div>

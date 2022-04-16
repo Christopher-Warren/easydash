@@ -69,6 +69,11 @@ const Orders = ({ products, orders }: any) => {
   }
 
   const RenderTableItems = () => {
+    console.log('rendertabke')
+    if (error2) {
+      console.log(error2)
+    }
+
     if (!loading2 && !error2) {
       return data2.getAllOrders.map((item: any, index: any) => {
         return (
@@ -156,6 +161,8 @@ const Orders = ({ products, orders }: any) => {
       })
     }
   }
+
+  if (error2) return null
 
   return (
     <PageWrapper>

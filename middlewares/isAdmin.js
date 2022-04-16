@@ -14,9 +14,11 @@ module.exports = async function isAdmin(req, res, next) {
       req.isAdmin = false
     }
   } catch (error) {
+    console.log('ERROR', error)
     if (error.message.includes('jwt expired')) {
       req.sessionExpired = true
-      res.clearCookie('token')
+
+      // res.clearCookie('token')
     } else {
       console.log('isAdminError', error.message)
     }

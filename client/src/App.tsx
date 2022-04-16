@@ -3,6 +3,8 @@ import {
   Switch,
   Route,
   Redirect,
+  useHistory,
+  useLocation,
 } from 'react-router-dom'
 
 import Dashboard from './pages/Dashboard'
@@ -13,28 +15,42 @@ import useLogin from './hooks/useAdminLogin'
 
 import PrimaryButton from './components/buttons/PrimaryButton'
 
+import { isAdminVar, isLoggedInVar } from './graphql/cache'
+
 function App() {
   const { login, loading, user, isAdmin, userId, error, logout } = useLogin()
 
   // Check isAdmin here, and redirect customer to '/' if they arent an admin
 
+  const { pathname } = useLocation()
+
   const renderDashboard = () => {
-    if (user.isLoggedIn && isAdmin) {
-      return <Dashboard logout={logout} userId={userId} />
+    if (!user.isLoggedIn) {
+      return (
+        <Redirect
+          to={{ pathname: '/dashboard/login', state: { from: pathname } }}
+        />
+      )
     }
-
-    if (user.isLoggedIn && !isAdmin) {
-      return <Redirect to="/" />
-    }
-
-    return <Login login={login} loginError={error} loading={loading} />
+    console.log(user.isLoggedIn, isAdmin)
+    return <Dashboard logout={logout} userId={userId} />
   }
 
   return (
-    <Router>
+    <>
       <Switch>
         {/* Admin Dashboard Entry */}
+        <Route path="/dashboard/login" exact>
+          <Login
+            login={login}
+            loginError={error}
+            loading={loading}
+            user={user}
+            isAdmin={isAdmin}
+          />
+        </Route>
         <Route path="/dashboard">{renderDashboard()}</Route>
+
         {/* Customer Entry */}
         <Route path="/" exact>
           {user.isLoggedIn && (
@@ -51,7 +67,7 @@ function App() {
       </Switch>
       {/* Global App Errors */}
       <ErrorNotifs />
-    </Router>
+    </>
   )
 }
 

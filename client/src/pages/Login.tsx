@@ -1,12 +1,28 @@
 import PrimaryButton from '../components/buttons/PrimaryButton'
 import FormInput from '../components/LoginInput'
 import logo from '../assets/logobanner.png'
-import { BrowserRouter as Switch, Route, Link } from 'react-router-dom'
+import {
+  BrowserRouter as Switch,
+  Route,
+  Link,
+  Redirect,
+  useHistory,
+  useLocation,
+} from 'react-router-dom'
 
 import RegisterForm from '../components/forms/RegisterForm'
 import LoadingSpinner from '../components/LoadingSpinner'
+import { useEffect } from 'react'
 
-const Login = ({ login, loading }: any) => {
+const Login = ({ login, loading, user, isAdmin }: any) => {
+  const history: any = useHistory()
+
+  useEffect(() => {
+    if (user.isLoggedIn && isAdmin) {
+      history.push(history.location.state.from)
+    }
+  })
+
   return (
     <div className="h-screen w-full flex items-center justify-center lg:justify-end">
       <div className="absolute hidden lg:block  w-1/4  h-screen left-0 overflow-hidden border-r-2 border-blue-200 drop-shadow-xl">
@@ -83,7 +99,7 @@ const Login = ({ login, loading }: any) => {
         className={`max-w-lg flex-grow lg:mr-40 xl:mr-96 transition-none lg:p-0 p-4 `}
       >
         <Switch>
-          <Route path="/dashboard" exact>
+          <Route path="/dashboard/login" exact>
             <form
               className="relative"
               onSubmit={async (e: any) => {
@@ -101,7 +117,7 @@ const Login = ({ login, loading }: any) => {
             >
               {loading && <LoadingSpinner />}
 
-              <div className={loading && 'hidden'}>
+              <div className={loading ? 'hidden' : ''}>
                 <img
                   className="lg:mx-0 mx-auto"
                   src={logo}

@@ -48,10 +48,12 @@ module.exports = {
     const token = jwt.sign(
       { userId: user.id, email: user.email },
       process.env.JWT_SECRET,
-      { expiresIn: '7d' },
+      { expiresIn: '10s' },
     )
+
     // We can set a maxAge to infinite, and trigger session expired
     // err based off jwt verify.
+    // maxAge: 60000 * 60 * 24 * 7,
     res.cookie('token', token, {
       // Expires after 7 days
       maxAge: 60000 * 60 * 24 * 7,

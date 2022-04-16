@@ -93,7 +93,9 @@ module.exports = {
 
     return order.populate('products')
   },
-  getAllOrders: async ({ input }, { isAdmin }) => {
+  getAllOrders: async ({ input }, { isAdmin, sessionExpired }) => {
+    console.log('orders.js --->', sessionExpired)
+    if (sessionExpired) throw new Error('Session expired')
     if (!isAdmin) throw new Error('You do not have permission')
 
     const limit = input?.limit ? input.limit : 5

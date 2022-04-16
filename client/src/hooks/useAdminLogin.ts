@@ -5,7 +5,11 @@ import { isLoggedInVar, isAdminVar } from '../graphql/cache'
 import { store } from '../redux/store'
 import { addError } from '../redux/error/errorSlice'
 
+import { useHistory } from 'react-router-dom'
+
 const useAdminLogin = () => {
+  const history = useHistory()
+
   const [login, { loading, error, data }] = useMutation(
     gql`
       mutation Login($email: String!, $password: String!) {

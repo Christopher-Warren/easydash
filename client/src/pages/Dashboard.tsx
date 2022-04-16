@@ -3,9 +3,9 @@ import PrimaryButton from '../components/buttons/PrimaryButton'
 
 import Home from './dashboard/Home'
 
-import { Route, useHistory, useParams } from 'react-router-dom'
+import { Redirect, Route, useHistory, useParams } from 'react-router-dom'
 import Products from './dashboard/Products'
-
+import { cache, isLoggedInVar, isAdminVar } from '../graphql/cache'
 import Modals from './modals/Modals'
 
 import { useQuery, gql } from '@apollo/client'

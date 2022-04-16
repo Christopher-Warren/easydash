@@ -8,7 +8,8 @@ const S3 = require('aws-sdk/clients/s3')
 const subcategory = require('../../models/subcategory')
 
 module.exports = {
-  products: async ({ input }, { isAdmin }) => {
+  products: async ({ input }, { isAdmin, sessionExpired }) => {
+    if (sessionExpired) throw new Error('Session expired')
     const limit = input?.limit ? input.limit : 5
     const skip = input?.skip ? input.skip : 0
 
@@ -163,6 +164,7 @@ module.exports = {
     return products
   },
   createProduct: async ({ productInput }, { isAdmin }) => {
+    if (sessionExpired) throw new Error('Session expired')
     if (!isAdmin) throw new Error('You do not have permission')
     if (!productInput.subcategory) throw new Error('Please enter a Subcategory')
     if (productInput.category === 'new-category')
@@ -245,6 +247,7 @@ module.exports = {
     }
   },
   modifyProduct: async ({ productInput }, { isAdmin }) => {
+    if (sessionExpired) throw new Error('Session expired')
     if (!isAdmin) throw new Error('You do not have permission')
 
     if (!productInput.subcategory && productInput.category)
@@ -382,6 +385,7 @@ module.exports = {
     return finalProduct
   },
   deleteProducts: async ({ productIds }, { isAdmin }) => {
+    if (sessionExpired) throw new Error('Session expired')
     if (!isAdmin) throw new Error('You do not have permission')
     const s3 = new S3({ apiVersion: '2006-03-01', region: 'us-east-2' })
 

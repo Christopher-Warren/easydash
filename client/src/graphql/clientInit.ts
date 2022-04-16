@@ -1,7 +1,7 @@
 import { ApolloClient, gql, HttpLink, from } from '@apollo/client/'
 import { onError } from '@apollo/client/link/error'
 
-import { cache } from './cache'
+import { cache, isLoggedInVar, isAdminVar } from './cache'
 
 import { addError } from '../redux/error/errorSlice'
 
@@ -22,11 +22,13 @@ const httpLink = new HttpLink({
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     graphQLErrors.forEach((error) => {
-      console.log(error)
+      localStorage.removeItem('role')
+      localStorage.removeItem('user')
+      isLoggedInVar(false)
+      isAdminVar(false)
+
       store.dispatch(addError(error.message))
     })
-    // localStorage.removeItem('user')
-    // isLoggedInVar(false)
   }
 })
 
