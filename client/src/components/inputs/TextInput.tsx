@@ -42,7 +42,7 @@ const TextInput = ({
         placeholder={placeholder}
       ></input>
       <label
-        htmlFor={name}
+        htmlFor={id}
         className="absolute transition-all appearance-none left-0 px-1 pt-3.5  -top-5 text-sm text-gray-400 pointer-events-none
         peer-focus:-top-5
         peer-focus:text-sm

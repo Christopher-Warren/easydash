@@ -1,6 +1,6 @@
 import ModalContainer from './ModalContainer'
 
-import { useQuery, gql, useMutation, QueryResult } from '@apollo/client'
+import { useQuery, useMutation, QueryResult } from '@apollo/client'
 
 import { Fragment, useEffect, useRef, useState } from 'react'
 
@@ -20,6 +20,9 @@ import TextArea from '../inputs/TextArea'
 import InfoCardLarge from '../cards/InfoCardLarge'
 import customPrompt from '../../utils/customPrompt'
 import Progress from '../progress/Progress'
+import usePrompt from '../../hooks/usePrompt'
+import { CREATE_PRODUCT, MODIFY_PRODUCT } from '../../graphql/mutation_vars'
+import { GET_ALL_CATEGORIES } from '../../graphql/query_vars'
 
 /* 
   This module has two actions
@@ -27,6 +30,10 @@ import Progress from '../progress/Progress'
   2) Edit a preexisting product, checked via productId
 
 */
+
+interface CategoryTypes {
+  getAllCategories: any[]
+}
 
 const NewProductModal = ({
   products,
@@ -36,87 +43,11 @@ const NewProductModal = ({
   productId?: string
 }) => {
   const { refetch } = products
-  const { data } = useQuery(gql`
-    query getAllCategories {
-      getAllCategories {
-        name
-        _id
-        subcategories {
-          name
-          _id
-        }
-      }
-    }
-  `)
+  const { data } = useQuery(GET_ALL_CATEGORIES)
 
-  const [createProduct] = useMutation(gql`
-    mutation createProduct(
-      $name: String!
-      $category: String!
-      $description: String!
-      $price: Float!
-      $subcategory: String!
-      $stock: Float!
-    ) {
-      createProduct(
-        productInput: {
-          name: $name
-          category: $category
-          description: $description
-          price: $price
-          subcategory: $subcategory
-          stock: $stock
-        }
-      ) {
-        _id
-        name
-        description
-        price
-        stock
-        subcategory {
-          name
-        }
-      }
-    }
-  `)
+  const [createProduct] = useMutation(CREATE_PRODUCT)
 
-  const [modifyProduct] = useMutation(gql`
-    mutation modifyProduct(
-      $_id: ID!
-      $name: String
-      $category: String
-      $description: String
-      $price: Float
-      $subcategory: String
-      $stock: Float
-    ) {
-      modifyProduct(
-        productInput: {
-          _id: $_id
-          name: $name
-          category: $category
-          description: $description
-          price: $price
-          subcategory: $subcategory
-          stock: $stock
-        }
-      ) {
-        _id
-        name
-        description
-        price
-        stock
-        subcategory {
-          _id
-          name
-        }
-        category {
-          name
-          _id
-        }
-      }
-    }
-  `)
+  const [modifyProduct] = useMutation(MODIFY_PRODUCT)
 
   // Gets data for the currently selected product
   // if the user is editing a preexisting one.
@@ -130,10 +61,11 @@ const NewProductModal = ({
   const [newCategoryInput, setNewCategoryInput] = useState<any>('')
   const [newSubCategoryInput, setNewSubCategoryInput] = useState<any>('')
   // State for Form Data
+  // When a product is selected, state will initialize
+  // to its data
   const [name, setName] = useState(selectedProduct?.name || '')
   const [category, setCategory] = useState('')
   const [subcategory, setSubcategory] = useState('')
-
   const [description, setDescription] = useState(
     selectedProduct?.description || '',
   )
@@ -180,11 +112,21 @@ const NewProductModal = ({
     if (imgUrls[0]) hasChanges = true
   }
 
+  console.log(selectedCategory, category)
+
+  console.log(data.getAllCategories.name)
+
+  const hasChanged = usePrompt(
+    [name, price, stock, description, selectedCategory],
+    selectedProduct,
+  )
+
   // Event Handlers
   const handleFileOnChange = (e: any) => {
     const fileInput = document.getElementById('file_input') as any
     const images = fileInput && Object.values(fileInput.files)
 
+    // TODO: Make an area for images selection
     const newImages = images.map((image: any) => {
       return URL.createObjectURL(image)
     })
@@ -365,9 +307,7 @@ const NewProductModal = ({
     return data.getAllCategories.map((category: any, index: number) => {
       return (
         <Fragment key={index}>
-          <option>
-            {category.name.charAt(0).toUpperCase() + category.name.slice(1)}
-          </option>
+          <option className="">{category.name}</option>
         </Fragment>
       )
     })
@@ -430,7 +370,11 @@ const NewProductModal = ({
 
   // Initialize Async State
   useEffect(() => {
-    if (data && data.getAllCategories[0] && pageLoads.current < 1) {
+    if (
+      data.getAllCategories &&
+      data.getAllCategories[0] &&
+      pageLoads.current < 1
+    ) {
       pageLoads.current++
 
       // This could be done better.
@@ -463,11 +407,15 @@ const NewProductModal = ({
       }
     }
 
-    if (data && !data.getAllCategories[0] && pageLoads.current < 1) {
+    if (
+      data.getAllCategories &&
+      !data.getAllCategories[0] &&
+      pageLoads.current < 1
+    ) {
       setCategory('new-category')
       setSubcategory('new-subcategory')
     }
-  }, [data, selectedProduct])
+  }, [data.getAllCategories, selectedProduct])
 
   const closePromptOpts = {
     title: 'Are you sure you wish to go back?',
@@ -487,6 +435,7 @@ const NewProductModal = ({
           title={productId ? 'Edit Product' : 'Create a New Product'}
         >
           <form
+            id="newProductForm"
             className="grid grid-cols-4  gap-10"
             onSubmit={handleFormSubmit}
           >
@@ -508,7 +457,7 @@ const NewProductModal = ({
                 onChange={handleCategorySelect}
                 label="Category"
               >
-                {data && renderCategories()}
+                {data.getAllCategories && renderCategories()}
                 <option value="new-category">New Category</option>
               </SelectPrimary>
 
@@ -529,7 +478,7 @@ const NewProductModal = ({
                 onChange={handleSubcategorySelect}
                 label="Subcategory"
               >
-                {data && renderSubcategories()}
+                {data.getAllCategories && renderSubcategories()}
               </SelectPrimary>
               <TextInput
                 containerClassName="mt-5"
@@ -570,6 +519,7 @@ const NewProductModal = ({
                 red
                 padding="px-10 py-2"
                 onClick={(e: any) => {
+                  e.preventDefault()
                   const dispatchToggle = () => {
                     dispatch(toggleModal({ value: null }))
                   }

@@ -12,7 +12,6 @@ import { ModalFormIDs } from '../modals/Modals'
 import TableCard from '../../components/cards/TableCard'
 import { useEffect, useState } from 'react'
 
-import '../../assets/css/tables.css'
 import customPrompt from '../../utils/customPrompt'
 
 import SelectInput from '../../components/inputs/SelectPrimary'
@@ -486,84 +485,9 @@ const Products = ({ products }: { products: QueryResult }) => {
               </tr>
             )}
           </tbody>
-
-          {/* <tfoot className="h-14 ">
-            <tr className="relative h-full ">
-              <td className="absolute w-full h-full ">
-                <div className="flex items-center px-4 h-full justify-between">
-                  <div className="flex items-center">
-                    <span className="normal-case pr-2 text-gray-400">
-                      No. of products
-                    </span>
-                    <SelectInput
-                      className=""
-                      containerClassName="w-12"
-                      onChange={(e: any) => {
-                        setLimit(parseInt(e.currentTarget.value))
-                        setIsChecked((val) => val.map(() => false))
-                        setSkip(0)
-                        console.log()
-                      }}
-                    >
-                      <option>5</option>
-                      <option>10</option>
-                      <option>20</option>
-                    </SelectInput>
-                  </div>
-
-                  <div className="flex ">
-                    <button
-                      disabled={skip === 0}
-                      onClick={(e: any) => {
-                        setSkip((prev: number) => prev - limit)
-                        setIsChecked((val) => val.map(() => false))
-                      }}
-                      className="p-0.5 active:outline hover:outline hover:outline-gray-500 disabled:outline-transparent dark:outline-gray-600 outline-2 rounded-sm  disabled:text-gray-300 dark:disabled:text-gray-700 dark:disabled:outline-transparent"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className=""
-                      >
-                        <polyline points="15 18 9 12 15 6"></polyline>
-                      </svg>
-                    </button>
-                    <button
-                      disabled={products.data?.products.length <= limit}
-                      onClick={(e: any) => {
-                        setSkip((prev: number) => prev + limit)
-                        setIsChecked((val) => val.map(() => false))
-                      }}
-                      className="ml-4 p-0.5 active:outline hover:outline hover:outline-gray-500 disabled:outline-transparent dark:outline-gray-600 outline-2 rounded-sm  disabled:text-gray-300 dark:disabled:text-gray-700 dark:disabled:outline-transparent"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className=""
-                      >
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </tfoot> */}
         </table>
+
+        {/* Table Footer */}
         <div className="py-3">
           <div className="flex items-center px-4 h-full justify-between">
             <div className="flex items-center">

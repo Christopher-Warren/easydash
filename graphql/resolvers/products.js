@@ -163,7 +163,7 @@ module.exports = {
 
     return products
   },
-  createProduct: async ({ productInput }, { isAdmin }) => {
+  createProduct: async ({ productInput, sessionExpired }, { isAdmin }) => {
     if (sessionExpired) throw new Error('Session expired')
     if (!isAdmin) throw new Error('You do not have permission')
     if (!productInput.subcategory) throw new Error('Please enter a Subcategory')

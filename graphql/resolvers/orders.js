@@ -94,7 +94,6 @@ module.exports = {
     return order.populate('products')
   },
   getAllOrders: async ({ input }, { isAdmin, sessionExpired }) => {
-    console.log('orders.js --->', sessionExpired)
     if (sessionExpired) throw new Error('Session expired')
     if (!isAdmin) throw new Error('You do not have permission')
 

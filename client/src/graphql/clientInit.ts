@@ -22,10 +22,12 @@ const httpLink = new HttpLink({
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     graphQLErrors.forEach((error) => {
-      localStorage.removeItem('role')
-      localStorage.removeItem('user')
-      isLoggedInVar(false)
-      isAdminVar(false)
+      if (error.message.includes('Session expired')) {
+        localStorage.removeItem('role')
+        localStorage.removeItem('user')
+        isLoggedInVar(false)
+        isAdminVar(false)
+      }
 
       store.dispatch(addError(error.message))
     })

@@ -32,7 +32,6 @@ function App() {
         />
       )
     }
-    console.log(user.isLoggedIn, isAdmin)
     return <Dashboard logout={logout} userId={userId} />
   }
 

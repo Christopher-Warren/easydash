@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import chevron from '../../assets/feather/chevron-down.svg'
 
 const SelectPrimary = ({
   id,
