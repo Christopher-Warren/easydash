@@ -370,32 +370,26 @@ module.exports = {
 
     try {
       if (existantCategory) {
-        if (existantCategory._id.toString() === oldCategory._id.toString()) {
-          return
+        if (existantCategory._id.toString() !== oldCategory._id.toString()) {
+          await existantCategory.save()
         }
-
-        await existantCategory.save()
       }
-
       if (existantSubcategory) {
         if (
-          existantSubcategory._id.toString() === oldSubcategory._id.toString()
+          existantSubcategory._id.toString() !== oldSubcategory._id.toString()
         ) {
-          return
+          await existantSubcategory.save()
         }
-
-        await existantSubcategory.save()
       }
 
       await oldCategory.save()
       await oldSubcategory.save()
 
       await modifiedProduct.save()
-
-      // Remove categories that have no products
     } catch (error) {
       console.log(error)
     }
+    // Remove categories that have no products
     const finalProduct = await Product.findById(ID)
       .populate('category')
       .populate('subcategory')

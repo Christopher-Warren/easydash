@@ -110,6 +110,7 @@ const ModifyProductModal = ({ products, productId }: ModifyProductType) => {
     // • Solve error
     // • handle images
     // • make component for createProduct
+    console.log('test')
 
     e.preventDefault()
     modifyProduct({
@@ -262,11 +263,15 @@ const ModifyProductModal = ({ products, productId }: ModifyProductType) => {
             ></TextArea>
             <Progress className="col-span-full" progress={progress}></Progress>
 
-            <div className="col-span-full flex justify-between">
+            <div className="col-span-full flex flex-row-reverse justify-between">
+              <PrimaryButton padding="px-10 py-2" type="submit">
+                Save
+              </PrimaryButton>
               <SecondaryButton
                 red
                 padding="px-10 py-2"
                 onClick={(e: any) => {
+                  console.log('test 2 ')
                   e.preventDefault()
                   const closeModal = () => {
                     dispatch(toggleModal({ value: null }))
@@ -278,9 +283,6 @@ const ModifyProductModal = ({ products, productId }: ModifyProductType) => {
               >
                 Back
               </SecondaryButton>
-              <PrimaryButton padding="px-10 py-2" type="submit">
-                Save
-              </PrimaryButton>
             </div>
           </form>
         </InfoCardLarge>
