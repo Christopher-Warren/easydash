@@ -20,8 +20,9 @@ import TextArea from '../inputs/TextArea'
 import InfoCardLarge from '../cards/InfoCardLarge'
 import customPrompt from '../../utils/customPrompt'
 import Progress from '../progress/Progress'
-import usePrompt from '../../hooks/usePrompt'
+import useHasStateChanged from '../../hooks/useHasStateChanged'
 import { GET_ALL_CATEGORIES } from '../../graphql/query_vars'
+import { MODIFY_PRODUCT } from '../../graphql/mutation_vars'
 
 type ModifyProductType = {
   productId?: string
@@ -49,17 +50,15 @@ const closePromptOpts: PromptTypes = {
 const ModifyProductModal = ({ products, productId }: ModifyProductType) => {
   const { refetch } = products
   const { data } = useQuery<CategoryTypes>(GET_ALL_CATEGORIES)
+  const [modifyProduct] = useMutation(MODIFY_PRODUCT)
 
   const [selectedProduct] = products.data.products.filter(
     (val: any, index: any) => val._id === productId,
   )
+  // Global state
+  const dispatch = useAppDispatch()
 
-  const [selectedCategory, setSelectedCategory] = useState(0)
-  const [newCategoryInput, setNewCategoryInput] = useState<any>('')
-  const [newSubCategoryInput, setNewSubCategoryInput] = useState<any>('')
-  // State for Form Data
-  // When a product is selected, state will initialize
-  // to its data
+  // Form state
   const [name, setName] = useState(selectedProduct.name)
   const [category, setCategory] = useState(selectedProduct.category.name)
   const [subcategory, setSubcategory] = useState(
@@ -69,10 +68,19 @@ const ModifyProductModal = ({ products, productId }: ModifyProductType) => {
   const [price, setPrice] = useState(selectedProduct.price)
   const [stock, setStock] = useState(selectedProduct.stock)
 
-  // State to track upload progress
+  const [newCategoryInput, setNewCategoryInput] = useState<any>('')
+  const [newSubCategoryInput, setNewSubCategoryInput] = useState<any>('')
+
   const [progress, setProgress] = useState(0)
 
-  const dispatch = useAppDispatch()
+  const hasChanged = useHasStateChanged([
+    name,
+    category,
+    subcategory,
+    description,
+    price,
+    stock,
+  ])
 
   const renderCategoryOptions = () => {
     return data?.getAllCategories.map((category: any, index: number) => {
@@ -96,12 +104,63 @@ const ModifyProductModal = ({ products, productId }: ModifyProductType) => {
     })
   }
 
-  console.log(category, subcategory)
+  let selectedImgs: any[] = []
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    // • Solve error
+    // • handle images
+    // • make component for createProduct
+
+    e.preventDefault()
+    modifyProduct({
+      variables: {
+        _id: productId,
+        name,
+        category: newCategoryInput ? newCategoryInput : category,
+        subcategory: newSubCategoryInput ? newSubCategoryInput : subcategory,
+        description,
+        price,
+        stock,
+      },
+    }).then(async ({ data }) => {
+      const formData = new FormData()
+      const fileInput = document.getElementById('file_input') as any
+      const images = fileInput && Object.values(fileInput.files)
+
+      images.forEach((file: any) => {
+        formData.append('photos', file)
+      })
+
+      await axios
+        .post('/api/image', formData, {
+          headers: {
+            productid: data.modifyProduct._id,
+          },
+          onUploadProgress: (prog) => {
+            setProgress((prog.loaded / prog.total) * 100)
+          },
+        })
+        .then(async () => {
+          if (selectedImgs.length > 0) {
+            await axios.post('/api/image/delete', selectedImgs, {
+              headers: {
+                productid: selectedProduct._id,
+              },
+            })
+          }
+        })
+        .then(() => {
+          dispatch(toggleModal({ value: null }))
+          refetch()
+          dispatch(addError('Product successfully changed.'))
+        })
+    })
+  }
 
   return (
     <ModalContainer
       size="max-w-3xl"
-      //   hasChanges={hasChanges}
+      hasChanged={hasChanged}
       opts={closePromptOpts}
     >
       <div className="w-full left-0 z-30 modal-anims  transition-all duration-100">
@@ -111,7 +170,7 @@ const ModifyProductModal = ({ products, productId }: ModifyProductType) => {
           <form
             id="newProductForm"
             className="grid grid-cols-4  gap-10"
-            // onSubmit={handleFormSubmit}
+            onSubmit={handleFormSubmit}
           >
             <TextInput
               autoFocus
@@ -126,7 +185,7 @@ const ModifyProductModal = ({ products, productId }: ModifyProductType) => {
             <div className="md:col-span-2 col-span-full transition-all duration-100">
               <SelectPrimary
                 value={category}
-                onChange={(e: React.FormEvent<HTMLSelectElement>) => {
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                   const defaultSubcategory = data?.getAllCategories.filter(
                     (category) => category.name === e.currentTarget.value,
                   )[0]?.subcategories[0]?.name
@@ -158,7 +217,7 @@ const ModifyProductModal = ({ products, productId }: ModifyProductType) => {
             <div className="  md:col-span-2 col-span-full">
               <SelectPrimary
                 value={subcategory}
-                onChange={(e: React.FormEvent<HTMLSelectElement>) => {
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                   setSubcategory(e.currentTarget.value)
                 }}
                 label="Subcategory"
@@ -209,18 +268,18 @@ const ModifyProductModal = ({ products, productId }: ModifyProductType) => {
                 padding="px-10 py-2"
                 onClick={(e: any) => {
                   e.preventDefault()
-                  const closeToggle = () => {
+                  const closeModal = () => {
                     dispatch(toggleModal({ value: null }))
                   }
 
-                  //   if (hasChanges) customPrompt(closePromptOpts, closeToggle)
-                  //   if (!hasChanges) closeToggle()
+                  if (hasChanged) customPrompt(closePromptOpts, closeModal)
+                  if (!hasChanged) closeModal()
                 }}
               >
                 Back
               </SecondaryButton>
               <PrimaryButton padding="px-10 py-2" type="submit">
-                {selectedProduct ? 'Save' : 'Create'}
+                Save
               </PrimaryButton>
             </div>
           </form>

@@ -5,14 +5,12 @@ interface CustomPrompt {
   cancel: string
 }
 
-const customPrompt = (options: CustomPrompt, action: any) => {
-  // window.confirm(message)
+const customPrompt = (options: CustomPrompt, action: () => void) => {
   const container = document.createElement('div')
   container.id = 'prompt'
   container.className =
     'absolute z-50 left-0 top-0 flex w-full h-full bg-black/50  justify-center items-center px-2'
 
-  // and give it some content
   const newContent = document.createElement('div')
   newContent.className =
     'bg-gray-50  rounded-md text-gray-900 modal py-3 px-5 w-96 text-center text-xl  font-semibold shadow-lg fixed '

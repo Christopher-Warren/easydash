@@ -20,7 +20,7 @@ import TextArea from '../inputs/TextArea'
 import InfoCardLarge from '../cards/InfoCardLarge'
 import customPrompt from '../../utils/customPrompt'
 import Progress from '../progress/Progress'
-import usePrompt from '../../hooks/usePrompt'
+import usePrompt from '../../hooks/useHasStateChanged'
 import { CREATE_PRODUCT, MODIFY_PRODUCT } from '../../graphql/mutation_vars'
 import { GET_ALL_CATEGORIES } from '../../graphql/query_vars'
 
@@ -116,10 +116,10 @@ const NewProductModal = ({
 
   console.log(data.getAllCategories.name)
 
-  const hasChanged = usePrompt(
-    [name, price, stock, description, selectedCategory],
-    selectedProduct,
-  )
+  // const hasChanged = usePrompt(
+  //   [name, price, stock, description, selectedCategory],
+  //   selectedProduct,
+  // )
 
   // Event Handlers
   const handleFileOnChange = (e: any) => {
@@ -427,7 +427,7 @@ const NewProductModal = ({
   return (
     <ModalContainer
       size="max-w-3xl"
-      hasChanges={hasChanges}
+      hasChanged={hasChanges}
       opts={closePromptOpts}
     >
       <div className="w-full left-0 z-30 modal-anims  transition-all duration-100">

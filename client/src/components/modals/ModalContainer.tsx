@@ -9,10 +9,10 @@ type ModalProps = {
   children: any
   size: any
   opts: any
-  hasChanges?: any
+  hasChanged?: boolean
 }
 
-const ModalContainer = ({ children, size, opts, hasChanges }: ModalProps) => {
+const ModalContainer = ({ children, size, opts, hasChanged }: ModalProps) => {
   const dispatch = useAppDispatch()
 
   return (
@@ -20,13 +20,13 @@ const ModalContainer = ({ children, size, opts, hasChanges }: ModalProps) => {
       className="bg-black bg-opacity-20 fixed top-0  h-screen w-full z-20 lg:pl-20 overflow-y-scroll transition-opacity duration-200"
       id="overlay"
       onClick={(e: any) => {
-        const closeToggle = () => {
+        const closeModal = () => {
           dispatch(toggleModal({ value: null }))
         }
 
         if (e.target.id === 'overlay') {
-          if (hasChanges) customPrompt(opts, closeToggle)
-          if (!hasChanges) closeToggle()
+          if (hasChanged) customPrompt(opts, closeModal)
+          if (!hasChanged) closeModal()
         }
       }}
     >

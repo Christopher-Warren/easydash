@@ -246,7 +246,7 @@ module.exports = {
       subcategory: updateSubcat,
     }
   },
-  modifyProduct: async ({ productInput }, { isAdmin }) => {
+  modifyProduct: async ({ productInput, sessionExpired }, { isAdmin }) => {
     if (sessionExpired) throw new Error('Session expired')
     if (!isAdmin) throw new Error('You do not have permission')
 
@@ -259,9 +259,7 @@ module.exports = {
     if (productInput.subcategory === 'new-subcategory')
       throw new Error(`Subcategory "new-subcategory" is unavailible`)
 
-    // • need to delete modified product ID from old categories and data
-    // • need to delete any categories/subcategories that do not have
-    //   any products
+    console.log(productInput)
 
     normalizeInputs(productInput)
     const { _id: ID } = productInput
@@ -369,19 +367,39 @@ module.exports = {
         (product) => product.toString() !== ID,
       )
     }
-    existantCategory && existantCategory.save()
-    existantSubcategory && existantSubcategory.save()
 
-    oldCategory.save()
-    oldSubcategory.save()
+    try {
+      if (existantCategory) {
+        if (existantCategory._id.toString() === oldCategory._id.toString()) {
+          return
+        }
 
-    modifiedProduct.save()
+        await existantCategory.save()
+      }
 
-    // Remove categories that have no products
+      if (existantSubcategory) {
+        if (
+          existantSubcategory._id.toString() === oldSubcategory._id.toString()
+        ) {
+          return
+        }
 
+        await existantSubcategory.save()
+      }
+
+      await oldCategory.save()
+      await oldSubcategory.save()
+
+      await modifiedProduct.save()
+
+      // Remove categories that have no products
+    } catch (error) {
+      console.log(error)
+    }
     const finalProduct = await Product.findById(ID)
       .populate('category')
       .populate('subcategory')
+
     return finalProduct
   },
   deleteProducts: async ({ productIds }, { isAdmin }) => {
