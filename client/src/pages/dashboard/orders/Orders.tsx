@@ -1,4 +1,4 @@
-import { gql, useMutation, QueryResult } from '@apollo/client'
+import { useMutation, QueryResult } from '@apollo/client'
 
 import PageWrapper from '../../../components/PageWrapper'
 import PrimaryButton from '../../../components/buttons/PrimaryButton'

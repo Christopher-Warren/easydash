@@ -1,4 +1,4 @@
-import { useQuery, gql } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import { useParams } from 'react-router-dom'
 import SecondaryButton from '../../../components/buttons/SecondaryButton'
 import InfoCardLarge from '../../../components/cards/InfoCardLarge'
@@ -8,6 +8,7 @@ import { useHistory } from 'react-router-dom'
 import LoadingSpinner from '../../../components/LoadingSpinner'
 import InfoCardSmall from '../../../components/cards/InfoCardSmall'
 import TableCard from '../../../components/cards/TableCard'
+import { GET_ORDER } from '../../../graphql/query_vars'
 
 function ViewOrder() {
   let { id }: any = useParams()
@@ -15,50 +16,7 @@ function ViewOrder() {
   const history = useHistory()
 
   const { data: { getOrder: order } = {}, loading, error } = useQuery(
-    gql`
-      query getOrder($input: ID!) {
-        getOrder(input: $input) {
-          _id
-          orderNumber
-          total
-          products {
-            qty
-            sum
-            product {
-              _id
-              name
-              price
-              images
-            }
-          }
-          status {
-            paid
-            processed
-            fulfilled
-          }
-          billingInfo {
-            firstName
-            lastName
-            country
-            state
-            city
-            zipcode
-            address
-            address2
-          }
-          shippingInfo {
-            firstName
-            lastName
-            country
-            state
-            city
-            zipcode
-            address
-            address2
-          }
-        }
-      }
-    `,
+    GET_ORDER,
     {
       variables: {
         input: id,

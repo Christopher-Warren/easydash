@@ -1,48 +1,7 @@
-import { useQuery, gql } from '@apollo/client'
-
 import PageWrapper from '../../components/PageWrapper'
 import InfoCard from '../../components/cards/InfoCardSmall'
 
 const Home = ({ userId }: any) => {
-  const { data, loading, error } = useQuery(gql`
-    query getCategories {
-      products {
-        name
-      }
-    }
-  `)
-
-  /* <p className="bg-white border border-gray-200 rounded-md p-2">
-        hello, world
-      </p> */
-
-  // <div className="grid grid-cols-10 gap-5 my-10">
-  //   <div className="col-span-4">
-  //     <InfoCard>
-  //       <h1>Sales</h1>
-  //       <span className="text-5xl">$1000</span>
-  //     </InfoCard>
-  //   </div>
-  //   <div className="bg-blue-500 col-span-4 min-h-full">Orders</div>
-  //   <div className="bg-blue-500 col-span-2 row-span-2">
-  // <ol className="con">
-  //   Activity
-  //   <li>item1</li>
-  //   <li>item1</li>
-  //   <li>item1</li>
-  //   <li>item1</li>
-  //   <li>item1</li>
-  //   <li>item1</li>
-  //   <li>item1</li>
-  //   <li>item1</li>
-  //   <li>item1</li>
-  //   <li>item1</li>
-  // </ol>
-  //   </div>
-  //   <div className="bg-blue-500 col-span-8">Fullfill, payments, stock</div>
-  //   <div className="bg-blue-500 col-span-8">item</div>
-  // </div>
-
   return (
     <PageWrapper>
       <h1 className="text-4xl font-medium">Hello, {userId}</h1>

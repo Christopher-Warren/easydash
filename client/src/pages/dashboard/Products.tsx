@@ -1,4 +1,4 @@
-import { gql, useMutation, QueryResult } from '@apollo/client'
+import { useMutation, QueryResult } from '@apollo/client'
 
 import PageWrapper from '../../components/PageWrapper'
 import PrimaryButton from '../../components/buttons/PrimaryButton'
@@ -17,15 +17,12 @@ import customPrompt from '../../utils/customPrompt'
 import SelectInput from '../../components/inputs/SelectPrimary'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import SelectFilter from '../../components/buttons/SelectFilter'
+import { DELETE_PRODUCTS } from '../../graphql/mutation_vars'
 
 const Products = ({ products }: { products: QueryResult }) => {
   const { data, loading, error, refetch, networkStatus } = products
 
-  const [deleteProducts] = useMutation(gql`
-    mutation deleteProducts($productIds: [ID]!) {
-      deleteProducts(productIds: $productIds)
-    }
-  `)
+  const [deleteProducts] = useMutation(DELETE_PRODUCTS)
 
   const dispatch = useAppDispatch()
 

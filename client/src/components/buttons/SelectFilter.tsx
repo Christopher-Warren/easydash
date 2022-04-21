@@ -1,11 +1,15 @@
-import { gql, useQuery } from '@apollo/client'
-import { useEffect, useRef, useState } from 'react'
+import { useQuery } from '@apollo/client'
+import { useState } from 'react'
 import SelectOption from './SelectOption'
 
 // Handle errors
 import { toggleModal } from '../../redux/modal/modalSlice'
 import { addError } from '../../redux/error/errorSlice'
 import { useAppDispatch } from '../../redux/hooks'
+import {
+  GET_ALL_CATEGORIES,
+  GET_ALL_SUBCATEGORIES,
+} from '../../graphql/query_vars'
 
 const SelectFilter = ({
   options,
@@ -20,27 +24,9 @@ const SelectFilter = ({
 }: any) => {
   const [hide, setHide] = useState(true)
 
-  const { data } = useQuery(gql`
-    query getAllCategories {
-      getAllCategories {
-        name
-        _id
-        subcategories {
-          name
-          _id
-        }
-      }
-    }
-  `)
+  const { data } = useQuery(GET_ALL_CATEGORIES)
 
-  const { data: subcategories } = useQuery(gql`
-    query getAllSubcategories {
-      getAllSubcategories {
-        name
-        _id
-      }
-    }
-  `)
+  const { data: subcategories } = useQuery(GET_ALL_SUBCATEGORIES)
 
   // State for options
 

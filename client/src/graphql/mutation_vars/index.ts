@@ -1,5 +1,24 @@
 import { gql } from '@apollo/client'
 
+// Authentication
+export const CREATE_USER = gql`
+  mutation CreateAccount($email: String!, $password: String!) {
+    createUser(userInput: { email: $email, password: $password }) {
+      email
+    }
+  }
+`
+
+export const USER_LOGIN = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      email
+      userId
+      role
+    }
+  }
+`
+
 export const CREATE_PRODUCT = gql(`
 mutation createProduct(
   $name: String!
@@ -66,5 +85,11 @@ export const MODIFY_PRODUCT = gql`
         _id
       }
     }
+  }
+`
+
+export const DELETE_PRODUCTS = gql`
+  mutation deleteProducts($productIds: [ID]!) {
+    deleteProducts(productIds: $productIds)
   }
 `

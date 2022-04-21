@@ -1,4 +1,4 @@
-import { ApolloClient, gql, HttpLink, from } from '@apollo/client/'
+import { ApolloClient, HttpLink, from } from '@apollo/client/'
 import { onError } from '@apollo/client/link/error'
 
 import { cache, isLoggedInVar, isAdminVar } from './cache'
@@ -6,13 +6,9 @@ import { cache, isLoggedInVar, isAdminVar } from './cache'
 import { addError } from '../redux/error/errorSlice'
 
 import { store } from '../redux/store'
+import { EXTEND_TYPE_DEFS } from './client_extension'
 
-export const typeDefs = gql`
-  extend type Query {
-    isLoggedIn: Boolean!
-    cartItems: [ID!]!
-  }
-`
+export const typeDefs = EXTEND_TYPE_DEFS
 
 const httpLink = new HttpLink({
   uri: '/graphql',

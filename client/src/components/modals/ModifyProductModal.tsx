@@ -1,8 +1,8 @@
 import ModalContainer from './ModalContainer'
 
-import { useQuery, gql, useMutation, QueryResult } from '@apollo/client'
+import { useQuery, useMutation, QueryResult } from '@apollo/client'
 
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment, useState } from 'react'
 
 import { toggleModal } from '../../redux/modal/modalSlice'
 import { addError } from '../../redux/error/errorSlice'
@@ -11,7 +11,6 @@ import { useAppDispatch } from '../../redux/hooks'
 import axios from 'axios'
 import PrimaryButton from '../buttons/PrimaryButton'
 
-// initial state for images
 import img from '../../assets/feather/image.svg'
 import SecondaryButton from '../buttons/SecondaryButton'
 import SelectPrimary from '../inputs/SelectPrimary'
@@ -71,6 +70,11 @@ const ModifyProductModal = ({ products, productId }: ModifyProductType) => {
   const [newCategoryInput, setNewCategoryInput] = useState<any>('')
   const [newSubCategoryInput, setNewSubCategoryInput] = useState<any>('')
 
+  // State to manage deletion of images
+  const [selectedImgs, setSelectedImgs] = useState<any>([])
+  // Temp preview image
+  const [imgUrls, setImgUrls] = useState<any[]>(selectedProduct.images)
+
   const [progress, setProgress] = useState(0)
 
   const hasChanged = useHasStateChanged([
@@ -104,7 +108,71 @@ const ModifyProductModal = ({ products, productId }: ModifyProductType) => {
     })
   }
 
-  let selectedImgs: any[] = []
+  const renderImagePreview = () => {
+    if (!imgUrls) return
+
+    const images = imgUrls.map((url, index) => {
+      return (
+        <Fragment key={index}>
+          <img
+            className={` h-20 w-20  object-cover ${
+              selectedImgs.includes(url) && 'border-red-500 border-8'
+            }`}
+            onClick={(e) => {
+              if (selectedImgs.includes(url)) {
+                setSelectedImgs((prev: any) => {
+                  return prev.filter((val: any) => val !== url)
+                })
+              } else {
+                setSelectedImgs([...selectedImgs, url])
+              }
+            }}
+            src={url}
+            alt="img"
+          ></img>
+        </Fragment>
+      )
+    })
+
+    return (
+      <div className="md:col-span-2 col-span-full row-span-6 grid grid-cols-12 h-fit">
+        <img
+          className="col-span-9 w-full h-64 object-cover"
+          src={imgUrls[0] || img}
+          alt="img"
+        ></img>
+        <div className="col-span-3 h-64  overflow-y-auto overflow-x-none ">
+          {images}
+        </div>
+
+        <input
+          className="col-span-full my-4 file:mr-4 file:py-2 file:px-4
+              file:rounded-full file:border-0 w-full 
+              file:text-sm file:font-semibold 
+              file:bg-purple-50 file:text-purple-700
+              hover:file:bg-purple-100
+              dark:file:bg-purple-600 dark:file:text-purple-50
+              "
+          id="file_input"
+          type="file"
+          multiple
+          accept=".jpg,.gif,.jpeg,.png"
+          onChange={handleFileOnChange}
+        ></input>
+      </div>
+    )
+  }
+
+  // Event Handlers
+  const handleFileOnChange = (e: any) => {
+    const fileInput = document.getElementById('file_input') as any
+    const images = fileInput && Object.values(fileInput.files)
+
+    // TODO: Make an area for images selection
+    const newImages = images.map((image: any) => {
+      return URL.createObjectURL(image)
+    })
+  }
 
   const handleFormSubmit = (e: React.FormEvent) => {
     // • Solve error
@@ -241,7 +309,7 @@ const ModifyProductModal = ({ products, productId }: ModifyProductType) => {
               ></TextInput>
             </div>
 
-            {/* {renderImagePreview()} */}
+            {renderImagePreview()}
 
             <TextInput
               containerClassName="col-span-2 md:col-span-1"

@@ -12,3 +12,91 @@ export const GET_ALL_CATEGORIES = gql`
     }
   }
 `
+
+export const GET_ALL_SUBCATEGORIES = gql`
+  query getAllSubcategories {
+    getAllSubcategories {
+      name
+      _id
+    }
+  }
+`
+
+export const GET_PRODUCTS = gql`
+  query getProducts($input: GetProductInput) {
+    products(input: $input) {
+      name
+      images
+      category {
+        name
+      }
+      subcategory {
+        name
+      }
+      price
+      stock
+      description
+      _id
+    }
+  }
+`
+
+export const GET_ALL_ORDERS = gql`
+  query getAllOrders($input: GetAllOrdersInput) {
+    getAllOrders(input: $input) {
+      _id
+      orderNumber
+      total
+      status {
+        processed
+        paid
+        fulfilled
+      }
+    }
+  }
+`
+
+export const GET_ORDER = gql`
+  query getOrder($input: ID!) {
+    getOrder(input: $input) {
+      _id
+      orderNumber
+      total
+      products {
+        qty
+        sum
+        product {
+          _id
+          name
+          price
+          images
+        }
+      }
+      status {
+        paid
+        processed
+        fulfilled
+      }
+      billingInfo {
+        firstName
+        lastName
+        country
+        state
+        city
+        zipcode
+        address
+        address2
+      }
+      shippingInfo {
+        firstName
+        lastName
+        country
+        state
+        city
+        zipcode
+        address
+        address2
+      }
+    }
+  }
+`

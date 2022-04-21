@@ -8,58 +8,23 @@ import Products from './dashboard/Products'
 import { cache, isLoggedInVar, isAdminVar } from '../graphql/cache'
 import Modals from './modals/Modals'
 
-import { useQuery, gql } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import Orders from './dashboard/orders/Orders'
 import PageWrapper from '../components/PageWrapper'
 import InfoCardLarge from '../components/cards/InfoCardLarge'
 import SecondaryButton from '../components/buttons/SecondaryButton'
 import ViewOrder from './dashboard/orders/ViewOrder'
+import { GET_ALL_ORDERS, GET_PRODUCTS } from '../graphql/query_vars'
 
 const Dashboard = ({ logout, userId }: any) => {
   const history = useHistory()
-  const products = useQuery(
-    gql`
-      query getProducts($input: GetProductInput) {
-        products(input: $input) {
-          name
-          images
-          category {
-            name
-          }
-          subcategory {
-            name
-          }
-          price
-          stock
-          description
-          _id
-        }
-      }
-    `,
-    {
-      notifyOnNetworkStatusChange: true,
-    },
-  )
+  const products = useQuery(GET_PRODUCTS, {
+    notifyOnNetworkStatusChange: true,
+  })
 
-  const orders = useQuery(
-    gql`
-      query getAllOrders($input: GetAllOrdersInput) {
-        getAllOrders(input: $input) {
-          _id
-          orderNumber
-          total
-          status {
-            processed
-            paid
-            fulfilled
-          }
-        }
-      }
-    `,
-    {
-      notifyOnNetworkStatusChange: true,
-    },
-  )
+  const orders = useQuery(GET_ALL_ORDERS, {
+    notifyOnNetworkStatusChange: true,
+  })
 
   return (
     <>

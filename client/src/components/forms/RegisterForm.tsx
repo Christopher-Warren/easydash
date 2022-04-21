@@ -4,19 +4,14 @@ import PrimaryButton from '../buttons/PrimaryButton'
 import FormInput from '../LoginInput'
 
 import { validatePassword } from '../../utils/validatePassword'
-import { useMutation, gql } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import LoadingSpinner from '../LoadingSpinner'
+import { CREATE_USER } from '../../graphql/mutation_vars'
 
 const RegisterForm = () => {
   const [error, setError] = useState<string[]>([])
 
-  const [createUser, { data, loading }] = useMutation(gql`
-    mutation CreateAccount($email: String!, $password: String!) {
-      createUser(userInput: { email: $email, password: $password }) {
-        email
-      }
-    }
-  `)
+  const [createUser, { data, loading }] = useMutation(CREATE_USER)
 
   return (
     <form
