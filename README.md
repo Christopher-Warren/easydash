@@ -3,20 +3,38 @@
 #### - Backend:
 
 - [ ] Setup a demo account with **_view only_** privileges
-- [ ] Complete the datastructure for products stored in db (Product must contain a price, **_NUMBER IN STOCK_**, etc)
-  - [x] Add url from S3
-- [ ] Create an endpoint to handle product **_changes_**
-  - For product **name**, **price**, **category**, **subcategory**
-  - Optional: A "View Changes History"
+- [x] Require authentication for **Mutations** that modify sensative data
+- [x] Require authentication for **Queries** that contain sensative store information. e.g. _All Orders_
 - [x] Integrate Amazon S3 to allow image uploads
       **For brevity, we will be using REST instead of GraphQL.**
-- [ ] Save returned Amazon S3 Urls to appropriate mongo product, must
-      use promises to achieve this
-  - [ ] Setup credentials
+- [x] Save returned Amazon S3 Urls to appropriate mongo product, must
+      use promises to achieve this cleanly
+
+  - [x] Setup credentials
     - [x] Enable plublic read access
-    - [ ] Heroku environment variables
+    - [x] Heroku environment variables
     - [x] Local environment
   - [x] Connect to bucket
+
+  - [ ] Complete **Home Page**
+
+  - [ ] Integrate _"Weekly sales"_
+  - [ ] Show _unfulfilled orders, link to fulfillment_
+  - [ ] Integrate _"Weekly sales"_
+  - [ ] Integrate "Activity" panel
+
+  - [ ] **Endpoints**
+
+    - [x] CRUD operations for products
+      - [x] Create, read, update, delete
+      - [x] _Filter_ mongodb
+      - [x] _Search_ search
+    - [x] CRUD operations for orders
+      - [x] Create, read, update, delete
+      - [x] _Filter_ mongodb
+      - [x] _Search_ search
+    - [x] _Filter_ mongodb
+    - [x] _Search_ search
 
 #### - Frontend:
 
@@ -25,23 +43,20 @@
   - [ ] Integrate _"Weekly sales"_
   - [ ] Show _unfulfilled orders, link to fulfillment_
   - [ ] Integrate _"Weekly sales"_
-  - Optional: Integrate "Activity" panel
+  - [ ] Integrate "Activity" panel
 
-- [ ] Complete **Products Page**
+- [x] Complete **Products Page**
 
-  - [ ] Complete **Product List Item Component**
+  - [x] Complete **Product List Item Component**
     - Component must be _reusable_ and _efficient_
-    - [ ] Add **"Edit Product"** button to product list item, and flesh-out UI
-  - [ ] Implement **"Create new Product"** button, and UI
+    - [x] Add **"Edit Product"** button to product list item, and flesh-out UI
+  - [x] Implement **"Create new Product"** button, and UI
     - Must utilize image upload to Amazon S3, adhering to our product creation _flow_
-  - [ ] Add _Filter_ option
-  - [ ] Optional: Add _Search_ option
+  - [x] Implement _Filter_ feature
+  - [x] Implement _Search_ feature
 
-- [ ] Complete **Orders Page**
-  - This page will mainly serve as a method to allow shop owner to do a few things, including:
-    - View unfulfilled orders
-    - Fulfill orders
-    - Send user order status
-- [ ] Complete **Users Page**
+- [ ] Complete **Orders Pages**
+
+- [ ] Complete **Users Pages**
 
 * [ ] Optional: Complete **Settings Page**
