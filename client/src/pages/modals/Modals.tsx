@@ -1,6 +1,6 @@
 import { useAppSelector } from '../../redux/hooks'
 
-import NewProductModal from '../../components/modals/NewProductModal'
+import CreateProductModal from '../../components/modals/CreateProductModal'
 import { QueryResult } from '@apollo/client'
 import ModifyProductModal from '../../components/modals/ModifyProductModal'
 
@@ -21,7 +21,7 @@ const Modals = ({ products }: { products: QueryResult }) => {
 
   switch (modal.value) {
     case ModalFormIDs.newProduct:
-      return <NewProductModal products={products} />
+      return <CreateProductModal products={products} />
 
     case ModalFormIDs.editProduct:
       return (
