@@ -231,130 +231,125 @@ const ModifyProductModal = ({ products, productId }: ModifyProductType) => {
       size="max-w-3xl"
       hasChanged={hasChanged}
       opts={closePromptOpts}
+      title="Edit Product"
     >
-      <div className="w-full left-0 z-30 modal-anims  transition-all duration-100">
-        <InfoCardLarge
-          title={productId ? 'Edit Product' : 'Create a New Product'}
-        >
-          <form
-            id="newProductForm"
-            className="grid grid-cols-4  gap-10"
-            onSubmit={handleFormSubmit}
+      <form
+        id="newProductForm"
+        className="grid grid-cols-4 gap-10"
+        onSubmit={handleFormSubmit}
+      >
+        <TextInput
+          autoFocus
+          placeholder="Name"
+          id="name"
+          containerClassName="col-span-full"
+          // className="col-span-full self-center"
+          value={name}
+          onChange={(e) => setName(e.currentTarget.value)}
+        ></TextInput>
+
+        <div className="md:col-span-2 col-span-full transition-all duration-100">
+          <SelectPrimary
+            value={category}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              const defaultSubcategory = data?.getAllCategories.filter(
+                (category) => category.name === e.currentTarget.value,
+              )[0]?.subcategories[0]?.name
+
+              setCategory(e.currentTarget.value)
+
+              if (!subcategory && defaultSubcategory) {
+                setSubcategory(defaultSubcategory)
+              }
+              if (!e.currentTarget.value) setSubcategory('')
+            }}
+            label="Category"
           >
-            <TextInput
-              autoFocus
-              placeholder="Name"
-              id="name"
-              containerClassName="col-span-full"
-              // className="col-span-full self-center"
-              value={name}
-              onChange={(e) => setName(e.currentTarget.value)}
-            ></TextInput>
+            {renderCategoryOptions()}
+            <option value="">New Category</option>
+          </SelectPrimary>
 
-            <div className="md:col-span-2 col-span-full transition-all duration-100">
-              <SelectPrimary
-                value={category}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                  const defaultSubcategory = data?.getAllCategories.filter(
-                    (category) => category.name === e.currentTarget.value,
-                  )[0]?.subcategories[0]?.name
+          <TextInput
+            containerClassName="mt-5"
+            placeholder="New category"
+            value={newCategoryInput}
+            onChange={(e) => setNewCategoryInput(e.currentTarget.value)}
+            disabled={category !== ''}
+            required
+          ></TextInput>
+        </div>
 
-                  setCategory(e.currentTarget.value)
+        {/* Subcategory */}
+        <div className="  md:col-span-2 col-span-full">
+          <SelectPrimary
+            value={subcategory}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              setSubcategory(e.currentTarget.value)
+            }}
+            label="Subcategory"
+          >
+            {renderSubcategoryOptions()}
+            <option
+              value=""
+              onClick={(e) => setSubcategory(e.currentTarget.value)}
+            >
+              New Subcategory
+            </option>
+          </SelectPrimary>
+          <TextInput
+            containerClassName="mt-5"
+            placeholder="New subcategory"
+            value={newSubCategoryInput}
+            onChange={(e) => setNewSubCategoryInput(e.currentTarget.value)}
+            disabled={subcategory !== ''}
+            required
+          ></TextInput>
+        </div>
 
-                  if (!subcategory && defaultSubcategory) {
-                    setSubcategory(defaultSubcategory)
-                  }
-                  if (!e.currentTarget.value) setSubcategory('')
-                }}
-                label="Category"
-              >
-                {renderCategoryOptions()}
-                <option value="">New Category</option>
-              </SelectPrimary>
+        {renderImagePreview()}
 
-              <TextInput
-                containerClassName="mt-5"
-                placeholder="New category"
-                value={newCategoryInput}
-                onChange={(e) => setNewCategoryInput(e.currentTarget.value)}
-                disabled={category !== ''}
-                required
-              ></TextInput>
-            </div>
+        <TextInput
+          containerClassName="col-span-2 md:col-span-1"
+          placeholder="Price"
+          value={price}
+          onChange={(e) => setPrice(parseInt(e.currentTarget.value))}
+        ></TextInput>
+        <TextInput
+          containerClassName="col-span-2 md:col-span-1"
+          placeholder="Stock"
+          value={stock}
+          onChange={(e) => setStock(parseInt(e.currentTarget.value))}
+        ></TextInput>
+        <TextArea
+          placeholder="Description"
+          containerClassName="row-span-6 md:col-span-2 col-span-full"
+          value={description}
+          onChange={(e) => setDescription(e.currentTarget.value)}
+        ></TextArea>
+        <Progress className="col-span-full" progress={progress}></Progress>
 
-            {/* Subcategory */}
-            <div className="  md:col-span-2 col-span-full">
-              <SelectPrimary
-                value={subcategory}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                  setSubcategory(e.currentTarget.value)
-                }}
-                label="Subcategory"
-              >
-                {renderSubcategoryOptions()}
-                <option
-                  value=""
-                  onClick={(e) => setSubcategory(e.currentTarget.value)}
-                >
-                  New Subcategory
-                </option>
-              </SelectPrimary>
-              <TextInput
-                containerClassName="mt-5"
-                placeholder="New subcategory"
-                value={newSubCategoryInput}
-                onChange={(e) => setNewSubCategoryInput(e.currentTarget.value)}
-                disabled={subcategory !== ''}
-                required
-              ></TextInput>
-            </div>
+        <div className="col-span-full flex flex-row-reverse justify-between">
+          <PrimaryButton padding="px-10 py-2" type="submit">
+            Save
+          </PrimaryButton>
+          <SecondaryButton
+            red
+            padding="px-10 py-2"
+            onClick={(e: any) => {
+              console.log('test 2 ')
+              e.preventDefault()
+              const closeModal = () => {
+                dispatch(toggleModal({ value: null }))
+              }
 
-            {renderImagePreview()}
-
-            <TextInput
-              containerClassName="col-span-2 md:col-span-1"
-              placeholder="Price"
-              value={price}
-              onChange={(e) => setPrice(parseInt(e.currentTarget.value))}
-            ></TextInput>
-            <TextInput
-              containerClassName="col-span-2 md:col-span-1"
-              placeholder="Stock"
-              value={stock}
-              onChange={(e) => setStock(parseInt(e.currentTarget.value))}
-            ></TextInput>
-            <TextArea
-              placeholder="Description"
-              containerClassName="row-span-6 md:col-span-2 col-span-full"
-              value={description}
-              onChange={(e) => setDescription(e.currentTarget.value)}
-            ></TextArea>
-            <Progress className="col-span-full" progress={progress}></Progress>
-
-            <div className="col-span-full flex flex-row-reverse justify-between">
-              <PrimaryButton padding="px-10 py-2" type="submit">
-                Save
-              </PrimaryButton>
-              <SecondaryButton
-                red
-                padding="px-10 py-2"
-                onClick={(e: any) => {
-                  console.log('test 2 ')
-                  e.preventDefault()
-                  const closeModal = () => {
-                    dispatch(toggleModal({ value: null }))
-                  }
-
-                  if (hasChanged) customPrompt(closePromptOpts, closeModal)
-                  if (!hasChanged) closeModal()
-                }}
-              >
-                Back
-              </SecondaryButton>
-            </div>
-          </form>
-        </InfoCardLarge>
-      </div>
+              if (hasChanged) customPrompt(closePromptOpts, closeModal)
+              if (!hasChanged) closeModal()
+            }}
+          >
+            Back
+          </SecondaryButton>
+        </div>
+      </form>
     </ModalContainer>
   )
 }

@@ -5,12 +5,13 @@ const SecondaryButton = ({
   padding,
   id,
   red,
+  className,
 }: any) => {
   return (
     <button
       onClick={onClick}
       id={id}
-      className={`flex justify-around bg-transparent shadow border leading-relaxed tracking-wide
+      className={`flex bg-transparent shadow border leading-relaxed tracking-wide
       ${
         red
           ? 'border-red-500 focus:outline-red-500 focus:accent-red-400 hover:bg-red-500  text-red-500'
@@ -18,6 +19,7 @@ const SecondaryButton = ({
       }
        
       ${padding}
+      ${className}
         font-semibold text-md rounded  hover:text-purple-700 
 
         hover:shadow-md focus:shadow-md  transition-colors`}

@@ -68,7 +68,6 @@ const Orders = ({ products, orders }: any) => {
   }
 
   const RenderTableItems = () => {
-    console.log('rendertabke')
     if (error2) {
       console.log(error2)
     }
@@ -211,7 +210,7 @@ const Orders = ({ products, orders }: any) => {
                     w-full flex-1 
                   focus:outline-purple-500 focus:accent-purple-400 border dark:border-gray-600"
                     type="search"
-                    placeholder="Enter order number... "
+                    placeholder="Order number... "
                   ></input>
                 </div>
                 <div className="border-b border-gray-200 dark:border-gray-700 w-full absolute left-0  bottom-0 " />
@@ -327,76 +326,76 @@ const Orders = ({ products, orders }: any) => {
               </tr>
             )}
           </tbody>
-          <div className="py-3">
-            <div className="flex items-center px-4 h-full justify-between">
-              <div className="flex items-center">
-                <span className="normal-case pr-2 text-gray-400">
-                  No. of products
-                </span>
-                <SelectInput
-                  className=""
-                  containerClassName="w-12"
-                  onChange={(e: any) => {
-                    setLimit(parseInt(e.currentTarget.value))
-                    setSkip(0)
-                    console.log()
-                  }}
-                >
-                  <option>5</option>
-                  <option>10</option>
-                  <option>20</option>
-                </SelectInput>
-              </div>
+        </table>
+        <div className="py-3">
+          <div className="flex items-center px-4 h-full justify-between">
+            <div className="flex items-center">
+              <span className="normal-case pr-2 text-gray-400">
+                No. of products
+              </span>
+              <SelectInput
+                className=""
+                containerClassName="w-12"
+                onChange={(e: any) => {
+                  setLimit(parseInt(e.currentTarget.value))
+                  setSkip(0)
+                  console.log()
+                }}
+              >
+                <option>5</option>
+                <option>10</option>
+                <option>20</option>
+              </SelectInput>
+            </div>
 
-              <div className="flex ">
-                <button
-                  disabled={skip === 0}
-                  onClick={(e: any) => {
-                    setSkip((prev: number) => prev - limit)
-                  }}
-                  className="p-0.5 active:outline hover:outline hover:outline-gray-500 disabled:outline-transparent dark:outline-gray-600 outline-2 rounded-sm  disabled:text-gray-300 dark:disabled:text-gray-700 dark:disabled:outline-transparent"
+            <div className="flex ">
+              <button
+                disabled={skip === 0}
+                onClick={(e: any) => {
+                  setSkip((prev: number) => prev - limit)
+                }}
+                className="p-0.5 active:outline hover:outline hover:outline-gray-500 disabled:outline-transparent dark:outline-gray-600 outline-2 rounded-sm  disabled:text-gray-300 dark:disabled:text-gray-700 dark:disabled:outline-transparent"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className=""
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className=""
-                  >
-                    <polyline points="15 18 9 12 15 6"></polyline>
-                  </svg>
-                </button>
-                <button
-                  disabled={products.data?.products.length <= limit}
-                  onClick={(e: any) => {
-                    setSkip((prev: number) => prev + limit)
-                  }}
-                  className="ml-4 p-0.5 active:outline hover:outline hover:outline-gray-500 disabled:outline-transparent dark:outline-gray-600 outline-2 rounded-sm  disabled:text-gray-300 dark:disabled:text-gray-700 dark:disabled:outline-transparent"
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+              </button>
+              <button
+                disabled={products.data?.products.length <= limit}
+                onClick={(e: any) => {
+                  setSkip((prev: number) => prev + limit)
+                }}
+                className="ml-4 p-0.5 active:outline hover:outline hover:outline-gray-500 disabled:outline-transparent dark:outline-gray-600 outline-2 rounded-sm  disabled:text-gray-300 dark:disabled:text-gray-700 dark:disabled:outline-transparent"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className=""
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className=""
-                  >
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                  </svg>
-                </button>
-              </div>
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
             </div>
           </div>
-        </table>
+        </div>
       </TableCard>
     </PageWrapper>
   )

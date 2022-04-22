@@ -1,4 +1,10 @@
-const InfoCardLarge = ({ children, title, titleClassName, p }: any) => {
+const InfoCardLarge = ({
+  children,
+  title,
+  titleClassName,
+  p,
+  className,
+}: any) => {
   return (
     <div
       className={`bg-white dark:bg-gray-800 border dark:border-gray-100/25 py-7 lg:px-8 px-4  rounded-2xl shadow-xl ${p}
@@ -14,8 +20,7 @@ const InfoCardLarge = ({ children, title, titleClassName, p }: any) => {
           {title}
         </h1>
       )}
-
-      {children}
+      <div className={className}>{children}</div>
     </div>
   )
 }

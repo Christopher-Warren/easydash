@@ -1,4 +1,9 @@
-const Progress = ({ className, progress }: any) => {
+type ProgressProps = {
+  className?: string
+  progress: number
+}
+
+const Progress = ({ className, progress }: ProgressProps) => {
   return (
     <div
       className={`${className} border border-gray-300 rounded overflow-hidden ${

@@ -3,6 +3,7 @@ import { useAppSelector } from '../../redux/hooks'
 import CreateProductModal from '../../components/modals/CreateProductModal'
 import { QueryResult } from '@apollo/client'
 import ModifyProductModal from '../../components/modals/ModifyProductModal'
+import CreateOrderModal from '../../components/modals/CreateOrderModal'
 
 const NEWPRODUCTID = parseInt(Math.random().toFixed(16).split('.')[1])
 const EDITPRODUCTID = parseInt(Math.random().toFixed(16).split('.')[1])
@@ -15,8 +16,14 @@ export enum ModalFormIDs {
   newOrder = NEWORDERID,
 }
 // TODO : Look into a better way to identify different modals
+// e.g. no parseInt(Math.random().toFixed(16).split('.')[1])
 
-const Modals = ({ products }: { products: QueryResult }) => {
+type ModalDataTypes = {
+  products: QueryResult
+  orders: QueryResult
+}
+
+const Modals = ({ products, orders }: ModalDataTypes) => {
   const modal = useAppSelector((state) => state.modal)
 
   switch (modal.value) {
@@ -29,7 +36,7 @@ const Modals = ({ products }: { products: QueryResult }) => {
       )
 
     case ModalFormIDs.newOrder:
-      return <div>newOrder form</div>
+      return <CreateOrderModal orders={orders} products={products} />
 
     default:
       return null

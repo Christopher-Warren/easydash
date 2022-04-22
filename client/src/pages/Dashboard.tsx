@@ -29,7 +29,7 @@ const Dashboard = ({ logout, userId }: any) => {
   return (
     <>
       <Route path="/dashboard">
-        <Modals products={products} />
+        <Modals products={products} orders={orders} />
         <SideBar />
       </Route>
       <div className="lg:pl-20">
