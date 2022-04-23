@@ -12,10 +12,10 @@ const SelectPrimary = ({
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className={`relative ${containerClassName} `}>
+    <div className={`relative ${containerClassName} py-3.5 `}>
       <select
         id={id}
-        className={`${className} peer capitalize dark:children:text-gray-50 dark:children:bg-gray-700 bg-transparent border-b-2  border-gray-200 focus:border-purple-400  py-1.5  outline-none appearance-none w-full
+        className={`${className} peer capitalize  dark:children:text-gray-50 dark:children:bg-gray-700 bg-transparent border-b-2  border-gray-200 focus:border-purple-400   outline-none appearance-none w-full
       `}
         value={value}
         onBlur={(e) => setIsOpen(false)}
@@ -24,11 +24,11 @@ const SelectPrimary = ({
       >
         {children}
       </select>
-      <span className="text-gray-400   -my-4 mx-1 absolute top-0 left-0 text-sm peer-focus:text-purple-400">
+      <span className="text-gray-400   -my-1.5 mx-1 absolute top-0 left-0 text-sm peer-focus:text-purple-400">
         {label}
       </span>
       <div
-        className={`absolute top-0 mt-2 right-0 pointer-events-none  transition-all ${
+        className={`absolute top-0 mt-3.5 right-0 pointer-events-none  transition-all ${
           isOpen ? 'rotate-180' : 'rotate-0'
         }`}
       >

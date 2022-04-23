@@ -327,11 +327,11 @@ const Orders = ({ products, orders }: any) => {
             )}
           </tbody>
         </table>
-        <div className="py-3">
+        <div className="">
           <div className="flex items-center px-4 h-full justify-between">
             <div className="flex items-center">
               <span className="normal-case pr-2 text-gray-400">
-                No. of products
+                No. of orders
               </span>
               <SelectInput
                 className=""

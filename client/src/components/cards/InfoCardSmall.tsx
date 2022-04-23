@@ -1,21 +1,24 @@
 const InfoCardSmall = ({
   children,
   title,
-
   titleClassName,
   className,
+  altTitle,
 }: any) => {
   return (
     <div
       className={`bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-md p-3 ${className} shadow-md relative`}
     >
-      <div className="relative">
+      <div className="relative w-full">
         {title && (
-          <h1
-            className={`mb-5 text-2xl text-gray-700 dark:text-gray-50 ${titleClassName}`}
-          >
-            {title}
-          </h1>
+          <div className="flex justify-between">
+            <h1
+              className={`mb-5 text-2xl text-gray-700 dark:text-gray-50 ${titleClassName}`}
+            >
+              {title}
+            </h1>
+            {altTitle}
+          </div>
         )}
 
         {children}

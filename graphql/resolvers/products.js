@@ -13,7 +13,7 @@ module.exports = {
     const limit = input?.limit ? input.limit : 5
     const skip = input?.skip ? input.skip : 0
 
-    const sort = input?.sort ? input.sort : null
+    const sort = input?.sort ? input.sort : '_id'
     const order = input?.order ? input.order : 1
 
     const search = input?.search || null
@@ -160,6 +160,7 @@ module.exports = {
     }
 
     const products = await Product.aggregate(stages)
+    console.log(products[0].name)
 
     return products
   },

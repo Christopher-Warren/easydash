@@ -1,5 +1,5 @@
 import { QueryResult } from '@apollo/client'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ModalFormIDs } from '../../pages/modals/Modals'
 import { useAppDispatch } from '../../redux/hooks'
 import { toggleModal } from '../../redux/modal/modalSlice'
@@ -39,7 +39,7 @@ const OrderProductsTable = ({
       },
     })
   }, [refetch, limit, skip, sort, order, filter, search])
-
+  console.log('render')
   const RenderTableItems = () => {
     if (!loading && !error) {
       return data.products.map((item: any, index: any) => {
@@ -99,46 +99,60 @@ const OrderProductsTable = ({
               <div className="relative dark:text-green-200">{`$${item.price}`}</div>
             </td>
             <td className="text-right  lg:pr-8 pr-3.5 ">
-              <div className="relative text-gray-600">
+              <div
+                className="relative text-gray-600 justify-end flex"
+                onClick={(e: any) => {
+                  if (e.target.type === 'number') return
+                  const chosenQty = parseFloat(e.currentTarget.firstChild.value)
+                  setCartItems((prev: any[]) => {
+                    if (!prev.some((val) => val._id === item._id)) {
+                      return [...prev, { ...item, qty: chosenQty }]
+                    }
+                    const mappedItems = prev.map((val) => {
+                      if (val._id === item._id) {
+                        return {
+                          ...val,
+                          qty: val.qty + chosenQty,
+                        }
+                      }
+                      return val
+                    })
+                    return mappedItems
+                  })
+
+                  //
+                  // Doesn't work?
+                  // setCartItems((prev: any[]) => {
+                  //   console.log('prev', prev)
+                  //   if (!prev.some((val) => val._id === item._id)) {
+                  //     console.log('new item... adding')
+                  //     return [...prev, { ...item, qty: 1 }]
+                  //   }
+                  //   const mappedItems = prev.map((val) => {
+                  //     console.log(val.qty)
+                  //     if (val._id === item._id) {
+                  //       val.qty = val.qty + 1
+                  //     }
+                  //     console.log(val)
+                  //     return val
+                  //   })
+                  //   console.log(mappedItems)
+                  //   return mappedItems
+                  // })
+                }}
+              >
+                <input
+                  className="w-14 mr-4 pl-1 dark:bg-gray-100 rounded-sm"
+                  defaultValue={1}
+                  type="number"
+                ></input>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="30"
                   height="30"
                   viewBox="0 0 24 24"
                   fill="none"
-                  onClick={(e) => {
-                    // setCartItems((prev: any[]) => {
-                    //   if (!prev.some((val) => val._id === item._id)) {
-                    //     return [...prev, { ...item, qty: 1 }]
-                    //   }
-                    //   const mappedItems = prev.map((val) => {
-                    //     if (val._id === item._id) {
-                    //       return { ...val, qty: val.qty + 1 }
-                    //     }
-                    //     return val
-                    //   })
-                    //   return mappedItems
-                    // })
-                    // Doesn't work?
-                    // setCartItems((prev: any[]) => {
-                    //   console.log('prev', prev)
-                    //   if (!prev.some((val) => val._id === item._id)) {
-                    //     console.log('new item... adding')
-                    //     return [...prev, { ...item, qty: 1 }]
-                    //   }
-                    //   const mappedItems = prev.map((val) => {
-                    //     console.log(val.qty)
-                    //     if (val._id === item._id) {
-                    //       val.qty = val.qty + 1
-                    //     }
-                    //     console.log(val)
-                    //     return val
-                    //   })
-                    //   console.log(mappedItems)
-                    //   return mappedItems
-                    // })
-                  }}
-                  className="inline hover:stroke-white cursor-pointer dark:text-green-200  hover:fill-green-500 hover:scale-[1.2]"
+                  className="inline dark:hover:stroke-gray-700 hover:stroke-white cursor-pointer text-green-400  hover:fill-green-400 hover:scale-[1.2]"
                   stroke="currentColor"
                   strokeWidth="2"
                   strokeLinecap="round"
@@ -258,7 +272,7 @@ const OrderProductsTable = ({
             </th>
           </tr>
 
-          <tr className="text-base dark:text-gray-400 text-gray-500">
+          <tr className="text-base dark:text-gray-400 text-gray-500 px-4 ">
             <th className="w-10 md:table-cell hidden py-3">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -278,7 +292,7 @@ const OrderProductsTable = ({
 
             <th
               onClick={() => handleSort('name')}
-              className="lg:w-5/12 px-5 hover:text-gray-700 dark:hover:text-gray-200"
+              className="lg:w-5/12 px-5 hover:text-gray-700 dark:hover:text-gray-200 py-3 "
             >
               Name
               <svg
@@ -289,7 +303,7 @@ const OrderProductsTable = ({
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className={` ml-1 mb-0.5 w-4 inline
+                className={` ml-1 mb-0.5 w-4  inline
                   ${sort !== 'name' && 'hidden'}
                   ${order === 1 ? 'rotate-0' : 'rotate-180 '}`}
               >
@@ -366,7 +380,7 @@ const OrderProductsTable = ({
       </table>
 
       {/* Table Footer */}
-      <div className="py-3">
+      <div className="">
         <div className="flex items-center px-4 h-full justify-between">
           <div className="flex items-center">
             <span className="normal-case pr-2 text-gray-400">

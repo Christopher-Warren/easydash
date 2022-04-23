@@ -1,8 +1,10 @@
-import { QueryResult } from '@apollo/client'
+import { QueryResult, useMutation } from '@apollo/client'
 import { useEffect, useState } from 'react'
+import { DELETE_PRODUCTS } from '../../graphql/mutation_vars'
 import { ModalFormIDs } from '../../pages/modals/Modals'
 import { useAppDispatch } from '../../redux/hooks'
 import { toggleModal } from '../../redux/modal/modalSlice'
+import customPrompt from '../../utils/customPrompt'
 import SelectFilter from '../buttons/SelectFilter'
 import TableCard from '../cards/TableCard'
 import SelectPrimary from '../inputs/SelectPrimary'
@@ -17,6 +19,8 @@ const ProductsTable = ({
 }) => {
   const { data, loading, error, refetch, networkStatus } = products
 
+  const [deleteProducts] = useMutation(DELETE_PRODUCTS)
+
   const [isChecked, setIsChecked] = useState<boolean[]>([])
   const [limit, setLimit] = useState(5)
   const [skip, setSkip] = useState(0)
@@ -27,6 +31,9 @@ const ProductsTable = ({
 
   const [filter, setFilter] = useState([])
   useEffect(() => {
+    // if (data && isChecked.length !== data.products.length) {
+    //   setIsChecked(() => data.products.map(() => false))
+    // }
     refetch({
       input: {
         limit: limit,
@@ -39,9 +46,7 @@ const ProductsTable = ({
     })
   }, [refetch, limit, skip, sort, order, filter, search])
 
-  if (data && isChecked.length !== data.products.length) {
-    setIsChecked(() => data.products.map(() => false))
-  }
+  //
   const RenderTableItems = () => {
     const dispatch = useAppDispatch()
 
@@ -210,6 +215,31 @@ const ProductsTable = ({
       setOrder(-1)
     }
   }
+
+  const handleDelete = (e: any) => {
+    customPrompt(
+      {
+        title: 'Are you sure you wish to delete these items?',
+        body: 'X items will be deleted',
+        confirm: 'DELETE',
+        cancel: 'BACK',
+      },
+      () => {
+        const filterIds = data.products.filter(
+          (item: any, idx: any) => isChecked[idx],
+        )
+        const selectedProducts = filterIds.map((item: any) => item._id)
+        deleteProducts({
+          variables: {
+            productIds: selectedProducts,
+          },
+        }).then((data: any) => {
+          setIsChecked((data) => data.map((i) => false))
+          refetch()
+        })
+      },
+    )
+  }
   return (
     <TableCard className={className}>
       {(loading || networkStatus === 4) && <LoadingSpinner />}
@@ -290,7 +320,7 @@ const ProductsTable = ({
                 <th className="text-right lg:pr-8 pr-3.5">
                   <button
                     className=" p-1 rounded-full bg-red-400 text-white hover:bg-red-500 transition-colors"
-                    // onClick={handleDelete}
+                    onClick={handleDelete}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -422,7 +452,7 @@ const ProductsTable = ({
       </table>
 
       {/* Table Footer */}
-      <div className="py-3">
+      <div className="">
         <div className="flex items-center px-4 h-full justify-between">
           <div className="flex items-center">
             <span className="normal-case pr-2 text-gray-400">
@@ -435,7 +465,6 @@ const ProductsTable = ({
                 setLimit(parseInt(e.currentTarget.value))
                 setIsChecked((val) => val.map(() => false))
                 setSkip(0)
-                console.log()
               }}
             >
               <option>5</option>
