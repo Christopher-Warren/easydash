@@ -1,4 +1,4 @@
-import { useMutation, QueryResult } from '@apollo/client'
+import { QueryResult } from '@apollo/client'
 
 import PageWrapper from '../../components/PageWrapper'
 import PrimaryButton from '../../components/buttons/PrimaryButton'
@@ -9,15 +9,8 @@ import { toggleModal } from '../../redux/modal/modalSlice'
 
 import { ModalFormIDs } from '../modals/Modals'
 
-import TableCard from '../../components/cards/TableCard'
-import { useEffect, useState } from 'react'
-
-import customPrompt from '../../utils/customPrompt'
-
-import SelectInput from '../../components/inputs/SelectPrimary'
 import LoadingSpinner from '../../components/LoadingSpinner'
-import SelectFilter from '../../components/buttons/SelectFilter'
-import { DELETE_PRODUCTS } from '../../graphql/mutation_vars'
+
 import ProductsTable from '../../components/tables/ProductsTable'
 
 const Products = ({ products }: { products: QueryResult }) => {

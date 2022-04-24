@@ -31,9 +31,6 @@ const ProductsTable = ({
 
   const [filter, setFilter] = useState([])
   useEffect(() => {
-    // if (data && isChecked.length !== data.products.length) {
-    //   setIsChecked(() => data.products.map(() => false))
-    // }
     refetch({
       input: {
         limit: limit,
@@ -45,8 +42,10 @@ const ProductsTable = ({
       },
     })
   }, [refetch, limit, skip, sort, order, filter, search])
+  if (data && isChecked.length !== data.products.length) {
+    setIsChecked(() => data.products.map(() => false))
+  }
 
-  //
   const RenderTableItems = () => {
     const dispatch = useAppDispatch()
 
@@ -119,7 +118,7 @@ const ProductsTable = ({
               </div>
             </td>
             <td className="px-5 relative">
-              <div className="py-2.5">
+              <div className="py-3">
                 <div className="">
                   <h2 className="text-base  leading-tight">{item.name}</h2>
                   <span className="text-xs font tracking-wider">
@@ -148,7 +147,7 @@ const ProductsTable = ({
             className="hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 border-y border-gray-200 dark:border-gray-700"
             key={i}
           >
-            <td className="relative w-8 px-4 py-3 ">
+            <td className="relative w-8 px-4 py-6  py-[1.437rem]">
               <input
                 type="checkbox"
                 className="lg:w-4 w-5 h-5 lg:h-4 accent-purple-500 "
@@ -242,7 +241,6 @@ const ProductsTable = ({
   }
   return (
     <TableCard className={className}>
-      {(loading || networkStatus === 4) && <LoadingSpinner />}
       <table className="table-auto w-full capitalize">
         <thead>
           <tr className="">
@@ -273,7 +271,7 @@ const ProductsTable = ({
           <tr
             className={`text-base dark:text-gray-400 text-gray-500 ${
               isChecked.some((val) => val === true) &&
-              'bg-purple-50 dark:bg-gray-700 '
+              'bg-purple-50 dark:bg-gray-800 '
             }`}
           >
             <th className="relative w-8 px-4 py-3 ">

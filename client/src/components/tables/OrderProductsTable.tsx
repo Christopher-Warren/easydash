@@ -39,7 +39,7 @@ const OrderProductsTable = ({
       },
     })
   }, [refetch, limit, skip, sort, order, filter, search])
-  console.log('render')
+
   const RenderTableItems = () => {
     if (!loading && !error) {
       return data.products.map((item: any, index: any) => {
@@ -175,12 +175,6 @@ const OrderProductsTable = ({
             className="hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 border-y border-gray-200 dark:border-gray-700"
             key={i}
           >
-            <td className="relative w-8 px-4 py-3 ">
-              <input
-                type="checkbox"
-                className="lg:w-4 w-5 h-5 lg:h-4 accent-purple-500 "
-              ></input>
-            </td>
             <td className=" md:table-cell hidden  px-3 ">
               <div className="border dark:border-gray-100/25 rounded-sm dark:text-gray-100/60 w-10 h-10 p-1 ">
                 <svg
@@ -242,6 +236,7 @@ const OrderProductsTable = ({
       setOrder(-1)
     }
   }
+
   return (
     <TableCard className={className}>
       {(loading || networkStatus === 4) && <LoadingSpinner />}
@@ -393,7 +388,6 @@ const OrderProductsTable = ({
                 setLimit(parseInt(e.currentTarget.value))
 
                 setSkip(0)
-                console.log()
               }}
             >
               <option>5</option>

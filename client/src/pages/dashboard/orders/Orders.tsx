@@ -77,7 +77,7 @@ const Orders = ({ products, orders }: any) => {
         return (
           <tr
             className={
-              ' hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 cursor-pointer border-y dark:border-gray-700 border-gray-200'
+              ' hover:bg-purple-200 hover:dark:bg-gray-700  dark:odd:bg-slate-800 cursor-pointer border-y dark:border-gray-700 border-gray-200'
             }
             key={index}
             onClick={(e: any) => {
@@ -117,16 +117,8 @@ const Orders = ({ products, orders }: any) => {
             className="hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 border-y border-gray-200 dark:border-gray-700"
             key={i}
           >
-            <td className="relative w-8 px-4 py-3 ">
-              {/* <div className="border-y border-gray-200 dark:border-gray-100/25 w-full absolute  left-0  top-0 " /> */}
-              <input
-                type="checkbox"
-                className="lg:w-4 w-5 h-5 lg:h-4 accent-purple-500 "
-              ></input>
-            </td>
-
             <td className="px-5 relative">
-              <div className="py-2.5">
+              <div className="py-3">
                 <div className="">
                   <h2 className="text-base  leading-tight dark:bg-gray-700 bg-gray-200 animate-pulse rounded-full text-transparent">
                     loading
@@ -184,9 +176,9 @@ const Orders = ({ products, orders }: any) => {
         >
           Create Order
         </PrimaryButton>
-        {/* <SecondaryButton padding="px-5 py-1.5">
+        <SecondaryButton padding="px-5 py-1.5">
           Manage Categories
-        </SecondaryButton> */}
+        </SecondaryButton>
       </div>
 
       <TableCard>
@@ -308,7 +300,7 @@ const Orders = ({ products, orders }: any) => {
           <tbody className="text-base">
             <RenderTableItems />
 
-            {limit > data2?.getAllOrders.length && (
+            {!loading2 && limit > data2.getAllOrders.length && (
               <tr
                 className="dark:odd:bg-slate-800  border-y
            dark:border-gray-700 border-gray-200 text-gray-400 
@@ -316,7 +308,7 @@ const Orders = ({ products, orders }: any) => {
               >
                 <td
                   colSpan={6}
-                  className="relative w-8 px-4 h-14 text-center normal-case"
+                  className="relative w-8 px-4 py-[1.437rem] text-center normal-case  "
                 >
                   {data2.getAllOrders.length === 0 &&
                   (filter.length > 0 || search.length > 0)

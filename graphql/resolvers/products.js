@@ -160,7 +160,6 @@ module.exports = {
     }
 
     const products = await Product.aggregate(stages)
-    console.log(products[0].name)
 
     return products
   },
