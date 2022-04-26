@@ -244,7 +244,7 @@ const ProductsTable = ({
       <table className="table-auto w-full capitalize">
         <thead>
           <tr className="">
-            <th className="relative w-8 px-4 py-3 " colSpan={6}>
+            <th className="relative w-8 px-4 py-3" colSpan={6}>
               <div className="flex">
                 <SelectFilter
                   buttonText="Filter"

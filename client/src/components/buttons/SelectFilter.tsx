@@ -10,6 +10,8 @@ import {
   GET_ALL_CATEGORIES,
   GET_ALL_SUBCATEGORIES,
 } from '../../graphql/query_vars'
+import PrimaryButton from './PrimaryButton'
+import SecondaryButton from './SecondaryButton'
 
 const SelectFilter = ({
   options,
@@ -22,7 +24,7 @@ const SelectFilter = ({
   filter,
   setFilter,
 }: any) => {
-  const [hide, setHide] = useState(true)
+  const [hide, setHide] = useState(false)
 
   const { data } = useQuery(GET_ALL_CATEGORIES)
 
@@ -39,17 +41,92 @@ const SelectFilter = ({
   // handle errors
   const dispatch = useAppDispatch()
 
+  const handleFormSubmit = (e: any) => {
+    e.preventDefault()
+
+    const categoryFilter: {}[] = []
+    const subcategoryFilter: {}[] = []
+
+    const priceFilter: any[] = []
+    const stockFilter: {}[] = []
+
+    if (price.min > price.max) {
+      dispatch(addError('Min price should be less than max price'))
+      return
+    }
+    if (stock.min > stock.max) {
+      dispatch(addError('Min price should be less than max price'))
+      return
+    }
+
+    for (let i = 0; i < e.currentTarget.length; i++) {
+      const isChecked = e.currentTarget[i].checked
+      const eleName = e.currentTarget[i].name
+
+      if (eleName === 'category option' && isChecked) {
+        categoryFilter.push(e.currentTarget[i].value)
+      }
+      if (eleName === 'subcategory option' && isChecked) {
+        subcategoryFilter.push(e.currentTarget[i].value)
+      }
+    }
+    console.log(categoryFilter)
+    setFilter(() => {
+      const newFilter: any = []
+
+      if (categoryFilter.length > 0) {
+        newFilter.push({
+          field: 'category.name',
+          query: {
+            in: categoryFilter,
+          },
+        })
+      }
+
+      if (subcategoryFilter.length > 0) {
+        newFilter.push({
+          field: 'subcategory.name',
+          query: {
+            in: subcategoryFilter,
+          },
+        })
+      }
+
+      if (price.min && price.max > 0) {
+        newFilter.push({
+          field: 'price',
+          query: {
+            gte: price.min,
+            lte: price.max,
+          },
+        })
+      }
+
+      if ((stock.min > 0 && stock.max) || stock.max) {
+        newFilter.push({
+          field: 'stock',
+          query: {
+            gte: stock.min,
+            lte: stock.max,
+          },
+        })
+      }
+
+      return newFilter
+    })
+  }
+
   return (
     <div
-      onBlur={(e: any) => {
-        if (!e.currentTarget.contains(e.relatedTarget)) {
-          setHide(true)
-        }
-      }}
+      // onBlur={(e: any) => {
+      //   if (!e.currentTarget.contains(e.relatedTarget)) {
+      //     setHide(true)
+      //   }
+      // }}
       className="relative"
     >
       <button
-        onClick={(e) => setHide(false)}
+        onClick={(e) => setHide(!hide)}
         id={id}
         type={type}
         className={`flex  justify-around font-medium text-md tracking-wide leading-relaxed rounded
@@ -67,108 +144,35 @@ const SelectFilter = ({
 
       <div
         tabIndex={0}
-        className={`absolute rounded-sm overflow-hidden dark:shadow-md dark:shadow-gray-900
-      dark:bg-gray-600 dark:text-white shadow
+        className={`absolute rounded-sm overflow-hidden shadow-lg shadow-gray-900/50 
+      dark:bg-gray-800 dark:text-white  transition-all
     text-black z-40  bg-white
       ${hide && 'h-0 w-0 opacity-0'} `}
       >
-        <div className="flex flex-wrap w-min px-3 py-2">
-          <h1 className="text-xl text-center text-gray-400 w-full ">Filter</h1>
-          <form
-            id="filter form"
-            onSubmit={(e: any) => {
-              e.preventDefault()
+        <div className="flex flex-wrap  w-max">
+          <form id="filter form" onSubmit={handleFormSubmit}>
+            <div className="flex justify-between items-center border-b border-gray-600 py-5 px-5 ">
+              <span className="text-xl text-center ">Filter</span>
+              <div className="ml-24">
+                <SecondaryButton
+                  className="px-3 py-1"
+                  onClick={(e: any) => {
+                    e.preventDefault()
 
-              const categoryFilter: {}[] = []
-              const subcategoryFilter: {}[] = []
-
-              const priceFilter: any[] = []
-              const stockFilter: {}[] = []
-
-              if (price.min > price.max) {
-                dispatch(addError('Min price should be less than max price'))
-                return
-              }
-              if (stock.min > stock.max) {
-                dispatch(addError('Min price should be less than max price'))
-                return
-              }
-
-              for (let i = 0; i < e.currentTarget.length; i++) {
-                const isChecked = e.currentTarget[i].checked
-                const eleName = e.currentTarget[i].name
-
-                if (eleName === 'category option' && isChecked) {
-                  categoryFilter.push(e.currentTarget[i].value)
-                }
-                if (eleName === 'subcategory option' && isChecked) {
-                  subcategoryFilter.push(e.currentTarget[i].value)
-                }
-              }
-
-              setFilter(() => {
-                const newFilter: any = []
-
-                if (categoryFilter.length > 0) {
-                  newFilter.push({
-                    field: 'category.name',
-                    query: {
-                      in: categoryFilter,
-                    },
-                  })
-                }
-
-                if (subcategoryFilter.length > 0) {
-                  newFilter.push({
-                    field: 'subcategory.name',
-                    query: {
-                      in: subcategoryFilter,
-                    },
-                  })
-                }
-
-                if (price.min && price.max > 0) {
-                  newFilter.push({
-                    field: 'price',
-                    query: {
-                      gte: price.min,
-                      lte: price.max,
-                    },
-                  })
-                }
-
-                if ((stock.min > 0 && stock.max) || stock.max) {
-                  newFilter.push({
-                    field: 'stock',
-                    query: {
-                      gte: stock.min,
-                      lte: stock.max,
-                    },
-                  })
-                }
-
-                return newFilter
-              })
-            }}
-          >
-            <div className="flex justify-between">
-              <button type="submit" className="order-2">
-                Apply
-              </button>
-              <button
-                className="order-1"
-                onClick={(e) => {
-                  e.preventDefault()
-
-                  setSubcategoriesState([])
-                  setCategoriesState([])
-                  setFilter([])
-                  setPrice({ min: 0, max: 0 })
-                  setStock({ min: 0, max: 0, showOut: false })
-                }}
-              >
-                Clear
-              </button>
+                    setSubcategoriesState([])
+                    setCategoriesState([])
+                    setFilter([])
+                    setPrice({ min: 0, max: 0 })
+                    setStock({ min: 0, max: 0, showOut: false })
+                    setHide(true)
+                  }}
+                >
+                  Clear
+                </SecondaryButton>
+                <PrimaryButton type="submit" className="px-3 py-1 ml-3">
+                  Apply
+                </PrimaryButton>
+              </div>
             </div>
 
             <SelectOption

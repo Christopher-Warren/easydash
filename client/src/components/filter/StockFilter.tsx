@@ -1,3 +1,4 @@
+import Checkbox from '../inputs/Checkbox'
 import TextInput from '../inputs/TextInput'
 
 const StockFilter = ({ name, stock, setStock }: any) => {
@@ -38,9 +39,10 @@ const StockFilter = ({ name, stock, setStock }: any) => {
   return (
     <li className="py-3 ">
       <div className="mb-3">
-        <input
+        <Checkbox
           type="checkbox"
           name="subcategory option"
+          label="Show out of stock"
           id="out of stock"
           checked={stock.showOut}
           onChange={() =>
@@ -51,10 +53,7 @@ const StockFilter = ({ name, stock, setStock }: any) => {
             }))
           }
           className="lg:w-4 w-5 h-5 lg:h-4 mt-1 accent-purple-500"
-        ></input>
-        <label className="ml-2" htmlFor="out of stock">
-          Show out of stock
-        </label>
+        ></Checkbox>
       </div>
 
       <TextInput

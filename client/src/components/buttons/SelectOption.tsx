@@ -27,7 +27,7 @@ const SelectOption = ({
     listRef.current?.children[0]?.clientHeight
 
   return (
-    <div className="w-full pb-2 last-of-type:pb-0" key={name}>
+    <div className="w-full" key={name}>
       <input
         name={name}
         id={name}
@@ -39,8 +39,8 @@ const SelectOption = ({
         type="checkbox"
       ></input>
       <label
-        className={`text-lg flex justify-between text-gray-500 dark:text-gray-200 items-center ${
-          checked && 'dark:text-purple-300 text-purple-600'
+        className={` py-4 px-5 text-lg flex justify-between text-gray-500 dark:text-gray-200 items-center cursor-pointer ${
+          checked && 'dark:text-purple-400 text-purple-600 '
         }`}
         htmlFor={name}
       >
@@ -65,7 +65,7 @@ const SelectOption = ({
 
       <ul className="relative">
         <div
-          className={`text-right w-full transition-all duration-1000 opacity-100 
+          className={`w-full transition-all duration-500 ease-out opacity-100 px-5
            overflow-hidden`}
           style={{ height: checked ? height : '0px' }}
           ref={listRef}
@@ -104,9 +104,9 @@ const SelectOption = ({
           )}
         </div>
         <div
-          className={`absolute duration-1000  transition-opacity shadow-inner shadow-gray-800/60 ${
+          className={`absolute duration-500  transition-opacity ${
             checked ? ' ' : ''
-          } bg-purple-100 dark:bg-gray-700 w-screen h-full top-0 -left-1/2 -z-10`}
+          } bg-purple-100 dark:bg-gray-900 w-screen h-full top-0 -left-1/2 -z-10`}
         ></div>
       </ul>
     </div>
