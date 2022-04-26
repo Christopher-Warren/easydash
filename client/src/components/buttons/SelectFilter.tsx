@@ -3,7 +3,6 @@ import { useState } from 'react'
 import SelectOption from './SelectOption'
 
 // Handle errors
-import { toggleModal } from '../../redux/modal/modalSlice'
 import { addError } from '../../redux/error/errorSlice'
 import { useAppDispatch } from '../../redux/hooks'
 import {
@@ -24,7 +23,7 @@ const SelectFilter = ({
   filter,
   setFilter,
 }: any) => {
-  const [hide, setHide] = useState(false)
+  const [hide, setHide] = useState(true)
 
   const { data } = useQuery(GET_ALL_CATEGORIES)
 
@@ -47,9 +46,6 @@ const SelectFilter = ({
     const categoryFilter: {}[] = []
     const subcategoryFilter: {}[] = []
 
-    const priceFilter: any[] = []
-    const stockFilter: {}[] = []
-
     if (price.min > price.max) {
       dispatch(addError('Min price should be less than max price'))
       return
@@ -70,7 +66,7 @@ const SelectFilter = ({
         subcategoryFilter.push(e.currentTarget[i].value)
       }
     }
-    console.log(categoryFilter)
+
     setFilter(() => {
       const newFilter: any = []
 
@@ -118,11 +114,11 @@ const SelectFilter = ({
 
   return (
     <div
-      // onBlur={(e: any) => {
-      //   if (!e.currentTarget.contains(e.relatedTarget)) {
-      //     setHide(true)
-      //   }
-      // }}
+      onBlur={(e: any) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) {
+          setHide(true)
+        }
+      }}
       className="relative"
     >
       <button
@@ -144,14 +140,14 @@ const SelectFilter = ({
 
       <div
         tabIndex={0}
-        className={`absolute rounded-sm overflow-hidden shadow-lg shadow-gray-900/50 
-      dark:bg-gray-800 dark:text-white  transition-all
+        className={`absolute rounded-sm overflow-hidden drop-shadow-[0_5px_8px_rgb(0,0,0,0.1)] dark:shadow-gray-900/50 
+      dark:bg-gray-800 dark:text-white  transition-all 
     text-black z-40  bg-white
       ${hide && 'h-0 w-0 opacity-0'} `}
       >
-        <div className="flex flex-wrap  w-max">
+        <div className="flex flex-wrap  w-max text-gray-800 dark:text-gray-50">
           <form id="filter form" onSubmit={handleFormSubmit}>
-            <div className="flex justify-between items-center border-b border-gray-600 py-5 px-5 ">
+            <div className="flex justify-between items-center border-b dark:border-gray-600 border-gray-300 py-5 px-5 ">
               <span className="text-xl text-center ">Filter</span>
               <div className="ml-24">
                 <SecondaryButton

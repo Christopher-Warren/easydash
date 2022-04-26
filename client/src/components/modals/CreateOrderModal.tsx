@@ -5,6 +5,7 @@ import PrimaryButton from '../buttons/PrimaryButton'
 import SecondaryButton from '../buttons/SecondaryButton'
 
 import InfoCardSmall from '../cards/InfoCardSmall'
+import Checkbox from '../inputs/Checkbox'
 import SelectPrimary from '../inputs/SelectPrimary'
 import TextInput from '../inputs/TextInput'
 import OrderProductsTable from '../tables/OrderProductsTable'
@@ -243,21 +244,19 @@ const CreateOrderModal = ({
             title="Billing"
             altTitle={
               <div className="col-span-5 mt-1 text-right">
-                <input
+                <Checkbox
                   type="checkbox"
                   name="subcategory option"
-                  onChange={(e) => {
+                  onChange={(e: any) => {
                     setIsSameChecked(!isSameChecked)
 
                     setBillingInfo(initShippingBilling)
                   }}
                   checked={isSameChecked}
                   id="isSame"
+                  label="Same as shipping"
                   className=" w-5 h-5 lg:h-4 lg:w-4 accent-purple-500  align-middle"
-                ></input>
-                <label className="ml-2 whitespace-nowrap " htmlFor="isSame">
-                  Same as shipping
-                </label>
+                ></Checkbox>
               </div>
             }
             className="mt-6 p-5"

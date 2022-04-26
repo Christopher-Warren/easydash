@@ -7,6 +7,7 @@ import { toggleModal } from '../../redux/modal/modalSlice'
 import customPrompt from '../../utils/customPrompt'
 import SelectFilter from '../buttons/SelectFilter'
 import TableCard from '../cards/TableCard'
+import Checkbox from '../inputs/Checkbox'
 import SelectPrimary from '../inputs/SelectPrimary'
 import LoadingSpinner from '../LoadingSpinner'
 
@@ -69,7 +70,7 @@ const ProductsTable = ({
             }}
           >
             <td className="relative w-8 px-4">
-              <input
+              <Checkbox
                 type="checkbox"
                 className="lg:w-4 w-5 h-5 lg:h-4 accent-purple-500 "
                 value={item._id}
@@ -82,7 +83,7 @@ const ProductsTable = ({
                     })
                   })
                 }
-              ></input>
+              ></Checkbox>
             </td>
             <td className=" md:table-cell hidden  px-3 ">
               <div className="border dark:border-gray-100/25 rounded-sm dark:text-gray-100/60 w-10 h-10 p-1 ">
@@ -148,10 +149,10 @@ const ProductsTable = ({
             key={i}
           >
             <td className="relative w-8 px-4 py-6  py-[1.437rem]">
-              <input
+              <Checkbox
                 type="checkbox"
                 className="lg:w-4 w-5 h-5 lg:h-4 accent-purple-500 "
-              ></input>
+              ></Checkbox>
             </td>
             <td className=" md:table-cell hidden  px-3 ">
               <div className="border dark:border-gray-100/25 rounded-sm dark:text-gray-100/60 w-10 h-10 p-1 ">
@@ -275,7 +276,7 @@ const ProductsTable = ({
             }`}
           >
             <th className="relative w-8 px-4 py-3 ">
-              <input
+              <Checkbox
                 type="checkbox"
                 className="lg:w-4 w-5 h-5 lg:h-4 mt-1 accent-purple-500"
                 checked={
@@ -288,7 +289,7 @@ const ProductsTable = ({
                     setIsChecked((state) => state.map((val) => true))
                   }
                 }}
-              ></input>
+              ></Checkbox>
             </th>
 
             <th className="w-10 md:table-cell hidden">
