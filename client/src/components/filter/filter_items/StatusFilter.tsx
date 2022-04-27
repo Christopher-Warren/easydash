@@ -1,18 +1,31 @@
 import Checkbox from '../../inputs/Checkbox'
 
-const StatusFilter = ({ statusChecked, setStatusChecked }: any) => {
-  console.log(statusChecked)
+const StatusFilter = ({
+  statusChecked,
+  setStatusChecked,
+
+  paymentActive,
+  setPaymentActive,
+  fulfillmentActive,
+  setFulfillmentActive,
+}: any) => {
   return (
     <ul className="">
-      <li className="border-b border-gray-700">
-        <Checkbox className="py-3 px-5" label="Active" />
+      <li className="flex items-center justify-between">
+        <span className="mb-2 mt-4 mx-5 inline-block text-lg">Payment</span>
+        <Checkbox
+          onChange={(e: any) => setPaymentActive(!paymentActive)}
+          checked={paymentActive}
+          className="mx-5"
+          label="Active"
+        />
       </li>
-      <li className="">
+      <li>
         <Checkbox
           name="status option"
           checked={statusChecked.paid}
           onChange={(e: any) =>
-            setStatusChecked({ ...statusChecked, paid: !statusChecked.paid })
+            setStatusChecked({ ...statusChecked, paid: true })
           }
           className="py-3 px-5"
           label="Paid"
@@ -20,16 +33,50 @@ const StatusFilter = ({ statusChecked, setStatusChecked }: any) => {
       </li>
       <li className="">
         <Checkbox
-          checked={statusChecked.fulfilled}
+          checked={!statusChecked.paid}
           onChange={(e: any) =>
             setStatusChecked({
               ...statusChecked,
-              fulfilled: !statusChecked.fulfilled,
+              paid: false,
             })
           }
           name="status option"
           className="py-3 px-5"
+          label="Unpaid"
+        />
+      </li>
+      <li className="flex items-center justify-between border-t border-gray-700">
+        <span className="mb-2 mt-4 mx-5 inline-block text-lg">Fulfillment</span>
+        <Checkbox
+          onChange={(e: any) => setFulfillmentActive(!fulfillmentActive)}
+          checked={fulfillmentActive}
+          className="mx-5"
+          label="Active"
+        />
+      </li>
+      <li className="">
+        <Checkbox
+          name="status option"
+          checked={statusChecked.fulfilled}
+          onChange={(e: any) =>
+            setStatusChecked({ ...statusChecked, fulfilled: true })
+          }
+          className="py-3 px-5"
           label="Fulfilled"
+        />
+      </li>
+      <li className="">
+        <Checkbox
+          checked={!statusChecked.fulfilled}
+          onChange={(e: any) =>
+            setStatusChecked({
+              ...statusChecked,
+              fulfilled: false,
+            })
+          }
+          name="status option"
+          className="py-3 px-5"
+          label="Unfulfilled"
         />
       </li>
     </ul>

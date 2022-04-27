@@ -111,6 +111,7 @@ const ProductsFilter = ({
 
       return newFilter
     })
+    setHide(true)
   }
 
   return (

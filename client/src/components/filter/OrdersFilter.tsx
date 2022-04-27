@@ -1,17 +1,12 @@
-import { useQuery } from '@apollo/client'
 import { useState } from 'react'
 import SelectOption from '../buttons/SelectOption'
 
 // Handle errors
 import { addError } from '../../redux/error/errorSlice'
 import { useAppDispatch } from '../../redux/hooks'
-import {
-  GET_ALL_CATEGORIES,
-  GET_ALL_SUBCATEGORIES,
-} from '../../graphql/query_vars'
+
 import PrimaryButton from '../buttons/PrimaryButton'
 import SecondaryButton from '../buttons/SecondaryButton'
-import Checkbox from '../inputs/Checkbox'
 import TotalFilter from './filter_items/TotalFilter'
 import StatusFilter from './filter_items/StatusFilter'
 import OrderNumberFilter from './filter_items/OrderNumberFilter'
@@ -27,61 +22,50 @@ const OrdersFilter = ({
   filter,
   setFilter,
 }: any) => {
-  const [hide, setHide] = useState(true)
+  const [hide, setHide] = useState(false)
 
   const [total, setTotal] = useState({ min: 0, max: 0 })
   const [orderNumber, setOrderNumber] = useState({ min: 0, max: 0 })
 
+  const [paymentActive, setPaymentActive] = useState(false)
+  const [fulfillmentActive, setFulfillmentActive] = useState(false)
   const [statusChecked, setStatusChecked] = useState({
     paid: false,
     fulfilled: false,
   })
-
   // handle errors
   const dispatch = useAppDispatch()
 
   const handleFormSubmit = (e: any) => {
     e.preventDefault()
 
-    const categoryFilter: {}[] = []
-    const subcategoryFilter: {}[] = []
-
     if (total.min > total.max) {
-      dispatch(addError('Min price should be less than max price'))
+      dispatch(addError('Minimum should be less than maximum'))
       return
     }
 
     if (orderNumber.min > orderNumber.max) {
-      dispatch(addError('Min price should be less than max price'))
+      dispatch(addError('Minimum should be less than maximum'))
       return
-    }
-
-    for (let i = 0; i < e.currentTarget.length; i++) {
-      const isChecked = e.currentTarget[i].checked
-      const eleName = e.currentTarget[i].name
-
-      if (eleName === 'status option' && isChecked) {
-        categoryFilter.push(e.currentTarget[i].value)
-      }
     }
 
     setFilter(() => {
       const newFilter: any = []
 
-      if (categoryFilter.length > 0) {
+      if (paymentActive) {
         newFilter.push({
-          field: 'category.name',
+          field: 'status.paid',
           query: {
-            in: categoryFilter,
+            boolean: statusChecked.paid,
           },
         })
       }
 
-      if (subcategoryFilter.length > 0) {
+      if (fulfillmentActive) {
         newFilter.push({
-          field: 'subcategory.name',
+          field: 'status.fulfilled',
           query: {
-            in: subcategoryFilter,
+            boolean: statusChecked.fulfilled,
           },
         })
       }
@@ -108,6 +92,8 @@ const OrdersFilter = ({
 
       return newFilter
     })
+
+    setHide(true)
   }
 
   return (
@@ -154,7 +140,12 @@ const OrdersFilter = ({
                     e.preventDefault()
 
                     setFilter([])
+
+                    setFulfillmentActive(false)
+                    setPaymentActive(false)
+                    setOrderNumber({ min: 0, max: 0 })
                     setTotal({ min: 0, max: 0 })
+
                     setHide(true)
                   }}
                 >
@@ -176,6 +167,10 @@ const OrdersFilter = ({
               <StatusFilter
                 statusChecked={statusChecked}
                 setStatusChecked={setStatusChecked}
+                paymentActive={paymentActive}
+                setPaymentActive={setPaymentActive}
+                fulfillmentActive={fulfillmentActive}
+                setFulfillmentActive={setFulfillmentActive}
               />
             </SelectOption>
 

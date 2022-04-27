@@ -3,6 +3,7 @@ const Checkbox = ({
   value,
   onChange,
   id,
+  disabled,
   checked,
   className,
   label,
@@ -11,6 +12,7 @@ const Checkbox = ({
     <>
       <label className={`relative inline-block ${className}`} htmlFor={id}>
         <input
+          disabled={disabled}
           id={id}
           type="checkbox"
           name={name}
@@ -34,7 +36,7 @@ const Checkbox = ({
           peer-focus-visible:outline outline-2 outline-offset-2 outline-purple-300
         peer-checked:bg-purple-600  transition-all duration-100
           ${checked ? '' : ''}
-             
+         
              `}
           aria-hidden
         >
