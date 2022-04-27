@@ -80,8 +80,9 @@ input FilterOptions {
 
 
 input Filter {
-    query: FilterOptions
     field: String
+    query: FilterOptions
+    
 }
 
 `

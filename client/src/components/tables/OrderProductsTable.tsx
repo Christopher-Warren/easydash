@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { ModalFormIDs } from '../../pages/modals/Modals'
 import { useAppDispatch } from '../../redux/hooks'
 import { toggleModal } from '../../redux/modal/modalSlice'
-import SelectFilter from '../buttons/SelectFilter'
+import ProductsFilter from '../buttons/ProductsFilter'
 import TableCard from '../cards/TableCard'
 import SelectPrimary from '../inputs/SelectPrimary'
 import LoadingSpinner from '../LoadingSpinner'
@@ -245,12 +245,14 @@ const OrderProductsTable = ({
           <tr className="">
             <th className="relative w-8 px-4 py-3 " colSpan={6}>
               <div className="flex">
-                <SelectFilter
+                <ProductsFilter
                   buttonText="Filter"
                   className="py-1 px-4 mr-4"
                   filter={filter}
                   setFilter={setFilter}
-                ></SelectFilter>
+                >
+                  Filter
+                </ProductsFilter>
                 <input
                   value={search}
                   onChange={(e) => {

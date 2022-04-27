@@ -16,7 +16,7 @@ import customPrompt from '../../../utils/customPrompt'
 
 import SelectInput from '../../../components/inputs/SelectPrimary'
 import LoadingSpinner from '../../../components/LoadingSpinner'
-import SelectFilter from '../../../components/buttons/SelectFilter'
+import OrdersFilter from '../../../components/buttons/OrdersFilter'
 
 import { useHistory } from 'react-router-dom'
 
@@ -187,12 +187,12 @@ const Orders = ({ products, orders }: any) => {
             <tr className="">
               <th className="relative w-8 px-4 py-3 " colSpan={6}>
                 <div className="flex">
-                  <SelectFilter
+                  <OrdersFilter
                     buttonText="Filter"
                     className="py-1 px-4 mr-4"
                     filter={filter}
                     setFilter={setFilter}
-                  ></SelectFilter>
+                  ></OrdersFilter>
                   <input
                     value={search}
                     onChange={(e) => {

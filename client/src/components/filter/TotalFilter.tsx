@@ -1,7 +1,6 @@
-import Checkbox from '../inputs/Checkbox'
 import TextInput from '../inputs/TextInput'
 
-const StockFilter = ({ name, stock, setStock }: any) => {
+const TotalFilter = ({ name, total, setTotal }: any) => {
   const handleMinInput = (e: any) => {
     const val = e.currentTarget.value
       .replace(/[^0-9.]/g, '')
@@ -9,11 +8,11 @@ const StockFilter = ({ name, stock, setStock }: any) => {
 
     const min = parseFloat(val)
     if (!min) {
-      setStock((prev: any) => {
+      setTotal((prev: any) => {
         return { ...prev, min: 0 }
       })
     } else {
-      setStock((prev: any) => {
+      setTotal((prev: any) => {
         return { ...prev, min }
       })
     }
@@ -26,11 +25,11 @@ const StockFilter = ({ name, stock, setStock }: any) => {
 
     const max = parseFloat(val)
     if (!max) {
-      setStock((prev: any) => {
+      setTotal((prev: any) => {
         return { ...prev, max: 0 }
       })
     } else {
-      setStock((prev: any) => {
+      setTotal((prev: any) => {
         return { ...prev, max }
       })
     }
@@ -38,48 +37,30 @@ const StockFilter = ({ name, stock, setStock }: any) => {
 
   return (
     <li className="">
-      <div className="border-b border-gray-700 py-3 px-5">
-        <Checkbox
-          type="checkbox"
-          name="subcategory option"
-          label="Show out of stock"
-          id="out of stock"
-          checked={stock.showOut}
-          onChange={() =>
-            setStock((prev: any) => ({
-              min: 0,
-              max: 0,
-              showOut: !prev.showOut,
-            }))
-          }
-          className=""
-        ></Checkbox>
-      </div>
-
-      <div className="py-5 px-5">
+      <div className="px-5 py-5">
         <TextInput
           className={`my-5 ${
-            stock.min > stock.max &&
-            stock.max > 0 &&
+            total.min > total.max &&
+            total.max > 0 &&
             'border-red-500 focus:border-red-500'
           }`}
-          placeholder="Min. Qty."
-          name="min stock option"
+          placeholder="Min. Price"
+          name="min total option"
           type="number"
-          value={stock.min}
+          value={total.min}
           onChange={handleMinInput}
         ></TextInput>
 
         <TextInput
           className={` ${
-            stock.min > stock.max &&
-            stock.max > 0 &&
+            total.min > total.max &&
+            total.max > 0 &&
             'border-red-500 focus:border-red-500'
           }`}
-          placeholder="Max. Qty."
-          name="min stock option"
+          placeholder="Max. Price"
+          name="min total option"
           type="number"
-          value={stock.max}
+          value={total.max}
           onChange={handleMaxInput}
         ></TextInput>
       </div>
@@ -87,4 +68,4 @@ const StockFilter = ({ name, stock, setStock }: any) => {
   )
 }
 
-export default StockFilter
+export default TotalFilter

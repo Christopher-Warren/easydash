@@ -13,12 +13,12 @@ const SelectOption = ({
   setCategoriesState,
   subcategoriesState,
   setSubcategoriesState,
-
   price,
   setPrice,
-
   stock,
   setStock,
+
+  children,
 }: any) => {
   const [checked, setChecked] = useState(false)
   const listRef = useRef<any>(null)
@@ -39,12 +39,13 @@ const SelectOption = ({
         type="checkbox"
       ></input>
       <label
-        className={` py-4 px-5 text-lg flex justify-between text-gray-500 dark:text-gray-200 items-center cursor-pointer ${
+        className={` py-4 px-5 text-lg flex justify-between text-gray-500 dark:text-gray-200  items-center cursor-pointer ${
           checked && 'dark:text-purple-400 text-purple-600 '
         }`}
         htmlFor={name}
       >
         {name}
+
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -65,43 +66,12 @@ const SelectOption = ({
 
       <ul className="relative">
         <div
-          className={`w-full transition-all duration-500 ease-out opacity-100 px-5
+          className={`w-full transition-all duration-500 ease-out opacity-100
            overflow-hidden`}
           style={{ height: checked ? height : '0px' }}
           ref={listRef}
         >
-          {categoriesState && (
-            <CategoryList
-              name={name}
-              categories={categories}
-              categoriesState={categoriesState}
-              setCategoriesState={setCategoriesState}
-            ></CategoryList>
-          )}
-
-          {subcategoriesState && (
-            <SubcategoryList
-              subcategories={subcategories}
-              subcategoriesState={subcategoriesState}
-              setSubcategoriesState={setSubcategoriesState}
-            />
-          )}
-
-          {price && (
-            <PriceFilter
-              name={name}
-              price={price}
-              setPrice={setPrice}
-            ></PriceFilter>
-          )}
-
-          {stock && (
-            <StockFilter
-              name={name}
-              stock={stock}
-              setStock={setStock}
-            ></StockFilter>
-          )}
+          {children}
         </div>
         <div
           className={`absolute duration-500  transition-opacity ${

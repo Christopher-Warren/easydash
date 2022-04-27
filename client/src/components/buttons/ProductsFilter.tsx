@@ -11,12 +11,13 @@ import {
 } from '../../graphql/query_vars'
 import PrimaryButton from './PrimaryButton'
 import SecondaryButton from './SecondaryButton'
+import { CategoryList } from '../filter/CategoryList'
+import { SubcategoryList } from '../filter/SubcategoryList'
+import PriceFilter from '../filter/PriceFilter'
+import StockFilter from '../filter/StockFilter'
 
-const SelectFilter = ({
-  options,
-  buttonText,
+const ProductsFilter = ({
   children,
-  padding,
   id,
   className,
   type,
@@ -114,29 +115,21 @@ const SelectFilter = ({
 
   return (
     <div
-      onBlur={(e: any) => {
-        if (!e.currentTarget.contains(e.relatedTarget)) {
-          setHide(true)
-        }
-      }}
+      // onBlur={(e: any) => {
+      //   if (!e.currentTarget.contains(e.relatedTarget)) {
+      //     setHide(true)
+      //   }
+      // }}
       className="relative"
     >
-      <button
-        onClick={(e) => setHide(!hide)}
+      <PrimaryButton
+        onClick={(e: any) => setHide(!hide)}
         id={id}
         type={type}
-        className={`flex  justify-around font-medium text-md tracking-wide leading-relaxed rounded
-        ${padding}
-        ${className}
-      bg-purple-600 text-white
-      hover:bg-purple-700 hover:shadow-md 
-        focus:shadow-md focus:outline-purple-500 focus:accent-purple-400
-      shadow-purple-500/50 shadow
-      transition-color duration-200
-      `}
+        className={className}
       >
-        {buttonText} {filter.length > 0 && filter.length}
-      </button>
+        {children}
+      </PrimaryButton>
 
       <div
         tabIndex={0}
@@ -170,44 +163,43 @@ const SelectFilter = ({
                 </PrimaryButton>
               </div>
             </div>
-
-            <SelectOption
-              filter={filter}
-              categories={data}
-              categoriesState={categoriesState}
-              setCategoriesState={setCategoriesState}
-              name="category"
-            ></SelectOption>
-            <SelectOption
-              filter={filter}
-              data={data}
-              name="subcategory"
-              subcategories={subcategories}
-              subcategoriesState={subcategoriesState}
-              setSubcategoriesState={setSubcategoriesState}
-            ></SelectOption>
-
-            <SelectOption
-              filter={filter}
-              data={data}
-              price={price}
-              setPrice={setPrice}
-              name="price"
-            ></SelectOption>
-            <SelectOption
-              filter={filter}
-              data={data}
-              stock={stock}
-              setStock={setStock}
-              name="qty."
-            ></SelectOption>
+            <SelectOption name="category">
+              <CategoryList
+                categories={data} // use in component
+                categoriesState={categoriesState}
+                setCategoriesState={setCategoriesState}
+              />
+            </SelectOption>
+            <SelectOption name="subcategory">
+              <SubcategoryList
+                filter={filter}
+                data={data} // don't need this?
+                subcategories={subcategories} // use in component
+                subcategoriesState={subcategoriesState}
+                setSubcategoriesState={setSubcategoriesState}
+              />
+            </SelectOption>
+            <SelectOption name="price">
+              <PriceFilter
+                filter={filter}
+                data={data}
+                price={price}
+                setPrice={setPrice}
+              />
+            </SelectOption>
+            <SelectOption name="qty.">
+              <StockFilter
+                filter={filter}
+                data={data}
+                stock={stock}
+                setStock={setStock}
+              />
+            </SelectOption>
           </form>
         </div>
-
-        {/* {renderCategories()} */}
       </div>
     </div>
   )
 }
 
-export default SelectFilter
+export default ProductsFilter

@@ -259,8 +259,6 @@ module.exports = {
     if (productInput.subcategory === 'new-subcategory')
       throw new Error(`Subcategory "new-subcategory" is unavailible`)
 
-    console.log(productInput)
-
     normalizeInputs(productInput)
     const { _id: ID } = productInput
     const { name } = productInput

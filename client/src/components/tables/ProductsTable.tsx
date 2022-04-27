@@ -5,7 +5,7 @@ import { ModalFormIDs } from '../../pages/modals/Modals'
 import { useAppDispatch } from '../../redux/hooks'
 import { toggleModal } from '../../redux/modal/modalSlice'
 import customPrompt from '../../utils/customPrompt'
-import SelectFilter from '../buttons/SelectFilter'
+import ProductsFilter from '../buttons/ProductsFilter'
 import TableCard from '../cards/TableCard'
 import Checkbox from '../inputs/Checkbox'
 import SelectPrimary from '../inputs/SelectPrimary'
@@ -247,12 +247,14 @@ const ProductsTable = ({
           <tr className="">
             <th className="relative w-8 px-4 py-3" colSpan={6}>
               <div className="flex">
-                <SelectFilter
-                  buttonText="Filter"
+                <ProductsFilter
                   className="py-1 px-4 mr-4"
                   filter={filter}
                   setFilter={setFilter}
-                ></SelectFilter>
+                  refetch={refetch}
+                >
+                  Filter
+                </ProductsFilter>
                 <input
                   value={search}
                   onChange={(e) => {

@@ -20,7 +20,7 @@ const Products = ({ products }: { products: QueryResult }) => {
 
   return (
     <PageWrapper>
-      <h1 className="text-4xl  font-medium ">Products</h1>
+      <h1 className="text-4xl font-medium">Products</h1>
       <span className=" tracking-wider dark:text-gray-100">
         These are products that you currently have listed for sale
       </span>

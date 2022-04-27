@@ -9,7 +9,7 @@ const Checkbox = ({
 }: any) => {
   return (
     <>
-      <label className="relative inline-block " htmlFor={id}>
+      <label className={`relative inline-block ${className}`} htmlFor={id}>
         <input
           id={id}
           type="checkbox"
