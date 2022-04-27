@@ -1,25 +1,6 @@
 import { useState, useRef } from 'react'
-import { CategoryList } from '../filter/CategoryList'
-import PriceFilter from '../filter/PriceFilter'
-import StockFilter from '../filter/StockFilter'
-import { SubcategoryList } from '../filter/SubcategoryList'
-import TextInput from '../inputs/TextInput'
 
-const SelectOption = ({
-  name,
-  categories,
-  subcategories,
-  categoriesState,
-  setCategoriesState,
-  subcategoriesState,
-  setSubcategoriesState,
-  price,
-  setPrice,
-  stock,
-  setStock,
-
-  children,
-}: any) => {
+const SelectOption = ({ name, children }: any) => {
   const [checked, setChecked] = useState(false)
   const listRef = useRef<any>(null)
   const height =

@@ -1,4 +1,4 @@
-import Checkbox from '../inputs/Checkbox'
+import Checkbox from '../../inputs/Checkbox'
 
 const StatusFilter = ({ statusChecked, setStatusChecked }: any) => {
   console.log(statusChecked)

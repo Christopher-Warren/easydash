@@ -6,7 +6,7 @@ import { cache, isLoggedInVar, isAdminVar } from './cache'
 import { addError } from '../redux/error/errorSlice'
 
 import { store } from '../redux/store'
-import { EXTEND_TYPE_DEFS } from './client_extension'
+import { EXTEND_TYPE_DEFS } from './types_extension'
 
 export const typeDefs = EXTEND_TYPE_DEFS
 
@@ -19,6 +19,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     graphQLErrors.forEach((error) => {
       if (error.message.includes('Session expired')) {
+        console.log('session expired, login again')
         localStorage.removeItem('role')
         localStorage.removeItem('user')
         isLoggedInVar(false)

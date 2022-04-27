@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { useState } from 'react'
-import SelectOption from './SelectOption'
+import SelectOption from '../buttons/SelectOption'
 
 // Handle errors
 import { addError } from '../../redux/error/errorSlice'
@@ -9,33 +9,34 @@ import {
   GET_ALL_CATEGORIES,
   GET_ALL_SUBCATEGORIES,
 } from '../../graphql/query_vars'
-import PrimaryButton from './PrimaryButton'
-import SecondaryButton from './SecondaryButton'
-import Checkbox from '../inputs/Checkbox'
-import TotalFilter from '../filter/TotalFilter'
-import StatusFilter from '../filter/StatusFilter'
-import OrderNumberFilter from '../filter/OrderNumberFilter'
+import PrimaryButton from '../buttons/PrimaryButton'
+import SecondaryButton from '../buttons/SecondaryButton'
+import CategoryFilter from '../filter/filter_items/CategoryFilter'
+import SubcategoryFilter from '../filter/filter_items/SubcategoryList'
+import PriceFilter from '../filter/filter_items/PriceFilter'
+import StockFilter from '../filter/filter_items/StockFilter'
 
-const OrdersFilter = ({
-  options,
-  buttonText,
+const ProductsFilter = ({
   children,
-  padding,
   id,
   className,
   type,
   filter,
   setFilter,
 }: any) => {
-  const [hide, setHide] = useState(false)
+  const [hide, setHide] = useState(true)
 
-  const [total, setTotal] = useState({ min: 0, max: 0 })
-  const [orderNumber, setOrderNumber] = useState({ min: 0, max: 0 })
+  const { data: categories } = useQuery(GET_ALL_CATEGORIES)
 
-  const [statusChecked, setStatusChecked] = useState({
-    paid: false,
-    fulfilled: false,
-  })
+  const { data: subcategories } = useQuery(GET_ALL_SUBCATEGORIES)
+
+  // State for options
+
+  const [categoriesState, setCategoriesState] = useState<any>([])
+  const [subcategoriesState, setSubcategoriesState] = useState<any>([])
+
+  const [price, setPrice] = useState({ min: 0, max: 0 })
+  const [stock, setStock] = useState({ min: 0, max: 0, showOut: false })
 
   // handle errors
   const dispatch = useAppDispatch()
@@ -46,12 +47,11 @@ const OrdersFilter = ({
     const categoryFilter: {}[] = []
     const subcategoryFilter: {}[] = []
 
-    if (total.min > total.max) {
+    if (price.min > price.max) {
       dispatch(addError('Min price should be less than max price'))
       return
     }
-
-    if (orderNumber.min > orderNumber.max) {
+    if (stock.min > stock.max) {
       dispatch(addError('Min price should be less than max price'))
       return
     }
@@ -60,8 +60,11 @@ const OrdersFilter = ({
       const isChecked = e.currentTarget[i].checked
       const eleName = e.currentTarget[i].name
 
-      if (eleName === 'status option' && isChecked) {
+      if (eleName === 'category option' && isChecked) {
         categoryFilter.push(e.currentTarget[i].value)
+      }
+      if (eleName === 'subcategory option' && isChecked) {
+        subcategoryFilter.push(e.currentTarget[i].value)
       }
     }
 
@@ -86,22 +89,22 @@ const OrdersFilter = ({
         })
       }
 
-      if (total.min && total.max > 0) {
+      if (price.min && price.max > 0) {
         newFilter.push({
-          field: 'total',
+          field: 'price',
           query: {
-            gte: total.min,
-            lte: total.max,
+            gte: price.min,
+            lte: price.max,
           },
         })
       }
 
-      if (orderNumber.min && orderNumber.max > 0) {
+      if ((stock.min > 0 && stock.max) || stock.max) {
         newFilter.push({
-          field: 'orderNumber',
+          field: 'stock',
           query: {
-            gte: orderNumber.min,
-            lte: orderNumber.max,
+            gte: stock.min,
+            lte: stock.max,
           },
         })
       }
@@ -112,29 +115,21 @@ const OrdersFilter = ({
 
   return (
     <div
-      //   onBlur={(e: any) => {
-      //     if (!e.currentTarget.contains(e.relatedTarget)) {
-      //       setHide(true)
-      //     }
-      //   }}
+      onBlur={(e: any) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) {
+          setHide(true)
+        }
+      }}
       className="relative"
     >
-      <button
-        onClick={(e) => setHide(!hide)}
+      <PrimaryButton
+        onClick={(e: any) => setHide(!hide)}
         id={id}
         type={type}
-        className={`flex  justify-around font-medium text-md tracking-wide leading-relaxed rounded
-        ${padding}
-        ${className}
-      bg-purple-600 text-white
-      hover:bg-purple-700 hover:shadow-md 
-        focus:shadow-md focus:outline-purple-500 focus:accent-purple-400
-      shadow-purple-500/50 shadow
-      transition-color duration-200
-      `}
+        className={className}
       >
-        {buttonText} {filter.length > 0 && filter.length}
-      </button>
+        {children}
+      </PrimaryButton>
 
       <div
         tabIndex={0}
@@ -153,8 +148,11 @@ const OrdersFilter = ({
                   onClick={(e: any) => {
                     e.preventDefault()
 
+                    setSubcategoriesState([])
+                    setCategoriesState([])
                     setFilter([])
-                    setTotal({ min: 0, max: 0 })
+                    setPrice({ min: 0, max: 0 })
+                    setStock({ min: 0, max: 0, showOut: false })
                     setHide(true)
                   }}
                 >
@@ -165,22 +163,26 @@ const OrdersFilter = ({
                 </PrimaryButton>
               </div>
             </div>
-            <SelectOption filter={filter} name="order number">
-              <OrderNumberFilter
-                orderNumber={orderNumber}
-                setOrderNumber={setOrderNumber}
-              ></OrderNumberFilter>
-            </SelectOption>
-
-            <SelectOption name="status">
-              <StatusFilter
-                statusChecked={statusChecked}
-                setStatusChecked={setStatusChecked}
+            <SelectOption name="category">
+              <CategoryFilter
+                categories={categories} // use in component
+                categoriesState={categoriesState}
+                setCategoriesState={setCategoriesState}
               />
             </SelectOption>
-
-            <SelectOption filter={filter} name="total">
-              <TotalFilter total={total} setTotal={setTotal}></TotalFilter>
+            <SelectOption name="subcategory">
+              <SubcategoryFilter
+                categories={categories} // don't need this?
+                subcategories={subcategories} // use in component
+                subcategoriesState={subcategoriesState}
+                setSubcategoriesState={setSubcategoriesState}
+              />
+            </SelectOption>
+            <SelectOption name="price">
+              <PriceFilter price={price} setPrice={setPrice} />
+            </SelectOption>
+            <SelectOption name="qty.">
+              <StockFilter stock={stock} setStock={setStock} />
             </SelectOption>
           </form>
         </div>
@@ -189,4 +191,4 @@ const OrdersFilter = ({
   )
 }
 
-export default OrdersFilter
+export default ProductsFilter

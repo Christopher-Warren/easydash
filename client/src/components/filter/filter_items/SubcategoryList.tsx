@@ -1,6 +1,6 @@
-import Checkbox from '../inputs/Checkbox'
+import Checkbox from '../../inputs/Checkbox'
 
-export const SubcategoryList = ({
+const SubcategoryFilter = ({
   subcategories,
   subcategoriesState,
   setSubcategoriesState,
@@ -48,3 +48,5 @@ export const SubcategoryList = ({
     )
   })
 }
+
+export default SubcategoryFilter

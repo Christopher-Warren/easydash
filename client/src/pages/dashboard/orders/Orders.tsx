@@ -16,7 +16,7 @@ import customPrompt from '../../../utils/customPrompt'
 
 import SelectInput from '../../../components/inputs/SelectPrimary'
 import LoadingSpinner from '../../../components/LoadingSpinner'
-import OrdersFilter from '../../../components/buttons/OrdersFilter'
+import OrdersFilter from '../../../components/filter/OrdersFilter'
 
 import { useHistory } from 'react-router-dom'
 

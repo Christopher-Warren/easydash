@@ -1,6 +1,6 @@
-import TextInput from '../inputs/TextInput'
+import TextInput from '../../inputs/TextInput'
 
-const PriceFilter = ({ name, price, setPrice }: any) => {
+const TotalFilter = ({ name, total, setTotal }: any) => {
   const handleMinInput = (e: any) => {
     const val = e.currentTarget.value
       .replace(/[^0-9.]/g, '')
@@ -8,11 +8,11 @@ const PriceFilter = ({ name, price, setPrice }: any) => {
 
     const min = parseFloat(val)
     if (!min) {
-      setPrice((prev: any) => {
+      setTotal((prev: any) => {
         return { ...prev, min: 0 }
       })
     } else {
-      setPrice((prev: any) => {
+      setTotal((prev: any) => {
         return { ...prev, min }
       })
     }
@@ -25,11 +25,11 @@ const PriceFilter = ({ name, price, setPrice }: any) => {
 
     const max = parseFloat(val)
     if (!max) {
-      setPrice((prev: any) => {
+      setTotal((prev: any) => {
         return { ...prev, max: 0 }
       })
     } else {
-      setPrice((prev: any) => {
+      setTotal((prev: any) => {
         return { ...prev, max }
       })
     }
@@ -40,27 +40,27 @@ const PriceFilter = ({ name, price, setPrice }: any) => {
       <div className="px-5 py-5">
         <TextInput
           className={`my-5 ${
-            price.min > price.max &&
-            price.max > 0 &&
+            total.min > total.max &&
+            total.max > 0 &&
             'border-red-500 focus:border-red-500'
           }`}
           placeholder="Min. Price"
-          name="min price option"
+          name="min total option"
           type="number"
-          value={price.min}
+          value={total.min}
           onChange={handleMinInput}
         ></TextInput>
 
         <TextInput
-          className={`my-5 ${
-            price.min > price.max &&
-            price.max > 0 &&
+          className={` ${
+            total.min > total.max &&
+            total.max > 0 &&
             'border-red-500 focus:border-red-500'
           }`}
           placeholder="Max. Price"
-          name="min price option"
+          name="min total option"
           type="number"
-          value={price.max}
+          value={total.max}
           onChange={handleMaxInput}
         ></TextInput>
       </div>
@@ -68,4 +68,4 @@ const PriceFilter = ({ name, price, setPrice }: any) => {
   )
 }
 
-export default PriceFilter
+export default TotalFilter

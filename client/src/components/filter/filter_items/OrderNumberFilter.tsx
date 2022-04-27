@@ -1,4 +1,4 @@
-import TextInput from '../inputs/TextInput'
+import TextInput from '../../inputs/TextInput'
 
 const OrderNumberFilter = ({ name, orderNumber, setOrderNumber }: any) => {
   const handleMinInput = (e: any) => {

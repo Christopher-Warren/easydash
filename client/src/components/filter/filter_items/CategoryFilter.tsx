@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react'
-import Checkbox from '../inputs/Checkbox'
+import Checkbox from '../../inputs/Checkbox'
 
-export const CategoryList = ({
+const CategoryFilter = ({
   categories,
   categoriesState,
   setCategoriesState,
@@ -44,3 +43,5 @@ export const CategoryList = ({
     )
   })
 }
+
+export default CategoryFilter

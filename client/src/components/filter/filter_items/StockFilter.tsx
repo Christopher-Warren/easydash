@@ -1,5 +1,5 @@
-import Checkbox from '../inputs/Checkbox'
-import TextInput from '../inputs/TextInput'
+import Checkbox from '../../inputs/Checkbox'
+import TextInput from '../../inputs/TextInput'
 
 const StockFilter = ({ name, stock, setStock }: any) => {
   const handleMinInput = (e: any) => {

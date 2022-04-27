@@ -7,7 +7,7 @@ import { addError } from '../redux/error/errorSlice'
 
 import { useHistory } from 'react-router-dom'
 import { USER_LOGIN } from '../graphql/mutation_vars'
-import { IS_ADMIN, IS_LOGGED_IN, LOGOUT } from '../graphql/client_extension'
+import { IS_ADMIN, IS_LOGGED_IN, LOGOUT } from '../graphql/types_extension'
 
 const useAdminLogin = () => {
   const history = useHistory()
