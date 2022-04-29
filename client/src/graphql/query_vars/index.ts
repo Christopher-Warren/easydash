@@ -26,6 +26,7 @@ export const GET_PRODUCTS = gql`
   query getProducts($input: GetProductInput) {
     products(input: $input) {
       name
+      createdAt
       images
       category {
         name
@@ -47,6 +48,7 @@ export const GET_ALL_ORDERS = gql`
       _id
       orderNumber
       total
+      createdAt
       status {
         processed
         paid

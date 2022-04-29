@@ -22,7 +22,7 @@ const OrdersFilter = ({
   filter,
   setFilter,
 }: any) => {
-  const [hide, setHide] = useState(false)
+  const [hide, setHide] = useState(true)
 
   const [total, setTotal] = useState({ min: 0, max: 0 })
   const [orderNumber, setOrderNumber] = useState({ min: 0, max: 0 })

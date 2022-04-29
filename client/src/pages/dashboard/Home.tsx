@@ -1,7 +1,33 @@
 import PageWrapper from '../../components/PageWrapper'
 import InfoCard from '../../components/cards/InfoCardSmall'
+import { useEffect } from 'react'
+import { DateTime } from 'luxon'
+const Home = ({ userId, products, orders }: any) => {
+  const { data, refetch } = products
 
-const Home = ({ userId }: any) => {
+  const newdate = DateTime.fromMillis(1648400167835)
+
+  const anotherdate = DateTime.utc(1982, 5, 25).toISO()
+
+  console.log(newdate.toISO())
+
+  useEffect(() => {
+    refetch({
+      input: {
+        filter: [
+          {
+            field: 'createdAt',
+            query: {
+              gte: newdate,
+              lte: newdate,
+            },
+          },
+        ],
+        limit: 999,
+      },
+    })
+  }, [refetch])
+
   return (
     <PageWrapper>
       <h1 className="text-4xl font-medium">Hello, {userId}</h1>

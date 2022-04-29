@@ -20,6 +20,8 @@ import OrdersFilter from '../../../components/filter/OrdersFilter'
 
 import { useHistory } from 'react-router-dom'
 
+import { DateTime, Interval } from 'luxon'
+
 const Orders = ({ products, orders }: any) => {
   const { data, loading, error, refetch, networkStatus } = products
   const {
@@ -71,13 +73,49 @@ const Orders = ({ products, orders }: any) => {
     if (error2) {
       console.log(error2)
     }
-
+    const now = DateTime.now()
     if (!loading2 && !error2) {
       return data2.getAllOrders.map((item: any, index: any) => {
+        const dt = DateTime.fromMillis(parseFloat(item.createdAt))
+
+        const ts = now
+          .diff(dt, ['minutes', 'hours', 'days', 'weeks', 'months'])
+          .toObject()
+        const { minutes, hours, days, weeks, months } = ts
+        let createdAt = ''
+
+        if (months) {
+          createdAt = createdAt.concat(
+            months.toString() + (months > 0 ? ' months ' : ' months '),
+          )
+        }
+
+        if (weeks && months === 0) {
+          createdAt = createdAt.concat(
+            weeks.toString() + (weeks > 0 ? ' Weeks ' : ' Week '),
+          )
+        }
+        if (days && !weeks) {
+          createdAt = createdAt.concat(
+            days.toString() + (days > 0 ? ' days ' : ' days '),
+          )
+        }
+        if (hours && !weeks && !days) {
+          createdAt = createdAt.concat(
+            hours.toString() + (hours > 0 ? ' hours ' : ' hours '),
+          )
+        }
+        if (minutes && !days) {
+          createdAt = createdAt.concat(
+            minutes.toFixed().toString() +
+              (minutes > 0 ? ' minutes ' : ' minutes '),
+          )
+        }
+
         return (
           <tr
             className={
-              ' hover:bg-purple-200 hover:dark:bg-gray-700  dark:odd:bg-slate-800 cursor-pointer border-y dark:border-gray-700 border-gray-200'
+              'transition-colors hover:bg-purple-200 hover:dark:bg-gray-700  dark:odd:bg-slate-800 cursor-pointer border-y dark:border-gray-700 border-gray-200'
             }
             key={index}
             onClick={(e: any) => {
@@ -92,6 +130,9 @@ const Orders = ({ products, orders }: any) => {
                   </h2>
                 </div>
               </div>
+            </td>
+            <td className="">
+              <div className=" relative">{createdAt + 'ago'}</div>
             </td>
             <td className="">
               <div className=" relative">
@@ -231,6 +272,29 @@ const Orders = ({ products, orders }: any) => {
                   <polyline points="5 12 12 5 19 12"></polyline>
                 </svg>
               </th>
+
+              <th
+                onClick={() => handleSort('createdAt')}
+                className="w-3/12 hover:text-gray-700 dark:hover:text-gray-200"
+              >
+                Created at
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className={` ml-1 mb-0.5 w-4 inline
+                      ${sort !== 'createdAt' && 'hidden'}
+                      ${order === 1 ? 'rotate-0' : 'rotate-180 '}`}
+                >
+                  <line x1="12" y1="19" x2="12" y2="5"></line>
+                  <polyline points="5 12 12 5 19 12"></polyline>
+                </svg>
+              </th>
+
               <th
                 onClick={() => handleSort('status.fulfilled')}
                 className="w-3/12 hover:text-gray-700 dark:hover:text-gray-200"
@@ -252,6 +316,7 @@ const Orders = ({ products, orders }: any) => {
                   <polyline points="5 12 12 5 19 12"></polyline>
                 </svg>
               </th>
+
               <th
                 onClick={() => handleSort('status.paid')}
                 className="w-1/12 hover:text-gray-700 dark:hover:text-gray-200"

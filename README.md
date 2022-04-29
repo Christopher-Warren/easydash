@@ -23,7 +23,7 @@
   - [ ] Integrate _"Weekly sales"_
   - [ ] Integrate "Activity" panel
 
-  - [ ] **Endpoints**
+  - [x] **Endpoints**
 
     - [x] CRUD operations for products
       - [x] Create, read, update, delete
@@ -55,8 +55,8 @@
   - [x] Implement _Filter_ feature
   - [x] Implement _Search_ feature
 
-- [ ] Complete **Orders Pages**
+- [x] Complete **Orders Page**
 
-- [ ] Complete **Users Pages**
+- [ ] Optional: Complete **Users Pages**
 
 * [ ] Optional: Complete **Settings Page**

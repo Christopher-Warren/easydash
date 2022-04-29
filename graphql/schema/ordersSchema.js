@@ -8,6 +8,7 @@ type Order {
     billingInfo: BillingInfo
     shippingInfo: ShippingInfo
     trackingNumber: String
+    createdAt: String
 }
 
 type OrderedProduct {

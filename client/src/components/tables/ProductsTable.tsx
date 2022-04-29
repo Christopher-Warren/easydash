@@ -54,7 +54,7 @@ const ProductsTable = ({
       return data.products.map((item: any, index: any) => {
         return (
           <tr
-            className={` hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 cursor-pointer border-y dark:border-gray-700 border-gray-200  ${
+            className={` hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 transition-colors  cursor-pointer border-y dark:border-gray-700 border-gray-200  ${
               isChecked[index] &&
               'bg-purple-50 dark:bg-gray-700/50 odd:dark:bg-gray-700/50'
             }`}

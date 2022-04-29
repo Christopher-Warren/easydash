@@ -17,7 +17,6 @@ import ViewOrder from './dashboard/orders/ViewOrder'
 import { GET_ALL_ORDERS, GET_PRODUCTS } from '../graphql/query_vars'
 
 const Dashboard = ({ logout, userId }: any) => {
-  const history = useHistory()
   const products = useQuery(GET_PRODUCTS, {
     notifyOnNetworkStatusChange: true,
   })
@@ -34,7 +33,7 @@ const Dashboard = ({ logout, userId }: any) => {
       </Route>
       <div className="lg:pl-20">
         <Route path="/dashboard" exact>
-          <Home userId={userId} />
+          <Home userId={userId} products={products} orders={orders} />
           {/* Need to use this button in Products page */}
           <PrimaryButton className="py-2 px-4" type="button" onClick={logout}>
             Logout

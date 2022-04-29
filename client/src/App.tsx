@@ -52,6 +52,7 @@ function App() {
 
         {/* Customer Entry */}
         <Route path="/" exact>
+          <Redirect to="/dashboard" />
           {user.isLoggedIn && (
             <div>
               <h1>You are logged in!</h1>
