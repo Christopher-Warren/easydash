@@ -5,11 +5,14 @@ import { DateTime } from 'luxon'
 const Home = ({ userId, products, orders }: any) => {
   const { data, refetch } = products
 
-  const newdate = DateTime.fromMillis(1648400167835)
+  const now = DateTime.now().toMillis()
 
-  const anotherdate = DateTime.utc(1982, 5, 25).toISO()
+  const anotherdate = DateTime.utc(2022, 4, 22).toMillis()
 
-  console.log(newdate.toISO())
+  console.log(now)
+  console.log(anotherdate)
+
+  console.log(data)
 
   useEffect(() => {
     refetch({
@@ -18,8 +21,8 @@ const Home = ({ userId, products, orders }: any) => {
           {
             field: 'createdAt',
             query: {
-              gte: newdate,
-              lte: newdate,
+              gte: anotherdate,
+              lte: now,
             },
           },
         ],

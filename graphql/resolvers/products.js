@@ -4,8 +4,12 @@ const Category = require('../../models/category')
 const Subcategory = require('../../models/subcategory')
 const normalizeInputs = require('../../utils/normalizeInputs')
 
+const generateMongoFilterStages = require('../../utils/generateMongoFilterStages')
+
 const S3 = require('aws-sdk/clients/s3')
 const subcategory = require('../../models/subcategory')
+
+const { DateTime } = require('luxon')
 
 module.exports = {
   products: async ({ input }, { isAdmin, sessionExpired }) => {
@@ -78,40 +82,10 @@ module.exports = {
       { $limit: limit },
     ]
 
-    function generateFilterStages(filter) {
-      if (!filter) return
-      function parseQueryOperators(filter) {
-        filter.forEach((filter) => {
-          for (const key of Object.keys(filter.query)) {
-            console.log(filter.query[key])
-            if (filter.query[key].length === 0) {
-              filter.query = null
+    generateMongoFilterStages(filter, stages)
 
-              return
-            }
-            filter.query['$' + key] = filter.query[key]
-            delete filter.query[key]
-          }
-        })
-      }
-
-      parseQueryOperators(filter)
-
-      filter.forEach((i) => {
-        if (!i.query) return
-        const filterStage = {
-          $match: {
-            [i.field]: i.query,
-          },
-        }
-
-        stages.unshift(filterStage)
-      })
-    }
-
-    generateFilterStages(filter)
-
-    // unshift lookup operations
+    // Must populate category and subcategory data
+    // early in aggregation pipeline
     stages.unshift(
       {
         $lookup: {
@@ -133,6 +107,7 @@ module.exports = {
       { $unwind: '$subcategory' },
     )
 
+    // Search operation must be the first stage
     if (search) {
       stages.unshift({
         $search: {
@@ -143,23 +118,11 @@ module.exports = {
           },
         },
       })
-
-      stages.push({
-        $project: {
-          _id: 1,
-          name: 1,
-          category: 1,
-          subcategory: 1,
-          description: 1,
-          stock: 1,
-          price: 1,
-          images: 1,
-          searchScore: { $meta: 'searchScore' },
-        },
-      })
     }
 
     const products = await Product.aggregate(stages)
+
+    console.log(products[0].createdAt)
 
     return products
   },

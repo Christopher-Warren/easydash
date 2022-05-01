@@ -1,6 +1,6 @@
 const Product = require('../../models/product')
 
-const normalizeInputs = require('../../utils/normalizeInputs')
+const generateMongoFilterStages = require('../../utils/generateMongoFilterStages')
 
 const Order = require('../../models/order')
 
@@ -120,45 +120,7 @@ module.exports = {
       // },
     ]
 
-    function generateFilterStages(filter) {
-      if (!filter) return
-      function parseQueryOperators(filter) {
-        filter.forEach((filter) => {
-          for (const key of Object.keys(filter.query)) {
-            if (key !== 'boolean') {
-              if (filter.query[key].length === 0) {
-                filter.query = null
-
-                return
-              }
-
-              filter.query['$' + key] = filter.query[key]
-              delete filter.query[key]
-            }
-
-            if (key === 'boolean') {
-              filter.query = filter.query[key]
-              delete filter.query[key]
-            }
-          }
-        })
-      }
-
-      parseQueryOperators(filter)
-
-      filter.forEach((i) => {
-        if (!i.query) return
-        const filterStage = {
-          $match: {
-            [i.field]: i.query,
-          },
-        }
-
-        stages.unshift(filterStage)
-      })
-    }
-
-    generateFilterStages(filter)
+    generateMongoFilterStages(filter, stages)
 
     if (search) {
       stages.unshift({
