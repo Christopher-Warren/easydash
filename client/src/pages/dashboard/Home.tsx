@@ -3,33 +3,43 @@ import InfoCard from '../../components/cards/InfoCardSmall'
 import { useEffect } from 'react'
 import { DateTime } from 'luxon'
 const Home = ({ userId, products, orders }: any) => {
-  const { data, refetch } = products
-
-  const now = DateTime.now().toMillis()
-
-  const anotherdate = DateTime.utc(2022, 4, 22).toMillis()
-
-  console.log(now)
-  console.log(anotherdate)
-
-  console.log(data)
+  const { data, refetch } = orders
 
   useEffect(() => {
+    const now = DateTime.now().toMillis()
+    const pastWeek = DateTime.now().minus({ days: 7 }).toMillis()
+
     refetch({
       input: {
         filter: [
           {
             field: 'createdAt',
             query: {
-              gte: anotherdate,
+              gte: pastWeek,
               lte: now,
             },
           },
         ],
-        limit: 999,
       },
     })
   }, [refetch])
+
+  const renderRecentSales = (data: any) => {
+    console.log('renderrec', data)
+    if (!data) return '0'
+
+    return data.getAllOrders.reduce((acc: number, arr: any) => {
+      console.log(arr)
+      return acc + arr.total
+    }, 0)
+  }
+
+  const renderRecentOrders = (data: any) => {
+    console.log('renderrec', data)
+    if (!data) return '0'
+
+    return data.getAllOrders.length
+  }
 
   return (
     <PageWrapper>
@@ -40,17 +50,22 @@ const Home = ({ userId, products, orders }: any) => {
         <div className="col-span-1  lg:col-span-9 grid grid-cols-2 gap-4">
           <div className="col-span-2 md:col-auto">
             <InfoCard title="Sales">
-              <span className="text-sm block">Today</span>
+              <span className="text-sm block">Past week</span>
 
-              <span className="text-4xl block text-right">$1000.42</span>
+              <span className="text-4xl block text-right">
+                {'$'}
+                {renderRecentSales(data)}
+              </span>
             </InfoCard>
           </div>
 
           <div className="col-span-2 md:col-auto">
-            <InfoCard title="Sales">
-              <span className="text-sm block">Today</span>
+            <InfoCard title="Orders">
+              <span className="text-sm block">Past week</span>
 
-              <span className="text-4xl block text-right">$1000.42</span>
+              <span className="text-4xl block text-right">
+                {renderRecentOrders(data)}
+              </span>
             </InfoCard>
           </div>
           <div className="col-span-2">

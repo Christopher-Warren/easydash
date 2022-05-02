@@ -175,11 +175,6 @@ const ModifyProductModal = ({ products, productId }: ModifyProductType) => {
   }
 
   const handleFormSubmit = (e: React.FormEvent) => {
-    // • Solve error
-    // • handle images
-    // • make component for createProduct
-    console.log('test')
-
     e.preventDefault()
     modifyProduct({
       variables: {
@@ -336,7 +331,6 @@ const ModifyProductModal = ({ products, productId }: ModifyProductType) => {
             red
             padding="px-10 py-2"
             onClick={(e: any) => {
-              console.log('test 2 ')
               e.preventDefault()
               const closeModal = () => {
                 dispatch(toggleModal({ value: null }))
