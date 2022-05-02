@@ -255,7 +255,6 @@ const CreateOrderModal = ({
                   checked={isSameChecked}
                   id="isSame"
                   label="Same as shipping"
-                  className=" w-5 h-5 lg:h-4 lg:w-4 accent-purple-500  align-middle"
                 ></Checkbox>
               </div>
             }

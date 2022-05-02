@@ -6,6 +6,7 @@ module.exports = function generateFilterStages(filter, stages) {
   // Each index contains an object with one field:string and a query:object.
   // Here, we get each filter object, and loop through it's queries
   // Typically nested loops should be avoided, but s
+
   filter.forEach((filter) => {
     for (const key of Object.keys(filter.query)) {
       if (filter.query[key].length === 0) {
@@ -33,8 +34,6 @@ module.exports = function generateFilterStages(filter, stages) {
       delete filter.query[key]
     }
   })
-
-  console.log(filter[0].query)
 
   // Prepares filters for aggregation
   filter.forEach((i) => {

@@ -4,3 +4,4 @@
 .env
 env.js
 /dev
+/routes/test.js

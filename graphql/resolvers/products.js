@@ -122,8 +122,6 @@ module.exports = {
 
     const products = await Product.aggregate(stages)
 
-    console.log(products[0].createdAt)
-
     return products
   },
   createProduct: async ({ productInput, sessionExpired }, { isAdmin }) => {

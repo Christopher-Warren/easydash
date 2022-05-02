@@ -1,4 +1,5 @@
 const fs = require('fs')
+const path = require('path')
 const S3 = require('aws-sdk/clients/s3') // AWS obtains credentials automatically from env variables
 const multer = require('multer')
 
@@ -104,9 +105,21 @@ module.exports = (app) =>
         return mongoImages
       })
       .then((data) => {
+        // Cleanup tmp folder after images are successfully uploaded
+        const tmpPath = path.dirname(__dirname) + '/tmp'
+
+        fs.readdir(tmpPath, (err, files) => {
+          files.forEach((imgPath) => {
+            fs.unlink(tmpPath + '/' + imgPath, (err) => {
+              if (err) throw err
+            })
+          })
+        })
+
         res.json({ message: 'Image upload success', images: imgUrls })
       })
       .catch((err) => {
+        console.error(err)
         res.json({ error: err })
       })
   })

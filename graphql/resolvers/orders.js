@@ -7,7 +7,6 @@ const Order = require('../../models/order')
 const { DateTime } = require('luxon')
 const now = DateTime.now()
 const later = DateTime.local(2022, 10, 12)
-// console.log(['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'])
 
 module.exports = {
   createOrder: async ({ orderInput }) => {
