@@ -23,8 +23,10 @@ import { useHistory } from 'react-router-dom'
 import { DateTime, Interval } from 'luxon'
 import { calcRelativeCreatedAt } from '../../../utils/calcRelativeCreatedAt'
 
+import { useLocation } from 'react-router-dom'
+
 const Orders = ({ orders }: any) => {
-  const { data, loading, error, refetch, networkStatus } = orders
+  const { data, loading, error, refetch, networkStatus, stopPolling } = orders
 
   const dispatch = useAppDispatch()
 
@@ -37,11 +39,23 @@ const Orders = ({ orders }: any) => {
 
   const [search, setSearch] = useState('')
 
-  const [filter, setFilter] = useState([])
+  const [filter, setFilter] = useState<any[]>([])
 
   const history = useHistory()
 
+  const location: any = useLocation()
+
   useEffect(() => {
+    // When user is coming from home using the link to access
+    // unfulfilled orders, state is set to show paid and unfulfilled orders.
+
+    if (location.state) setFilter(location.state)
+  }, [location, stopPolling])
+
+  useEffect(() => {
+    // Data is initally polling from Dashboard4.tsx
+    // we need to stop this when viewing orders
+    stopPolling()
     refetch({
       input: {
         limit: limit,
@@ -52,7 +66,7 @@ const Orders = ({ orders }: any) => {
         search: search,
       },
     })
-  }, [refetch, limit, skip, sort, order, filter, search])
+  }, [refetch, limit, skip, sort, order, filter, search, stopPolling])
 
   const handleSort = (string: string) => {
     setSort(string)
@@ -178,9 +192,9 @@ const Orders = ({ orders }: any) => {
         >
           Create Order
         </PrimaryButton>
-        <SecondaryButton padding="px-5 py-1.5">
+        {/* <SecondaryButton padding="px-5 py-1.5">
           Manage Categories
-        </SecondaryButton>
+        </SecondaryButton> */}
       </div>
 
       <TableCard>
@@ -357,7 +371,6 @@ const Orders = ({ orders }: any) => {
                 onChange={(e: any) => {
                   setLimit(parseInt(e.currentTarget.value))
                   setSkip(0)
-                  console.log()
                 }}
               >
                 <option>5</option>

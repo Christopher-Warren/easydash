@@ -23,6 +23,7 @@ const Dashboard = ({ logout, userId }: any) => {
 
   const orders = useQuery(GET_ALL_ORDERS, {
     notifyOnNetworkStatusChange: true,
+    pollInterval: 5000,
   })
 
   return (
@@ -33,11 +34,13 @@ const Dashboard = ({ logout, userId }: any) => {
       </Route>
       <div className="lg:pl-20">
         <Route path="/dashboard" exact>
-          <Home userId={userId} products={products} orders={orders} />
+          <Home
+            userId={userId}
+            products={products}
+            orders={orders}
+            logout={logout}
+          />
           {/* Need to use this button in Products page */}
-          <PrimaryButton className="py-2 px-4" type="button" onClick={logout}>
-            Logout
-          </PrimaryButton>
         </Route>
 
         <Route path="/dashboard/products" exact>

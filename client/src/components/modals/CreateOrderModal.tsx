@@ -1,6 +1,9 @@
 import { QueryResult, useMutation, useQuery } from '@apollo/client'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { CREATE_ORDER } from '../../graphql/mutation_vars'
+import { addError } from '../../redux/error/errorSlice'
+import { toggleModal } from '../../redux/modal/modalSlice'
 import PrimaryButton from '../buttons/PrimaryButton'
 import SecondaryButton from '../buttons/SecondaryButton'
 
@@ -25,6 +28,9 @@ const CreateOrderModal = ({
     confirm: 'Back',
     cancel: 'Stay',
   }
+  const { refetch } = orders
+
+  const dispatch = useDispatch()
 
   const [createOrder, { data }] = useMutation(CREATE_ORDER)
 
@@ -37,10 +43,10 @@ const CreateOrderModal = ({
     lastName: '',
     address: '',
     address2: '',
-    city: '',
-    state: '',
+    city: 'Atlanta',
+    state: 'GA',
     zipcode: '',
-    country: '',
+    country: 'USA',
   }
 
   const [shippingInfo, setShippingInfo] = useState(initShippingBilling)
@@ -128,17 +134,30 @@ const CreateOrderModal = ({
             variables: {
               orderInput: {
                 products: parsedCartItems,
-                shippingInput: shippingInfo,
-                billingInput: isSameChecked ? shippingInfo : billingInfo,
+                shippingInput: {
+                  ...shippingInfo,
+                  zipcode: parseFloat(shippingInfo.zipcode),
+                },
+                billingInput: isSameChecked
+                  ? {
+                      ...shippingInfo,
+                      zipcode: parseFloat(shippingInfo.zipcode),
+                    }
+                  : {
+                      ...billingInfo,
+                      zipcode: parseFloat(billingInfo.zipcode),
+                    },
               },
             },
+          }).then(() => {
+            refetch()
+            dispatch(addError('Order successfully created!'))
+            dispatch(toggleModal({ value: null }))
           })
-
-          console.log(data)
         }}
       >
         <div className="grid lg:grid-cols-2 gap-6">
-          <InfoCardSmall title="Shipping" className="mt-6 p-5">
+          <InfoCardSmall title="Shipping" className="mt-6 lg:p-5 py-5">
             <div className="grid grid-cols-8 gap-6">
               <TextInput
                 value={shippingInfo.firstName}
@@ -241,6 +260,7 @@ const CreateOrderModal = ({
             </div>
           </InfoCardSmall>
           <InfoCardSmall
+            className="mt-6 lg:p-5 py-5"
             title="Billing"
             altTitle={
               <div className="col-span-5 mt-1 text-right">
@@ -258,7 +278,6 @@ const CreateOrderModal = ({
                 ></Checkbox>
               </div>
             }
-            className="mt-6 p-5"
           >
             <div
               className={`grid grid-cols-8 gap-6  ${
@@ -386,7 +405,12 @@ const CreateOrderModal = ({
           <PrimaryButton type="submit" className="px-3 py-1">
             Create Order
           </PrimaryButton>
-          <SecondaryButton className="px-3 py-1">Back</SecondaryButton>
+          <SecondaryButton
+            onClick={(e: any) => dispatch(toggleModal({ value: null }))}
+            className="px-3 py-1"
+          >
+            Back
+          </SecondaryButton>
         </div>
       </form>
     </ModalContainer>

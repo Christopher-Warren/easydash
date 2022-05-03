@@ -14,7 +14,9 @@ const { DateTime } = require('luxon')
 module.exports = {
   products: async ({ input }, { isAdmin, sessionExpired }) => {
     if (sessionExpired) throw new Error('Session expired')
-    const limit = input?.limit ? input.limit : 5
+
+    const limit = input?.limit ? input.limit : null
+
     const skip = input?.skip ? input.skip : 0
 
     const sort = input?.sort ? input.sort : '_id'
@@ -79,8 +81,9 @@ module.exports = {
         $sort: { [sort]: order },
       },
       { $skip: skip },
-      { $limit: limit },
     ]
+
+    if (limit) stages.push({ $limit: limit })
 
     generateMongoFilterStages(filter, stages)
 

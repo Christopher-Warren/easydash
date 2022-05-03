@@ -92,9 +92,10 @@ module.exports = {
 
     return order.populate('products')
   },
-  getAllOrders: async ({ input }, { isAdmin, sessionExpired }) => {
+  getAllOrders: async ({ input }, { isAdmin, sessionExpired, isUser }) => {
     if (sessionExpired) throw new Error('Session expired')
-    if (!isAdmin) throw new Error('You do not have permission')
+
+    if (!isAdmin && !isUser) throw new Error('You do not have permission!!!!!')
 
     const limit = input?.limit ? input.limit : null
     const skip = input?.skip ? input.skip : 0

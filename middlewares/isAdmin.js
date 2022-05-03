@@ -13,6 +13,12 @@ module.exports = async function isAdmin(req, res, next) {
     } else {
       req.isAdmin = false
     }
+
+    if (user.role === 'USER') {
+      req.isUser = true
+    } else {
+      req.isUser = false
+    }
   } catch (error) {
     if (error.message.includes('jwt expired')) {
       req.sessionExpired = true

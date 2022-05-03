@@ -5,9 +5,12 @@
 
 @import url('./assets/css/ErrorNotifs.css');
 
-::selection {
-  background-color: #a78bfa5b;
+.logo {
+  filter: brightness(3);
 }
+/* ::selection {
+  background-color: #a78bfa5b;
+} */
 * {
   font-family: 'Rubik', sans-serif;
 }

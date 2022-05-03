@@ -56,7 +56,7 @@ const OrdersFilter = ({
         newFilter.push({
           field: 'status.paid',
           query: {
-            boolean: statusChecked.paid,
+            eq: statusChecked.paid ? 'true' : 'false',
           },
         })
       }
@@ -65,7 +65,7 @@ const OrdersFilter = ({
         newFilter.push({
           field: 'status.fulfilled',
           query: {
-            boolean: statusChecked.fulfilled,
+            eq: statusChecked.fulfilled ? 'true' : 'false',
           },
         })
       }

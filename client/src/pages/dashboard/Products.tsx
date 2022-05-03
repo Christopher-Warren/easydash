@@ -37,9 +37,9 @@ const Products = ({ products }: { products: QueryResult }) => {
         >
           New Product
         </PrimaryButton>
-        <SecondaryButton padding="px-5 py-1.5">
+        {/* <SecondaryButton padding="px-5 py-1.5">
           Manage Categories
-        </SecondaryButton>
+        </SecondaryButton> */}
       </div>
 
       <ProductsTable products={products}></ProductsTable>

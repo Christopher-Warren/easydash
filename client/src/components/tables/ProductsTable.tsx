@@ -10,6 +10,7 @@ import TableCard from '../cards/TableCard'
 import Checkbox from '../inputs/Checkbox'
 import SelectPrimary from '../inputs/SelectPrimary'
 import LoadingSpinner from '../LoadingSpinner'
+import { useLocation } from 'react-router-dom'
 
 const ProductsTable = ({
   products,
@@ -31,6 +32,13 @@ const ProductsTable = ({
   const [search, setSearch] = useState('')
 
   const [filter, setFilter] = useState([])
+
+  const location: any = useLocation()
+
+  useEffect(() => {
+    if (location.state) setFilter(location.state)
+  }, [location])
+
   useEffect(() => {
     refetch({
       input: {
@@ -42,6 +50,8 @@ const ProductsTable = ({
         search: search,
       },
     })
+
+    console.log(filter)
   }, [refetch, limit, skip, sort, order, filter, search])
   if (data && isChecked.length !== data.products.length) {
     setIsChecked(() => data.products.map(() => false))
@@ -148,7 +158,7 @@ const ProductsTable = ({
             className="hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 border-y border-gray-200 dark:border-gray-700"
             key={i}
           >
-            <td className="relative w-8 px-4 py-6  py-[1.437rem]">
+            <td className="relative w-8 px-4   py-[1.437rem]">
               <Checkbox
                 type="checkbox"
                 className="lg:w-4 w-5 h-5 lg:h-4 accent-purple-500 "

@@ -11,7 +11,7 @@ const OrdersActivity = () => {
         order: -1,
       },
     },
-    pollInterval: 1000,
+    pollInterval: 5000,
   })
 
   const RenderRecentOrders = () => {
@@ -19,12 +19,14 @@ const OrdersActivity = () => {
 
     return data.getAllOrders.map((order: any) => {
       const createdAt = calcRelativeCreatedAt(order.createdAt)
+
       return (
         <li className="" key={order.orderNumber}>
           <div className="bg-gray-900 absolute h-px  left-0 w-full"></div>
           <div className="inline-block py-3">
             <span className="block text-lg">
-              Order #{order.orderNumber} processed
+              Order #{order.orderNumber}{' '}
+              {order.status.paid ? 'paid' : 'processed'}
             </span>
             <span className="block text-gray-500 text-sm">{createdAt}</span>
           </div>

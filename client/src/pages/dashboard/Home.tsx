@@ -3,8 +3,42 @@ import InfoCard from '../../components/cards/InfoCardSmall'
 import { useEffect } from 'react'
 import { DateTime } from 'luxon'
 import OrdersActivity from '../../components/orders/OrdersActivity'
-const Home = ({ userId, products, orders }: any) => {
+import { Link } from 'react-router-dom'
+import { useQuery } from '@apollo/client'
+import { GET_ALL_ORDERS, GET_PRODUCTS } from '../../graphql/query_vars'
+import PrimaryButton from '../../components/buttons/PrimaryButton'
+import SecondaryButton from '../../components/buttons/SecondaryButton'
+const Home = ({ userId, products, orders, logout }: any) => {
   const { data, refetch } = orders
+
+  const unfulfilled = useQuery(GET_ALL_ORDERS, {
+    variables: {
+      input: {
+        limit: null,
+        filter: {
+          field: 'status.fulfilled',
+          query: {
+            eq: 'false',
+          },
+        },
+      },
+    },
+  })
+
+  const outOfStock = useQuery(GET_PRODUCTS, {
+    variables: {
+      input: {
+        limit: null,
+        filter: {
+          field: 'stock',
+          query: {
+            gte: 0,
+            lte: 0,
+          },
+        },
+      },
+    },
+  })
 
   useEffect(() => {
     const now = DateTime.now().toMillis()
@@ -41,11 +75,20 @@ const Home = ({ userId, products, orders }: any) => {
 
   return (
     <PageWrapper>
-      <div className="mb-8">
-        <h1 className="md:text-4xl text-3xl font-medium">Hello, {userId}</h1>
-        <span className="tracking-wider">
-          Welcome to your store's dashboard
-        </span>
+      <div className="md:flex justify-between mb-8">
+        <div className="">
+          <h1 className="lg:text-4xl md:text-3xl text-2xl font-medium">
+            Hello, {userId}
+          </h1>
+          <span className="tracking-wider">
+            Welcome to your store's dashboard
+          </span>
+        </div>
+        <div className="text-right ">
+          <SecondaryButton className="py-2 px-4" type="button" onClick={logout}>
+            Logout
+          </SecondaryButton>
+        </div>
       </div>
       <div className="grid md:grid-cols-4 grid-cols-1 gap-6 children:h-min row-span-full">
         <div className="grid grid-cols-2  col-span-3 gap-6">
@@ -74,10 +117,86 @@ const Home = ({ userId, products, orders }: any) => {
             </InfoCard>
           </div>
           <div className="col-span-2">
-            <InfoCard title="Sales">
-              <span className="text-sm block">Today</span>
-
-              <span className="text-4xl block text-right">$1000.42</span>
+            <InfoCard className="children:p-0 overflow-hidden">
+              <ol className="children:p-3 text-lg">
+                <li className=" hover:bg-purple-200 hover:dark:bg-gray-700 transition-colors cursor-pointer">
+                  <Link
+                    className="flex justify-between w-full"
+                    to={{
+                      pathname: '/dashboard/orders',
+                      state: [
+                        {
+                          field: 'status.paid',
+                          query: {
+                            eq: 'true',
+                          },
+                        },
+                        {
+                          field: 'status.fulfilled',
+                          query: {
+                            eq: 'false',
+                          },
+                        },
+                      ],
+                    }}
+                  >
+                    <span>
+                      {unfulfilled.data && unfulfilled.data.getAllOrders.length}{' '}
+                      orders ready to fulfill
+                    </span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="rotate-180"
+                    >
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                  </Link>
+                </li>
+                <div className="w-full h-px bg-gray-700 !p-0"></div>
+                <li className=" hover:bg-purple-200 hover:dark:bg-gray-700 transition-colors cursor-pointer">
+                  <Link
+                    className="flex justify-between w-full"
+                    to={{
+                      pathname: '/dashboard/products',
+                      state: [
+                        {
+                          field: 'stock',
+                          query: {
+                            gte: 0,
+                            lte: 0,
+                          },
+                        },
+                      ],
+                    }}
+                  >
+                    <span className="">
+                      {outOfStock.data?.products?.length} products out of stock
+                    </span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="rotate-180"
+                    >
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                  </Link>
+                </li>
+              </ol>
             </InfoCard>
           </div>
         </div>

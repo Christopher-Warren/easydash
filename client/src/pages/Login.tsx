@@ -119,7 +119,7 @@ const Login = ({ login, loading, user, isAdmin }: any) => {
 
               <div className={loading ? 'hidden' : ''}>
                 <img
-                  className="lg:mx-0 mx-auto"
+                  className="lg:mx-0 mx-auto dark:brightness-[2.5] "
                   src={logo}
                   alt="Easy Dash Logo"
                 />

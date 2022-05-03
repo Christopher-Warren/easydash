@@ -3,6 +3,10 @@ import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 const SideBar = () => {
   const [sideToggle, setSideToggle] = useState(false)
+
+  const handleNavClick = (e: any) => {
+    setSideToggle(false)
+  }
   return (
     <div
       className={`fixed top-0 w-20  h-28 z-10 bg-white dark:border-gray-100/25 transition-all duration-200  overflow-hidden lg:h-screen lg:border-r lg:shadow-xl
@@ -58,7 +62,12 @@ const SideBar = () => {
           )}
         </button>
         {/* Replaces menu button with Logo on lg+ */}
-        <NavLink to="/dashboard" activeClassName="activeNav" exact>
+        <NavLink
+          onClick={handleNavClick}
+          to="/dashboard"
+          activeClassName="activeNav"
+          exact
+        >
           <div className="p-4 my-2 transition-all text-gray-500">
             <svg
               className="mx-auto w-8 h-8 mt-2"
@@ -78,7 +87,11 @@ const SideBar = () => {
           </div>
         </NavLink>
         {/* Products Page */}
-        <NavLink to="/dashboard/products" activeClassName="activeNav">
+        <NavLink
+          onClick={handleNavClick}
+          to="/dashboard/products"
+          activeClassName="activeNav"
+        >
           <div className="p-4 my-2 transition-all text-gray-500">
             <svg
               className="mx-auto w-8 h-8 mt-2"
@@ -95,7 +108,11 @@ const SideBar = () => {
             </svg>
           </div>
         </NavLink>
-        <NavLink to="/dashboard/orders" activeClassName="activeNav">
+        <NavLink
+          onClick={handleNavClick}
+          to="/dashboard/orders"
+          activeClassName="activeNav"
+        >
           <div className="p-4 my-2 transition-all text-gray-500">
             <svg
               className="mx-auto w-8 h-8 mt-2"
@@ -112,7 +129,7 @@ const SideBar = () => {
             </svg>
           </div>
         </NavLink>
-        <NavLink to="/dashboard/users" activeClassName="activeNav">
+        {/* <NavLink onClick={handleNavClick} to="/dashboard/users" activeClassName="activeNav">
           <div className="p-4 my-2 transition-all text-gray-500">
             <svg
               className="mx-auto w-8 h-8 mt-2"
@@ -127,8 +144,8 @@ const SideBar = () => {
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
           </div>
-        </NavLink>
-        <NavLink to="/dashboard/settings" activeClassName="activeNav">
+        </NavLink> */}
+        {/* <NavLink onClick={handleNavClick} to="/dashboard/settings" activeClassName="activeNav">
           <div className="p-4 my-2 transition-all text-gray-500">
             <svg
               className="mx-auto w-8 h-8 mt-2"
@@ -143,7 +160,7 @@ const SideBar = () => {
               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
             </svg>
           </div>
-        </NavLink>
+        </NavLink> */}
       </div>
     </div>
   )
