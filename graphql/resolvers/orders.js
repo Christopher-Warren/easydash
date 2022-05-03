@@ -96,7 +96,7 @@ module.exports = {
     if (sessionExpired) throw new Error('Session expired')
     if (!isAdmin) throw new Error('You do not have permission')
 
-    const limit = input?.limit ? input.limit : 5
+    const limit = input?.limit ? input.limit : null
     const skip = input?.skip ? input.skip : 0
 
     const sort = input?.sort ? input.sort : null
@@ -111,13 +111,15 @@ module.exports = {
         $sort: { [sort]: order },
       },
       { $skip: skip },
-      { $limit: limit },
+
       // {
       //   $match: {
       //     'status.paid': true,
       //   },
       // },
     ]
+
+    if (limit) stages.push({ $limit: limit })
 
     generateMongoFilterStages(filter, stages)
 
