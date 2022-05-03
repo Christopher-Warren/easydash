@@ -9,7 +9,6 @@ const Home = ({ userId, products, orders }: any) => {
   useEffect(() => {
     const now = DateTime.now().toMillis()
     const pastWeek = DateTime.now().minus({ days: 7 }).toMillis()
-
     refetch({
       input: {
         filter: [
@@ -85,8 +84,8 @@ const Home = ({ userId, products, orders }: any) => {
 
         <div className="md:col-span-1 col-span-3">
           <div>
-            <InfoCard title="Activity" titleClassName="relative">
-              <div className="bg-gray-700 absolute h-px left-0"></div>
+            <InfoCard title="Activity" titleClassName="relative mb-5">
+              {/* <div className="bg-gray-800 absolute h-px left-0 w-full"></div> */}
               <OrdersActivity></OrdersActivity>
             </InfoCard>
           </div>

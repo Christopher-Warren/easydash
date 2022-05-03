@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { GET_ALL_ORDERS } from '../../graphql/query_vars'
+import { calcRelativeCreatedAt } from '../../utils/calcRelativeCreatedAt'
 
 const OrdersActivity = () => {
   const { data, loading, error } = useQuery(GET_ALL_ORDERS, {
@@ -13,22 +14,27 @@ const OrdersActivity = () => {
     pollInterval: 1000,
   })
 
-  //   console.log(data && data)
-
   const RenderRecentOrders = () => {
     if (!data) return null
 
     return data.getAllOrders.map((order: any) => {
+      const createdAt = calcRelativeCreatedAt(order.createdAt)
       return (
         <li className="" key={order.orderNumber}>
-          {order.orderNumber}
+          <div className="bg-gray-900 absolute h-px  left-0 w-full"></div>
+          <div className="inline-block py-3">
+            <span className="block text-lg">
+              Order #{order.orderNumber} processed
+            </span>
+            <span className="block text-gray-500 text-sm">{createdAt}</span>
+          </div>
         </li>
       )
     })
   }
 
   return (
-    <ol className="text-lg pt-3 children:py-2">
+    <ol className="text-lg -mb-3">
       <RenderRecentOrders></RenderRecentOrders>
     </ol>
   )

@@ -10,7 +10,7 @@ import { toggleModal } from '../../../redux/modal/modalSlice'
 import { ModalFormIDs } from '../../modals/Modals'
 
 import TableCard from '../../../components/cards/TableCard'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import customPrompt from '../../../utils/customPrompt'
 
@@ -21,16 +21,10 @@ import OrdersFilter from '../../../components/filter/OrdersFilter'
 import { useHistory } from 'react-router-dom'
 
 import { DateTime, Interval } from 'luxon'
+import { calcRelativeCreatedAt } from '../../../utils/calcRelativeCreatedAt'
 
-const Orders = ({ products, orders }: any) => {
-  const { data, loading, error, refetch, networkStatus } = products
-  const {
-    data: data2,
-    loading: loading2,
-    error: error2,
-    refetch: refetch2,
-    networkStatus: networkStatus2,
-  } = orders
+const Orders = ({ orders }: any) => {
+  const { data, loading, error, refetch, networkStatus } = orders
 
   const dispatch = useAppDispatch()
 
@@ -38,8 +32,8 @@ const Orders = ({ products, orders }: any) => {
 
   const [limit, setLimit] = useState(5)
   const [skip, setSkip] = useState(0)
-  const [sort, setSort] = useState<null | string>(null)
-  const [order, setOrder] = useState<null | number>(null)
+  const [sort, setSort] = useState<null | string>('orderNumber')
+  const [order, setOrder] = useState<null | number>(-1)
 
   const [search, setSearch] = useState('')
 
@@ -48,7 +42,7 @@ const Orders = ({ products, orders }: any) => {
   const history = useHistory()
 
   useEffect(() => {
-    refetch2({
+    refetch({
       input: {
         limit: limit,
         skip: skip,
@@ -58,7 +52,7 @@ const Orders = ({ products, orders }: any) => {
         search: search,
       },
     })
-  }, [refetch2, limit, skip, sort, order, filter, search])
+  }, [refetch, limit, skip, sort, order, filter, search])
 
   const handleSort = (string: string) => {
     setSort(string)
@@ -70,47 +64,14 @@ const Orders = ({ products, orders }: any) => {
   }
 
   const RenderTableItems = () => {
-    if (error2) {
-      console.log(error2)
+    if (error) {
+      console.error(error)
+      return null
     }
-    const now = DateTime.now()
-    if (!loading2 && !error2) {
-      return data2.getAllOrders.map((item: any, index: any) => {
-        const dt = DateTime.fromMillis(parseFloat(item.createdAt))
 
-        const ts = now
-          .diff(dt, ['minutes', 'hours', 'days', 'weeks', 'months'])
-          .toObject()
-        const { minutes, hours, days, weeks, months } = ts
-        let createdAt = ''
-
-        if (months) {
-          createdAt = createdAt.concat(
-            months.toString() + (months > 0 ? ' months ' : ' months '),
-          )
-        }
-
-        if (weeks && months === 0) {
-          createdAt = createdAt.concat(
-            weeks.toString() + (weeks > 0 ? ' Weeks ' : ' Week '),
-          )
-        }
-        if (days && !weeks) {
-          createdAt = createdAt.concat(
-            days.toString() + (days > 0 ? ' days ' : ' days '),
-          )
-        }
-        if (hours && !weeks && !days) {
-          createdAt = createdAt.concat(
-            hours.toString() + (hours > 0 ? ' hours ' : ' hours '),
-          )
-        }
-        if (minutes && !days) {
-          createdAt = createdAt.concat(
-            minutes.toFixed().toString() +
-              (minutes > 0 ? ' minutes ' : ' minutes '),
-          )
-        }
+    if (!loading && !error) {
+      return data.getAllOrders.map((item: any, index: any) => {
+        const createdAt = calcRelativeCreatedAt(item.createdAt)
 
         return (
           <tr
@@ -132,7 +93,7 @@ const Orders = ({ products, orders }: any) => {
               </div>
             </td>
             <td className="">
-              <div className=" relative">{createdAt + 'ago'}</div>
+              <div className=" relative">{createdAt}</div>
             </td>
             <td className="">
               <div className=" relative">
@@ -196,7 +157,7 @@ const Orders = ({ products, orders }: any) => {
   // When attempting to fetch data with an expired token, an error
   // is thrown. This doesn't happen on '/dashboard/products' so we
   // will need to address this with a better approach
-  if (error2) return null
+  if (error) return null
 
   return (
     <PageWrapper>
@@ -204,7 +165,7 @@ const Orders = ({ products, orders }: any) => {
       <span className=" tracking-wider dark:text-gray-100">
         These are orders that you currently awaiting fulfillment
       </span>
-      {(loading || networkStatus2 === 4) && <LoadingSpinner />}
+      {(loading || networkStatus === 4) && <LoadingSpinner />}
 
       <div className="flex my-5">
         <PrimaryButton
@@ -365,7 +326,7 @@ const Orders = ({ products, orders }: any) => {
           <tbody className="text-base">
             <RenderTableItems />
 
-            {!loading2 && limit > data2.getAllOrders.length && (
+            {!loading && limit > data.getAllOrders.length && (
               <tr
                 className="dark:odd:bg-slate-800  border-y
            dark:border-gray-700 border-gray-200 text-gray-400 
@@ -375,7 +336,7 @@ const Orders = ({ products, orders }: any) => {
                   colSpan={6}
                   className="relative w-8 px-4 py-[1.437rem] text-center normal-case  "
                 >
-                  {data2.getAllOrders.length === 0 &&
+                  {data.getAllOrders.length === 0 &&
                   (filter.length > 0 || search.length > 0)
                     ? 'No orders match the entered ID'
                     : 'No more orders'}
@@ -429,7 +390,7 @@ const Orders = ({ products, orders }: any) => {
                 </svg>
               </button>
               <button
-                disabled={products.data?.products.length <= limit}
+                disabled={orders.data?.getAllOrders.length < limit}
                 onClick={(e: any) => {
                   setSkip((prev: number) => prev + limit)
                 }}
