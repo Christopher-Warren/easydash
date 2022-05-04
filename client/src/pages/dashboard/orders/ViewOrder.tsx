@@ -227,7 +227,7 @@ function ViewOrder() {
 
                 <div className="whitespace-nowrap text-right font-medium">
                   <p className="my-2"> 1 (555) 555-5555</p>
-                  <p className=""> 1 (706) 555-5555</p>
+                  <p className=""> 1 (555) 555-5555</p>
                 </div>
               </div>
             </InfoCardSmall>

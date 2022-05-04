@@ -133,7 +133,7 @@ mutation createOrder($orderInput: OrderInput) {
 {
   "orderInput": {
     "products": [
-      {"product": "62409727adeaee4ba54141a2","qty": 2}
+      {"product": "6272b9030d90c9371b8b379a","qty": 2}
     ],
     "billingInput": {
       "firstName": "john",
@@ -169,15 +169,16 @@ mutation createOrder($orderInput: OrderInput) {
   next()
 })
 
-if (process.env.NODE_ENV === 'production') {
+if (true) {
   // Allows Express to serve production assets.
   app.use(express.static('client/build'))
   app.get('*', (req, res, next) => {
+    if (req.url === '/playground') return next()
+
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
 
     // Needed to include next() to allow playground middleware to fire
     // during a production build since it was hanging.
-    next()
   })
 }
 mongoose
