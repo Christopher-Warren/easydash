@@ -55,8 +55,13 @@ app.get('/playground', (req, res, next) => {
   const host = req.hostname
   const protocol = req.protocol
 
+  console.log('host: ', host && host)
+  console.log('protocol: ', protocol && protocol)
+  console.log('port: ', process?.env?.PORT)
+
   const endPoint = `${protocol}://${host}:${process.env.PORT || '3000'}/graphql`
 
+  console.log(endPoint && endPoint)
   app.use(
     expressPlayground({
       endpoint: '/graphql',
