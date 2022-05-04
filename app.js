@@ -53,14 +53,16 @@ const fn = (args) => {
 
 app.get('/playground', (req, res, next) => {
   const host = req.hostname
-  const endPoint = `http://${host}:${process.env.PORT || '3000'}/graphql`
+  const protocol = req.protocol
+
+  const endPoint = `${protocol}://${host}:${process.env.PORT || '3000'}/graphql`
 
   app.use(
     expressPlayground({
       endpoint: '/graphql',
       tabs: [
         {
-          name: 'tav',
+          name: 'Custom endpoint',
           endpoint: endPoint,
         },
       ],
