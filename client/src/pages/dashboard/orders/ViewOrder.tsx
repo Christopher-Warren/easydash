@@ -204,7 +204,7 @@ function ViewOrder() {
                   <p>{order.shippingInfo.address}</p>
                   <p>{order.shippingInfo.address2}</p>
                   <p>{`${order.shippingInfo.city}, ${order.shippingInfo.state} ${order.shippingInfo.zipcode}`}</p>
-                  <p>usa</p>
+                  <p>{order.shippingInfo.country}</p>
                 </div>
               </div>
             </InfoCardSmall>
