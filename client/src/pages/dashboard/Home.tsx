@@ -3,7 +3,7 @@ import InfoCard from '../../components/cards/InfoCardSmall'
 import { useEffect } from 'react'
 import { DateTime } from 'luxon'
 import OrdersActivity from '../../components/orders/OrdersActivity'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
 import { GET_ALL_ORDERS, GET_PRODUCTS } from '../../graphql/query_vars'
 
@@ -86,11 +86,11 @@ const Home = ({ userId, products, orders, logout }: any) => {
           </span>
         </div>
         <div className="text-right flex justify-between mt-6">
-          <Link to="/playground">
+          <a href="/playground">
             <PrimaryButton className="py-2 px-4 h-min">
               GraphQL Playground
             </PrimaryButton>
-          </Link>
+          </a>
 
           <SecondaryButton
             className="py-2 px-4 h-min lg:ml-6 ml-0"
