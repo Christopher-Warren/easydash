@@ -31,6 +31,7 @@ app.use(
   graphqlHTTP((req, res) => ({
     schema: graphqlSchema,
     rootValue: graphqlResolvers,
+
     customFormatErrorFn: (error) => {
       // By default, graphql sends a status of 500 for all errors. Apollo handles
       // these errors arbitrarily, preventing our thrown resolver error from being shown
@@ -47,23 +48,13 @@ app.use(
     },
   })),
 )
-const fn = (args) => {
-  console.log(args)
-}
 
 app.get('/playground', (req, res, next) => {
   const host = req.hostname
   const protocol = req.protocol
 
-  console.log('host: ', host && host)
-  console.log('protocol: ', protocol && protocol)
-  console.log('secure?: ', req.secure && req.secure)
-  console.log('secure 2?: ', req.secure && req.secure)
-  console.log('port: ', process?.env?.PORT)
-
   const endPoint = `${protocol}://${host}:${process.env.PORT || '3000'}/graphql`
 
-  console.log(endPoint && endPoint)
   app.use(
     expressPlayground({
       endpoint: '/graphql',
@@ -80,23 +71,16 @@ app.get('/playground', (req, res, next) => {
   )
   next()
 })
-// expressPlayground({
-//   endpoint: '/graphql',
-//   tabs: [
-//     {
-//       name: 'tav',
-//       endpoint: '/playground',
-//     },
-//   ],
-//   settings: {
-//     'request.credentials': 'include',
-//   },
-// })
+
 if (process.env.NODE_ENV === 'production') {
   // Allows Express to serve production assets.
   app.use(express.static('client/build'))
-  app.get('*', (req, res) => {
+  app.get('*', (req, res, next) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+
+    // Needed to include next() to allow playground middleware to fire
+    // during a production build since it was hanging.
+    next()
   })
 }
 mongoose
