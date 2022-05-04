@@ -9,8 +9,6 @@ const generateMongoFilterStages = require('../../utils/generateMongoFilterStages
 const S3 = require('aws-sdk/clients/s3')
 const subcategory = require('../../models/subcategory')
 
-const { DateTime } = require('luxon')
-
 module.exports = {
   products: async ({ input }, { isAdmin, sessionExpired }) => {
     if (sessionExpired) throw new Error('Session expired')
@@ -129,7 +127,7 @@ module.exports = {
   },
   createProduct: async ({ productInput, sessionExpired }, { isAdmin }) => {
     if (sessionExpired) throw new Error('Session expired')
-    if (!isAdmin) throw new Error('You do not have permission')
+    if (!isAdmin) throw new Error('Easydash runs in read only mode')
     if (!productInput.subcategory) throw new Error('Please enter a Subcategory')
     if (productInput.category === 'new-category')
       throw new Error(`Category "new-category" is unavailible`)
@@ -212,7 +210,7 @@ module.exports = {
   },
   modifyProduct: async ({ productInput, sessionExpired }, { isAdmin }) => {
     if (sessionExpired) throw new Error('Session expired')
-    if (!isAdmin) throw new Error('You do not have permission')
+    if (!isAdmin) throw new Error('Easydash runs in read only mode')
 
     if (!productInput.subcategory && productInput.category)
       throw new Error('Must enter a subcategory when changing category.')
@@ -358,9 +356,9 @@ module.exports = {
 
     return finalProduct
   },
-  deleteProducts: async ({ productIds }, { isAdmin }) => {
+  deleteProducts: async ({ productIds, sessionExpired }, { isAdmin }) => {
     if (sessionExpired) throw new Error('Session expired')
-    if (!isAdmin) throw new Error('You do not have permission')
+    if (!isAdmin) throw new Error('Easydash runs in read only mode')
     const s3 = new S3({ apiVersion: '2006-03-01', region: 'us-east-2' })
 
     let deletedCount = 0
