@@ -53,7 +53,14 @@ app.get('/playground', (req, res, next) => {
   const host = req.hostname
   const protocol = req.protocol
 
-  const endPoint = `${protocol}://${host}:${process.env.PORT || '3000'}/graphql`
+  let endPoint = `${protocol}://${host}:${process.env.PORT || '3000'}/graphql`
+
+  // having trouble getting https from reqest
+  // req.secure returns false in heroku
+  // we also don't need the port for some reason
+  if (process.env.NODE_ENV === 'production') {
+    endPoint = `https://${host}/graphql`
+  }
 
   app.use(
     expressPlayground({
