@@ -183,7 +183,6 @@ function ViewOrder() {
               </tbody>
             </table>
             {/* shipped pants */}
-            refund
           </TableCard>
 
           {/* Shipping / Contact */}

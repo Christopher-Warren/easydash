@@ -8,6 +8,7 @@ import { useQuery } from '@apollo/client'
 import { GET_ALL_ORDERS, GET_PRODUCTS } from '../../graphql/query_vars'
 
 import SecondaryButton from '../../components/buttons/SecondaryButton'
+import PrimaryButton from '../../components/buttons/PrimaryButton'
 const Home = ({ userId, products, orders, logout }: any) => {
   const { data, refetch } = orders
 
@@ -84,8 +85,18 @@ const Home = ({ userId, products, orders, logout }: any) => {
             Welcome to your store's dashboard
           </span>
         </div>
-        <div className="text-right ">
-          <SecondaryButton className="py-2 px-4" type="button" onClick={logout}>
+        <div className="text-right flex justify-between mt-6">
+          <Link to="/playground">
+            <PrimaryButton className="py-2 px-4 h-min">
+              GraphQL Playground
+            </PrimaryButton>
+          </Link>
+
+          <SecondaryButton
+            className="py-2 px-4 h-min lg:ml-6 ml-0"
+            type="button"
+            onClick={logout}
+          >
             Logout
           </SecondaryButton>
         </div>

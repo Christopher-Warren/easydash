@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux'
 import { CREATE_ORDER } from '../../graphql/mutation_vars'
 import { addError } from '../../redux/error/errorSlice'
 import { toggleModal } from '../../redux/modal/modalSlice'
+import { listOfCities } from '../../utils/forms/listOfCities'
+import { listOfStates } from '../../utils/forms/listOfStates'
 import PrimaryButton from '../buttons/PrimaryButton'
 import SecondaryButton from '../buttons/SecondaryButton'
 
@@ -218,7 +220,11 @@ const CreateOrderModal = ({
                 containerClassName="md:col-span-3 col-span-6"
                 label="City"
               >
-                <option>Atlanta</option>
+                {listOfCities.map((city) => (
+                  <option key={city} value={city}>
+                    {city}
+                  </option>
+                ))}
               </SelectPrimary>
 
               <SelectPrimary
@@ -232,8 +238,11 @@ const CreateOrderModal = ({
                 containerClassName="md:col-span-2 col-span-2"
                 label="State"
               >
-                <option>GA</option>
-                <option>TN</option>
+                {listOfStates.map((state) => (
+                  <option key={state} value={state}>
+                    {state}
+                  </option>
+                ))}
               </SelectPrimary>
 
               <TextInput
@@ -348,7 +357,11 @@ const CreateOrderModal = ({
                 containerClassName="md:col-span-3 col-span-6"
                 label="City"
               >
-                <option>Atlanta</option>
+                {listOfCities.map((city) => (
+                  <option key={city} value={city}>
+                    {city}
+                  </option>
+                ))}
               </SelectPrimary>
 
               <SelectPrimary
@@ -363,8 +376,11 @@ const CreateOrderModal = ({
                 containerClassName="md:col-span-2 col-span-2"
                 label="State"
               >
-                <option>GA</option>
-                <option>TN</option>
+                {listOfStates.map((state) => (
+                  <option key={state} value={state}>
+                    {state}
+                  </option>
+                ))}
               </SelectPrimary>
 
               <TextInput

@@ -67,12 +67,102 @@ app.get('/playground', (req, res, next) => {
       endpoint: '/graphql',
       tabs: [
         {
-          name: 'Custom endpoint',
+          name: 'Easydash Query Example',
+          query: `# Easydash GraphQL API
+# Click the play button in the middle to execute the request
+# Click "QUERY VARIABLES" below for more fun query options
+query getProducts($input: GetProductInput) {
+  products(input: $input) {
+    name
+    images
+    category {
+      name
+    }
+    subcategory {
+      name
+    }
+    price
+    description
+  }
+}
+          `,
+
           endpoint: endPoint,
+          variables: `
+{
+  "input": {
+      "limit": 5,
+      "filter": [
+      {
+        "field": "category.name",
+        "query": 
+          {
+            "in": ["apparel", "food"]
+          }
+      }
+    ]
+  }
+}     
+          `,
+        },
+        {
+          name: 'Easydash Mutation Example',
+          query: `# Easydash GraphQL API
+# Click the play button in the middle to execute the
+# request and create an order
+# Click "QUERY VARIABLES" below for more fun query options
+mutation createOrder($orderInput: OrderInput) {
+  createOrder(orderInput: $orderInput) {
+    _id
+    status {
+      paid
+    }
+    products {
+      product {
+        name
+        stock
+      }
+      qty
+    }
+  }
+}
+          `,
+
+          endpoint: endPoint,
+          variables: `
+{
+  "orderInput": {
+    "products": [
+      {"product": "62409727adeaee4ba54141a2","qty": 2}
+    ],
+    "billingInput": {
+      "firstName": "john",
+      "lastName": "doe",
+      "country": "USA",
+      "state": "GA",
+      "city": "Atlanta",
+      "zipcode": 30301,
+      "address": "123 cool pl.",
+      "address2": "Apt 7331"
+    },
+    "shippingInput": {
+      "firstName": "john",
+      "lastName": "doe",
+      "country": "USA",
+      "state": "GA",
+      "city": "Atlanta",
+      "zipcode": 30301,
+      "address": "123 cool pl.",
+      "address2": "Apt 7331"
+    }
+  }
+} 
+          `,
         },
       ],
       settings: {
         'request.credentials': 'include',
+        'schema.polling.enable': false,
       },
     }),
   )

@@ -43,7 +43,7 @@ const OrderProductsTable = ({
       return data.products.map((item: any, index: any) => {
         return (
           <tr
-            className="hover:dark:bg-gray-700 dark:odd:bg-slate-800  border-y dark:border-gray-700 border-gray-200  dark:bg-gray-700/50 odd:dark:bg-gray-700/50"
+            className="hover:dark:bg-gray-700   border-y dark:border-gray-700 border-gray-200  dark:bg-gray-800 "
             key={index}
           >
             <td className=" md:table-cell hidden  px-3 ">
