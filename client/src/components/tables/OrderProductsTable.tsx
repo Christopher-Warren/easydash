@@ -1,8 +1,6 @@
 import { QueryResult } from '@apollo/client'
-import React, { useEffect, useState } from 'react'
-import { ModalFormIDs } from '../../pages/modals/Modals'
-import { useAppDispatch } from '../../redux/hooks'
-import { toggleModal } from '../../redux/modal/modalSlice'
+import { useEffect, useState } from 'react'
+
 import ProductsFilter from '../filter/ProductsFilter'
 import TableCard from '../cards/TableCard'
 import SelectPrimary from '../inputs/SelectPrimary'

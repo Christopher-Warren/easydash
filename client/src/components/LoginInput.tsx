@@ -1,41 +1,16 @@
-import { ReactChild, useState } from 'react'
+import { useState } from 'react'
 
-type InputTypes =
-  | 'button'
-  | 'checkbox'
-  | 'color'
-  | 'date'
-  | 'datetime-local'
-  | 'email'
-  | 'file'
-  | 'hidden'
-  | 'image'
-  | 'month'
-  | 'number'
-  | 'password'
-  | 'password2'
-  | 'radio'
-  | 'range'
-  | 'reset'
-  | 'search'
-  | 'submit'
-  | 'tel'
-  | 'text'
-  | 'time'
-  | 'url'
-  | 'week'
-interface InputProps {
-  children: ReactChild
-  id: string
-  name: InputTypes
-  type: InputTypes
-  required?: boolean
-  minLength?: number
-}
-
-const LoginInput = ({ children, id, name, type, required, minLength }: any) => {
+const LoginInput = ({
+  children,
+  id,
+  name,
+  type,
+  required,
+  minLength,
+  defaultValue,
+}: any) => {
   const [active, setActive] = useState(() => {
-    return false
+    return true
   })
   return (
     <>
@@ -50,7 +25,9 @@ const LoginInput = ({ children, id, name, type, required, minLength }: any) => {
         >
           {children}
         </label>
+
         <input
+          defaultValue={defaultValue ? defaultValue : null}
           name={name}
           onChange={(e) => {
             if (e.target.value) setActive(true)

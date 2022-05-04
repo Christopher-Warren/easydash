@@ -16,7 +16,7 @@ import SecondaryButton from '../buttons/SecondaryButton'
 import SelectPrimary from '../inputs/SelectPrimary'
 import TextInput from '../inputs/TextInput'
 import TextArea from '../inputs/TextArea'
-import InfoCardLarge from '../cards/InfoCardLarge'
+
 import customPrompt from '../../utils/customPrompt'
 import Progress from '../progress/Progress'
 import useHasStateChanged from '../../hooks/useHasStateChanged'
@@ -186,39 +186,46 @@ const ModifyProductModal = ({ products, productId }: ModifyProductType) => {
         price,
         stock,
       },
-    }).then(async ({ data }) => {
-      const formData = new FormData()
-      const fileInput = document.getElementById('file_input') as any
-      const images = fileInput && Object.values(fileInput.files)
-
-      images.forEach((file: any) => {
-        formData.append('photos', file)
-      })
-
-      await axios
-        .post('/api/image', formData, {
-          headers: {
-            productid: data.modifyProduct._id,
-          },
-          onUploadProgress: (prog) => {
-            setProgress((prog.loaded / prog.total) * 100)
-          },
-        })
-        .then(async () => {
-          if (selectedImgs.length > 0) {
-            await axios.post('/api/image/delete', selectedImgs, {
-              headers: {
-                productid: selectedProduct._id,
-              },
-            })
-          }
-        })
-        .then(() => {
-          dispatch(toggleModal({ value: null }))
-          refetch()
-          dispatch(addError('Product successfully changed.'))
-        })
     })
+      .then(async ({ data }) => {
+        const formData = new FormData()
+        const fileInput = document.getElementById('file_input') as any
+        const images = fileInput && Object.values(fileInput.files)
+
+        images.forEach((file: any) => {
+          formData.append('photos', file)
+        })
+
+        await axios
+          .post('/api/image', formData, {
+            headers: {
+              productid: data.modifyProduct._id,
+            },
+            onUploadProgress: (prog) => {
+              setProgress((prog.loaded / prog.total) * 100)
+            },
+          })
+          .then(async () => {
+            if (selectedImgs.length > 0) {
+              await axios.post('/api/image/delete', selectedImgs, {
+                headers: {
+                  productid: selectedProduct._id,
+                },
+              })
+            }
+          })
+          .then(() => {
+            dispatch(toggleModal({ value: null }))
+            refetch()
+            dispatch(addError('Product successfully changed.'))
+          })
+          .catch((error) => {
+            // console.error(error.message)
+          })
+      })
+      .catch((error) => {
+        // console.error(error.message)
+      })
   }
 
   return (

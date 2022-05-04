@@ -1,11 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-  useHistory,
-  useLocation,
-} from 'react-router-dom'
+import { Switch, Route, Redirect, useLocation } from 'react-router-dom'
 
 import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
@@ -14,8 +7,6 @@ import ErrorNotifs from './components/modals/ErrorNotifications'
 import useLogin from './hooks/useAdminLogin'
 
 import PrimaryButton from './components/buttons/PrimaryButton'
-
-import { isAdminVar, isLoggedInVar } from './graphql/cache'
 
 function App() {
   const { login, loading, user, isAdmin, userId, error, logout } = useLogin()

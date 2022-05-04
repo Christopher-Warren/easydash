@@ -2,7 +2,7 @@
 
 #### - Backend:
 
-- [ ] Setup a demo account with **_view only_** privileges
+- [x] Setup a demo account with **_view only_** privileges
 - [x] Require authentication for **Mutations** that modify sensative data
 - [x] Require authentication for **Queries** that contain sensative store information. e.g. _All Orders_
 - [x] Integrate Amazon S3 to allow image uploads
@@ -16,12 +16,12 @@
     - [x] Local environment
   - [x] Connect to bucket
 
-  - [ ] Complete **Home Page**
+  - [x] Complete **Home Page**
 
-  - [ ] Integrate _"Weekly sales"_
-  - [ ] Show _unfulfilled orders, link to fulfillment_
-  - [ ] Integrate _"Weekly sales"_
-  - [ ] Integrate "Activity" panel
+  - [x] Integrate _"Weekly sales"_
+  - [x] Show _unfulfilled orders, link to fulfillment_
+  - [x] Integrate _"Weekly sales"_
+  - [x] Integrate "Activity" panel
 
   - [x] **Endpoints**
 
@@ -38,12 +38,12 @@
 
 #### - Frontend:
 
-- [ ] Complete **Home Page**
+- [x] Complete **Home Page**
 
-  - [ ] Integrate _"Weekly sales"_
-  - [ ] Show _unfulfilled orders, link to fulfillment_
-  - [ ] Integrate _"Weekly sales"_
-  - [ ] Integrate "Activity" panel
+  - [x] Integrate _"Weekly sales"_
+  - [x] Show _unfulfilled orders, link to fulfillment_
+  - [x] Integrate _"Weekly sales"_
+  - [x] Integrate "Activity" panel
 
 - [x] Complete **Products Page**
 
@@ -59,4 +59,4 @@
 
 - [ ] Optional: Complete **Users Pages**
 
-* [ ] Optional: Complete **Settings Page**
+- [ ] Optional: Complete **Settings Page**

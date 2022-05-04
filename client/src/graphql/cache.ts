@@ -27,19 +27,17 @@ export const cache: InMemoryCache = new InMemoryCache({
 
 // Initializes to true if localStorage includes a 'token' key,
 // false otherwise
-const isAdmin = localStorage.getItem('role') === 'ADMIN' || false
-
-let isAdmin2 = false
+let isAdmin = false
 if (
   localStorage.getItem('role') === 'ADMIN' ||
   localStorage.getItem('role') === 'USER'
 ) {
-  isAdmin2 = true
+  isAdmin = true
 } else {
-  isAdmin2 = false
+  isAdmin = false
 }
 
-export const isAdminVar = makeVar<boolean>(isAdmin2)
+export const isAdminVar = makeVar<boolean>(isAdmin)
 
 // Initializes to true if localStorage includes a 'token' key,
 // false otherwise

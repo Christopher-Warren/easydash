@@ -5,14 +5,11 @@ import { isLoggedInVar, isAdminVar } from '../graphql/cache'
 import { store } from '../redux/store'
 import { addError } from '../redux/error/errorSlice'
 
-import { useHistory } from 'react-router-dom'
 import { USER_LOGIN } from '../graphql/mutation_vars'
 import { IS_ADMIN, IS_LOGGED_IN, LOGOUT } from '../graphql/types_extension'
 
 const useAdminLogin = () => {
-  const history = useHistory()
-
-  const [login, { loading, error, data }] = useMutation(USER_LOGIN, {
+  const [login, { loading, error }] = useMutation(USER_LOGIN, {
     onCompleted: ({ login }) => {
       if (login.role === 'ADMIN' || login.role === 'USER') {
         localStorage.setItem('role', login.role)

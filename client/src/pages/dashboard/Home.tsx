@@ -6,7 +6,7 @@ import OrdersActivity from '../../components/orders/OrdersActivity'
 import { Link } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
 import { GET_ALL_ORDERS, GET_PRODUCTS } from '../../graphql/query_vars'
-import PrimaryButton from '../../components/buttons/PrimaryButton'
+
 import SecondaryButton from '../../components/buttons/SecondaryButton'
 const Home = ({ userId, products, orders, logout }: any) => {
   const { data, refetch } = orders

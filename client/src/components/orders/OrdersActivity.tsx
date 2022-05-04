@@ -3,7 +3,7 @@ import { GET_ALL_ORDERS } from '../../graphql/query_vars'
 import { calcRelativeCreatedAt } from '../../utils/calcRelativeCreatedAt'
 
 const OrdersActivity = () => {
-  const { data, loading, error } = useQuery(GET_ALL_ORDERS, {
+  const { data } = useQuery(GET_ALL_ORDERS, {
     variables: {
       input: {
         limit: 10,

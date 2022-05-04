@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client'
 import { useParams } from 'react-router-dom'
 import SecondaryButton from '../../../components/buttons/SecondaryButton'
-import InfoCardLarge from '../../../components/cards/InfoCardLarge'
+
 import PageWrapper from '../../../components/PageWrapper'
 
 import { useHistory } from 'react-router-dom'

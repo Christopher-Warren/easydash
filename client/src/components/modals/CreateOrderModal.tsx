@@ -1,4 +1,4 @@
-import { QueryResult, useMutation, useQuery } from '@apollo/client'
+import { QueryResult, useMutation } from '@apollo/client'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { CREATE_ORDER } from '../../graphql/mutation_vars'
@@ -12,7 +12,7 @@ import Checkbox from '../inputs/Checkbox'
 import SelectPrimary from '../inputs/SelectPrimary'
 import TextInput from '../inputs/TextInput'
 import OrderProductsTable from '../tables/OrderProductsTable'
-import ProductsTable from '../tables/ProductsTable'
+
 import ModalContainer, { PromptTypes } from './ModalContainer'
 
 const CreateOrderModal = ({
@@ -32,7 +32,7 @@ const CreateOrderModal = ({
 
   const dispatch = useDispatch()
 
-  const [createOrder, { data }] = useMutation(CREATE_ORDER)
+  const [createOrder] = useMutation(CREATE_ORDER)
 
   const [cartItems, setCartItems] = useState([])
 
@@ -85,7 +85,7 @@ const CreateOrderModal = ({
                         const removeItem = prev.filter(
                           (val: any) => val._id !== item._id,
                         )
-                        console.log(removeItem)
+
                         return removeItem
                       }
 
@@ -149,11 +149,15 @@ const CreateOrderModal = ({
                     },
               },
             },
-          }).then(() => {
-            refetch()
-            dispatch(addError('Order successfully created!'))
-            dispatch(toggleModal({ value: null }))
           })
+            .then(() => {
+              refetch()
+              dispatch(addError('Order successfully created!'))
+              dispatch(toggleModal({ value: null }))
+            })
+            .catch((error) => {
+              // console.error(error.message)
+            })
         }}
       >
         <div className="grid lg:grid-cols-2 gap-6">

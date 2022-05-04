@@ -5,9 +5,7 @@ import {
   BrowserRouter as Switch,
   Route,
   Link,
-  Redirect,
   useHistory,
-  useLocation,
 } from 'react-router-dom'
 
 import RegisterForm from '../components/forms/RegisterForm'
@@ -123,13 +121,20 @@ const Login = ({ login, loading, user, isAdmin }: any) => {
                   src={logo}
                   alt="Easy Dash Logo"
                 />
-                <FormInput id="email" name="email" type="email" required>
+                <FormInput
+                  defaultValue="test@test.com"
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                >
                   Email Address
                 </FormInput>
                 <FormInput
                   id="password"
                   name="password"
                   type="password"
+                  defaultValue="asdf1234"
                   required
                 >
                   Password

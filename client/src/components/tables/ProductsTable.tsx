@@ -9,7 +9,7 @@ import ProductsFilter from '../filter/ProductsFilter'
 import TableCard from '../cards/TableCard'
 import Checkbox from '../inputs/Checkbox'
 import SelectPrimary from '../inputs/SelectPrimary'
-import LoadingSpinner from '../LoadingSpinner'
+
 import { useLocation } from 'react-router-dom'
 
 const ProductsTable = ({
@@ -19,7 +19,7 @@ const ProductsTable = ({
   products: QueryResult
   className?: string
 }) => {
-  const { data, loading, error, refetch, networkStatus } = products
+  const { data, loading, error, refetch } = products
 
   const [deleteProducts] = useMutation(DELETE_PRODUCTS)
 
@@ -50,8 +50,6 @@ const ProductsTable = ({
         search: search,
       },
     })
-
-    console.log(filter)
   }, [refetch, limit, skip, sort, order, filter, search])
   if (data && isChecked.length !== data.products.length) {
     setIsChecked(() => data.products.map(() => false))

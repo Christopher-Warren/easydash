@@ -16,7 +16,7 @@ import SecondaryButton from '../buttons/SecondaryButton'
 import SelectPrimary from '../inputs/SelectPrimary'
 import TextInput from '../inputs/TextInput'
 import TextArea from '../inputs/TextArea'
-import InfoCardLarge from '../cards/InfoCardLarge'
+
 import customPrompt from '../../utils/customPrompt'
 import Progress from '../progress/Progress'
 import useHasStateChanged from '../../hooks/useHasStateChanged'
@@ -173,12 +173,8 @@ const CreateProductModal = ({ products }: ModifyProductType) => {
   }
 
   const handleFormSubmit = (e: React.FormEvent) => {
-    // • Solve error
-    // • handle images
-    // • make component for createProduct
-    console.log('test')
-
     e.preventDefault()
+
     createProduct({
       variables: {
         name,
@@ -188,30 +184,34 @@ const CreateProductModal = ({ products }: ModifyProductType) => {
         price,
         stock,
       },
-    }).then(async ({ data }) => {
-      const formData = new FormData()
-      const fileInput = document.getElementById('file_input') as any
-      const images = fileInput && Object.values(fileInput.files)
-
-      images.forEach((file: any) => {
-        formData.append('photos', file)
-      })
-
-      await axios
-        .post('/api/image', formData, {
-          headers: {
-            productid: data.createProduct._id,
-          },
-          onUploadProgress: (prog) => {
-            setProgress((prog.loaded / prog.total) * 100)
-          },
-        })
-        .then(() => {
-          dispatch(toggleModal({ value: null }))
-          refetch()
-          dispatch(addError('Product successfully created.'))
-        })
     })
+      .then(async ({ data }) => {
+        const formData = new FormData()
+        const fileInput = document.getElementById('file_input') as any
+        const images = fileInput && Object.values(fileInput.files)
+
+        images.forEach((file: any) => {
+          formData.append('photos', file)
+        })
+
+        await axios
+          .post('/api/image', formData, {
+            headers: {
+              productid: data.createProduct._id,
+            },
+            onUploadProgress: (prog) => {
+              setProgress((prog.loaded / prog.total) * 100)
+            },
+          })
+          .then(() => {
+            dispatch(toggleModal({ value: null }))
+            refetch()
+            dispatch(addError('Product successfully created.'))
+          })
+      })
+      .catch((error) => {
+        // console.error(error.message)
+      })
   }
 
   return (
@@ -324,7 +324,6 @@ const CreateProductModal = ({ products }: ModifyProductType) => {
             red
             padding="px-10 py-2"
             onClick={(e: any) => {
-              console.log('test 2 ')
               e.preventDefault()
               const closeModal = () => {
                 dispatch(toggleModal({ value: null }))
