@@ -203,7 +203,7 @@ function ViewOrder() {
                   </p>
                   <p>{order.shippingInfo.address}</p>
                   <p>{order.shippingInfo.address2}</p>
-                  <p>{`${order.shippingInfo.city}, MI ${order.shippingInfo.zipcode}`}</p>
+                  <p>{`${order.shippingInfo.city}, ${order.shippingInfo.state} ${order.shippingInfo.zipcode}`}</p>
                   <p>usa</p>
                 </div>
               </div>
@@ -226,8 +226,8 @@ function ViewOrder() {
                 </div>
 
                 <div className="whitespace-nowrap text-right font-medium">
-                  <p className="my-2"> 1 (706) 463-5857</p>
-                  <p className=""> 1 (706) 463-5857</p>
+                  <p className="my-2"> 1 (555) 555-5555</p>
+                  <p className=""> 1 (706) 555-5555</p>
                 </div>
               </div>
             </InfoCardSmall>
