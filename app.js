@@ -47,16 +47,42 @@ app.use(
     },
   })),
 )
-app.get(
-  '/playground',
-  expressPlayground({
-    endpoint: '/graphql',
-    settings: {
-      'request.credentials': 'include',
-    },
-  }),
-)
+const fn = (args) => {
+  console.log(args)
+}
 
+app.get('/playground', (req, res, next) => {
+  const host = req.hostname
+  const endPoint = `http://${host}:${process.env.PORT || '3000'}/graphql`
+
+  app.use(
+    expressPlayground({
+      endpoint: '/graphql',
+      tabs: [
+        {
+          name: 'tav',
+          endpoint: endPoint,
+        },
+      ],
+      settings: {
+        'request.credentials': 'include',
+      },
+    }),
+  )
+  next()
+})
+// expressPlayground({
+//   endpoint: '/graphql',
+//   tabs: [
+//     {
+//       name: 'tav',
+//       endpoint: '/playground',
+//     },
+//   ],
+//   settings: {
+//     'request.credentials': 'include',
+//   },
+// })
 if (process.env.NODE_ENV === 'production') {
   // Allows Express to serve production assets.
   app.use(express.static('client/build'))
