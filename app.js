@@ -57,6 +57,8 @@ app.get('/playground', (req, res, next) => {
 
   console.log('host: ', host && host)
   console.log('protocol: ', protocol && protocol)
+  console.log('secure?: ', req.secure && req.secure)
+  console.log('secure 2?: ', req.secure && req.secure)
   console.log('port: ', process?.env?.PORT)
 
   const endPoint = `${protocol}://${host}:${process.env.PORT || '3000'}/graphql`
