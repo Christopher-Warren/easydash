@@ -9,6 +9,8 @@ import { GET_ALL_ORDERS, GET_PRODUCTS } from '../../graphql/query_vars'
 
 import SecondaryButton from '../../components/buttons/SecondaryButton'
 import PrimaryButton from '../../components/buttons/PrimaryButton'
+
+
 const Home = ({ userId, products, orders, logout }: any) => {
   const { data, refetch } = orders
 
@@ -61,7 +63,7 @@ const Home = ({ userId, products, orders, logout }: any) => {
   }, [refetch])
 
   const renderRecentSales = (data: any) => {
-    if (!data) return '0'
+    if (!data || data.getAllOrders === null) return '0'
 
     return data.getAllOrders.reduce((acc: number, arr: any) => {
       return acc + arr.total
@@ -69,7 +71,7 @@ const Home = ({ userId, products, orders, logout }: any) => {
   }
 
   const renderRecentOrders = (data: any) => {
-    if (!data) return '0'
+    if (!data || data.getAllOrders === null) return '0'
 
     return data.getAllOrders.length
   }

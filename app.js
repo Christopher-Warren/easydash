@@ -169,7 +169,7 @@ mutation createOrder($orderInput: OrderInput) {
   next()
 })
 
-if (true) {
+if (process.env.NODE_ENV === 'production') {
   // Allows Express to serve production assets.
   app.use(express.static('client/build'))
   app.get('*', (req, res, next) => {
