@@ -9,6 +9,7 @@ import LoadingSpinner from '../../../components/LoadingSpinner'
 import InfoCardSmall from '../../../components/cards/InfoCardSmall'
 import TableCard from '../../../components/cards/TableCard'
 import { GET_ORDER } from '../../../graphql/query_vars'
+import ItemPageWrapper from '../../../components/layout/ItemPageWrapper'
 
 function ViewOrder() {
   let { id }: any = useParams()
@@ -100,13 +101,7 @@ function ViewOrder() {
   }
 
   return (
-    <PageWrapper>
-      <div className="flex">
-        <SecondaryButton onClick={() => history.goBack()} padding="px-5 py-1.5">
-          {'<- Back'}
-        </SecondaryButton>
-      </div>
-
+    <ItemPageWrapper>
       {/* Head */}
       <div className="md:flex my-6 dark:text-gray-100 justify-between">
         <div className="">
@@ -115,7 +110,6 @@ function ViewOrder() {
           </h1>
           <span>Status: {order.status?.paid ? 'Paid' : 'Unpaid'}</span>
         </div>
-        {/*  bg-white dark:bg-gray-800  dark:border-gray-700 dark:text-gray-200 rounded-md tracking-wide shadow-lg */}
         <div className="my-6 md:my-0">
           <div className="flex h-full px-4 py-2 items-center border bg-white dark:bg-gray-800  dark:border-gray-700 dark:text-gray-200 rounded-md tracking-wide shadow-lg">
             <div className="w-10 h-10 rounded-full bg-teal-500 mr-3 inline-block"></div>
@@ -287,7 +281,7 @@ function ViewOrder() {
           </div>
         </InfoCardSmall>
       </div>
-    </PageWrapper>
+    </ItemPageWrapper>
   )
 }
 

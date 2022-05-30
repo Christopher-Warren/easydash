@@ -1,21 +1,25 @@
 import { QueryResult } from '@apollo/client'
 
-import PageWrapper from '../../components/PageWrapper'
-import PrimaryButton from '../../components/buttons/PrimaryButton'
+import PageWrapper from '../../../components/PageWrapper'
+import PrimaryButton from '../../../components/buttons/PrimaryButton'
 
-import { useAppDispatch } from '../../redux/hooks'
-import { toggleModal } from '../../redux/modal/modalSlice'
+import { useAppDispatch } from '../../../redux/hooks'
+import { toggleModal } from '../../../redux/modal/modalSlice'
 
-import { ModalFormIDs } from '../modals/Modals'
+import { ModalFormIDs } from '../../modals/Modals'
 
-import LoadingSpinner from '../../components/LoadingSpinner'
+import LoadingSpinner from '../../../components/LoadingSpinner'
 
-import ProductsTable from '../../components/tables/ProductsTable'
+import ProductsTable from '../../../components/tables/ProductsTable'
+import { useHistory } from 'react-router-dom'
 
 const Products = ({ products }: { products: QueryResult }) => {
   const { loading, networkStatus } = products
 
   const dispatch = useAppDispatch()
+
+  const history = useHistory()
+  const currentPath = history.location.pathname
 
   return (
     <PageWrapper>
@@ -31,7 +35,9 @@ const Products = ({ products }: { products: QueryResult }) => {
           onClick={(e: any) => {
             e.preventDefault()
 
-            dispatch(toggleModal({ value: ModalFormIDs.newProduct }))
+            history.push(currentPath + '/createProduct')
+
+            // dispatch(toggleModal({ value: ModalFormIDs.newProduct }))
           }}
         >
           New Product

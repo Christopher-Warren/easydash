@@ -3,7 +3,7 @@ import SideBar from '../components/SideBar'
 import Home from './dashboard/Home'
 
 import { Route } from 'react-router-dom'
-import Products from './dashboard/Products'
+import Products from './dashboard/products/Products'
 
 import Modals from './modals/Modals'
 
@@ -12,6 +12,7 @@ import Orders from './dashboard/orders/Orders'
 
 import ViewOrder from './dashboard/orders/ViewOrder'
 import { GET_ALL_ORDERS, GET_PRODUCTS } from '../graphql/query_vars'
+import NewProduct from './dashboard/products/NewProduct'
 
 const Dashboard = ({ logout, userId }: any) => {
   const products = useQuery(GET_PRODUCTS, {
@@ -42,6 +43,10 @@ const Dashboard = ({ logout, userId }: any) => {
 
         <Route path="/dashboard/products" exact>
           <Products products={products}></Products>
+        </Route>
+
+        <Route path="/dashboard/products/createProduct">
+          <NewProduct products={products}></NewProduct>
         </Route>
 
         <Route path="/dashboard/orders" exact>
