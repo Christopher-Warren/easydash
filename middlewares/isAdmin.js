@@ -2,7 +2,10 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 
 module.exports = async function isAdmin(req, res, next) {
-  if (!req.cookies.token) return next()
+  if (!req.cookies.token) {
+    req.sessionExpired = true
+    return next()
+  }
 
   try {
     const { email } = jwt.verify(req.cookies.token, process.env.JWT_SECRET)

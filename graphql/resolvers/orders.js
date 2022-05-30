@@ -95,8 +95,6 @@ module.exports = {
   getAllOrders: async ({ input }, { isAdmin, sessionExpired, isUser }) => {
     if (sessionExpired) throw new Error('Session expired')
 
-    console.log(isAdmin, isUser)
-
     const limit = input?.limit ? input.limit : null
     const skip = input?.skip ? input.skip : 0
 
