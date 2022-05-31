@@ -21,7 +21,8 @@ const Dashboard = ({ logout, userId }: any) => {
 
   const orders = useQuery(GET_ALL_ORDERS, {
     notifyOnNetworkStatusChange: true,
-    pollInterval: 5000,
+    // pollInterval: 5000,
+    // disable polling with in development
   })
 
   return (

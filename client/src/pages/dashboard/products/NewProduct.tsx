@@ -1,8 +1,6 @@
-import ModalContainer from '../../../components/modals/ModalContainer'
-
 import { useQuery, useMutation, QueryResult } from '@apollo/client'
 
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
 import { toggleModal } from '../../../redux/modal/modalSlice'
 import { addError } from '../../../redux/error/errorSlice'
@@ -22,7 +20,7 @@ import Progress from '../../../components/progress/Progress'
 import useHasStateChanged from '../../../hooks/useHasStateChanged'
 import { GET_ALL_CATEGORIES } from '../../../graphql/query_vars'
 import { CREATE_PRODUCT } from '../../../graphql/mutation_vars'
-import PageWrapper from '../../../components/PageWrapper'
+
 import ItemPageWrapper from '../../../components/layout/ItemPageWrapper'
 
 type ModifyProductType = {
@@ -85,6 +83,15 @@ const NewProduct = ({ products }: ModifyProductType) => {
     price,
     stock,
   ])
+
+  useEffect(() => {
+    const getid = async () => {
+      const { data } = await axios.get('/api/generate_id')
+      console.log(data)
+    }
+
+    getid()
+  }, [])
 
   const renderCategoryOptions = () => {
     return data?.getAllCategories.map((category: any, index: number) => {
