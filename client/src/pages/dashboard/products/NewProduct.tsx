@@ -22,6 +22,7 @@ import { GET_ALL_CATEGORIES } from '../../../graphql/query_vars'
 import { CREATE_PRODUCT } from '../../../graphql/mutation_vars'
 
 import ItemPageWrapper from '../../../components/layout/ItemPageWrapper'
+import useGetId from '../../../hooks/useGetId'
 
 type ModifyProductType = {
   products: QueryResult
@@ -84,14 +85,8 @@ const NewProduct = ({ products }: ModifyProductType) => {
     stock,
   ])
 
-  useEffect(() => {
-    const getid = async () => {
-      const { data } = await axios.get('/api/generate_id')
-      console.log(data)
-    }
-
-    getid()
-  }, [])
+  // New state
+  const id = useGetId()
 
   const renderCategoryOptions = () => {
     return data?.getAllCategories.map((category: any, index: number) => {
