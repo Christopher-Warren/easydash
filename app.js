@@ -22,6 +22,7 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(isAdmin)
 require('./routes/uploadImagesRoute')(app)
+require('./routes/generateObjectID')(app)
 require('./routes/deleteImages')(app)
 require('./routes/test')(app)
 
