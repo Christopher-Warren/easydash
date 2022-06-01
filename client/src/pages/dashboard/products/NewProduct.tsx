@@ -56,12 +56,8 @@ const NewProduct = ({ products }: ModifyProductType) => {
 
   // Form state
   const [name, setName] = useState('')
-  const [category, setCategory] = useState(
-    data?.getAllCategories[0]?.name || '',
-  )
-  const [subcategory, setSubcategory] = useState(
-    data?.getAllCategories[0]?.subcategories[0]?.name || '',
-  )
+  const [category, setCategory] = useState<string>('')
+  const [subcategory, setSubcategory] = useState('')
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState(0)
   const [stock, setStock] = useState(0)
@@ -85,11 +81,21 @@ const NewProduct = ({ products }: ModifyProductType) => {
     stock,
   ])
 
+  useEffect(() => {
+    if (!data?.getAllCategories[0]) return
+
+    setCategory(data?.getAllCategories[0].name)
+    setSubcategory(() => {
+      return data?.getAllCategories[0].subcategories[0].name
+    })
+  }, [data?.getAllCategories])
+
   // New state
   const id = useGetId()
 
   const renderCategoryOptions = () => {
-    return data?.getAllCategories.map((category: any, index: number) => {
+    if (!data) return null
+    return data.getAllCategories.map((category: any, index: number) => {
       return (
         <Fragment key={index}>
           <option className="">{category.name}</option>
@@ -99,11 +105,12 @@ const NewProduct = ({ products }: ModifyProductType) => {
   }
 
   const renderSubcategoryOptions = () => {
-    const subcategories = data?.getAllCategories.filter(
-      (obj) => obj.name === category,
-    )[0]?.subcategories
+    if (!data || !category) return null
 
-    if (!subcategories) return null
+    const subcategories = data?.getAllCategories.filter((obj) => {
+      console.log(obj.name, category)
+      return obj.name === category
+    })[0]?.subcategories
 
     return subcategories.map((subcategory: any) => {
       return <option key={subcategory._id}>{subcategory.name}</option>
@@ -273,19 +280,19 @@ const NewProduct = ({ products }: ModifyProductType) => {
         {/* Subcategory */}
         <div className="  md:col-span-2 col-span-full">
           <SelectPrimary
-            value={subcategory}
+            value="asd"
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               setSubcategory(e.currentTarget.value)
             }}
             label="Subcategory"
           >
             {renderSubcategoryOptions()}
-            <option
+            {/* <option
               value=""
               onClick={(e) => setSubcategory(e.currentTarget.value)}
             >
               New Subcategory
-            </option>
+            </option> */}
           </SelectPrimary>
           <TextInput
             containerClassName="mt-5"
