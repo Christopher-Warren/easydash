@@ -7,7 +7,6 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.4.10",
-    "@craco/craco": "^6.2.0",
     "@reduxjs/toolkit": "^1.7.1",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
