@@ -37,7 +37,6 @@ const Dashboard = ({ logout, userId }: any) => {
             orders={orders}
             logout={logout}
           />
-          {/* Need to use this button in Products page */}
         </Route>
 
         <Route path="/dashboard/products" exact>

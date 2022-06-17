@@ -20,7 +20,7 @@ ReactDOM.render(
     <ApolloProvider client={client}>
       <Provider store={store}>
         <Router history={history}>
-          <div className=" dark:bg-gray-900 bg-purple-50 h-screen overflow-y-scroll">
+          <div className=" ">
             <App />
           </div>
         </Router>

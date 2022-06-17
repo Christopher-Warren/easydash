@@ -7,11 +7,10 @@ import ErrorNotifs from './components/modals/ErrorNotifications'
 import useLogin from './hooks/useAdminLogin'
 
 import PrimaryButton from './components/buttons/PrimaryButton'
+import { ShopHome } from './pages/shop/ShopHome'
 
 function App() {
   const { login, loading, user, isAdmin, userId, error, logout } = useLogin()
-
-  // Check isAdmin here, and redirect customer to '/' if they arent an admin
 
   const { pathname } = useLocation()
 
@@ -43,17 +42,19 @@ function App() {
 
         {/* Customer Entry */}
         <Route path="/" exact>
-          <Redirect to="/dashboard" />
-          {user.isLoggedIn && (
+          {/* <Redirect to="/dashboard" /> */}
+          {/* {user.isLoggedIn && (
             <div>
               <h1>You are logged in!</h1>
               <PrimaryButton type="button" onClick={logout}>
                 Logout
               </PrimaryButton>
             </div>
-          )}
-
-          <h1>Welcome to our store!</h1>
+          )} */}
+          {/* Start here */}
+        </Route>
+        <Route path="/goal">
+          <ShopHome></ShopHome>
         </Route>
       </Switch>
       {/* Global App Errors */}
