@@ -13,6 +13,17 @@ export const GET_ALL_CATEGORIES = gql`
   }
 `
 
+export const GET_FEATURED_PRODUCTS = gql`
+  query getAllCategories {
+    getAllCategories {
+      name
+      products {
+        images
+      }
+    }
+  }
+`
+
 export const GET_ALL_SUBCATEGORIES = gql`
   query getAllSubcategories {
     getAllSubcategories {

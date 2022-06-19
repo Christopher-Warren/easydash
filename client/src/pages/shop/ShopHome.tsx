@@ -1,5 +1,10 @@
-import Example from './storefront-pages/variation2'
+import Navbar from './store-navigation/Navbar'
 
 export const ShopHome = () => {
-  return <Example />
+  return (
+    <>
+      <Navbar></Navbar>
+      <div>hellp</div>
+    </>
+  )
 }

@@ -52,10 +52,9 @@ function App() {
             </div>
           )} */}
           {/* Start here */}
-        </Route>
-        <Route path="/goal">
           <ShopHome></ShopHome>
         </Route>
+        <Route path="/goal"></Route>
       </Switch>
       {/* Global App Errors */}
       <ErrorNotifs />
