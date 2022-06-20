@@ -2,6 +2,8 @@ import { Fragment, useState } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon, SearchIcon, ShoppingBagIcon } from '@heroicons/react/outline'
 
+import logo from '../../../../assets/android-chrome-192x192.png'
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
@@ -21,11 +23,7 @@ export const LeftNav = ({ getAllCategories, setOpen }) => {
       <div className="ml-4 flex lg:ml-0">
         <a href="#">
           <span className="sr-only">Workflow</span>
-          <img
-            className="h-8 w-auto"
-            src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=600"
-            alt=""
-          />
+          <img className="h-10 w-auto" src={logo} alt="" />
         </a>
       </div>
       {/* Flyout menus */}

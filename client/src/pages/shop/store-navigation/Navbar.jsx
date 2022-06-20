@@ -2,22 +2,16 @@ import { useState } from 'react'
 
 import { useQuery } from '@apollo/client'
 import { GET_FEATURED_PRODUCTS } from '../../../graphql/query_vars'
-import { MobileNav } from './MobileNav'
+import { MobileNav } from './navbar/MobileNav'
 import { RightNav } from './navbar/RightNav'
 import { LeftNav } from './navbar/LeftNav'
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
-
-export default function Example() {
+export default function Navbar() {
   const [open, setOpen] = useState(false)
 
-  const {
-    data: { getAllCategories },
-  } = useQuery(GET_FEATURED_PRODUCTS)
+  const { data } = useQuery(GET_FEATURED_PRODUCTS)
 
-  if (!getAllCategories) return null
+  if (!data) return null
 
   return (
     <div className="bg-white">
@@ -25,17 +19,20 @@ export default function Example() {
       <MobileNav
         open={open}
         setOpen={setOpen}
-        getAllCategories={getAllCategories}
+        getAllCategories={data.getAllCategories}
       ></MobileNav>
 
-      <header className="relative bg-white">
+      <header className="relative bg-white z-20">
         <nav
           aria-label="Top"
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
         >
           <div className="border-b border-gray-200">
             <div className="h-16 flex items-center">
-              <LeftNav getAllCategories={getAllCategories} setOpen={setOpen} />
+              <LeftNav
+                getAllCategories={data.getAllCategories}
+                setOpen={setOpen}
+              />
               <RightNav />
             </div>
           </div>
