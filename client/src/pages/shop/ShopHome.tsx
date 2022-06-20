@@ -8,11 +8,13 @@ import Example5 from './storefront-home/full_width_with_overlapping_image_tiles'
 import Example4 from './storefront-home/full_width_with_background_image'
 
 import { Footer } from './store-navigation/Footer'
+import { QueryLoader } from './QueryLoader'
 
 export const ShopHome = () => {
   // if (true) return <Goal />
+
   return (
-    <>
+    <QueryLoader>
       <Navbar></Navbar>
       <Example />
       <Example2 />
@@ -21,6 +23,6 @@ export const ShopHome = () => {
       <Example5 />
 
       <Footer />
-    </>
+    </QueryLoader>
   )
 }

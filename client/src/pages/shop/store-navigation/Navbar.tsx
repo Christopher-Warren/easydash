@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 import { useQuery } from '@apollo/client'
 import { GET_FEATURED_PRODUCTS } from '../../../graphql/query_vars'
@@ -6,12 +6,8 @@ import { MobileNav } from './navbar/MobileNav'
 import { RightNav } from './navbar/RightNav'
 import { LeftNav } from './navbar/LeftNav'
 
-export default function Navbar() {
+export default function Navbar({ data }: any) {
   const [open, setOpen] = useState(false)
-
-  const { data } = useQuery(GET_FEATURED_PRODUCTS)
-
-  if (!data) return null
 
   return (
     <div className="bg-white">
