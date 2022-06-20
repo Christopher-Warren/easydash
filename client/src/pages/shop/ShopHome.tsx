@@ -4,8 +4,6 @@ export const ShopHome = () => {
   return (
     <>
       <Navbar></Navbar>
-      <div>hellp</div>
     </>
   )
 }
-// test
