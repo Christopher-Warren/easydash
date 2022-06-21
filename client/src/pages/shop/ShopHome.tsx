@@ -1,28 +1,38 @@
 import Navbar from './store-navigation/Navbar'
 
-import Example from './storefront-home/with_image_tiles'
-import Example2 from './storefront-home/with_image_backgrounds'
-import Example3 from './storefront-home/three_column_with_description'
-import Example5 from './storefront-home/full_width_with_overlapping_image_tiles'
+import HeroSection from './storefront-home/with_image_tiles'
+import ShopByCategorySection from './storefront-home/with_image_backgrounds'
+import ShopBySubcategorySection from './storefront-home/three_column_with_description'
+import ShopBySaleSection from './storefront-home/full_width_with_overlapping_image_tiles'
 
-import Example4 from './storefront-home/full_width_with_background_image'
+import IncintiveSection from './storefront-home/full_width_with_background_image'
 
-import { Footer } from './store-navigation/Footer'
+import { Footer as FooterSection } from './store-navigation/Footer'
 import { QueryLoader } from './QueryLoader'
+import Example from './components/product-lists/card_with_full_details'
 
 export const ShopHome = () => {
-  // if (true) return <Goal />
+  if (false) {
+    return (
+      <>
+        <QueryLoader>
+          <Navbar></Navbar>
+          <Example />
+        </QueryLoader>
+      </>
+    )
+  }
+  console.log('asd222')
 
   return (
     <QueryLoader>
       <Navbar></Navbar>
-      <Example />
-      <Example2 />
-      <Example4 />
-      <Example3 />
-      <Example5 />
-
-      <Footer />
+      <HeroSection />
+      <ShopByCategorySection />
+      <IncintiveSection />
+      <ShopBySubcategorySection />
+      <ShopBySaleSection />
+      <FooterSection />
     </QueryLoader>
   )
 }

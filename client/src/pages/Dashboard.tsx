@@ -29,7 +29,7 @@ const Dashboard = ({ logout, userId }: any) => {
         <Modals products={products} orders={orders} />
         <SideBar />
       </Route>
-      <div className="lg:pl-20">
+      <div className=" bg-gray-900">
         <Route path="/dashboard" exact>
           <Home
             userId={userId}

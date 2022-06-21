@@ -5,5 +5,9 @@ export interface ChildrenArray {
 }
 
 export interface FeaturedCategoryProps {
-  getAllCategories?: any[]
+  getAllCategories: any[]
+}
+
+export interface FeaturedCategoryData {
+  data?: FeaturedCategoryProps
 }

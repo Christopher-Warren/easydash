@@ -8,40 +8,48 @@ import useLogin from './hooks/useAdminLogin'
 
 import PrimaryButton from './components/buttons/PrimaryButton'
 import { ShopHome } from './pages/shop/ShopHome'
+import DashboardRouting from './routing/DashboardRouting'
 
 function App() {
   const { login, loading, user, isAdmin, userId, error, logout } = useLogin()
 
   const { pathname } = useLocation()
 
-  const renderDashboard = () => {
-    if (!user.isLoggedIn) {
-      return (
-        <Redirect
-          to={{ pathname: '/dashboard/login', state: { from: pathname } }}
-        />
-      )
-    }
-    return <Dashboard logout={logout} userId={userId} />
-  }
-
   return (
     <>
       <Switch>
         {/* Admin Dashboard Entry */}
-        <Route path="/dashboard/login" exact>
-          <Login
-            login={login}
-            loginError={error}
-            loading={loading}
-            user={user}
-            isAdmin={isAdmin}
-          />
-        </Route>
-        <Route path="/dashboard">{renderDashboard()}</Route>
 
+        {/* Disableing this fixes bug? */}
+        {/* <DashboardRouting
+          user={user}
+          logout={logout}
+          userId={userId}
+          login={login}
+          loading={loading}
+          error={error}
+          isAdmin={isAdmin}
+        /> */}
+        <>
+          <Route path="/dashboard/login" exact>
+            <Login
+              login={login}
+              loginError={error}
+              loading={loading}
+              user={user}
+              isAdmin={isAdmin}
+            />
+          </Route>
+          <Route path="/dashboard">{'dash'}</Route>
+        </>
         {/* Customer Entry */}
         <Route path="/" exact>
+          <ShopHome></ShopHome>
+          {console.log('asd?')}
+
+          {/* <Route path="/shop/categories">
+            <ShopHome></ShopHome>
+          </Route> */}
           {/* <Redirect to="/dashboard" /> */}
           {/* {user.isLoggedIn && (
             <div>
@@ -52,7 +60,6 @@ function App() {
             </div>
           )} */}
           {/* Start here */}
-          <ShopHome></ShopHome>
         </Route>
         <Route path="/goal"></Route>
       </Switch>
