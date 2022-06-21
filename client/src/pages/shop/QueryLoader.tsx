@@ -2,13 +2,12 @@ import { useQuery } from '@apollo/client'
 import { GET_FEATURED_PRODUCTS } from '../../graphql/query_vars'
 
 import React, { ReactChild, ReactNode } from 'react'
+import { ChildrenArray, FeaturedCategoryProps } from './types'
 
-type Props = {
-  children: ReactNode[]
-}
-
-export const QueryLoader = ({ children }: Props) => {
-  const { data, loading } = useQuery(GET_FEATURED_PRODUCTS)
+export const QueryLoader = ({ children }: ChildrenArray) => {
+  const { data, loading } = useQuery<FeaturedCategoryProps>(
+    GET_FEATURED_PRODUCTS,
+  )
 
   if (!data) return null
   return (

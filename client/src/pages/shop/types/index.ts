@@ -1,9 +1,9 @@
 import { ReactNode } from 'react'
 
-export type ChildProps = {
-  children: ReactNode
+export interface ChildrenArray {
+  children: ReactNode[]
 }
 
-export type Props = {
-  getAllCategories: any[]
+export interface FeaturedCategoryProps {
+  getAllCategories?: any[]
 }
