@@ -1,5 +1,12 @@
-import { Redirect, Route, useLocation } from 'react-router-dom'
+import {
+  Redirect,
+  Route,
+  Switch,
+  useLocation,
+  useRouteMatch,
+} from 'react-router-dom'
 import Dashboard from '../pages/Dashboard'
+import ValidateUser from '../pages/dashboard/ValidateUser'
 import Login from '../pages/Login'
 
 const DashboardRouting = ({
@@ -11,22 +18,11 @@ const DashboardRouting = ({
   error,
   isAdmin,
 }: any) => {
-  const { pathname } = useLocation()
-  const renderDashboard = () => {
-    if (!user.isLoggedIn) {
-      return (
-        <Redirect
-          to={{ pathname: '/dashboard/login', state: { from: pathname } }}
-        />
-      )
-    }
-    return <Dashboard logout={logout} userId={userId} />
-  }
+  const { path } = useRouteMatch()
 
   return (
-    <>
+    <Switch>
       <Route path="/dashboard/login" exact>
-        asd
         <Login
           login={login}
           loginError={error}
@@ -35,8 +31,13 @@ const DashboardRouting = ({
           isAdmin={isAdmin}
         />
       </Route>
-      <Route path="/dashboard">{renderDashboard()}</Route>
-    </>
+      <Route exact path={path}>
+        <ValidateUser user={user}>
+          <Dashboard />
+        </ValidateUser>
+      </Route>
+      <Route path={`${path}/test`}>asd</Route>
+    </Switch>
   )
 }
 export default DashboardRouting

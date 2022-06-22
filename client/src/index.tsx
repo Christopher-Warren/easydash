@@ -11,7 +11,7 @@ import { store } from './redux/store'
 import { createBrowserHistory } from 'history'
 
 import App from './App'
-import { Router } from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
 
 const history = createBrowserHistory()
 
@@ -19,8 +19,7 @@ ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
       <Provider store={store}>
-        <Router history={history}>
-          {/*  dark:bg-gray-900 bg-purple-50 h-screen overflow-y-scroll */}
+        <Router>
           <div className=" ">
             <App />
           </div>

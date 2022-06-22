@@ -11,6 +11,7 @@ const subcategory = require('../../models/subcategory')
 
 module.exports = {
   products: async ({ input }, { isAdmin, sessionExpired }) => {
+    console.log('Products accessed...')
     if (sessionExpired) throw new Error('Session expired')
 
     const limit = input?.limit ? input.limit : null

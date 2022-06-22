@@ -12,6 +12,7 @@ import { QueryLoader } from './QueryLoader'
 import Example from './components/product-lists/card_with_full_details'
 
 export const ShopHome = () => {
+  console.log('sh')
   if (false) {
     return (
       <>
@@ -22,7 +23,6 @@ export const ShopHome = () => {
       </>
     )
   }
-  console.log('asd222')
 
   return (
     <QueryLoader>

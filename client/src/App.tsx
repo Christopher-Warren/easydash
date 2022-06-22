@@ -15,51 +15,52 @@ function App() {
 
   const { pathname } = useLocation()
 
+  // function App() {
+  //   const { login, loading, user, isAdmin, userId, error, logout } = useLogin()
+
+  //   const { pathname } = useLocation()
+  //   let { path, url } = useRouteMatch()
+  //   return (
+  //     <Switch>
+  //       <Route path="/">
+  //         <Switch>
+  //           <Route path="/dashboard" exact>
+  //             <p>wowowow</p>
+  //           </Route>
+  //         </Switch>
+  //         <Switch>
+  //           <Route path="/home" exact>
+  //             <p>wowowow222222</p>
+  //           </Route>
+  //         </Switch>
+  //       </Route>
+  //     </Switch>
+  //   )
+  // }
+
   return (
     <>
       <Switch>
         {/* Admin Dashboard Entry */}
+        <Route path="/dashboard">
+          <DashboardRouting
+            user={user}
+            logout={logout}
+            userId={userId}
+            login={login}
+            loading={loading}
+            error={error}
+            isAdmin={isAdmin}
+          />
+        </Route>
 
-        {/* Disableing this fixes bug? */}
-        {/* <DashboardRouting
-          user={user}
-          logout={logout}
-          userId={userId}
-          login={login}
-          loading={loading}
-          error={error}
-          isAdmin={isAdmin}
-        /> */}
-        <>
-          <Route path="/dashboard/login" exact>
-            <Login
-              login={login}
-              loginError={error}
-              loading={loading}
-              user={user}
-              isAdmin={isAdmin}
-            />
-          </Route>
-          <Route path="/dashboard">{'dash'}</Route>
-        </>
         {/* Customer Entry */}
-        <Route path="/" exact>
-          <ShopHome></ShopHome>
-          {console.log('asd?')}
-
-          {/* <Route path="/shop/categories">
-            <ShopHome></ShopHome>
-          </Route> */}
-          {/* <Redirect to="/dashboard" /> */}
-          {/* {user.isLoggedIn && (
-            <div>
-              <h1>You are logged in!</h1>
-              <PrimaryButton type="button" onClick={logout}>
-                Logout
-              </PrimaryButton>
-            </div>
-          )} */}
-          {/* Start here */}
+        <Route path="/">
+          <Switch>
+            <Route path="/">
+              <ShopHome></ShopHome>
+            </Route>
+          </Switch>
         </Route>
         <Route path="/goal"></Route>
       </Switch>
