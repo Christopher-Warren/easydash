@@ -1,5 +1,7 @@
 import { FeaturedCategoryData } from '../types'
 
+import { Link } from 'react-router-dom'
+
 export default function Example({ data }: FeaturedCategoryData) {
   // Later, we can allow the dashboard owner to tag 3 special
   // categories as "primary", etc. from within the Dashboard
@@ -15,12 +17,12 @@ export default function Example({ data }: FeaturedCategoryData) {
           <h2 className="text-2xl font-extrabold tracking-tight text-gray-900">
             Shop by Category
           </h2>
-          <a
-            href="/shop/categories"
+          <Link
+            to="/shop/categories"
             className="hidden text-sm font-semibold text-indigo-600 hover:text-indigo-500 sm:block"
           >
             Browse all categories<span aria-hidden="true"> &rarr;</span>
-          </a>
+          </Link>
         </div>
 
         <div className="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-6 lg:gap-8">

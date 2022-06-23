@@ -4,6 +4,7 @@ import ErrorNotifs from './components/modals/ErrorNotifications'
 
 import { ShopHome } from './pages/shop/ShopHome'
 import DashboardRouting from './routing/DashboardRouting'
+import StorefrontRouting from './routing/StorefrontRouting'
 
 function App() {
   return (
@@ -16,11 +17,7 @@ function App() {
 
         {/* Customer Entry */}
         <Route path="/">
-          <Switch>
-            <Route path="/">
-              <ShopHome></ShopHome>
-            </Route>
-          </Switch>
+          <StorefrontRouting />
         </Route>
         <Route path="/goal"></Route>
       </Switch>

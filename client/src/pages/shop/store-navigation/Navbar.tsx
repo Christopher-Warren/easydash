@@ -5,9 +5,14 @@ import { GET_FEATURED_PRODUCTS } from '../../../graphql/query_vars'
 import { MobileNav } from './navbar/MobileNav'
 import { RightNav } from './navbar/RightNav'
 import { LeftNav } from './navbar/LeftNav'
+import { FeaturedCategoryProps } from '../types'
 
-export default function Navbar({ data }: any) {
+export default function Navbar() {
   const [open, setOpen] = useState(false)
+
+  const { data } = useQuery<FeaturedCategoryProps>(GET_FEATURED_PRODUCTS)
+
+  if (!data) return null
 
   return (
     <div className="bg-white">
