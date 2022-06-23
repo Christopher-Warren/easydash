@@ -1,7 +1,10 @@
 import { Redirect, useLocation } from 'react-router-dom'
+import useAdminLogin from '../../hooks/useAdminLogin'
 
-const ValidateUser = ({ user, children }: any) => {
+const ValidateUser = ({ children }: any) => {
   const { pathname } = useLocation()
+
+  const { user } = useAdminLogin()
 
   if (!user.isLoggedIn) {
     return (

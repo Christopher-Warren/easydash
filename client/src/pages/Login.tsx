@@ -5,21 +5,18 @@ import {
   BrowserRouter as Switch,
   Route,
   Link,
-  useHistory,
+  Redirect,
 } from 'react-router-dom'
 
 import RegisterForm from '../components/forms/RegisterForm'
 import LoadingSpinner from '../components/LoadingSpinner'
-import { useEffect } from 'react'
 
-const Login = ({ login, loading, user, isAdmin }: any) => {
-  const history: any = useHistory()
+import useAdminLogin from '../hooks/useAdminLogin'
 
-  useEffect(() => {
-    if (user.isLoggedIn && isAdmin) {
-      history.push(history.location.state.from)
-    }
-  })
+const Login = () => {
+  const { login, loading, user, isAdmin } = useAdminLogin()
+
+  if (user.isLoggedIn && isAdmin) return <Redirect to="/dashboard" />
 
   return (
     <div className="h-screen w-full flex items-center justify-center lg:justify-end">
@@ -110,7 +107,9 @@ const Login = ({ login, loading, user, isAdmin }: any) => {
                       password: formData.get('password'),
                     },
                   })
-                } catch (error) {}
+                } catch (error) {
+                  // console.log(error)
+                }
               }}
             >
               {loading && <LoadingSpinner />}

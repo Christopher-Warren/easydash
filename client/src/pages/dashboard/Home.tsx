@@ -3,16 +3,16 @@ import InfoCard from '../../components/cards/InfoCardSmall'
 import { useEffect } from 'react'
 import { DateTime } from 'luxon'
 import OrdersActivity from '../../components/orders/OrdersActivity'
-import { Link, Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
 import { GET_ALL_ORDERS, GET_PRODUCTS } from '../../graphql/query_vars'
 
 import SecondaryButton from '../../components/buttons/SecondaryButton'
 import PrimaryButton from '../../components/buttons/PrimaryButton'
+import useAdminLogin from '../../hooks/useAdminLogin'
 
-
-const Home = ({ userId, products, orders, logout }: any) => {
-  const { data, refetch } = orders
+const Home = () => {
+  const { userId, logout } = useAdminLogin()
 
   const unfulfilled = useQuery(GET_ALL_ORDERS, {
     variables: {
@@ -43,6 +43,10 @@ const Home = ({ userId, products, orders, logout }: any) => {
     },
   })
 
+  const orders = useQuery(GET_ALL_ORDERS, {
+    notifyOnNetworkStatusChange: true,
+  })
+  const { data, refetch } = orders
   useEffect(() => {
     const now = DateTime.now().toMillis()
     const pastWeek = DateTime.now().minus({ days: 7 }).toMillis()

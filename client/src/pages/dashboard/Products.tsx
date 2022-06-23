@@ -1,4 +1,4 @@
-import { QueryResult } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 
 import PageWrapper from '../../components/PageWrapper'
 import PrimaryButton from '../../components/buttons/PrimaryButton'
@@ -11,8 +11,13 @@ import { ModalFormIDs } from '../modals/Modals'
 import LoadingSpinner from '../../components/LoadingSpinner'
 
 import ProductsTable from '../../components/tables/ProductsTable'
+import { GET_PRODUCTS } from '../../graphql/query_vars'
 
-const Products = ({ products }: { products: QueryResult }) => {
+const Products = () => {
+  const products = useQuery(GET_PRODUCTS, {
+    notifyOnNetworkStatusChange: true,
+  })
+
   const { loading, networkStatus } = products
 
   const dispatch = useAppDispatch()

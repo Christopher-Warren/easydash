@@ -1,42 +1,46 @@
-import {
-  Redirect,
-  Route,
-  Switch,
-  useLocation,
-  useRouteMatch,
-} from 'react-router-dom'
-import Dashboard from '../pages/Dashboard'
+import { Route, Switch, useRouteMatch } from 'react-router-dom'
+import SideBar from '../components/SideBar'
+import Home from '../pages/dashboard/Home'
+import Orders from '../pages/dashboard/orders/Orders'
+import ViewOrder from '../pages/dashboard/orders/ViewOrder'
+import Products from '../pages/dashboard/Products'
 import ValidateUser from '../pages/dashboard/ValidateUser'
 import Login from '../pages/Login'
+import Modals from '../pages/modals/Modals'
 
-const DashboardRouting = ({
-  user,
-  logout,
-  userId,
-  login,
-  loading,
-  error,
-  isAdmin,
-}: any) => {
+const DashboardRouting = ({ user, logout, userId }: any) => {
   const { path } = useRouteMatch()
 
   return (
     <Switch>
-      <Route path="/dashboard/login" exact>
-        <Login
-          login={login}
-          loginError={error}
-          loading={loading}
-          user={user}
-          isAdmin={isAdmin}
-        />
+      <Route path={`${path}/login`} exact>
+        <Login />
       </Route>
-      <Route exact path={path}>
-        <ValidateUser user={user}>
-          <Dashboard />
+
+      <Route path={path}>
+        <ValidateUser>
+          <Route path="/dashboard">
+            <Modals />
+            <SideBar />
+          </Route>
+
+          <Route path="/dashboard" exact>
+            <Home />
+          </Route>
+
+          <Route path="/dashboard/products" exact>
+            <Products></Products>
+          </Route>
+
+          <Route path="/dashboard/orders" exact>
+            <Orders></Orders>
+          </Route>
+
+          <Route path="/dashboard/orders/:id">
+            <ViewOrder />
+          </Route>
         </ValidateUser>
       </Route>
-      <Route path={`${path}/test`}>asd</Route>
     </Switch>
   )
 }
