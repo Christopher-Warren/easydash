@@ -8,7 +8,7 @@ import ValidateUser from '../pages/dashboard/ValidateUser'
 import Login from '../pages/Login'
 import Modals from '../pages/modals/Modals'
 
-const DashboardRouting = ({ user, logout, userId }: any) => {
+const DashboardRouting = () => {
   const { path } = useRouteMatch()
 
   return (
