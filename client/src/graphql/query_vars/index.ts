@@ -16,12 +16,20 @@ export const GET_ALL_CATEGORIES = gql`
 export const GET_FEATURED_PRODUCTS = gql`
   query categories {
     getAllCategories {
+      _id
       name
       subcategories {
         name
       }
       products {
+        _id
+        name
+        description
         images
+        price
+        subcategory {
+          name
+        }
       }
     }
   }
