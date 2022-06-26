@@ -16,7 +16,7 @@ const schema = `
       validateToken: AuthData
 
       # productsSchema.js
-      getAllCategories: [Category!]
+      getAllCategories(name: String): [Category!]
       getAllSubcategories: [Subcategory!]
       products(input: GetProductInput): [Product!]
 

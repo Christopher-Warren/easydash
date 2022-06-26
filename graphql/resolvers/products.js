@@ -406,7 +406,7 @@ module.exports = {
 
     return removedProducts.length.toString()
   },
-  getAllCategories: async ({ category }) => {
+  getAllCategories: async ({ name }) => {
     /*
     Nested population
     https://stackoverflow.com/a/34444982/15676430
@@ -435,7 +435,7 @@ module.exports = {
     we should probably find a solution that takes care of all of our populations
     in one method
 */
-    const categories = await Category.find()
+    const categories = await Category.find(name ? { name } : {})
       .populate('products')
       .populate('subcategories')
       .populate({
@@ -445,9 +445,7 @@ module.exports = {
           model: 'Subcategory',
         },
       })
-
-    console.log(categories[0].name)
-
+    // console.log(categories)
     return categories
   },
   getAllSubcategories: async ({ category }) => {

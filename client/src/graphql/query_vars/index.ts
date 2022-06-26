@@ -13,7 +13,7 @@ export const GET_ALL_CATEGORIES = gql`
   }
 `
 
-export const GET_FEATURED_PRODUCTS = gql`
+export const GET_SHOP_HOME_DATA = gql`
   query categories {
     getAllCategories {
       _id
@@ -22,11 +22,25 @@ export const GET_FEATURED_PRODUCTS = gql`
         name
       }
       products {
+        images
+      }
+    }
+  }
+`
+
+export const GET_ALL_BY_CATEGORY = gql`
+  query categories($name: String) {
+    getAllCategories(name: $name) {
+      _id
+      name
+      subcategories {
+        name
+      }
+      products {
         _id
         name
-        description
-        images
         price
+        images
         subcategory {
           name
         }

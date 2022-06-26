@@ -3,7 +3,7 @@ import { FeaturedCategoryData } from '../types'
 import { Link } from 'react-router-dom'
 
 export default function Example({ data }: FeaturedCategoryData) {
-  // Later, we can allow the dashboard owner to tag 3 special
+  // Later, we can allow the shop owner to tag 3 special
   // categories as "primary", etc. from within the Dashboard
   // and modify our request to reflect ONLY the categories we need.
   const primaryCategory = data?.getAllCategories[0]
@@ -39,10 +39,10 @@ export default function Example({ data }: FeaturedCategoryData) {
             <div className="p-6 flex items-end">
               <div>
                 <h3 className="font-semibold text-white">
-                  <a href={`/shop/categories/${primaryCategory.name}`}>
+                  <Link to={`/shop/categories/${primaryCategory.name}`}>
                     <span className="absolute inset-0" />
                     {primaryCategory.name}
-                  </a>
+                  </Link>
                 </h3>
                 <p aria-hidden="true" className="mt-1 text-sm text-white">
                   Shop now
@@ -63,10 +63,10 @@ export default function Example({ data }: FeaturedCategoryData) {
             <div className="p-6 flex items-end sm:absolute sm:inset-0">
               <div>
                 <h3 className="font-semibold text-white">
-                  <a href={`/shop/categories/${secondaryCategory.name}`}>
+                  <Link to={`/shop/categories/${secondaryCategory.name}`}>
                     <span className="absolute inset-0" />
                     {secondaryCategory.name}
-                  </a>
+                  </Link>
                 </h3>
                 <p aria-hidden="true" className="mt-1 text-sm text-white">
                   Shop now
@@ -87,10 +87,10 @@ export default function Example({ data }: FeaturedCategoryData) {
             <div className="p-6 flex items-end sm:absolute sm:inset-0">
               <div>
                 <h3 className="font-semibold text-white">
-                  <a href={`/shop/categories/${secondaryCategory2.name}`}>
+                  <Link to={`/shop/categories/${secondaryCategory2.name}`}>
                     <span className="absolute inset-0" />
                     {secondaryCategory2.name}
-                  </a>
+                  </Link>
                 </h3>
                 <p aria-hidden="true" className="mt-1 text-sm text-white">
                   Shop now
@@ -101,12 +101,12 @@ export default function Example({ data }: FeaturedCategoryData) {
         </div>
 
         <div className="mt-6 sm:hidden">
-          <a
-            href="#"
+          <Link
+            to="/shop/categories"
             className="block text-sm font-semibold text-indigo-600 hover:text-indigo-500"
           >
             Browse all categories<span aria-hidden="true"> &rarr;</span>
-          </a>
+          </Link>
         </div>
       </div>
     </div>

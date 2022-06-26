@@ -14,7 +14,11 @@ const StorefrontRouting = () => {
           <ShopHome />
         </Route>
 
-        <Route path={'/shop/categories'}>
+        <Route path={'/shop/categories/'} exact>
+          <ShopByCategory />
+        </Route>
+
+        <Route path={'/shop/categories/:category'}>
           <ShopByCategory />
         </Route>
       </Route>
