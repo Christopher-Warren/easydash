@@ -5,9 +5,9 @@ import ShopBySaleSection from './storefront-home/full_width_with_overlapping_ima
 
 import IncintiveSection from './storefront-home/full_width_with_background_image'
 
-import { Footer as FooterSection } from './store-navigation/Footer'
 import { ShopHomeLoader } from './ShopHomeLoader'
 import Example from './components/product-lists/card_with_full_details'
+import Footer from './store-navigation/Footer'
 
 export const ShopHome = () => {
   return (
@@ -17,7 +17,7 @@ export const ShopHome = () => {
       <IncintiveSection />
       <ShopBySubcategorySection />
       <ShopBySaleSection />
-      <FooterSection />
+      <Footer />
     </ShopHomeLoader>
   )
 }

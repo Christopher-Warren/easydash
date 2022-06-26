@@ -1,8 +1,9 @@
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
-import { MenuIcon, SearchIcon, ShoppingBagIcon } from '@heroicons/react/outline'
+import { MenuIcon } from '@heroicons/react/outline'
 
 import logo from '../../../../assets/android-chrome-192x192.png'
+import { Link } from 'react-router-dom'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -21,10 +22,10 @@ export const LeftNav = ({ getAllCategories, setOpen }) => {
       </button>
       {/* Logo */}
       <div className="ml-4 flex lg:ml-0">
-        <a href="#">
+        <Link to="/">
           <span className="sr-only">Workflow</span>
           <img className="h-10 w-auto" src={logo} alt="" />
-        </a>
+        </Link>
       </div>
       {/* Flyout menus */}
       <Popover.Group className="hidden lg:ml-8 lg:block lg:self-stretch">

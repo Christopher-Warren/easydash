@@ -1,4 +1,11 @@
-export const Footer = () => {
+import { useQuery } from '@apollo/client'
+import { GET_SHOP_HOME_DATA } from '../../../graphql/query_vars'
+import { FeaturedCategoryProps } from '../types'
+
+const Footer = () => {
+  const { data } = useQuery<FeaturedCategoryProps>(GET_SHOP_HOME_DATA)
+
+  if (!data) return null
   return (
     <footer aria-labelledby="footer-heading" className="bg-gray-900">
       <h2 id="footer-heading" className="sr-only">
@@ -95,3 +102,5 @@ export const Footer = () => {
     </footer>
   )
 }
+
+export default Footer

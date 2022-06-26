@@ -8,16 +8,13 @@ const StorefrontRouting = () => {
   return (
     <Switch>
       <Route path={'/'}>
-        <Navbar></Navbar>
-
+        <Navbar />
         <Route exact path={'/'}>
           <ShopHome />
         </Route>
-
         <Route path={'/shop/categories/'} exact>
           <ShopByCategory />
         </Route>
-
         <Route path={'/shop/categories/:category'}>
           <ShopByCategory />
         </Route>
