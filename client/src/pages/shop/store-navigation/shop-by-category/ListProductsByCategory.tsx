@@ -1,3 +1,6 @@
+import { Link } from 'react-router-dom'
+import { urlFromItemName } from '../../../../utils/urlFromItemName'
+
 export default function ListProductsByCategory({ data }: any) {
   return data.getAllCategories.map((category: any) => {
     return (
@@ -22,10 +25,16 @@ export default function ListProductsByCategory({ data }: any) {
                 </div>
                 <div className="flex-1 p-4 space-y-2 flex flex-col">
                   <h3 className="text-sm font-medium text-gray-900">
-                    <a href="/categories/here">
+                    <Link
+                      to={`/categories/${urlFromItemName(
+                        product.name,
+                        product._id,
+                      )}`}
+                    >
+                      {console.log(urlFromItemName(product.name, product._id))}
                       <span aria-hidden="true" className="absolute inset-0" />
                       {product.name}
-                    </a>
+                    </Link>
                   </h3>
                   <p className="text-sm text-gray-500">{product.description}</p>
                   <div className="flex-1 flex flex-col justify-end">
