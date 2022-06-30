@@ -1,5 +1,5 @@
 import { Route, Switch } from 'react-router-dom'
-import Example from '../pages/shop/components/product-overviews/split_with_image'
+import ViewProduct from '../pages/shop/ViewProduct'
 import { ShopHome } from '../pages/shop/ShopHome'
 import Navbar from '../pages/shop/store-navigation/Navbar'
 
@@ -20,7 +20,7 @@ const StorefrontRouting = () => {
           <ShopByCategory />
         </Route>
         <Route path={'/shop/categories/:category/:id'}>
-          <Example />
+          <ViewProduct />
         </Route>
       </Route>
     </Switch>

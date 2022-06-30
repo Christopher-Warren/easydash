@@ -78,6 +78,26 @@ export const GET_PRODUCTS = gql`
   }
 `
 
+export const GET_PRODUCT = gql`
+  query getProduct($input: GetProductInput) {
+    getProduct(input: $input) {
+      name
+      createdAt
+      images
+      category {
+        name
+      }
+      subcategory {
+        name
+      }
+      price
+      stock
+      description
+      _id
+    }
+  }
+`
+
 export const GET_ALL_ORDERS = gql`
   query getAllOrders($input: GetAllOrdersInput) {
     getAllOrders(input: $input) {

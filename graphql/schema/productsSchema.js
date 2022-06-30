@@ -30,6 +30,7 @@ input SubcategoryInput {
 }
 
 input GetProductInput {
+    _id: ID
     limit: Float
     skip: Float
     sort: String

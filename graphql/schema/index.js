@@ -19,6 +19,7 @@ const schema = `
       getAllCategories(name: String): [Category!]
       getAllSubcategories: [Subcategory!]
       products(input: GetProductInput): [Product!]
+      getProduct(input: GetProductInput): Product!
 
       #ordersSchema.js
       getOrder(input: ID!): Order

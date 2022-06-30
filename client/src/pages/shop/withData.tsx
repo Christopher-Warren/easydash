@@ -8,8 +8,6 @@ export const withData = (Component: any) => {
       GET_SHOP_HOME_DATA,
     )
 
-    console.log(data)
-
     return <Component {...props} data={data} />
   }
 }

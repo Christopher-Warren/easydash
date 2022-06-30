@@ -126,6 +126,14 @@ module.exports = {
 
     return products
   },
+  getProduct: async ({ input }) => {
+    console.log(input)
+    const product = await Product.findById(input._id)
+      .populate('category')
+      .populate('subcategory')
+    console.log(product)
+    return product
+  },
   createProduct: async ({ productInput, sessionExpired }, { isAdmin }) => {
     if (sessionExpired) throw new Error('Session expired')
     if (!isAdmin) throw new Error('Easydash runs in read only mode')

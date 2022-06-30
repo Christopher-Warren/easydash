@@ -26,10 +26,9 @@ export default function ListProductsByCategory({ data }: any) {
                 <div className="flex-1 p-4 space-y-2 flex flex-col">
                   <h3 className="text-sm font-medium text-gray-900">
                     <Link
-                      to={`/shop/categories/${category.name}/${urlFromItemName(
-                        product.name,
-                        product._id,
-                      )}`}
+                      to={{
+                        pathname: `/shop/categories/${category.name}/${product._id}`,
+                      }}
                     >
                       <span aria-hidden="true" className="absolute inset-0" />
                       {product.name}
