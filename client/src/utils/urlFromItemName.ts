@@ -1,7 +1,7 @@
 /**
  *
  * @param productName
- * @returns A URL friendly string where spaces are replaces by hypens
+ * @returns A URL friendly string where spaces are replaced by hypens
  */
 
 export const urlFromItemName = (productName: string, id: string) => {
