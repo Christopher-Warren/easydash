@@ -1,4 +1,5 @@
 import { Route, Switch } from 'react-router-dom'
+import Example from '../pages/shop/components/product-overviews/split_with_image'
 import { ShopHome } from '../pages/shop/ShopHome'
 import Navbar from '../pages/shop/store-navigation/Navbar'
 
@@ -12,11 +13,14 @@ const StorefrontRouting = () => {
         <Route exact path={'/'}>
           <ShopHome />
         </Route>
-        <Route path={'/shop/categories/'} exact>
+        <Route exact path={'/shop/categories/'}>
           <ShopByCategory />
         </Route>
-        <Route path={'/shop/categories/:category'}>
+        <Route exact path={'/shop/categories/:category'}>
           <ShopByCategory />
+        </Route>
+        <Route path={'/shop/categories/:category/:id'}>
+          <Example />
         </Route>
       </Route>
     </Switch>
