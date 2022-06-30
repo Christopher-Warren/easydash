@@ -11,7 +11,6 @@ const subcategory = require('../../models/subcategory')
 
 module.exports = {
   products: async ({ input }, { isAdmin, sessionExpired }) => {
-    console.log('Products accessed...')
     if (sessionExpired) throw new Error('Session expired')
 
     const limit = input?.limit ? input.limit : null
@@ -127,11 +126,10 @@ module.exports = {
     return products
   },
   getProduct: async ({ input }) => {
-    console.log(input)
     const product = await Product.findById(input._id)
       .populate('category')
       .populate('subcategory')
-    console.log(product)
+
     return product
   },
   createProduct: async ({ productInput, sessionExpired }, { isAdmin }) => {
@@ -456,12 +454,19 @@ module.exports = {
     // console.log(categories)
     return categories
   },
-  getAllSubcategories: async ({ category }) => {
-    // Need 2 endpoints 'getAllCategories' and 'getAllSubcategories'
-    // whose only purpose is to get and return information, allowing
-    // the front end to populate data for filtering
-
-    const subcategories = await Subcategory.find().populate('products')
+  getAllSubcategories: async ({ limit, name }) => {
+    const subcategories = await Subcategory.find(name ? { name } : {})
+      .populate('products')
+      .populate('category')
+      .populate({
+        path: 'products',
+        populate: {
+          path: 'category',
+          model: 'Category',
+        },
+      })
+      .limit(limit ? limit : null)
+    console.log(name)
 
     return subcategories
   },

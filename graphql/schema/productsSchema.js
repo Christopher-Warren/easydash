@@ -59,6 +59,7 @@ type Subcategory {
     _id: ID!
     name: String
     description: String
+    category: Category
     products: [Product!]
 }
 

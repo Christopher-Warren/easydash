@@ -4,6 +4,7 @@ import { ShopHome } from '../pages/shop/ShopHome'
 import Navbar from '../pages/shop/store-navigation/Navbar'
 
 import { ShopByCategory } from '../pages/shop/store-navigation/shop-by-category/ShopByCategory'
+import { ShopBySubcategory } from '../pages/shop/store-navigation/shop-by-category/ShopBySubcategory'
 
 const StorefrontRouting = () => {
   return (
@@ -20,6 +21,16 @@ const StorefrontRouting = () => {
           <ShopByCategory />
         </Route>
         <Route path={'/shop/categories/:category/:id'}>
+          <ViewProduct />
+        </Route>
+
+        <Route exact path={'/shop/subcategories/'}>
+          <ShopBySubcategory />
+        </Route>
+        <Route exact path={'/shop/subcategories/:subcategory'}>
+          <ShopBySubcategory />
+        </Route>
+        <Route path={'/shop/subcategories/:subcategory/:id'}>
           <ViewProduct />
         </Route>
       </Route>

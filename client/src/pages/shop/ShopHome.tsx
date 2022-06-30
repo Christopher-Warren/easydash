@@ -8,16 +8,25 @@ import IncintiveSection from './storefront-home/full_width_with_background_image
 import { ShopHomeLoader } from './ShopHomeLoader'
 import Footer from './store-navigation/Footer'
 import { withData } from './withData'
+import {
+  GET_ALL_SUBCATEGORIES,
+  GET_SHOP_HOME_DATA,
+} from '../../graphql/query_vars'
 
 export const ShopHome = () => {
-  const ShopBy = withData(ShopByCategorySection)
+  const ShopByCategory = withData(ShopByCategorySection, GET_SHOP_HOME_DATA)
+  const ShopBySubcategory = withData(
+    ShopBySubcategorySection,
+    GET_ALL_SUBCATEGORIES,
+    { limit: 3 },
+  )
 
   return (
     <ShopHomeLoader>
       <HeroSection />
-      <ShopBy /> {/* data */}
+      <ShopByCategory /> {/* data */}
       <IncintiveSection />
-      <ShopBySubcategorySection />
+      <ShopBySubcategory />
       <ShopBySaleSection />
       <Footer />
     </ShopHomeLoader>

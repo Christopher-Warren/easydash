@@ -1,14 +1,11 @@
-import ListProductsByCategory from '../shop-by-category/ListProductsByCategory'
-
 import { useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
 import { GET_ALL_BY_CATEGORY } from '../../../../graphql/query_vars'
 import Footer from '../Footer'
+import ListProductsByCategory from './ListProductsByCategory'
 
 export const ShopByCategory = () => {
   const params: { category?: String } = useParams()
-
-  // console.log(params)
 
   const { data, loading } = useQuery(GET_ALL_BY_CATEGORY, {
     variables: { name: params.category ? params.category : null },

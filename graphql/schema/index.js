@@ -17,7 +17,7 @@ const schema = `
 
       # productsSchema.js
       getAllCategories(name: String): [Category!]
-      getAllSubcategories: [Subcategory!]
+      getAllSubcategories(limit: Float, name: String): [Subcategory!]
       products(input: GetProductInput): [Product!]
       getProduct(input: GetProductInput): Product!
 

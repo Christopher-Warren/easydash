@@ -50,10 +50,19 @@ export const GET_ALL_BY_CATEGORY = gql`
 `
 
 export const GET_ALL_SUBCATEGORIES = gql`
-  query getAllSubcategories {
-    getAllSubcategories {
-      name
+  query getAllSubcategories($limit: Float, $name: String) {
+    getAllSubcategories(limit: $limit, name: $name) {
       _id
+      name
+      products {
+        category {
+          name
+        }
+        _id
+        name
+        price
+        images
+      }
     }
   }
 `
