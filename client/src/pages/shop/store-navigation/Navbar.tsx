@@ -6,8 +6,6 @@ import { MobileNav } from './navbar/MobileNav'
 import { RightNav } from './navbar/RightNav'
 import { LeftNav } from './navbar/LeftNav'
 import { FeaturedCategoryProps } from '../types'
-import { addToCart } from '../../../redux/cart/cartSlice'
-import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../../../redux/hooks'
 
 export default function Navbar() {
@@ -15,14 +13,11 @@ export default function Navbar() {
 
   const { data } = useQuery<FeaturedCategoryProps>(GET_SHOP_HOME_DATA)
   const cart = useAppSelector((state) => state.cart)
-  const dispatch = useDispatch()
 
   const totalQuantity = cart.reduce(
     (prev, current) => prev + current.quantity,
     0,
   )
-
-  console.log(cart)
 
   if (!data) return null
   return (
