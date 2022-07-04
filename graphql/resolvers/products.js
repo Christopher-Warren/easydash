@@ -466,7 +466,6 @@ module.exports = {
         },
       })
       .limit(limit ? limit : null)
-    console.log(name)
 
     return subcategories
   },

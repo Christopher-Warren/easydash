@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { useQuery } from '@apollo/client'
 import { GET_SHOP_HOME_DATA } from '../../../graphql/query_vars'
@@ -6,14 +6,25 @@ import { MobileNav } from './navbar/MobileNav'
 import { RightNav } from './navbar/RightNav'
 import { LeftNav } from './navbar/LeftNav'
 import { FeaturedCategoryProps } from '../types'
+import { addToCart } from '../../../redux/cart/cartSlice'
+import { useDispatch } from 'react-redux'
+import { useAppSelector } from '../../../redux/hooks'
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
 
   const { data } = useQuery<FeaturedCategoryProps>(GET_SHOP_HOME_DATA)
+  const cart = useAppSelector((state) => state.cart)
+  const dispatch = useDispatch()
+
+  const totalQuantity = cart.reduce(
+    (prev, current) => prev + current.quantity,
+    0,
+  )
+
+  console.log(cart)
 
   if (!data) return null
-
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -34,7 +45,7 @@ export default function Navbar() {
                 getAllCategories={data.getAllCategories}
                 setOpen={setOpen}
               />
-              <RightNav />
+              <RightNav totalQuantity={totalQuantity} />
             </div>
           </div>
         </nav>

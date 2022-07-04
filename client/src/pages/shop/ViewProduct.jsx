@@ -9,6 +9,8 @@ import { ShieldCheckIcon } from '@heroicons/react/outline'
 import { useQuery } from '@apollo/client'
 import { GET_PRODUCT } from '../../graphql/query_vars'
 import { Link, useParams } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { addToCart } from '../../redux/cart/cartSlice'
 
 const noSizes = [
   {
@@ -25,9 +27,9 @@ function classNames(...classes) {
 
 export default function Example(props) {
   const [selectedSize, setSelectedSize] = useState('size')
+  const dispatch = useDispatch()
 
   const params = useParams()
-
   const { data } = useQuery(GET_PRODUCT, {
     variables: {
       input: {
@@ -35,10 +37,18 @@ export default function Example(props) {
       },
     },
   })
+
   if (!data) {
     return null
   }
   const { getProduct } = data
+
+  const handleAddProduct = (e) => {
+    e.preventDefault()
+
+    dispatch(addToCart({ productId: getProduct._id, quantity: 1 }))
+  }
+
   return (
     <div className="bg-white">
       <div className="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-2 lg:gap-x-8">
@@ -66,7 +76,7 @@ export default function Example(props) {
                   </svg>
 
                   <Link
-                    to={`/shop/subcategories/${getProduct.category.name}`}
+                    to={`/shop/subcategories/${getProduct.subcategory.name}`}
                     className="font-medium text-gray-500 hover:text-gray-900"
                   >
                     {getProduct.subcategory.name}
@@ -222,6 +232,7 @@ export default function Example(props) {
               <div className="mt-10">
                 <button
                   type="submit"
+                  onClick={handleAddProduct}
                   className="w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
                 >
                   Add to cart
