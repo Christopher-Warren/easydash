@@ -23,7 +23,7 @@ export const ShopHome = () => {
   return (
     <>
       <HeroSection />
-      <ShopByCategory /> {/* data */}
+      <ShopByCategory />
       <IncintiveSection />
       <ShopBySubcategory />
       <ShopBySaleSection />

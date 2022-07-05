@@ -5,12 +5,17 @@ import Navbar from '../pages/shop/store-navigation/Navbar'
 
 import { ShopByCategory } from '../pages/shop/store-navigation/shop-by-category/ShopByCategory'
 import { ShopBySubcategory } from '../pages/shop/store-navigation/shop-by-category/ShopBySubcategory'
+import CartPage from '../pages/shop/store-navigation/CartPage'
 
 const StorefrontRouting = () => {
   return (
     <Switch>
       <Route path={'/'}>
         <Navbar />
+
+        <Route path={'/cart'}>
+          <CartPage />
+        </Route>
         <Route exact path={'/'}>
           <ShopHome />
         </Route>

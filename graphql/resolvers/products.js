@@ -125,6 +125,17 @@ module.exports = {
 
     return products
   },
+  getCartItems: async ({ input }) => {
+    const products = await Product.find({ _id: input })
+      .populate('category')
+      .populate('subcategory')
+
+    const withQuantity = products.map((product, idx) => {
+      return { ...product._doc, quantity: input[idx].quantity }
+    })
+
+    return withQuantity
+  },
   getProduct: async ({ input }) => {
     const product = await Product.findById(input._id)
       .populate('category')

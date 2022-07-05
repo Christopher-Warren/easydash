@@ -4,9 +4,11 @@ interface CartState {
   quantity: number | null
   productId?: string
 }
-const initialState: any[] = []
+const initialState: any[] = [
+  { _id: '6272bc3a0d90c9371b8b3a83', quantity: 2 },
+  { _id: '6272bd870d90c9371b8b3bfc', quantity: 2 },
+]
 
-console.log('cartSlice init', initialState)
 // Added prodoctId to allow sending
 // of data through state, allowing
 // users to edit items

@@ -20,6 +20,7 @@ const schema = `
       getAllSubcategories(limit: Float, name: String): [Subcategory!]
       products(input: GetProductInput): [Product!]
       getProduct(input: GetProductInput): Product!
+      getCartItems(input: [CartInput]): [Product!]
 
       #ordersSchema.js
       getOrder(input: ID!): Order

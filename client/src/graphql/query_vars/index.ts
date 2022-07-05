@@ -13,6 +13,25 @@ export const GET_ALL_CATEGORIES = gql`
   }
 `
 
+export const GET_CART_ITEMS = gql`
+  query getCartItems($input: [CartInput]) {
+    getCartItems(input: $input) {
+      _id
+      name
+      images
+      category {
+        name
+      }
+      subcategory {
+        name
+      }
+      price
+      description
+      quantity
+    }
+  }
+`
+
 export const GET_SHOP_HOME_DATA = gql`
   query categories {
     getAllCategories {
