@@ -9,8 +9,6 @@ import { ShieldCheckIcon } from '@heroicons/react/outline'
 import { useQuery } from '@apollo/client'
 import { GET_PRODUCT } from '../../graphql/query_vars'
 import { Link, useParams } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { addToCart } from '../../redux/cart/cartSlice'
 
 const noSizes = [
   {
@@ -27,7 +25,6 @@ function classNames(...classes) {
 
 export default function Example(props) {
   const [selectedSize, setSelectedSize] = useState('size')
-  const dispatch = useDispatch()
 
   const params = useParams()
   const { data } = useQuery(GET_PRODUCT, {
@@ -45,8 +42,6 @@ export default function Example(props) {
 
   const handleAddProduct = (e) => {
     e.preventDefault()
-
-    dispatch(addToCart({ productId: getProduct._id, quantity: 1 }))
   }
 
   return (

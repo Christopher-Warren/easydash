@@ -1,5 +1,5 @@
 import { SearchIcon, ShoppingBagIcon } from '@heroicons/react/outline'
-export const RightNav = ({ totalQuantity }) => {
+export const RightNav = () => {
   return (
     <div className="ml-auto flex items-center">
       <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
@@ -49,7 +49,7 @@ export const RightNav = ({ totalQuantity }) => {
             aria-hidden="true"
           />
           <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-            {totalQuantity}
+            666
           </span>
           <span className="sr-only">items in cart, view cart</span>
         </a>
