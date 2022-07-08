@@ -27,8 +27,13 @@ export const GET_CART_ITEMS = gql`
       }
       price
       description
-      quantity
     }
+  }
+`
+
+export const GET_CART_ITEMS2 = gql`
+  query GetCartItems {
+    cartItems @client
   }
 `
 

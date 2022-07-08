@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client'
+import { useQuery, useReactiveVar } from '@apollo/client'
 import {
   CheckIcon,
   ClockIcon,
@@ -6,24 +6,72 @@ import {
   XIcon,
 } from '@heroicons/react/solid'
 import { Link } from 'react-router-dom'
-import { GET_CART_ITEMS } from '../../../graphql/query_vars'
+import { cartItemsVar } from '../../../graphql/cache'
+import { GET_CART_ITEMS, GET_CART_ITEMS2 } from '../../../graphql/query_vars'
 
 export default function CartPage() {
-  const { data, previousData } = useQuery(GET_CART_ITEMS, {
+  const { data, previousData } = useQuery(GET_CART_ITEMS2)
+
+  const cart = useReactiveVar(cartItemsVar)
+
+  const { data: data2 } = useQuery(GET_CART_ITEMS, {
     variables: {
-      input: [],
+      input: cart,
     },
   })
+
+  console.log(data2, data)
 
   if (!data) {
     return null
   }
+
+  // TODO: Test consuming this state with creating orders.
   return (
     <div className="bg-white">
       <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-          Shopping Cart
+          Shopping Cart{' '}
+          {cart.map((i) => {
+            return (
+              <div key={i._id}>
+                <br></br>
+                {i._id} ----
+                {i.quantity}
+              </div>
+            )
+          })}
         </h1>
+        <button
+          onClick={() => {
+            const itemExists = cart.find(
+              (val) => val._id === '6272b8960d90c9371b8b372f',
+            )
+
+            if (itemExists) itemExists.quantity += 1
+
+            console.log(cart)
+
+            cartItemsVar([...cartItemsVar()])
+          }}
+        >
+          add backpack to cart
+        </button>
+        <button
+          onClick={() => {
+            const itemExists = cart.find(
+              (val) => val._id === '6272bb020d90c9371b8b3943',
+            )
+
+            if (itemExists) itemExists.quantity += 1
+
+            console.log(cart)
+
+            cartItemsVar([...cartItemsVar()])
+          }}
+        >
+          add polo to cart
+        </button>
         <form className="mt-12 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
           <section aria-labelledby="cart-heading" className="lg:col-span-7">
             <h2 id="cart-heading" className="sr-only">
@@ -34,8 +82,8 @@ export default function CartPage() {
               role="list"
               className="border-t border-b border-gray-200 divide-y divide-gray-200"
             >
-              {data &&
-                data.getCartItems.map((product: any, productIdx: number) => (
+              {data2 &&
+                data2.getCartItems.map((product: any, productIdx: number) => (
                   <li key={product._id} className="flex py-6 sm:py-10">
                     <div className="flex-shrink-0">
                       <img
@@ -78,8 +126,21 @@ export default function CartPage() {
                             Quantity, {product.name}
                           </label>
                           <select
-                            // value={cart[productIdx].quantity}
-                            // onChange={(e) => }
+                            value={cart[productIdx].quantity}
+                            onChange={(e) => {
+                              const itemExists = cart.find(
+                                (val) => val._id === product._id,
+                              )
+
+                              if (itemExists)
+                                itemExists.quantity = parseInt(
+                                  e.currentTarget.value,
+                                )
+
+                              console.log(cart)
+
+                              cartItemsVar([...cartItemsVar()])
+                            }}
                             id={`quantity-${productIdx}`}
                             name={`quantity-${productIdx}`}
                             className="max-w-full rounded-md border border-gray-300 py-1.5 text-base leading-5 font-medium text-gray-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"

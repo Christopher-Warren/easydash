@@ -14,7 +14,6 @@ export const cache: InMemoryCache = new InMemoryCache({
             return isAdminVar()
           },
         },
-
         cartItems: {
           read() {
             return cartItemsVar()
@@ -44,4 +43,7 @@ export const isAdminVar = makeVar<boolean>(isAdmin)
 export const isLoggedInVar = makeVar<boolean>(!!localStorage.getItem('user'))
 
 // Initializes to an empty array
-export const cartItemsVar = makeVar<string[]>([])
+export const cartItemsVar = makeVar<{ _id: string; quantity: number }[]>([
+  { _id: '6272b8960d90c9371b8b372f', quantity: 4 },
+  { _id: '6272bb020d90c9371b8b3943', quantity: 1 },
+])
