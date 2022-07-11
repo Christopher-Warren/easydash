@@ -6,9 +6,10 @@ import {
 } from '@heroicons/react/solid'
 import { RadioGroup } from '@headlessui/react'
 import { ShieldCheckIcon } from '@heroicons/react/outline'
-import { useQuery } from '@apollo/client'
+import { useQuery, useReactiveVar } from '@apollo/client'
 import { GET_PRODUCT } from '../../graphql/query_vars'
 import { Link, useParams } from 'react-router-dom'
+import { cartItemsVar } from '../../graphql/cache'
 
 const noSizes = [
   {
@@ -25,6 +26,7 @@ function classNames(...classes) {
 
 export default function Example(props) {
   const [selectedSize, setSelectedSize] = useState('size')
+  const cart = useReactiveVar(cartItemsVar)
 
   const params = useParams()
   const { data } = useQuery(GET_PRODUCT, {
@@ -42,6 +44,8 @@ export default function Example(props) {
 
   const handleAddProduct = (e) => {
     e.preventDefault()
+
+    cartItemsVar([...cart, { _id: e.target.value, quantity: 1 }])
   }
 
   return (
