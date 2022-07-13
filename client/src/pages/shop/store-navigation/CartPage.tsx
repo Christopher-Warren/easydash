@@ -17,8 +17,8 @@ export default function CartPage() {
       input: cart,
     },
   })
-
-  // TODO: Test consuming this state with creating orders.
+  if (!data) return null
+  console.log(data.getCartItems, cart)
   return (
     <div className="bg-white">
       <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -160,7 +160,13 @@ export default function CartPage() {
             <dl className="mt-6 space-y-4">
               <div className="flex items-center justify-between">
                 <dt className="text-sm text-gray-600">Subtotal</dt>
-                <dd className="text-sm font-medium text-gray-900">$99.00</dd>
+                <dd className="text-sm font-medium text-gray-900">
+                  ${' '}
+                  {`${data.getCartItems.reduce(
+                    (prev: any, curr: any) => prev + curr.price,
+                    0,
+                  )}`}
+                </dd>
               </div>
               <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
                 <dt className="flex items-center text-sm text-gray-600">
@@ -178,7 +184,7 @@ export default function CartPage() {
                     />
                   </a>
                 </dt>
-                <dd className="text-sm font-medium text-gray-900">$5.00</dd>
+                <dd className="text-sm font-medium text-gray-900">N/A</dd>
               </div>
               <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
                 <dt className="flex text-sm text-gray-600">
@@ -196,13 +202,19 @@ export default function CartPage() {
                     />
                   </a>
                 </dt>
-                <dd className="text-sm font-medium text-gray-900">$8.32</dd>
+                <dd className="text-sm font-medium text-gray-900">N/A</dd>
               </div>
               <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
                 <dt className="text-base font-medium text-gray-900">
                   Order total
                 </dt>
-                <dd className="text-base font-medium text-gray-900">$112.32</dd>
+                <dd className="text-base font-medium text-gray-900">
+                  ${' '}
+                  {`${data.getCartItems.reduce(
+                    (prev: any, curr: any, idx: any) => prev + curr.price,
+                    0,
+                  )}`}
+                </dd>
               </div>
             </dl>
 

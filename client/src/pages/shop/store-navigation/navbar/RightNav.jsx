@@ -1,6 +1,7 @@
 import { SearchIcon, ShoppingBagIcon } from '@heroicons/react/outline'
 import { useReactiveVar } from '@apollo/client'
 import { cartItemsVar } from '../../../../graphql/cache'
+import { Link } from 'react-router-dom'
 
 export const RightNav = () => {
   const cart = useReactiveVar(cartItemsVar)
@@ -47,7 +48,7 @@ export const RightNav = () => {
 
       {/* Cart */}
       <div className="ml-4 flow-root lg:ml-6">
-        <a href="#" className="group -m-2 p-2 flex items-center">
+        <Link to="/cart" className="group -m-2 p-2 flex items-center">
           <ShoppingBagIcon
             className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
             aria-hidden="true"
@@ -56,7 +57,7 @@ export const RightNav = () => {
             {cart.reduce((prev, curr) => prev + curr.quantity, 0)}
           </span>
           <span className="sr-only">items in cart, view cart</span>
-        </a>
+        </Link>
       </div>
     </div>
   )

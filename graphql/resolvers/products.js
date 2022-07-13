@@ -130,11 +130,7 @@ module.exports = {
       .populate('category')
       .populate('subcategory')
 
-    const withQuantity = products.map((product, idx) => {
-      return { ...product._doc, quantity: input[idx].quantity }
-    })
-
-    return withQuantity
+    return products
   },
   getProduct: async ({ input }) => {
     const product = await Product.findById(input._id)
