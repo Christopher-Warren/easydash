@@ -8,8 +8,7 @@ export default function ShopBySubcategory({ data }: any) {
           Shop by Subcategory
         </h2>
         <p className="mt-4 text-base text-gray-500">
-          Each season, we collaborate with world-class designers to create a
-          collection inspired by the natural world.
+          What do you want to see here?
         </p>
 
         <div className="mt-10 space-y-12 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-x-8">
