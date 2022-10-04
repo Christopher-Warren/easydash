@@ -1,3 +1,11 @@
+import imgone from "../../../assets/images/createorder.png";
+import imgtwo from "../../../assets/images/createshot.png";
+import imgthree from "../../../assets/images/editshot.png";
+import imgfour from "../../../assets/images/homeshot.png";
+import imgfive from "../../../assets/images/ordershot.png";
+import imgsix from "../../../assets/images/productsshot.png";
+import imgseven from "../../../assets/images/dash.png";
+
 export default function ShopBySale() {
   return (
     <div className="bg-gray-50">
@@ -10,7 +18,7 @@ export default function ShopBySale() {
                   id="sale-heading"
                   className="text-4xl font-extrabold tracking-tight text-gray-900 md:text-5xl"
                 >
-                  Final Stock.
+                  Your huge sale.
                   <br />
                   Up to 50% off.
                 </h2>
@@ -29,8 +37,8 @@ export default function ShopBySale() {
                   <div className="flex space-x-6 sm:flex-col sm:space-x-0 sm:space-y-6 lg:space-y-8">
                     <div className="flex-shrink-0">
                       <img
-                        className="h-64 w-64 rounded-lg object-cover md:h-72 md:w-72"
-                        src="https://tailwindui.com/img/ecommerce-images/home-page-03-category-01.jpg"
+                        className="h-64 w-64 rounded-lg object-left object-cover md:h-72 md:w-72"
+                        src={imgone}
                         alt=""
                       />
                     </div>
@@ -38,7 +46,7 @@ export default function ShopBySale() {
                     <div className="mt-6 flex-shrink-0 sm:mt-0">
                       <img
                         className="h-64 w-64 rounded-lg object-cover md:h-72 md:w-72"
-                        src="https://tailwindui.com/img/ecommerce-images/home-page-03-category-02.jpg"
+                        src={imgtwo}
                         alt=""
                       />
                     </div>
@@ -47,7 +55,7 @@ export default function ShopBySale() {
                     <div className="flex-shrink-0">
                       <img
                         className="h-64 w-64 rounded-lg object-cover md:h-72 md:w-72"
-                        src="https://tailwindui.com/img/ecommerce-images/home-page-03-favorite-01.jpg"
+                        src={imgthree}
                         alt=""
                       />
                     </div>
@@ -55,7 +63,7 @@ export default function ShopBySale() {
                     <div className="mt-6 flex-shrink-0 sm:mt-0">
                       <img
                         className="h-64 w-64 rounded-lg object-cover md:h-72 md:w-72"
-                        src="https://tailwindui.com/img/ecommerce-images/home-page-03-favorite-02.jpg"
+                        src={imgfour}
                         alt=""
                       />
                     </div>
@@ -64,7 +72,7 @@ export default function ShopBySale() {
                     <div className="flex-shrink-0">
                       <img
                         className="h-64 w-64 rounded-lg object-cover md:h-72 md:w-72"
-                        src="https://tailwindui.com/img/ecommerce-images/home-page-03-category-01.jpg"
+                        src={imgfive}
                         alt=""
                       />
                     </div>
@@ -72,7 +80,7 @@ export default function ShopBySale() {
                     <div className="mt-6 flex-shrink-0 sm:mt-0">
                       <img
                         className="h-64 w-64 rounded-lg object-cover md:h-72 md:w-72"
-                        src="https://tailwindui.com/img/ecommerce-images/home-page-03-category-02.jpg"
+                        src={imgsix}
                         alt=""
                       />
                     </div>
