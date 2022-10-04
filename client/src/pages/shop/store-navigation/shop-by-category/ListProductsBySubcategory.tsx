@@ -1,11 +1,20 @@
-import { Link } from 'react-router-dom'
-import { urlFromItemName } from '../../../../utils/urlFromItemName'
+import { Link } from "react-router-dom";
+import { urlFromItemName } from "../../../../utils/urlFromItemName";
+import { ChevronRightIcon } from "@heroicons/react/outline";
 
 export default function ListProductsBySubcategory({ data }: any) {
   return data.getAllSubcategories.map((subcategory: any) => {
+    console.log(subcategory.category.name);
     return (
       <div key={subcategory._id} className="bg-white">
         <div className="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+          <span className="text-lg">
+            <Link to={`/shop/categories/${subcategory.category.name}`}>
+              {subcategory.category.name}
+            </Link>
+          </span>
+          <ChevronRightIcon className="w-4 h-4 inline-block mb-1 ml-2" />
+
           <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight  sm:text-4xl">
             {subcategory.name}
           </h2>
@@ -49,6 +58,6 @@ export default function ListProductsBySubcategory({ data }: any) {
           </div>
         </div>
       </div>
-    )
-  })
+    );
+  });
 }

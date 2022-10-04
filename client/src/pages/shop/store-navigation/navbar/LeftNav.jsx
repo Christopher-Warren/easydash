@@ -1,12 +1,12 @@
-import { Fragment } from 'react'
-import { Popover, Transition } from '@headlessui/react'
-import { MenuIcon } from '@heroicons/react/outline'
+import { Fragment } from "react";
+import { Popover, Transition } from "@headlessui/react";
+import { MenuIcon } from "@heroicons/react/outline";
 
-import logo from '../../../../assets/android-chrome-192x192.png'
-import { Link } from 'react-router-dom'
+import logo from "../../../../assets/android-chrome-192x192.png";
+import { Link } from "react-router-dom";
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export const LeftNav = ({ getAllCategories, setOpen }) => {
@@ -37,9 +37,9 @@ export const LeftNav = ({ getAllCategories, setOpen }) => {
                   <Popover.Button
                     className={classNames(
                       open
-                        ? 'border-indigo-600 text-indigo-600'
-                        : 'border-transparent text-gray-700 hover:text-gray-800',
-                      'relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px',
+                        ? "border-indigo-600 text-indigo-600"
+                        : "border-transparent text-gray-700 hover:text-gray-800",
+                      "relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px"
                     )}
                   >
                     Shop
@@ -67,7 +67,7 @@ export const LeftNav = ({ getAllCategories, setOpen }) => {
                         <div className="grid grid-cols-2 gap-y-10 gap-x-8 py-16">
                           <div className="col-start-2 grid grid-cols-2 gap-x-8">
                             {getAllCategories.map((item, idx) => {
-                              if (idx > 1) return null
+                              if (idx > 1) return null;
                               return (
                                 <div
                                   key={item.name}
@@ -80,8 +80,10 @@ export const LeftNav = ({ getAllCategories, setOpen }) => {
                                       className="object-center object-cover"
                                     />
                                   </div>
-                                  <a
-                                    href="#"
+
+                                  <Popover.Button
+                                    as={Link}
+                                    to={`/shop/categories/${item.name}`}
                                     className="mt-6 block font-medium text-gray-900"
                                   >
                                     <span
@@ -89,12 +91,12 @@ export const LeftNav = ({ getAllCategories, setOpen }) => {
                                       aria-hidden="true"
                                     />
                                     {item.name}
-                                  </a>
+                                  </Popover.Button>
                                   <p aria-hidden="true" className="mt-1">
                                     Shop now
                                   </p>
                                 </div>
-                              )
+                              );
                             })}
                           </div>
                           <div className="row-start-1 grid grid-cols-3 gap-y-10 gap-x-8 text-sm">
@@ -112,12 +114,13 @@ export const LeftNav = ({ getAllCategories, setOpen }) => {
                                 >
                                   {category.subcategories.map((subcategory) => (
                                     <li key={subcategory.name} className="flex">
-                                      <a
-                                        // href={subcategory.href}
+                                      <Popover.Button
+                                        as={Link}
+                                        to={`/shop/subcategories/${subcategory.name}`}
                                         className="hover:text-gray-800"
                                       >
                                         {subcategory.name}
-                                      </a>
+                                      </Popover.Button>
                                     </li>
                                   ))}
                                 </ul>
@@ -143,5 +146,5 @@ export const LeftNav = ({ getAllCategories, setOpen }) => {
         </div>
       </Popover.Group>
     </>
-  )
-}
+  );
+};

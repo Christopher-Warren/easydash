@@ -1,52 +1,61 @@
-import { useState } from 'react'
+import { useState } from "react";
 import {
   CheckIcon,
   QuestionMarkCircleIcon,
   StarIcon,
-} from '@heroicons/react/solid'
-import { RadioGroup } from '@headlessui/react'
-import { ShieldCheckIcon } from '@heroicons/react/outline'
-import { useQuery, useReactiveVar } from '@apollo/client'
-import { GET_PRODUCT } from '../../graphql/query_vars'
-import { Link, useParams } from 'react-router-dom'
-import { cartItemsVar } from '../../graphql/cache'
+} from "@heroicons/react/solid";
+import { RadioGroup } from "@headlessui/react";
+import { ShieldCheckIcon } from "@heroicons/react/outline";
+import { useQuery, useReactiveVar } from "@apollo/client";
+import { GET_PRODUCT } from "../../graphql/query_vars";
+import { Link, useParams } from "react-router-dom";
+import { cartItemsVar } from "../../graphql/cache";
 
 const noSizes = [
   {
-    name: 'One size only',
-    description: 'Fits all.',
+    name: "One size only",
+    description: "Fits all.",
   },
-]
+];
 
-const reviews = { average: 0, totalCount: 0 }
+const reviews = { average: 0, totalCount: 0 };
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Example(props) {
-  const [selectedSize, setSelectedSize] = useState('size')
-  const cart = useReactiveVar(cartItemsVar)
+  const [selectedSize, setSelectedSize] = useState("size");
+  const cart = useReactiveVar(cartItemsVar);
 
-  const params = useParams()
+  const params = useParams();
   const { data } = useQuery(GET_PRODUCT, {
     variables: {
       input: {
         _id: params.id,
       },
     },
-  })
+  });
 
   if (!data) {
-    return null
+    return null;
   }
-  const { getProduct } = data
+  const { getProduct } = data;
 
   const handleAddProduct = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    cartItemsVar([...cart, { _id: e.target.value, quantity: 1 }])
-  }
+    const productExists = cart.find((item) => {
+      return item._id === getProduct._id;
+    });
+    if (productExists) {
+      productExists.quantity++;
+      cartItemsVar([...cart]);
+      return;
+    }
+
+    cartItemsVar([...cart, { _id: getProduct._id, quantity: 1 }]);
+  };
 
   return (
     <div className="bg-white">
@@ -111,9 +120,9 @@ export default function Example(props) {
                           key={rating}
                           className={classNames(
                             reviews.average > rating
-                              ? 'text-yellow-400'
-                              : 'text-gray-300',
-                            'h-5 w-5 flex-shrink-0',
+                              ? "text-yellow-400"
+                              : "text-gray-300",
+                            "h-5 w-5 flex-shrink-0"
                           )}
                           aria-hidden="true"
                         />
@@ -180,8 +189,8 @@ export default function Example(props) {
                           value={size}
                           className={({ active }) =>
                             classNames(
-                              active ? 'ring-2 ring-indigo-500' : '',
-                              'relative block border border-gray-300 rounded-lg p-4 cursor-pointer focus:outline-none',
+                              active ? "ring-2 ring-indigo-500" : "",
+                              "relative block border border-gray-300 rounded-lg p-4 cursor-pointer focus:outline-none"
                             )
                           }
                         >
@@ -201,11 +210,11 @@ export default function Example(props) {
                               </RadioGroup.Description>
                               <div
                                 className={classNames(
-                                  active ? 'border' : 'border-2',
+                                  active ? "border" : "border-2",
                                   checked
-                                    ? 'border-indigo-500'
-                                    : 'border-transparent',
-                                  'absolute -inset-px rounded-lg pointer-events-none',
+                                    ? "border-indigo-500"
+                                    : "border-transparent",
+                                  "absolute -inset-px rounded-lg pointer-events-none"
                                 )}
                                 aria-hidden="true"
                               />
@@ -253,5 +262,5 @@ export default function Example(props) {
         </div>
       </div>
     </div>
-  )
+  );
 }

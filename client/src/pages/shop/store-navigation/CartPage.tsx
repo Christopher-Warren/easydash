@@ -1,29 +1,36 @@
-import { useQuery, useReactiveVar } from '@apollo/client'
+import { useQuery, useReactiveVar } from "@apollo/client";
 import {
   CheckIcon,
   ClockIcon,
   QuestionMarkCircleIcon,
   XIcon,
-} from '@heroicons/react/solid'
-import { Link } from 'react-router-dom'
-import { cartItemsVar } from '../../../graphql/cache'
-import { GET_CART_ITEMS, GET_CART_ITEMS2 } from '../../../graphql/query_vars'
+} from "@heroicons/react/solid";
+import { Link } from "react-router-dom";
+import { cartItemsVar } from "../../../graphql/cache";
+import { GET_CART_ITEMS, GET_CART_ITEMS2 } from "../../../graphql/query_vars";
 
 export default function CartPage() {
-  const cart = useReactiveVar(cartItemsVar)
+  const cart = useReactiveVar(cartItemsVar);
 
   const { data } = useQuery(GET_CART_ITEMS, {
     variables: {
       input: cart,
     },
-  })
-  if (!data) return null
-  console.log(data.getCartItems, cart)
+  });
+  if (!data) return null;
+
+  const handleRemoveItem = (e: any, productId: string) => {
+    e.preventDefault();
+
+    const updatedCart = cart.filter((item) => item._id !== productId);
+    cartItemsVar(updatedCart);
+  };
+
   return (
     <div className="bg-white">
       <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-          Shopping Cart{' '}
+          Shopping Cart
         </h1>
         <form className="mt-12 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
           <section aria-labelledby="cart-heading" className="lg:col-span-7">
@@ -82,15 +89,15 @@ export default function CartPage() {
                             value={cart[productIdx].quantity}
                             onChange={(e) => {
                               const itemExists = cart.find(
-                                (val) => val._id === product._id,
-                              )
+                                (val) => val._id === product._id
+                              );
 
                               if (itemExists)
                                 itemExists.quantity = parseInt(
-                                  e.currentTarget.value,
-                                )
+                                  e.currentTarget.value
+                                );
 
-                              cartItemsVar([...cartItemsVar()])
+                              cartItemsVar([...cartItemsVar()]);
                             }}
                             id={`quantity-${productIdx}`}
                             name={`quantity-${productIdx}`}
@@ -108,6 +115,7 @@ export default function CartPage() {
 
                           <div className="absolute top-0 right-0">
                             <button
+                              onClick={(e) => handleRemoveItem(e, product._id)}
                               type="button"
                               className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
                             >
@@ -135,7 +143,7 @@ export default function CartPage() {
                         <span>
                           {/* product.inStock */}
                           {product
-                            ? 'In stock'
+                            ? "In stock"
                             : `Ships in ${product.leadTime}`}
                         </span>
                       </p>
@@ -161,10 +169,10 @@ export default function CartPage() {
               <div className="flex items-center justify-between">
                 <dt className="text-sm text-gray-600">Subtotal</dt>
                 <dd className="text-sm font-medium text-gray-900">
-                  ${' '}
+                  ${" "}
                   {`${data.getCartItems.reduce(
                     (prev: any, curr: any) => prev + curr.price,
-                    0,
+                    0
                   )}`}
                 </dd>
               </div>
@@ -209,10 +217,10 @@ export default function CartPage() {
                   Order total
                 </dt>
                 <dd className="text-base font-medium text-gray-900">
-                  ${' '}
+                  ${" "}
                   {`${data.getCartItems.reduce(
                     (prev: any, curr: any, idx: any) => prev + curr.price,
-                    0,
+                    0
                   )}`}
                 </dd>
               </div>
@@ -230,5 +238,5 @@ export default function CartPage() {
         </form>
       </div>
     </div>
-  )
+  );
 }

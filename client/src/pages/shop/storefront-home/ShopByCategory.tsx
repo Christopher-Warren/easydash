@@ -1,14 +1,11 @@
-import { FeaturedCategoryData } from '../types'
+import { FeaturedCategoryData } from "../types";
 
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 
-export default function Example({ data }: FeaturedCategoryData) {
-  // Later, we can allow the shop owner to tag 3 special
-  // categories as "primary", etc. from within the Dashboard
-  // and modify our request to reflect ONLY the categories we need.
-  const primaryCategory = data?.getAllCategories[0]
-  const secondaryCategory = data?.getAllCategories[1]
-  const secondaryCategory2 = data?.getAllCategories[2]
+export default function ShopByCategory({ data }: FeaturedCategoryData) {
+  const primaryCategory = data?.getAllCategories[0];
+  const secondaryCategory = data?.getAllCategories[1];
+  const secondaryCategory2 = data?.getAllCategories[2];
 
   return (
     <div className="bg-gray-50">
@@ -110,5 +107,5 @@ export default function Example({ data }: FeaturedCategoryData) {
         </div>
       </div>
     </div>
-  )
+  );
 }

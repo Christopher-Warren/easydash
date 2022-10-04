@@ -1,24 +1,24 @@
-import HeroSection from './storefront-home/with_image_tiles'
-import ShopByCategorySection from './storefront-home/with_image_backgrounds'
-import ShopBySubcategorySection from './storefront-home/three_column_with_description'
-import ShopBySaleSection from './storefront-home/full_width_with_overlapping_image_tiles'
+import HeroSection from "./storefront-home/Hero";
+import ShopByCategorySection from "./storefront-home/ShopByCategory";
+import ShopBySubcategorySection from "./storefront-home/ShopBySubcategory";
+import ShopBySaleSection from "./storefront-home/ShopBySale";
 
-import IncintiveSection from './storefront-home/full_width_with_background_image'
+import IncintiveSection from "./storefront-home/IncintiveSection";
 
-import Footer from './store-navigation/Footer'
-import { withData } from './withData'
+import Footer from "./store-navigation/Footer";
+import { withData } from "./withData";
 import {
   GET_ALL_SUBCATEGORIES,
   GET_SHOP_HOME_DATA,
-} from '../../graphql/query_vars'
+} from "../../graphql/query_vars";
 
 export const ShopHome = () => {
-  const ShopByCategory = withData(ShopByCategorySection, GET_SHOP_HOME_DATA)
+  const ShopByCategory = withData(ShopByCategorySection, GET_SHOP_HOME_DATA);
   const ShopBySubcategory = withData(
     ShopBySubcategorySection,
     GET_ALL_SUBCATEGORIES,
-    { limit: 3 },
-  )
+    { limit: 3 }
+  );
 
   return (
     <>
@@ -29,5 +29,5 @@ export const ShopHome = () => {
       <ShopBySaleSection />
       <Footer />
     </>
-  )
-}
+  );
+};

@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from "@apollo/client";
 
 export const GET_ALL_CATEGORIES = gql`
   query getAllCategories {
@@ -11,7 +11,7 @@ export const GET_ALL_CATEGORIES = gql`
       }
     }
   }
-`
+`;
 
 export const GET_CART_ITEMS = gql`
   query getCartItems($input: [CartInput]) {
@@ -29,13 +29,13 @@ export const GET_CART_ITEMS = gql`
       description
     }
   }
-`
+`;
 
 export const GET_CART_ITEMS2 = gql`
   query GetCartItems {
     cartItems @client
   }
-`
+`;
 
 export const GET_SHOP_HOME_DATA = gql`
   query categories {
@@ -50,7 +50,7 @@ export const GET_SHOP_HOME_DATA = gql`
       }
     }
   }
-`
+`;
 
 export const GET_ALL_BY_CATEGORY = gql`
   query categories($name: String) {
@@ -71,13 +71,16 @@ export const GET_ALL_BY_CATEGORY = gql`
       }
     }
   }
-`
+`;
 
 export const GET_ALL_SUBCATEGORIES = gql`
   query getAllSubcategories($limit: Float, $name: String) {
     getAllSubcategories(limit: $limit, name: $name) {
       _id
       name
+      category {
+        name
+      }
       products {
         category {
           name
@@ -89,7 +92,7 @@ export const GET_ALL_SUBCATEGORIES = gql`
       }
     }
   }
-`
+`;
 
 export const GET_PRODUCTS = gql`
   query getProducts($input: GetProductInput) {
@@ -109,7 +112,7 @@ export const GET_PRODUCTS = gql`
       _id
     }
   }
-`
+`;
 
 export const GET_PRODUCT = gql`
   query getProduct($input: GetProductInput) {
@@ -129,7 +132,7 @@ export const GET_PRODUCT = gql`
       _id
     }
   }
-`
+`;
 
 export const GET_ALL_ORDERS = gql`
   query getAllOrders($input: GetAllOrdersInput) {
@@ -145,7 +148,7 @@ export const GET_ALL_ORDERS = gql`
       }
     }
   }
-`
+`;
 
 export const GET_ORDER = gql`
   query getOrder($input: ID!) {
@@ -190,4 +193,4 @@ export const GET_ORDER = gql`
       }
     }
   }
-`
+`;

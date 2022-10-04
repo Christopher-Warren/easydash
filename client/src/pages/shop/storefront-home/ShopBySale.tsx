@@ -1,5 +1,4 @@
-/* This example requires Tailwind CSS v2.0+ */
-export default function Example() {
+export default function ShopBySale() {
   return (
     <div className="bg-gray-50">
       <div className="pt-32 overflow-hidden sm:pt-14">
@@ -85,5 +84,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }
