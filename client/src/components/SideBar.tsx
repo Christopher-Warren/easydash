@@ -1,19 +1,19 @@
-import { useState } from 'react'
+import { useState } from "react";
 
-import { NavLink } from 'react-router-dom'
+import { NavLink } from "react-router-dom";
 const SideBar = () => {
-  const [sideToggle, setSideToggle] = useState(false)
+  const [sideToggle, setSideToggle] = useState(false);
 
   const handleNavClick = (e: any) => {
-    setSideToggle(false)
-  }
+    setSideToggle(false);
+  };
   return (
     <div
       className={`fixed top-0 w-20  h-28 z-10 bg-white dark:border-gray-100/25 transition-all duration-200  overflow-hidden lg:h-screen lg:border-r lg:shadow-xl
       ${
         sideToggle
-          ? '!h-screen border-r shadow-xl  dark:bg-gray-800  dark:border-gray-100/25 '
-          : 'bg-transparent'
+          ? "!h-screen border-r shadow-xl  dark:bg-gray-800  dark:border-gray-100/25 "
+          : "bg-transparent"
       }
       
       
@@ -29,7 +29,7 @@ const SideBar = () => {
         <button
           className="relative w-16 h-16 flex justify-center items-center  text-purple-500 lg:hidden"
           onClick={() => {
-            setSideToggle(!sideToggle)
+            setSideToggle(!sideToggle);
           }}
         >
           {!sideToggle ? (
@@ -163,7 +163,7 @@ const SideBar = () => {
         </NavLink> */}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SideBar
+export default SideBar;
