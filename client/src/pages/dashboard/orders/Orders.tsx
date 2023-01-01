@@ -18,8 +18,13 @@ import { useHistory } from 'react-router-dom'
 import { calcRelativeCreatedAt } from '../../../utils/calcRelativeCreatedAt'
 
 import { useLocation } from 'react-router-dom'
+import { GET_ALL_ORDERS } from '../../../graphql/query_vars'
+import { useQuery } from '@apollo/client'
 
-const Orders = ({ orders }: any) => {
+const Orders = () => {
+  const orders = useQuery(GET_ALL_ORDERS, {
+    notifyOnNetworkStatusChange: true,
+  })
   const { data, loading, error, refetch, networkStatus, stopPolling } = orders
 
   const dispatch = useAppDispatch()

@@ -19,6 +19,8 @@ input ModifyProductInput {
     stock: Float
 }
 
+
+
 input CategoryInput {
     _id: ID!
     name: String
@@ -30,12 +32,18 @@ input SubcategoryInput {
 }
 
 input GetProductInput {
+    _id: ID
     limit: Float
     skip: Float
     sort: String
     order: Float
     search: String
     filter: [Filter]
+}
+
+input CartInput {
+    _id: String!
+    quantity: Int!
 }
 
 
@@ -51,6 +59,7 @@ type Product {
     images: [String]
     stock: Float!
     searchScore: Float
+    quantity: Int
 }
 
 
@@ -58,6 +67,7 @@ type Subcategory {
     _id: ID!
     name: String
     description: String
+    category: Category
     products: [Product!]
 }
 
@@ -82,7 +92,6 @@ input FilterOptions {
 input Filter {
     field: String
     query: FilterOptions
-    
 }
 
 `

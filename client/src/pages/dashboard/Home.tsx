@@ -1,39 +1,39 @@
-import PageWrapper from '../../components/PageWrapper'
-import InfoCard from '../../components/cards/InfoCardSmall'
-import { useEffect } from 'react'
-import { DateTime } from 'luxon'
-import OrdersActivity from '../../components/orders/OrdersActivity'
-import { Link, Redirect } from 'react-router-dom'
-import { useQuery } from '@apollo/client'
-import { GET_ALL_ORDERS, GET_PRODUCTS } from '../../graphql/query_vars'
+import PageWrapper from "../../components/PageWrapper";
+import InfoCard from "../../components/cards/InfoCardSmall";
+import { useEffect } from "react";
+import { DateTime } from "luxon";
+import OrdersActivity from "../../components/orders/OrdersActivity";
+import { Link } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_ORDERS, GET_PRODUCTS } from "../../graphql/query_vars";
 
-import SecondaryButton from '../../components/buttons/SecondaryButton'
-import PrimaryButton from '../../components/buttons/PrimaryButton'
+import SecondaryButton from "../../components/buttons/SecondaryButton";
+import PrimaryButton from "../../components/buttons/PrimaryButton";
+import useAdminLogin from "../../hooks/useAdminLogin";
 
-
-const Home = ({ userId, products, orders, logout }: any) => {
-  const { data, refetch } = orders
+const Home = () => {
+  const { userId, logout } = useAdminLogin();
 
   const unfulfilled = useQuery(GET_ALL_ORDERS, {
     variables: {
       input: {
         limit: null,
         filter: {
-          field: 'status.fulfilled',
+          field: "status.fulfilled",
           query: {
-            eq: 'false',
+            eq: "false",
           },
         },
       },
     },
-  })
+  });
 
   const outOfStock = useQuery(GET_PRODUCTS, {
     variables: {
       input: {
         limit: null,
         filter: {
-          field: 'stock',
+          field: "stock",
           query: {
             gte: 0,
             lte: 0,
@@ -41,16 +41,20 @@ const Home = ({ userId, products, orders, logout }: any) => {
         },
       },
     },
-  })
+  });
 
+  const orders = useQuery(GET_ALL_ORDERS, {
+    notifyOnNetworkStatusChange: true,
+  });
+  const { data, refetch } = orders;
   useEffect(() => {
-    const now = DateTime.now().toMillis()
-    const pastWeek = DateTime.now().minus({ days: 7 }).toMillis()
+    const now = DateTime.now().toMillis();
+    const pastWeek = DateTime.now().minus({ days: 7 }).toMillis();
     refetch({
       input: {
         filter: [
           {
-            field: 'createdAt',
+            field: "createdAt",
             query: {
               gte: pastWeek,
               lte: now,
@@ -59,26 +63,26 @@ const Home = ({ userId, products, orders, logout }: any) => {
         ],
         limit: null,
       },
-    })
-  }, [refetch])
+    });
+  }, [refetch]);
 
   const renderRecentSales = (data: any) => {
-    if (!data || data.getAllOrders === null) return '0'
+    if (!data || data.getAllOrders === null) return "0";
 
     return data.getAllOrders.reduce((acc: number, arr: any) => {
-      return acc + arr.total
-    }, 0)
-  }
+      return acc + arr.total;
+    }, 0);
+  };
 
   const renderRecentOrders = (data: any) => {
-    if (!data || data.getAllOrders === null) return '0'
+    if (!data || data.getAllOrders === null) return "0";
 
-    return data.getAllOrders.length
-  }
+    return data.getAllOrders.length;
+  };
 
   return (
     <PageWrapper>
-      <div className="md:flex justify-between mb-8">
+      <div className="md:flex justify-between mb-8 ">
         <div className="">
           <h1 className="lg:text-4xl md:text-3xl text-2xl font-medium">
             Hello, {userId}
@@ -112,7 +116,7 @@ const Home = ({ userId, products, orders, logout }: any) => {
               </span>
 
               <span className="text-4xl block text-right">
-                {'$'}
+                {"$"}
                 {renderRecentSales(data)}
               </span>
             </InfoCard>
@@ -136,25 +140,25 @@ const Home = ({ userId, products, orders, logout }: any) => {
                   <Link
                     className="flex justify-between w-full"
                     to={{
-                      pathname: '/dashboard/orders',
+                      pathname: "/dashboard/orders",
                       state: [
                         {
-                          field: 'status.paid',
+                          field: "status.paid",
                           query: {
-                            eq: 'true',
+                            eq: "true",
                           },
                         },
                         {
-                          field: 'status.fulfilled',
+                          field: "status.fulfilled",
                           query: {
-                            eq: 'false',
+                            eq: "false",
                           },
                         },
                       ],
                     }}
                   >
                     <span>
-                      {unfulfilled.data && unfulfilled.data.getAllOrders.length}{' '}
+                      {unfulfilled.data && unfulfilled.data.getAllOrders.length}{" "}
                       orders ready to fulfill
                     </span>
                     <svg
@@ -178,10 +182,10 @@ const Home = ({ userId, products, orders, logout }: any) => {
                   <Link
                     className="flex justify-between w-full"
                     to={{
-                      pathname: '/dashboard/products',
+                      pathname: "/dashboard/products",
                       state: [
                         {
-                          field: 'stock',
+                          field: "stock",
                           query: {
                             gte: 0,
                             lte: 0,
@@ -224,7 +228,7 @@ const Home = ({ userId, products, orders, logout }: any) => {
         </div>
       </div>
     </PageWrapper>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
