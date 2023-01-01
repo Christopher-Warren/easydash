@@ -1,4 +1,4 @@
-import { InMemoryCache, makeVar } from '@apollo/client'
+import { InMemoryCache, makeVar } from "@apollo/client";
 
 export const cache: InMemoryCache = new InMemoryCache({
   typePolicies: {
@@ -6,42 +6,41 @@ export const cache: InMemoryCache = new InMemoryCache({
       fields: {
         isLoggedIn: {
           read() {
-            return isLoggedInVar()
+            return isLoggedInVar();
           },
         },
         isAdmin: {
           read() {
-            return isAdminVar()
+            return isAdminVar();
           },
         },
-
         cartItems: {
           read() {
-            return cartItemsVar()
+            return cartItemsVar();
           },
         },
       },
     },
   },
-})
+});
 
 // Initializes to true if localStorage includes a 'token' key,
 // false otherwise
-let isAdmin = false
+let isAdmin = false;
 if (
-  localStorage.getItem('role') === 'ADMIN' ||
-  localStorage.getItem('role') === 'USER'
+  localStorage.getItem("role") === "ADMIN" ||
+  localStorage.getItem("role") === "USER"
 ) {
-  isAdmin = true
+  isAdmin = true;
 } else {
-  isAdmin = false
+  isAdmin = false;
 }
 
-export const isAdminVar = makeVar<boolean>(isAdmin)
+export const isAdminVar = makeVar<boolean>(isAdmin);
 
 // Initializes to true if localStorage includes a 'token' key,
 // false otherwise
-export const isLoggedInVar = makeVar<boolean>(!!localStorage.getItem('user'))
+export const isLoggedInVar = makeVar<boolean>(!!localStorage.getItem("user"));
 
 // Initializes to an empty array
-export const cartItemsVar = makeVar<string[]>([])
+export const cartItemsVar = makeVar<{ _id: string; quantity: number }[]>([]);
