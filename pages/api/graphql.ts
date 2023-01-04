@@ -2,14 +2,8 @@
 import { createYoga, createSchema } from "graphql-yoga";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import { schema } from "../../graphql/schema/index";
-
-import rootQuery from "../../graphql/resolvers/index";
-import dbConnect from "../../lib/dbConnect";
-
-import products from "../../graphql/resolvers/products";
-
-const prod = products.products;
+import RootQuery from "../../graphql/resolvers/RootQuery";
+import RootMutation from "../../graphql/resolvers/RootMutation";
 
 export const config = {
   api: {
@@ -17,16 +11,6 @@ export const config = {
     bodyParser: false,
   },
 };
-
-console.log("gql", rootQuery);
-
-const connect = async () => {
-  await dbConnect();
-
-  // console.log(await prod());
-};
-
-connect();
 
 export default createYoga<{
   req: NextApiRequest;
@@ -270,14 +254,8 @@ export default createYoga<{
       }
     `,
     resolvers: {
-      RootQuery: {
-        products: prod,
-      },
-      RootMutation: {
-        login: (_, args) => {
-          console.log(args);
-        },
-      },
+      RootQuery,
+      RootMutation,
     },
   }),
 });
