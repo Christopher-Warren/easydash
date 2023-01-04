@@ -1,4 +1,4 @@
-module.exports = productSchema = `
+export const productSchema = `
 input ProductInput {
     _id: ID
     name: String!
@@ -94,4 +94,4 @@ input Filter {
     query: FilterOptions
 }
 
-`
+`;

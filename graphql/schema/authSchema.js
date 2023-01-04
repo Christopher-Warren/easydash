@@ -1,4 +1,4 @@
-module.exports = authSchema = `
+export const authSchema = `
 type User {
     _id: ID!
     email: String!
@@ -24,4 +24,4 @@ type User {
   input UserInput {
     email: String!
     password: String
-  }`
+  }`;

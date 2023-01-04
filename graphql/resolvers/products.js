@@ -1,28 +1,28 @@
-const Product = require('../../models/product')
+import Product from "../../models/product";
+import Category from "../../models/category";
+import Subcategory from "../../models/subcategory";
 
-const Category = require('../../models/category')
-const Subcategory = require('../../models/subcategory')
-const normalizeInputs = require('../../utils/normalizeInputs')
+import normalizeInputs from "../../utils/normalizeInputs";
+import generateMongoFilterStages from "../../utils/generateMongoFilterStages";
 
-const generateMongoFilterStages = require('../../utils/generateMongoFilterStages')
+import S3 from "aws-sdk/clients/s3";
 
-const S3 = require('aws-sdk/clients/s3')
-const subcategory = require('../../models/subcategory')
+export default {
+  // GraphQL Args: https://www.apollographql.com/docs/apollo-server/data/resolvers/#resolver-arguments
+  products: async (_parent, args = {}, _context, _info) => {
+    // if (sessionExpired) throw new Error("Session expired");
+    const { input } = args;
 
-module.exports = {
-  products: async ({ input }, { isAdmin, sessionExpired }) => {
-    if (sessionExpired) throw new Error('Session expired')
+    const limit = input?.limit ? input.limit : null;
 
-    const limit = input?.limit ? input.limit : null
+    const skip = input?.skip ? input.skip : 0;
 
-    const skip = input?.skip ? input.skip : 0
+    const sort = input?.sort ? input.sort : "_id";
+    const order = input?.order ? input.order : 1;
 
-    const sort = input?.sort ? input.sort : '_id'
-    const order = input?.order ? input.order : 1
+    const search = input?.search || null;
 
-    const search = input?.search || null
-
-    const filter = input?.filter
+    const filter = input?.filter;
 
     const stages = [
       // {localField} should be a field from this Product Model
@@ -79,99 +79,100 @@ module.exports = {
         $sort: { [sort]: order },
       },
       { $skip: skip },
-    ]
+    ];
 
-    if (limit) stages.push({ $limit: limit })
+    if (limit) stages.push({ $limit: limit });
 
-    generateMongoFilterStages(filter, stages)
+    generateMongoFilterStages(filter, stages);
 
     // Must populate category and subcategory data
     // early in aggregation pipeline
     stages.unshift(
       {
         $lookup: {
-          from: 'categories',
-          localField: 'category',
-          foreignField: '_id',
-          as: 'category',
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "category",
         },
       },
       {
         $lookup: {
-          from: 'subcategories',
-          localField: 'subcategory',
-          foreignField: '_id',
-          as: 'subcategory',
+          from: "subcategories",
+          localField: "subcategory",
+          foreignField: "_id",
+          as: "subcategory",
         },
       },
-      { $unwind: '$category' },
-      { $unwind: '$subcategory' },
-    )
+      { $unwind: "$category" },
+      { $unwind: "$subcategory" }
+    );
 
     // Search operation must be the first stage
     if (search) {
       stages.unshift({
         $search: {
           text: {
-            path: 'name',
+            path: "name",
             query: search,
             fuzzy: {},
           },
         },
-      })
+      });
     }
 
-    const products = await Product.aggregate(stages)
+    const products = await Product.aggregate(stages);
 
-    return products
+    return products;
   },
-  getCartItems: async ({ input }) => {
+  getCartItems: async (_parent, input) => {
     const products = await Product.find({ _id: input })
-      .populate('category')
-      .populate('subcategory')
+      .populate("category")
+      .populate("subcategory");
 
-    return products
+    return products;
   },
-  getProduct: async ({ input }) => {
+  getProduct: async (_parent, input) => {
     const product = await Product.findById(input._id)
-      .populate('category')
-      .populate('subcategory')
+      .populate("category")
+      .populate("subcategory");
 
-    return product
+    return product;
   },
   createProduct: async ({ productInput, sessionExpired }, { isAdmin }) => {
-    if (sessionExpired) throw new Error('Session expired')
-    if (!isAdmin) throw new Error('Easydash runs in read only mode')
-    if (!productInput.subcategory) throw new Error('Please enter a Subcategory')
-    if (productInput.category === 'new-category')
-      throw new Error(`Category "new-category" is unavailible`)
+    if (sessionExpired) throw new Error("Session expired");
+    if (!isAdmin) throw new Error("Easydash runs in read only mode");
+    if (!productInput.subcategory)
+      throw new Error("Please enter a Subcategory");
+    if (productInput.category === "new-category")
+      throw new Error(`Category "new-category" is unavailible`);
 
-    if (productInput.subcategory === 'new-subcategory')
-      throw new Error(`Subcategory "new-subcategory" is unavailible`)
+    if (productInput.subcategory === "new-subcategory")
+      throw new Error(`Subcategory "new-subcategory" is unavailible`);
 
-    normalizeInputs(productInput)
+    normalizeInputs(productInput);
 
     // Ensure that the input category exists
     let foundCategory = await Category.findOne({
       name: productInput.category,
-    })
+    });
 
     if (!foundCategory) {
       foundCategory = await Category.create({
         name: productInput.category,
-      })
+      });
     }
 
     // If a subcategory was entered, create the subcategory
     // and assign it to the product
     let foundSubcategory = await Subcategory.findOne({
       name: productInput.subcategory,
-    })
+    });
     if (!foundSubcategory) {
       foundSubcategory = await Subcategory.create({
         name: productInput.subcategory,
         category: foundCategory._id,
-      })
+      });
     }
 
     // Create the product, with category _id
@@ -183,16 +184,9 @@ module.exports = {
       price: productInput.price,
       stock: productInput.stock,
       createdAt: Date.now(),
-    })
-    const {
-      name,
-      category,
-      description,
-      price,
-      stock,
-      date,
-      _id,
-    } = createdProduct
+    });
+    const { name, category, description, price, stock, date, _id } =
+      createdProduct;
 
     // Add the product to the category in which it belogs to
     // Add subcategory to the category if exists
@@ -201,14 +195,14 @@ module.exports = {
       subcategories: foundCategory.subcategories.includes(foundSubcategory._id)
         ? [...foundCategory.subcategories]
         : [...foundCategory.subcategories, foundSubcategory._id],
-    }).populate('products')
+    }).populate("products");
 
     const updateSubcat = await Subcategory.findByIdAndUpdate(
       foundSubcategory._id,
       {
         products: [...foundSubcategory.products, _id],
-      },
-    ).populate('products')
+      }
+    ).populate("products");
 
     return {
       name,
@@ -220,59 +214,59 @@ module.exports = {
       _id,
       category: updateCat,
       subcategory: updateSubcat,
-    }
+    };
   },
   modifyProduct: async ({ productInput, sessionExpired }, { isAdmin }) => {
-    if (sessionExpired) throw new Error('Session expired')
-    if (!isAdmin) throw new Error('Easydash runs in read only mode')
+    if (sessionExpired) throw new Error("Session expired");
+    if (!isAdmin) throw new Error("Easydash runs in read only mode");
 
     if (!productInput.subcategory && productInput.category)
-      throw new Error('Must enter a subcategory when changing category.')
+      throw new Error("Must enter a subcategory when changing category.");
 
-    if (productInput.category === 'new-category')
-      throw new Error(`Category "new-category" is unavailible`)
+    if (productInput.category === "new-category")
+      throw new Error(`Category "new-category" is unavailible`);
 
-    if (productInput.subcategory === 'new-subcategory')
-      throw new Error(`Subcategory "new-subcategory" is unavailible`)
+    if (productInput.subcategory === "new-subcategory")
+      throw new Error(`Subcategory "new-subcategory" is unavailible`);
 
-    normalizeInputs(productInput)
-    const { _id: ID } = productInput
-    const { name } = productInput
-    const { description } = productInput
-    const { price } = productInput
-    const { stock } = productInput
-    const { category: categoryName } = productInput
-    const { subcategory: subcategoryName } = productInput
+    normalizeInputs(productInput);
+    const { _id: ID } = productInput;
+    const { name } = productInput;
+    const { description } = productInput;
+    const { price } = productInput;
+    const { stock } = productInput;
+    const { category: categoryName } = productInput;
+    const { subcategory: subcategoryName } = productInput;
 
-    const modifiedProduct = await Product.findById(ID)
+    const modifiedProduct = await Product.findById(ID);
 
-    const oldCategory = await Category.findById(modifiedProduct.category)
+    const oldCategory = await Category.findById(modifiedProduct.category);
     const oldSubcategory = await Subcategory.findById(
-      modifiedProduct.subcategory,
-    )
+      modifiedProduct.subcategory
+    );
 
-    if (name) modifiedProduct.name = name
-    if (description) modifiedProduct.description = description
-    if (price) modifiedProduct.price = price
-    if (stock) modifiedProduct.stock = stock
+    if (name) modifiedProduct.name = name;
+    if (description) modifiedProduct.description = description;
+    if (price) modifiedProduct.price = price;
+    if (stock) modifiedProduct.stock = stock;
 
     // Handle case where:
     // New category is entered
-    const existantCategory = await Category.findOne({ name: categoryName })
+    const existantCategory = await Category.findOne({ name: categoryName });
     const existantSubcategory = await Subcategory.findOne({
       name: subcategoryName,
-    })
+    });
 
     if (categoryName && categoryName !== oldCategory.name) {
       // When destination category and subcategory exist,
       // update data, no new categories or subcategories
       // are needed
       if (existantCategory && existantSubcategory) {
-        existantCategory.products.push(ID)
-        existantSubcategory.products.push(ID)
+        existantCategory.products.push(ID);
+        existantSubcategory.products.push(ID);
 
-        modifiedProduct.category = existantCategory._id
-        modifiedProduct.subcategory = existantSubcategory._id
+        modifiedProduct.category = existantCategory._id;
+        modifiedProduct.subcategory = existantSubcategory._id;
       }
       // Destination category exists, but a new subcategory
       // needs to be created
@@ -282,13 +276,13 @@ module.exports = {
           name: subcategory,
           category: existantCategory._id,
           products: [ID],
-        })
+        });
 
-        existantCategory.subcategories.push(newSubcategory._id)
-        existantCategory.products.push(ID)
+        existantCategory.subcategories.push(newSubcategory._id);
+        existantCategory.products.push(ID);
 
-        modifiedProduct.subcategory = newSubcategory._id
-        modifiedProduct.category = existantCategory._id
+        modifiedProduct.subcategory = newSubcategory._id;
+        modifiedProduct.category = existantCategory._id;
       }
 
       // Case where brand new category is entered
@@ -296,128 +290,128 @@ module.exports = {
         const newCategory = await Category.create({
           name: categoryName,
           products: [ID],
-        })
+        });
         const newSubcategory = await Subcategory.create({
           name: subcategoryName,
           products: [ID],
           category: newCategory._id,
-        })
-        newCategory.subcategories = [newSubcategory._id]
+        });
+        newCategory.subcategories = [newSubcategory._id];
 
-        modifiedProduct.category = newCategory._id
-        modifiedProduct.subcategory = newSubcategory._id
+        modifiedProduct.category = newCategory._id;
+        modifiedProduct.subcategory = newSubcategory._id;
 
-        newSubcategory.save()
-        newCategory.save()
+        newSubcategory.save();
+        newCategory.save();
       }
 
       // Remove product from old category and subcategory
 
       oldCategory.products = oldCategory.products.filter(
-        (product) => product.toString() !== ID,
-      )
+        (product) => product.toString() !== ID
+      );
       oldSubcategory.products = oldSubcategory.products.filter(
-        (product) => product.toString() !== ID,
-      )
+        (product) => product.toString() !== ID
+      );
     }
 
     if (categoryName === oldCategory.name || !categoryName) {
-      if (!subcategory) return
+      if (!subcategory) return;
 
       if (existantSubcategory) {
-        modifiedProduct.subcategory = existantSubcategory._id
-        existantSubcategory.products.push(ID)
+        modifiedProduct.subcategory = existantSubcategory._id;
+        existantSubcategory.products.push(ID);
       }
       if (!existantSubcategory) {
         const newSubcategory = await Subcategory.create({
           name: subcategoryName,
           category: modifiedProduct.category,
           products: [ID],
-        })
-        oldCategory.subcategories.push(newSubcategory._id)
-        modifiedProduct.subcategory = newSubcategory._id
+        });
+        oldCategory.subcategories.push(newSubcategory._id);
+        modifiedProduct.subcategory = newSubcategory._id;
       }
       oldSubcategory.products = oldSubcategory.products.filter(
-        (product) => product.toString() !== ID,
-      )
+        (product) => product.toString() !== ID
+      );
     }
 
     try {
       if (existantCategory) {
         if (existantCategory._id.toString() !== oldCategory._id.toString()) {
-          await existantCategory.save()
+          await existantCategory.save();
         }
       }
       if (existantSubcategory) {
         if (
           existantSubcategory._id.toString() !== oldSubcategory._id.toString()
         ) {
-          await existantSubcategory.save()
+          await existantSubcategory.save();
         }
       }
 
-      await oldCategory.save()
-      await oldSubcategory.save()
+      await oldCategory.save();
+      await oldSubcategory.save();
 
-      await modifiedProduct.save()
+      await modifiedProduct.save();
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
     // Remove categories that have no products
     const finalProduct = await Product.findById(ID)
-      .populate('category')
-      .populate('subcategory')
+      .populate("category")
+      .populate("subcategory");
 
-    return finalProduct
+    return finalProduct;
   },
   deleteProducts: async ({ productIds, sessionExpired }, { isAdmin }) => {
-    if (sessionExpired) throw new Error('Session expired')
-    if (!isAdmin) throw new Error('Easydash runs in read only mode')
-    const s3 = new S3({ apiVersion: '2006-03-01', region: 'us-east-2' })
+    if (sessionExpired) throw new Error("Session expired");
+    if (!isAdmin) throw new Error("Easydash runs in read only mode");
+    const s3 = new S3({ apiVersion: "2006-03-01", region: "us-east-2" });
 
-    let deletedCount = 0
+    let deletedCount = 0;
     const removedProducts = productIds.map(async (productId) => {
-      const product = await Product.findOneAndDelete({ _id: productId })
+      const product = await Product.findOneAndDelete({ _id: productId });
 
       const data = await s3
         .listObjects({
-          Bucket: 'easydashbucket',
+          Bucket: "easydashbucket",
           Prefix: `product_photos/${productId}`,
         })
-        .promise()
+        .promise();
 
       const imageKeys = data.Contents.map((val) => {
-        return { Key: val.Key }
-      })
+        return { Key: val.Key };
+      });
 
-      let deletedImages
+      let deletedImages;
       if (imageKeys.length > 0) {
         deletedImages = await s3
           .deleteObjects({
-            Bucket: 'easydashbucket',
+            Bucket: "easydashbucket",
             Delete: { Objects: imageKeys },
           })
-          .promise()
+          .promise();
       }
 
-      deletedCount++
+      deletedCount++;
 
-      return product
-    })
+      return product;
+    });
 
     const removedCategoryProducts = await Category.updateMany(
       { products: { $in: productIds } },
-      { $pull: { products: { $in: productIds } } },
-    )
+      { $pull: { products: { $in: productIds } } }
+    );
     const removedSubcategoryProducts = await Subcategory.updateMany(
       { products: { $in: productIds } },
-      { $pull: { products: { $in: productIds } } },
-    )
+      { $pull: { products: { $in: productIds } } }
+    );
 
-    const oldcat = await Category.deleteMany({ products: [] })
-    const oldsub = await Subcategory.deleteMany({ products: [] })
+    const oldcat = await Category.deleteMany({ products: [] });
+    const oldsub = await Subcategory.deleteMany({ products: [] });
 
-    return removedProducts.length.toString()
+    return removedProducts.length.toString();
   },
   getAllCategories: async ({ name }) => {
     /*
@@ -449,31 +443,31 @@ module.exports = {
     in one method
 */
     const categories = await Category.find(name ? { name } : {})
-      .populate('products')
-      .populate('subcategories')
+      .populate("products")
+      .populate("subcategories")
       .populate({
-        path: 'products',
+        path: "products",
         populate: {
-          path: 'subcategory',
-          model: 'Subcategory',
+          path: "subcategory",
+          model: "Subcategory",
         },
-      })
+      });
     // console.log(categories)
-    return categories
+    return categories;
   },
   getAllSubcategories: async ({ limit, name }) => {
     const subcategories = await Subcategory.find(name ? { name } : {})
-      .populate('products')
-      .populate('category')
+      .populate("products")
+      .populate("category")
       .populate({
-        path: 'products',
+        path: "products",
         populate: {
-          path: 'category',
-          model: 'Category',
+          path: "category",
+          model: "Category",
         },
       })
-      .limit(limit ? limit : null)
+      .limit(limit ? limit : null);
 
-    return subcategories
+    return subcategories;
   },
-}
+};
