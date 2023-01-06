@@ -1,10 +1,10 @@
-import Home from "../client/src/pages/dashboard/Home";
+import { ShopHome } from "../client/src/pages/shop/ShopHome";
 
-const index = (props) => {
+const Home = (props) => {
   return (
     <div className="dark">
-      <Home />
+      <ShopHome />
     </div>
   );
 };
-export default index;
+export default Home;

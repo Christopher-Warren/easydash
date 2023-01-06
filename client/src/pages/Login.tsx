@@ -1,23 +1,18 @@
-import PrimaryButton from '../components/buttons/PrimaryButton'
-import FormInput from '../components/LoginInput'
-import logo from '../assets/logobanner.png'
+import PrimaryButton from "../components/buttons/PrimaryButton";
+import FormInput from "../components/LoginInput";
+import logo from "../assets/logobanner.png";
 import {
   BrowserRouter as Switch,
   Route,
   Link,
   Redirect,
-} from 'react-router-dom'
+} from "react-router-dom";
 
-import RegisterForm from '../components/forms/RegisterForm'
-import LoadingSpinner from '../components/LoadingSpinner'
-
-import useAdminLogin from '../hooks/useAdminLogin'
+import RegisterForm from "../components/forms/RegisterForm";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const Login = () => {
-  const { login, loading, user, isAdmin } = useAdminLogin()
-
-  if (user.isLoggedIn && isAdmin) return <Redirect to="/dashboard" />
-
+  const loading = false;
   return (
     <div className="h-screen w-full flex items-center justify-center lg:justify-end">
       <div className="absolute hidden lg:block  w-1/4  h-screen left-0 overflow-hidden border-r-2 border-blue-200 drop-shadow-xl">
@@ -90,7 +85,7 @@ const Login = () => {
         </svg>
       </div>
 
-      <div
+      {/* <div
         className={`max-w-lg flex-grow lg:mr-40 xl:mr-96 transition-none lg:p-0 p-4 `}
       >
         <Switch>
@@ -98,15 +93,15 @@ const Login = () => {
             <form
               className="relative"
               onSubmit={async (e: any) => {
-                e.preventDefault()
-                const formData = new FormData(e.target as HTMLFormElement)
+                e.preventDefault();
+                const formData = new FormData(e.target as HTMLFormElement);
                 try {
                   await login({
                     variables: {
-                      email: formData.get('email'),
-                      password: formData.get('password'),
+                      email: formData.get("email"),
+                      password: formData.get("password"),
                     },
-                  })
+                  });
                 } catch (error) {
                   // console.log(error)
                 }
@@ -114,7 +109,7 @@ const Login = () => {
             >
               {loading && <LoadingSpinner />}
 
-              <div className={loading ? 'hidden' : ''}>
+              <div className={loading ? "hidden" : ""}>
                 <img
                   className="lg:mx-0 mx-auto dark:brightness-[2.5] "
                   src={logo}
@@ -141,8 +136,8 @@ const Login = () => {
                 <div className="flex justify-between -mt-1 text-blue-500 only-of-type:a">
                   <div>
                     <span className="dark:text-gray-500 text-gray-600">
-                      {' '}
-                      No Account?{' '}
+                      {" "}
+                      No Account?{" "}
                     </span>
                     <Link to="/dashboard/register" className="underline">
                       Create One!
@@ -164,9 +159,9 @@ const Login = () => {
             <RegisterForm />
           </Route>
         </Switch>
-      </div>
+      </div> */}
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

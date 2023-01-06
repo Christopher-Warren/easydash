@@ -22,6 +22,7 @@ const useAdminLogin = () => {
   });
 
   const userId = localStorage.getItem("user");
+
   const [logout] = useMutation(LOGOUT, {
     onCompleted: (data) => {
       isAdminVar(false);

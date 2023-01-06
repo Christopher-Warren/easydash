@@ -27,20 +27,22 @@ export const cache: InMemoryCache = new InMemoryCache({
 // Initializes to true if localStorage includes a 'token' key,
 // false otherwise
 // let isAdmin = false;
-// if (
-//   localStorage.getItem("role") === "ADMIN" ||
-//   localStorage.getItem("role") === "USER"
-// ) {
-//   isAdmin = true;
-// } else {
-//   isAdmin = false;
+// if (typeof window !== "undefined") {
+//   if (
+//     localStorage.getItem("role") === "ADMIN" ||
+//     localStorage.getItem("role") === "USER"
+//   ) {
+//     isAdmin = true;
+//   } else {
+//     isAdmin = false;
+//   }
 // }
 
 // export const isAdminVar = makeVar<boolean>(isAdmin);
 
-// Initializes to true if localStorage includes a 'token' key,
-// false otherwise
-// export const isLoggedInVar = makeVar<boolean>(!!localStorage.getItem("user"));
+// // Initializes to true if localStorage includes a 'token' key,
+// // false otherwise
+export const isLoggedInVar = makeVar<boolean>(false);
 
-// Initializes to an empty array
+// // Initializes to an empty array
 // export const cartItemsVar = makeVar<{ _id: string; quantity: number }[]>([]);
