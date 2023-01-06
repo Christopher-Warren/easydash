@@ -7,7 +7,7 @@ const InfoCardSmall = ({
 }: any) => {
   return (
     <div
-      className={`bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-md children:p-3 ${className} shadow-md relative`}
+      className={`bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-md ${className} shadow-md relative`}
     >
       <div className="relative w-full">
         {title && (
@@ -24,7 +24,7 @@ const InfoCardSmall = ({
         {children}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default InfoCardSmall
+export default InfoCardSmall;

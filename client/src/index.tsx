@@ -13,19 +13,6 @@ import { createBrowserHistory } from "history";
 import App from "./App";
 import { BrowserRouter as Router } from "react-router-dom";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <ApolloProvider client={client}>
-      <Provider store={store}>
-        <Router>
-          <div className="dark">
-            <div className="dark:bg-gray-900  bg-white">
-              <App />
-            </div>
-          </div>
-        </Router>
-      </Provider>
-    </ApolloProvider>
-  </React.StrictMode>,
-  document.getElementById("root")
-);
+function page() {
+  return <div>hello</div>;
+}

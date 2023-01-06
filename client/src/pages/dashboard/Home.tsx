@@ -3,7 +3,7 @@ import InfoCard from "../../components/cards/InfoCardSmall";
 import { useEffect } from "react";
 import { DateTime } from "luxon";
 import OrdersActivity from "../../components/orders/OrdersActivity";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_ORDERS, GET_PRODUCTS } from "../../graphql/query_vars";
 
@@ -12,7 +12,11 @@ import PrimaryButton from "../../components/buttons/PrimaryButton";
 import useAdminLogin from "../../hooks/useAdminLogin";
 
 const Home = () => {
-  const { userId, logout } = useAdminLogin();
+  // const { userId, logout } = useAdminLogin();
+  console.log("asd");
+
+  const userId = null;
+  const logout = null;
 
   const unfulfilled = useQuery(GET_ALL_ORDERS, {
     variables: {
@@ -107,8 +111,8 @@ const Home = () => {
           </SecondaryButton>
         </div>
       </div>
-      <div className="grid md:grid-cols-4 grid-cols-1 gap-6 children:h-min row-span-full">
-        <div className="grid grid-cols-2  col-span-3 gap-6">
+      <div className="grid md:grid-cols-4 grid-cols-1 gap-6  row-span-full">
+        <div className="grid grid-cols-2  col-span-3 gap-6 h-min">
           <div className="md:col-span-1 col-span-2">
             <InfoCard title="Sales">
               <span className="text-sm block dark:text-gray-400 ">
@@ -134,28 +138,29 @@ const Home = () => {
             </InfoCard>
           </div>
           <div className="col-span-2">
-            <InfoCard className="children:p-0 overflow-hidden">
-              <ol className="children:p-3 text-lg">
-                <li className=" hover:bg-purple-200 hover:dark:bg-gray-700 transition-colors cursor-pointer">
+            <InfoCard className="overflow-hidden">
+              <ol className="text-lg p-0">
+                <li className=" hover:bg-purple-200 p-3 hover:dark:bg-gray-700 transition-colors cursor-pointer">
                   <Link
                     className="flex justify-between w-full"
-                    to={{
-                      pathname: "/dashboard/orders",
-                      state: [
-                        {
-                          field: "status.paid",
-                          query: {
-                            eq: "true",
-                          },
-                        },
-                        {
-                          field: "status.fulfilled",
-                          query: {
-                            eq: "false",
-                          },
-                        },
-                      ],
-                    }}
+                    href={"/dashboard/orders"}
+                    // to={{
+                    //   pathname: "/dashboard/orders",
+                    //   state: [
+                    //     {
+                    //       field: "status.paid",
+                    //       query: {
+                    //         eq: "true",
+                    //       },
+                    //     },
+                    //     {
+                    //       field: "status.fulfilled",
+                    //       query: {
+                    //         eq: "false",
+                    //       },
+                    //     },
+                    //   ],
+                    // }}
                   >
                     <span>
                       {unfulfilled.data && unfulfilled.data.getAllOrders.length}{" "}
@@ -178,21 +183,22 @@ const Home = () => {
                   </Link>
                 </li>
                 <div className="w-full h-px bg-gray-700 !p-0"></div>
-                <li className=" hover:bg-purple-200 hover:dark:bg-gray-700 transition-colors cursor-pointer">
+                <li className=" hover:bg-purple-200 p-3 hover:dark:bg-gray-700 transition-colors cursor-pointer">
                   <Link
                     className="flex justify-between w-full"
-                    to={{
-                      pathname: "/dashboard/products",
-                      state: [
-                        {
-                          field: "stock",
-                          query: {
-                            gte: 0,
-                            lte: 0,
-                          },
-                        },
-                      ],
-                    }}
+                    href={"/dashboard/products"}
+                    // to={{
+                    //   pathname: "/dashboard/products",
+                    //   state: [
+                    //     {
+                    //       field: "stock",
+                    //       query: {
+                    //         gte: 0,
+                    //         lte: 0,
+                    //       },
+                    //     },
+                    //   ],
+                    // }}
                   >
                     <span className="">
                       {outOfStock.data?.products?.length} products out of stock
@@ -218,7 +224,7 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="md:col-span-1 col-span-3">
+        <div className="md:col-span-1 col-span-3 h-min">
           <div>
             <InfoCard title="Activity" titleClassName="relative mb-5">
               {/* <div className="bg-gray-800 absolute h-px left-0 w-full"></div> */}

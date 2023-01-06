@@ -1,43 +1,43 @@
-import { useMutation, useQuery } from '@apollo/client'
+import { useMutation, useQuery } from "@apollo/client";
 
-import { isLoggedInVar, isAdminVar } from '../graphql/cache'
+import { isLoggedInVar, isAdminVar } from "../graphql/cache";
 
-import { store } from '../redux/store'
-import { addError } from '../redux/error/errorSlice'
+import { store } from "../redux/store";
+import { addError } from "../redux/error/errorSlice";
 
-import { USER_LOGIN } from '../graphql/mutation_vars'
-import { IS_ADMIN, IS_LOGGED_IN, LOGOUT } from '../graphql/types_extension'
+import { USER_LOGIN } from "../graphql/mutation_vars";
+import { IS_ADMIN, IS_LOGGED_IN, LOGOUT } from "../graphql/types_extension";
 
 const useAdminLogin = () => {
   const [login, { loading, error }] = useMutation(USER_LOGIN, {
     onCompleted: ({ login }) => {
-      if (login.role === 'ADMIN' || login.role === 'USER') {
-        localStorage.setItem('role', login.role)
-        isAdminVar(true)
+      if (login.role === "ADMIN" || login.role === "USER") {
+        localStorage.setItem("role", login.role);
+        isAdminVar(true);
       }
 
-      localStorage.setItem('user', login.email as string)
-      isLoggedInVar(true)
+      localStorage.setItem("user", login.email as string);
+      isLoggedInVar(true);
     },
-  })
+  });
 
-  const userId = localStorage.getItem('user')
+  const userId = localStorage.getItem("user");
   const [logout] = useMutation(LOGOUT, {
     onCompleted: (data) => {
-      isAdminVar(false)
-      isLoggedInVar(false)
-      localStorage.removeItem('role')
-      localStorage.removeItem('user')
+      isAdminVar(false);
+      isLoggedInVar(false);
+      localStorage.removeItem("role");
+      localStorage.removeItem("user");
 
-      store.dispatch(addError(data.logout.message))
+      store.dispatch(addError(data.logout.message));
     },
-  })
+  });
 
-  const { data: user } = useQuery(IS_LOGGED_IN)
-  const { data: isAdminData } = useQuery(IS_ADMIN)
-  const isAdmin = isAdminData.isAdmin
+  const { data: user } = useQuery(IS_LOGGED_IN);
+  const { data: isAdminData } = useQuery(IS_ADMIN);
+  const isAdmin = isAdminData.isAdmin;
 
-  return { login, user, isAdmin, loading, userId, error, logout }
-}
+  return { login, user, isAdmin, loading, userId, error, logout };
+};
 
-export default useAdminLogin
+export default useAdminLogin;
