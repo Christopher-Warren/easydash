@@ -21,7 +21,7 @@
     "**/*.tsx",
     "graphql/resolvers/RootMutation.js",
     "graphql/resolvers/RootQuery.js",
-    "pages/_app.js"
+    "pages/_app.ts"
   ],
   "exclude": ["node_modules"]
 }

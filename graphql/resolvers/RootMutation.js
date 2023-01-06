@@ -10,6 +10,7 @@ import Order from "../../models/order";
 
 import S3 from "aws-sdk/clients/s3";
 import dbConnect from "../../lib/dbConnect";
+import { setCookie, deleteCookie } from "cookies-next";
 
 const RootMutation = {
   createProduct: async (
@@ -409,7 +410,7 @@ const RootMutation = {
       throw { err };
     }
   },
-  login: async (_parent, { email, password }) => {
+  login: async (_parent, { email, password }, { req, res }) => {
     await dbConnect();
     const user = await User.findOne({ email });
     if (!user) throw new Error("Invalid password or email address");
@@ -427,16 +428,20 @@ const RootMutation = {
     // We can set a maxAge to infinite, and trigger session expired
     // err based off jwt verify.
     // maxAge: 60000 * 60 * 24 * 7,
-    res.cookie("token", token, {
+    setCookie("token", token, {
       // Expires after 7 days
+      req,
+      res,
       maxAge: 60000 * 60 * 24 * 7 * 2,
       httpOnly: true,
       sameSite: true,
     });
+
     return { userId: user.id, email: email, role: user.role };
   },
-  logout: (_parent, { res }) => {
+  logout: (_parent, _args, { req, res }) => {
     res.clearCookie("token");
+    deleteCookie("token", { req, res });
     // On frontend we need to remove 'user' localstorage item,
     // and update isLoggedInVar
 

@@ -2,9 +2,14 @@ import PrimaryButton from "../../../client/src/components/buttons/PrimaryButton"
 import LoginInput from "../../../client/src/components/LoginInput";
 import Link from "next/link";
 import LoginWrapper from "../../../components/LoginWrapper";
+import { useMutation } from "@apollo/client";
+import { USER_LOGIN } from "../../../graphql/mutation_vars";
 
 const Login = () => {
   const loading = false;
+
+  const [login, { data }] = useMutation(USER_LOGIN);
+
   return (
     <LoginWrapper>
       <form
@@ -13,12 +18,12 @@ const Login = () => {
           e.preventDefault();
           const formData = new FormData(e.target as HTMLFormElement);
           try {
-            // await login({
-            //   variables: {
-            //     email: formData.get("email"),
-            //     password: formData.get("password"),
-            //   },
-            // });
+            await login({
+              variables: {
+                email: formData.get("email"),
+                password: formData.get("password"),
+              },
+            });
           } catch (error) {
             // console.log(error)
           }
