@@ -45,4 +45,4 @@ export const isAdminVar = makeVar<boolean>(false);
 export const isLoggedInVar = makeVar<boolean>(false);
 
 // // Initializes to an empty array
-// export const cartItemsVar = makeVar<{ _id: string; quantity: number }[]>([]);
+export const cartItemsVar = makeVar<{ _id: string; quantity: number }[]>([]);

@@ -24,6 +24,7 @@ const dbConnect = async () => {
     };
 
     cached.promise = mongoose.connect(MONGO_URI, opts).then((mongoose) => {
+      mongoose.set("strictQuery", false);
       return mongoose;
     });
   }

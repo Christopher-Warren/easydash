@@ -4,11 +4,16 @@ import Link from "next/link";
 import LoginWrapper from "../../../components/LoginWrapper";
 import { useMutation } from "@apollo/client";
 import { USER_LOGIN } from "../../../graphql/mutation_vars";
+import { useRouter } from "next/router";
 
 const Login = () => {
   const loading = false;
 
   const [login, { data }] = useMutation(USER_LOGIN);
+
+  console.log(data);
+
+  const router = useRouter();
 
   return (
     <LoginWrapper>
@@ -24,6 +29,7 @@ const Login = () => {
                 password: formData.get("password"),
               },
             });
+            router.push("/dashboard");
           } catch (error) {
             // console.log(error)
           }

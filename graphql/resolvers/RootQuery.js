@@ -6,8 +6,6 @@ import Order from "../../models/order";
 import generateMongoFilterStages from "../../utils/generateMongoFilterStages";
 import dbConnect from "../../lib/dbConnect";
 
-console.log("ASDASDASD");
-
 const RootQuery = {
   products: async (_parent, args = {}, _context, _info) => {
     // if (sessionExpired) throw new Error("Session expired");

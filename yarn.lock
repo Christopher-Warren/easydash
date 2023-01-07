@@ -1205,6 +1205,13 @@
     "@types/qs" "*"
     "@types/serve-static" "*"
 
+"@types/jsonwebtoken@^9.0.0":
+  "integrity" "sha512-mM4TkDpA9oixqg1Fv2vVpOFyIVLJjm5x4k0V+K/rEsizfjD7Tk7LKk3GTtbB7KCfP0FEHQtsZqFxYA0+sijNVg=="
+  "resolved" "https://registry.npmjs.org/@types/jsonwebtoken/-/jsonwebtoken-9.0.0.tgz"
+  "version" "9.0.0"
+  dependencies:
+    "@types/node" "*"
+
 "@types/long@^4.0.0":
   "integrity" "sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA=="
   "resolved" "https://registry.npmjs.org/@types/long/-/long-4.0.2.tgz"
@@ -2229,6 +2236,11 @@
   "integrity" "sha512-9FzQjJ7MATs1tSpnco1K6ayiYE3figslrXA72G2HQ/n76RzvYlofyi5QM+iX4YRs/pu3yzxlVQSST23+dMDknw=="
   "resolved" "https://registry.npmjs.org/jmespath/-/jmespath-0.16.0.tgz"
   "version" "0.16.0"
+
+"jose@^4.11.2":
+  "integrity" "sha512-njj0VL2TsIxCtgzhO+9RRobBvws4oYyCM8TpvoUQwl/MbIM3NFJRR9+e6x0sS5xXaP1t6OCBkaBME98OV9zU5A=="
+  "resolved" "https://registry.npmjs.org/jose/-/jose-4.11.2.tgz"
+  "version" "4.11.2"
 
 "js-tokens@^3.0.0 || ^4.0.0":
   "integrity" "sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ=="
