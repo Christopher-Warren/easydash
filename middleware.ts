@@ -6,17 +6,14 @@ import { jwtVerify } from "jose";
 // This function can be marked `async` if using `await` inside
 export async function middleware(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
-
   const onLoginPage = req.url.includes("/login");
 
-  console.log(req.url);
-
+  // @TODO Make 13-14 a function
   if (onLoginPage && !token) return NextResponse.next();
   if (!token)
     return NextResponse.redirect(new URL("/dashboard/login", req.url));
 
   const JWT_SECRET: string | undefined = process.env.JWT_SECRET!;
-
   const secret = new TextEncoder().encode(JWT_SECRET);
 
   const verified = await jwtVerify(token, secret);

@@ -11,30 +11,27 @@ const Login = () => {
 
   const [login, { data }] = useMutation(USER_LOGIN);
 
-  console.log(data);
-
   const router = useRouter();
+
+  const handleLogin = async (e: any) => {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    try {
+      await login({
+        variables: {
+          email: formData.get("email"),
+          password: formData.get("password"),
+        },
+      });
+      router.push("/dashboard");
+    } catch (error) {
+      // console.log(error)
+    }
+  };
 
   return (
     <LoginWrapper>
-      <form
-        className="relative"
-        onSubmit={async (e: any) => {
-          e.preventDefault();
-          const formData = new FormData(e.target as HTMLFormElement);
-          try {
-            await login({
-              variables: {
-                email: formData.get("email"),
-                password: formData.get("password"),
-              },
-            });
-            router.push("/dashboard");
-          } catch (error) {
-            // console.log(error)
-          }
-        }}
-      >
+      <form className="relative" onSubmit={handleLogin}>
         {/* {loading && <LoadingSpinner />} */}
 
         <div className={loading ? "hidden" : ""}>

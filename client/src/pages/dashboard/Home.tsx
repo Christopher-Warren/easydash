@@ -4,19 +4,27 @@ import { useEffect } from "react";
 import { DateTime } from "luxon";
 import OrdersActivity from "../../components/orders/OrdersActivity";
 import Link from "next/link";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { GET_ALL_ORDERS, GET_PRODUCTS } from "../../graphql/query_vars";
 
 import SecondaryButton from "../../components/buttons/SecondaryButton";
 import PrimaryButton from "../../components/buttons/PrimaryButton";
 import useAdminLogin from "../../hooks/useAdminLogin";
+import { LOGOUT } from "../../graphql/types_extension";
+
+import { useRouter } from "next/router";
 
 const Home = () => {
-  // const { userId, logout } = useAdminLogin();
-  console.log("asd");
-
   const userId = null;
-  const logout = null;
+
+  // Add this to a hook of some kind that has both login
+  // and logout functionality
+  const router = useRouter();
+  const [logout] = useMutation(LOGOUT, {
+    onCompleted(data) {
+      router.reload();
+    },
+  });
 
   const unfulfilled = useQuery(GET_ALL_ORDERS, {
     variables: {

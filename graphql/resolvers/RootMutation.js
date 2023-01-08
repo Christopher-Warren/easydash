@@ -428,6 +428,8 @@ const RootMutation = {
     // We can set a maxAge to infinite, and trigger session expired
     // err based off jwt verify.
     // maxAge: 60000 * 60 * 24 * 7,
+
+    // Need to change this to use 'jose'
     setCookie("token", token, {
       // Expires after 7 days
       req,
@@ -440,7 +442,7 @@ const RootMutation = {
     return { userId: user.id, email: email, role: user.role };
   },
   logout: (_parent, _args, { req, res }) => {
-    res.clearCookie("token");
+    console.log("ww");
     deleteCookie("token", { req, res });
     // On frontend we need to remove 'user' localstorage item,
     // and update isLoggedInVar

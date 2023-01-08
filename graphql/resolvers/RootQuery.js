@@ -132,7 +132,7 @@ const RootQuery = {
 
     return product;
   },
-  getAllCategories: async ({ name }) => {
+  getAllCategories: async (_parent, { name }) => {
     await dbConnect();
     /*
     Nested population
@@ -175,7 +175,7 @@ const RootQuery = {
     // console.log(categories)
     return categories;
   },
-  getAllSubcategories: async ({ limit, name }) => {
+  getAllSubcategories: async (_parent, { limit, name }) => {
     await dbConnect();
     const subcategories = await Subcategory.find(name ? { name } : {})
       .populate("products")
@@ -191,7 +191,7 @@ const RootQuery = {
 
     return subcategories;
   },
-  getOrder: async ({ input }) => {
+  getOrder: async (_parent, { input }) => {
     await dbConnect();
     const order = await Order.findById(input).populate({
       path: "products",
@@ -203,9 +203,8 @@ const RootQuery = {
 
     return order.populate("products");
   },
-  getAllOrders: async ({ input }, { isAdmin, sessionExpired, isUser }) => {
+  getAllOrders: async (_parent, { input }) => {
     await dbConnect();
-    if (sessionExpired) throw new Error("Session expired");
 
     const limit = input?.limit ? input.limit : null;
     const skip = input?.skip ? input.skip : 0;
