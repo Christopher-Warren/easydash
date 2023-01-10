@@ -1,26 +1,27 @@
-import { useQuery } from '@apollo/client'
+import { useQuery } from "@apollo/client";
 
-import PageWrapper from '../../components/PageWrapper'
-import PrimaryButton from '../../components/buttons/PrimaryButton'
+import PageWrapper from "../../components/PageWrapper";
+import PrimaryButton from "../../components/buttons/PrimaryButton";
 
-import { useAppDispatch } from '../../redux/hooks'
-import { toggleModal } from '../../redux/modal/modalSlice'
+import { useAppDispatch } from "../../../../redux/hooks";
+import { toggleModal } from "../../redux/modal/modalSlice";
 
-import { ModalFormIDs } from '../modals/Modals'
+import { ModalFormIDs } from "../modals/Modals";
 
-import LoadingSpinner from '../../components/LoadingSpinner'
+import LoadingSpinner from "../../components/LoadingSpinner";
 
-import ProductsTable from '../../components/tables/ProductsTable'
-import { GET_PRODUCTS } from '../../graphql/query_vars'
+import ProductsTable from "../../components/tables/ProductsTable";
+import { GET_PRODUCTS } from "../../graphql/query_vars";
+import Link from "next/link";
 
 const Products = () => {
   const products = useQuery(GET_PRODUCTS, {
     notifyOnNetworkStatusChange: true,
-  })
+  });
 
-  const { loading, networkStatus } = products
+  const { loading, networkStatus } = products;
 
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   return (
     <PageWrapper>
@@ -31,16 +32,10 @@ const Products = () => {
       {(loading || networkStatus === 4) && <LoadingSpinner />}
 
       <div className="flex my-5">
-        <PrimaryButton
-          padding="px-5 py-1.5 mr-5"
-          onClick={(e: any) => {
-            e.preventDefault()
+        <Link href={"/dashboard/products/new"}>
+          <PrimaryButton padding="px-5 py-1.5 mr-5">New Product</PrimaryButton>
+        </Link>
 
-            dispatch(toggleModal({ value: ModalFormIDs.newProduct }))
-          }}
-        >
-          New Product
-        </PrimaryButton>
         {/* <SecondaryButton padding="px-5 py-1.5">
           Manage Categories
         </SecondaryButton> */}
@@ -48,7 +43,7 @@ const Products = () => {
 
       <ProductsTable products={products}></ProductsTable>
     </PageWrapper>
-  )
-}
+  );
+};
 
-export default Products
+export default Products;

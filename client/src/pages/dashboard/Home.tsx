@@ -9,7 +9,7 @@ import { GET_ALL_ORDERS, GET_PRODUCTS } from "../../graphql/query_vars";
 
 import SecondaryButton from "../../components/buttons/SecondaryButton";
 import PrimaryButton from "../../components/buttons/PrimaryButton";
-import useAdminLogin from "../../hooks/useAdminLogin";
+
 import { LOGOUT } from "../../graphql/types_extension";
 
 import { useRouter } from "next/router";

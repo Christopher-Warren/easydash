@@ -1,26 +1,26 @@
-import PageWrapper from '../PageWrapper'
+import PageWrapper from "../PageWrapper";
 
-import { toggleModal } from '../../redux/modal/modalSlice'
+import { toggleModal } from "../../../../redux/modal/modalSlice";
 
-import { useAppDispatch } from '../../redux/hooks'
-import customPrompt from '../../utils/customPrompt'
-import InfoCardLarge from '../cards/InfoCardLarge'
+import { useAppDispatch } from "../../../../redux/hooks";
+import customPrompt from "../../utils/customPrompt";
+import InfoCardLarge from "../cards/InfoCardLarge";
 
-type size = 'max-w-3xl' | 'max-w-4xl' | 'max-w-5xl' | 'max-w-6xl' | 'max-w-7xl'
+type size = "max-w-3xl" | "max-w-4xl" | "max-w-5xl" | "max-w-6xl" | "max-w-7xl";
 export interface PromptTypes {
-  title: string
-  body: string
-  confirm: string
-  cancel: string
+  title: string;
+  body: string;
+  confirm: string;
+  cancel: string;
 }
 type ModalProps = {
-  className?: string
-  title: string
-  children: any
-  size: size
-  opts: PromptTypes
-  hasChanged?: boolean
-}
+  className?: string;
+  title: string;
+  children: any;
+  size: size;
+  opts: PromptTypes;
+  hasChanged?: boolean;
+};
 
 const ModalContainer = ({
   children,
@@ -30,7 +30,7 @@ const ModalContainer = ({
   title,
   className,
 }: ModalProps) => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   return (
     <div
@@ -38,12 +38,12 @@ const ModalContainer = ({
       id="overlay"
       onClick={(e: any) => {
         const closeModal = () => {
-          dispatch(toggleModal({ value: null }))
-        }
+          dispatch(toggleModal({ value: null }));
+        };
 
-        if (e.target.id === 'overlay') {
-          if (hasChanged) customPrompt(opts, closeModal)
-          if (!hasChanged) closeModal()
+        if (e.target.id === "overlay") {
+          if (hasChanged) customPrompt(opts, closeModal);
+          if (!hasChanged) closeModal();
         }
       }}
     >
@@ -57,7 +57,7 @@ const ModalContainer = ({
         </PageWrapper>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ModalContainer
+export default ModalContainer;

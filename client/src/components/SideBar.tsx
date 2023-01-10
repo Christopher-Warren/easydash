@@ -1,12 +1,47 @@
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
-import { NavLink } from "react-router-dom";
 const SideBar = () => {
   const [sideToggle, setSideToggle] = useState(false);
 
   const handleNavClick = (e: any) => {
     setSideToggle(false);
   };
+
+  const NavLink = ({ children }: any) => {
+    return children;
+  };
+
+  const router = useRouter();
+
+  const navLinks = [
+    {
+      href: "/dashboard",
+      logo: () => (
+        <div className="p-4 my-2 transition-all text-gray-500">
+          <svg
+            className="mx-auto w-8 h-8 mt-2"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            <span className="inline">Home</span>
+          </svg>
+        </div>
+      ),
+    },
+  ];
+
+  //   const isCurrentPage = router.pathname.includes(route.href);
+
   return (
     <div
       className={`fixed top-0 w-20  h-28 z-10 bg-white dark:border-gray-100/25 transition-all duration-200  overflow-hidden lg:h-screen lg:border-r lg:shadow-xl
@@ -21,6 +56,9 @@ const SideBar = () => {
     >
       <div className="lg:mt-32 mt-10">
         {/* MOBILE-ONLY Menu Button */}
+        {navLinks.map((v) => {
+          return v.logo();
+        })}
         <img
           src="/mstile-150x150.png"
           alt="dashboard logo"
@@ -62,12 +100,7 @@ const SideBar = () => {
           )}
         </button>
         {/* Replaces menu button with Logo on lg+ */}
-        <NavLink
-          onClick={handleNavClick}
-          to="/dashboard"
-          activeClassName="activeNav"
-          exact
-        >
+        <Link onClick={handleNavClick} href="/dashboard">
           <div className="p-4 my-2 transition-all text-gray-500">
             <svg
               className="mx-auto w-8 h-8 mt-2"
@@ -85,7 +118,7 @@ const SideBar = () => {
               <span className="inline">Home</span>
             </svg>
           </div>
-        </NavLink>
+        </Link>
         {/* Products Page */}
         <NavLink
           onClick={handleNavClick}

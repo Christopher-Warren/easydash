@@ -1,43 +1,39 @@
-import { QueryResult, useMutation } from '@apollo/client'
-import { useEffect, useState } from 'react'
-import { DELETE_PRODUCTS } from '../../graphql/mutation_vars'
-import { ModalFormIDs } from '../../pages/modals/Modals'
-import { useAppDispatch } from '../../redux/hooks'
-import { toggleModal } from '../../redux/modal/modalSlice'
-import customPrompt from '../../utils/customPrompt'
-import ProductsFilter from '../filter/ProductsFilter'
-import TableCard from '../cards/TableCard'
-import Checkbox from '../inputs/Checkbox'
-import SelectPrimary from '../inputs/SelectPrimary'
-
-import { useLocation } from 'react-router-dom'
+import { QueryResult, useMutation } from "@apollo/client";
+import { useEffect, useState } from "react";
+import { DELETE_PRODUCTS } from "../../graphql/mutation_vars";
+import { ModalFormIDs } from "../../pages/modals/Modals";
+import { useAppDispatch } from "../../../../redux/hooks";
+import { toggleModal } from "../../../../redux/modal/modalSlice";
+import customPrompt from "../../utils/customPrompt";
+import ProductsFilter from "../filter/ProductsFilter";
+import TableCard from "../cards/TableCard";
+import Checkbox from "../inputs/Checkbox";
+import SelectPrimary from "../inputs/SelectPrimary";
 
 const ProductsTable = ({
   products,
   className,
 }: {
-  products: QueryResult
-  className?: string
+  products: QueryResult;
+  className?: string;
 }) => {
-  const { data, loading, error, refetch } = products
+  const { data, loading, error, refetch } = products;
 
-  const [deleteProducts] = useMutation(DELETE_PRODUCTS)
+  const [deleteProducts] = useMutation(DELETE_PRODUCTS);
 
-  const [isChecked, setIsChecked] = useState<boolean[]>([])
-  const [limit, setLimit] = useState(5)
-  const [skip, setSkip] = useState(0)
-  const [sort, setSort] = useState<null | string>(null)
-  const [order, setOrder] = useState<null | number>(null)
+  const [isChecked, setIsChecked] = useState<boolean[]>([]);
+  const [limit, setLimit] = useState(5);
+  const [skip, setSkip] = useState(0);
+  const [sort, setSort] = useState<null | string>(null);
+  const [order, setOrder] = useState<null | number>(null);
 
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState("");
 
-  const [filter, setFilter] = useState([])
+  const [filter, setFilter] = useState([]);
 
-  const location: any = useLocation()
-
-  useEffect(() => {
-    if (location.state) setFilter(location.state)
-  }, [location])
+  // useEffect(() => {
+  //   if (location.state) setFilter(location.state)
+  // }, [location])
 
   useEffect(() => {
     refetch({
@@ -49,14 +45,14 @@ const ProductsTable = ({
         filter: filter,
         search: search,
       },
-    })
-  }, [refetch, limit, skip, sort, order, filter, search])
+    });
+  }, [refetch, limit, skip, sort, order, filter, search]);
   if (data && isChecked.length !== data.products.length) {
-    setIsChecked(() => data.products.map(() => false))
+    setIsChecked(() => data.products.map(() => false));
   }
 
   const RenderTableItems = () => {
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch();
 
     if (!loading && !error) {
       return data.products.map((item: any, index: any) => {
@@ -64,17 +60,17 @@ const ProductsTable = ({
           <tr
             className={` hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 transition-colors  cursor-pointer border-y dark:border-gray-700 border-gray-200  ${
               isChecked[index] &&
-              'bg-purple-50 dark:bg-gray-700/50 odd:dark:bg-gray-700/50'
+              "bg-purple-50 dark:bg-gray-700/50 odd:dark:bg-gray-700/50"
             }`}
             key={index}
             onClick={(e: any) => {
-              if (e.target.type === 'checkbox') return
+              if (e.target.type === "checkbox") return;
               dispatch(
                 toggleModal({
                   value: ModalFormIDs.editProduct,
                   productId: item._id,
-                }),
-              )
+                })
+              );
             }}
           >
             <td className="relative w-8 px-4">
@@ -86,9 +82,9 @@ const ProductsTable = ({
                 onChange={() =>
                   setIsChecked((state) => {
                     return state?.map((val: any, idx: number) => {
-                      if (index === idx) return !val
-                      return val
-                    })
+                      if (index === idx) return !val;
+                      return val;
+                    });
                   })
                 }
               ></Checkbox>
@@ -99,7 +95,7 @@ const ProductsTable = ({
                   <img
                     className="object-cover object-center font-light rounded-sm h-full w-full"
                     src={item.images[0]}
-                    alt={item.name + ' '}
+                    alt={item.name + " "}
                   ></img>
                 ) : (
                   <svg
@@ -146,10 +142,10 @@ const ProductsTable = ({
               <div className="relative dark:text-green-200">{`$${item.price}`}</div>
             </td>
           </tr>
-        )
-      })
+        );
+      });
     } else {
-      const skeleton = Array.from(Array(limit).keys())
+      const skeleton = Array.from(Array(limit).keys());
       return skeleton.map((i) => {
         return (
           <tr
@@ -210,44 +206,44 @@ const ProductsTable = ({
               </div>
             </td>
           </tr>
-        )
-      })
+        );
+      });
     }
-  }
+  };
 
   const handleSort = (string: string) => {
-    setSort(string)
+    setSort(string);
     if (order === -1 || string !== sort) {
-      setOrder(1)
+      setOrder(1);
     } else {
-      setOrder(-1)
+      setOrder(-1);
     }
-  }
+  };
 
   const handleDelete = (e: any) => {
     customPrompt(
       {
-        title: 'Are you sure you wish to delete these items?',
-        body: 'X items will be deleted',
-        confirm: 'DELETE',
-        cancel: 'BACK',
+        title: "Are you sure you wish to delete these items?",
+        body: "X items will be deleted",
+        confirm: "DELETE",
+        cancel: "BACK",
       },
       () => {
         const filterIds = data.products.filter(
-          (item: any, idx: any) => isChecked[idx],
-        )
-        const selectedProducts = filterIds.map((item: any) => item._id)
+          (item: any, idx: any) => isChecked[idx]
+        );
+        const selectedProducts = filterIds.map((item: any) => item._id);
         deleteProducts({
           variables: {
             productIds: selectedProducts,
           },
         }).then((data: any) => {
-          setIsChecked((data) => data.map((i) => false))
-          refetch()
-        })
-      },
-    )
-  }
+          setIsChecked((data) => data.map((i) => false));
+          refetch();
+        });
+      }
+    );
+  };
   return (
     <TableCard className={className}>
       <table className="table-auto w-full capitalize">
@@ -266,7 +262,7 @@ const ProductsTable = ({
                 <input
                   value={search}
                   onChange={(e) => {
-                    setSearch(e.currentTarget.value)
+                    setSearch(e.currentTarget.value);
                   }}
                   className="rounded dark:bg-gray-900 dark:text-gray-300 px-2 py-0.5 
               w-full flex-1 
@@ -282,7 +278,7 @@ const ProductsTable = ({
           <tr
             className={`text-base dark:text-gray-400 text-gray-500 ${
               isChecked.some((val) => val === true) &&
-              'bg-purple-50 dark:bg-gray-800 '
+              "bg-purple-50 dark:bg-gray-800 "
             }`}
           >
             <th className="relative w-8 px-4 py-3 ">
@@ -294,9 +290,9 @@ const ProductsTable = ({
                 }
                 onChange={() => {
                   if (isChecked.every((val) => val === true)) {
-                    setIsChecked((state) => state.map((val) => false))
+                    setIsChecked((state) => state.map((val) => false));
                   } else {
-                    setIsChecked((state) => state.map((val) => true))
+                    setIsChecked((state) => state.map((val) => true));
                   }
                 }}
               ></Checkbox>
@@ -322,7 +318,7 @@ const ProductsTable = ({
               <>
                 <th className="lg:w-5/12 px-5">
                   Selected {isChecked.filter((val) => val === true).length} item
-                  {isChecked.filter((val) => val === true).length > 1 && 's'}
+                  {isChecked.filter((val) => val === true).length > 1 && "s"}
                 </th>
                 <th className="w-3/12"></th>
                 <th className="w-1/12"></th>
@@ -350,7 +346,7 @@ const ProductsTable = ({
             ) : (
               <>
                 <th
-                  onClick={() => handleSort('name')}
+                  onClick={() => handleSort("name")}
                   className="lg:w-5/12 px-5 hover:text-gray-700 dark:hover:text-gray-200"
                 >
                   Name
@@ -363,15 +359,15 @@ const ProductsTable = ({
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     className={` ml-1 mb-0.5 w-4 inline
-                  ${sort !== 'name' && 'hidden'}
-                  ${order === 1 ? 'rotate-0' : 'rotate-180 '}`}
+                  ${sort !== "name" && "hidden"}
+                  ${order === 1 ? "rotate-0" : "rotate-180 "}`}
                   >
                     <line x1="12" y1="19" x2="12" y2="5"></line>
                     <polyline points="5 12 12 5 19 12"></polyline>
                   </svg>
                 </th>
                 <th
-                  onClick={() => handleSort('category.name')}
+                  onClick={() => handleSort("category.name")}
                   className="w-3/12 hover:text-gray-700 dark:hover:text-gray-200"
                 >
                   Category
@@ -384,15 +380,15 @@ const ProductsTable = ({
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     className={` ml-1 mb-0.5 w-4 inline
-                  ${sort !== 'category.name' && 'hidden'}
-                  ${order === 1 ? 'rotate-0' : 'rotate-180 '}`}
+                  ${sort !== "category.name" && "hidden"}
+                  ${order === 1 ? "rotate-0" : "rotate-180 "}`}
                   >
                     <line x1="12" y1="19" x2="12" y2="5"></line>
                     <polyline points="5 12 12 5 19 12"></polyline>
                   </svg>
                 </th>
                 <th
-                  onClick={() => handleSort('stock')}
+                  onClick={() => handleSort("stock")}
                   className="w-1/12 hover:text-gray-700 dark:hover:text-gray-200"
                 >
                   Qty.
@@ -405,15 +401,15 @@ const ProductsTable = ({
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     className={` ml-1 mb-0.5 w-4 inline
-                  ${sort !== 'stock' && 'hidden'}
-                  ${order === 1 ? 'rotate-0' : 'rotate-180 '}`}
+                  ${sort !== "stock" && "hidden"}
+                  ${order === 1 ? "rotate-0" : "rotate-180 "}`}
                   >
                     <line x1="12" y1="19" x2="12" y2="5"></line>
                     <polyline points="5 12 12 5 19 12"></polyline>
                   </svg>
                 </th>
                 <th
-                  onClick={() => handleSort('price')}
+                  onClick={() => handleSort("price")}
                   className="text-right lg:pr-8 pr-3.5 hover:text-gray-700 dark:hover:text-gray-200"
                 >
                   Price
@@ -426,8 +422,8 @@ const ProductsTable = ({
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     className={` ml-1 mb-0.5 w-4 inline
-                  ${sort !== 'price' && 'hidden'}
-                  ${order === 1 ? 'rotate-0' : 'rotate-180 '}`}
+                  ${sort !== "price" && "hidden"}
+                  ${order === 1 ? "rotate-0" : "rotate-180 "}`}
                   >
                     <line x1="12" y1="19" x2="12" y2="5"></line>
                     <polyline points="5 12 12 5 19 12"></polyline>
@@ -452,8 +448,8 @@ const ProductsTable = ({
               >
                 {data.products.length === 0 &&
                 (filter.length > 0 || search.length > 0)
-                  ? 'No matching products found'
-                  : 'There are no more products to show'}
+                  ? "No matching products found"
+                  : "There are no more products to show"}
               </td>
             </tr>
           )}
@@ -471,9 +467,9 @@ const ProductsTable = ({
               className=""
               containerClassName="w-12"
               onChange={(e: any) => {
-                setLimit(parseInt(e.currentTarget.value))
-                setIsChecked((val) => val.map(() => false))
-                setSkip(0)
+                setLimit(parseInt(e.currentTarget.value));
+                setIsChecked((val) => val.map(() => false));
+                setSkip(0);
               }}
             >
               <option>5</option>
@@ -486,8 +482,8 @@ const ProductsTable = ({
             <button
               disabled={skip === 0}
               onClick={(e: any) => {
-                setSkip((prev: number) => prev - limit)
-                setIsChecked((val) => val.map(() => false))
+                setSkip((prev: number) => prev - limit);
+                setIsChecked((val) => val.map(() => false));
               }}
               className="p-0.5 active:outline hover:outline hover:outline-gray-500 disabled:outline-transparent dark:outline-gray-600 outline-2 rounded-sm  disabled:text-gray-300 dark:disabled:text-gray-700 dark:disabled:outline-transparent"
             >
@@ -510,8 +506,8 @@ const ProductsTable = ({
             <button
               disabled={products.data?.products?.length < limit}
               onClick={(e: any) => {
-                setSkip((prev: number) => prev + limit)
-                setIsChecked((val) => val.map(() => false))
+                setSkip((prev: number) => prev + limit);
+                setIsChecked((val) => val.map(() => false));
               }}
               className="ml-4 p-0.5 active:outline hover:outline hover:outline-gray-500 disabled:outline-transparent dark:outline-gray-600 outline-2 rounded-sm  disabled:text-gray-300 dark:disabled:text-gray-700 dark:disabled:outline-transparent"
             >
@@ -534,7 +530,7 @@ const ProductsTable = ({
         </div>
       </div>
     </TableCard>
-  )
-}
+  );
+};
 
-export default ProductsTable
+export default ProductsTable;
