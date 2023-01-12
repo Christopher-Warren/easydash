@@ -1,25 +1,16 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const SideBar = () => {
   const [sideToggle, setSideToggle] = useState(false);
-
-  const handleNavClick = (e: any) => {
-    setSideToggle(false);
-  };
-
-  const NavLink = ({ children }: any) => {
-    return children;
-  };
-
   const router = useRouter();
 
   const navLinks = [
     {
       href: "/dashboard",
-      logo: () => (
-        <div className="p-4 my-2 transition-all text-gray-500">
+      Icon: () => (
+        <div className="p-4">
           <svg
             className="mx-auto w-8 h-8 mt-2"
             xmlns="http://www.w3.org/2000/svg"
@@ -33,39 +24,112 @@ const SideBar = () => {
           >
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
             <polyline points="9 22 9 12 15 12 15 22"></polyline>
-            <span className="inline">Home</span>
+          </svg>
+        </div>
+      ),
+    },
+    {
+      href: "/dashboard/products",
+      Icon: () => (
+        <div className="p-4 ">
+          <svg
+            className="mx-auto w-8 h-8 mt-2"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="21 8 21 21 3 21 3 8"></polyline>
+            <rect x="1" y="3" width="22" height="5"></rect>
+            <line x1="10" y1="12" x2="14" y2="12"></line>
+          </svg>
+        </div>
+      ),
+    },
+    {
+      href: "/dashboard/orders",
+      Icon: () => (
+        <div className="p-4">
+          <svg
+            className="mx-auto w-8 h-8 mt-2"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+        </div>
+      ),
+    },
+    {
+      href: "/dashboard/users",
+      Icon: () => (
+        <div className="p-4">
+          <svg
+            className="mx-auto w-8 h-8 mt-2"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>
+      ),
+    },
+    {
+      href: "/dashboard/settings",
+      Icon: () => (
+        <div className="p-4">
+          <svg
+            className="mx-auto w-8 h-8 mt-2"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="12" cy="12" r="3" />
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
           </svg>
         </div>
       ),
     },
   ];
 
-  //   const isCurrentPage = router.pathname.includes(route.href);
+  useEffect(() => {
+    setSideToggle(false);
+  }, [router.asPath]);
 
   return (
     <div
-      className={`fixed top-0 w-20  h-28 z-10 bg-white dark:border-gray-100/25 transition-all duration-200  overflow-hidden lg:h-screen lg:border-r lg:shadow-xl
+      className={`fixed top-0 w-20  h-28 z-10 dark:border-gray-100/25 transition-all duration-300  overflow-hidden lg:h-screen lg:border-r lg:shadow-xl
       ${
         sideToggle
-          ? "!h-screen border-r shadow-xl  dark:bg-gray-800  dark:border-gray-100/25 "
-          : "bg-transparent"
-      }
-      
-      
-      `}
+          ? "!h-screen border-r bg-white  dark:bg-gray-800  dark:border-gray-100/25 "
+          : "bg-transparent md:bg-white"
+      }`}
     >
       <div className="lg:mt-32 mt-10">
         {/* MOBILE-ONLY Menu Button */}
-        {navLinks.map((v) => {
-          return v.logo();
-        })}
         <img
           src="/mstile-150x150.png"
           alt="dashboard logo"
-          className="mx-auto -m-4 hidden lg:block"
+          className="mx-auto -m-2 hidden lg:block"
         />
         <button
-          className="relative w-16 h-16 flex justify-center items-center  text-purple-500 lg:hidden"
+          className="relative w-16 h-16 mb-2 mx-auto flex justify-center items-center  text-purple-500 lg:hidden"
           onClick={() => {
             setSideToggle(!sideToggle);
           }}
@@ -100,100 +164,21 @@ const SideBar = () => {
           )}
         </button>
         {/* Replaces menu button with Logo on lg+ */}
-        <Link onClick={handleNavClick} href="/dashboard">
-          <div className="p-4 my-2 transition-all text-gray-500">
-            <svg
-              className="mx-auto w-8 h-8 mt-2"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+
+        {navLinks.map(({ Icon, href }) => {
+          const isCurrentPage = router.pathname === href;
+          return (
+            // Transition doesn't work with current implementation
+            <Link
+              className={`block transition-all duration-300 hover:bg-purple-200 ${
+                isCurrentPage ? "bg-purple-500 text-white" : "text-gray-500"
+              }`}
+              href={href}
             >
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-              <polyline points="9 22 9 12 15 12 15 22"></polyline>
-              <span className="inline">Home</span>
-            </svg>
-          </div>
-        </Link>
-        {/* Products Page */}
-        <NavLink
-          onClick={handleNavClick}
-          to="/dashboard/products"
-          activeClassName="activeNav"
-        >
-          <div className="p-4 my-2 transition-all text-gray-500">
-            <svg
-              className="mx-auto w-8 h-8 mt-2"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polyline points="21 8 21 21 3 21 3 8"></polyline>
-              <rect x="1" y="3" width="22" height="5"></rect>
-              <line x1="10" y1="12" x2="14" y2="12"></line>
-            </svg>
-          </div>
-        </NavLink>
-        <NavLink
-          onClick={handleNavClick}
-          to="/dashboard/orders"
-          activeClassName="activeNav"
-        >
-          <div className="p-4 my-2 transition-all text-gray-500">
-            <svg
-              className="mx-auto w-8 h-8 mt-2"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-              <line x1="3" y1="6" x2="21" y2="6"></line>
-              <path d="M16 10a4 4 0 0 1-8 0"></path>
-            </svg>
-          </div>
-        </NavLink>
-        {/* <NavLink onClick={handleNavClick} to="/dashboard/users" activeClassName="activeNav">
-          <div className="p-4 my-2 transition-all text-gray-500">
-            <svg
-              className="mx-auto w-8 h-8 mt-2"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-          </div>
-        </NavLink> */}
-        {/* <NavLink onClick={handleNavClick} to="/dashboard/settings" activeClassName="activeNav">
-          <div className="p-4 my-2 transition-all text-gray-500">
-            <svg
-              className="mx-auto w-8 h-8 mt-2"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="12" cy="12" r="3" />
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-            </svg>
-          </div>
-        </NavLink> */}
+              <Icon />
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

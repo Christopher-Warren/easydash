@@ -1,6 +1,5 @@
+import Link from "next/link";
 import { FeaturedCategoryData } from "../types";
-
-import { Link } from "react-router-dom";
 
 export default function ShopByCategory({ data }: FeaturedCategoryData) {
   const primaryCategory = data?.getAllCategories[0];
@@ -15,7 +14,7 @@ export default function ShopByCategory({ data }: FeaturedCategoryData) {
             Shop by Category
           </h2>
           <Link
-            to="/shop/categories"
+            href="/shop/categories"
             className="hidden text-sm font-semibold text-indigo-600 hover:text-indigo-500 sm:block"
           >
             Browse all categories<span aria-hidden="true"> &rarr;</span>
@@ -36,7 +35,7 @@ export default function ShopByCategory({ data }: FeaturedCategoryData) {
             <div className="p-6 flex items-end">
               <div>
                 <h3 className="font-semibold text-white">
-                  <Link to={`/shop/categories/${primaryCategory.name}`}>
+                  <Link href={`/shop/categories/${primaryCategory.name}`}>
                     <span className="absolute inset-0" />
                     {primaryCategory.name}
                   </Link>
@@ -60,7 +59,7 @@ export default function ShopByCategory({ data }: FeaturedCategoryData) {
             <div className="p-6 flex items-end sm:absolute sm:inset-0">
               <div>
                 <h3 className="font-semibold text-white">
-                  <Link to={`/shop/categories/${secondaryCategory.name}`}>
+                  <Link href={`/shop/categories/${secondaryCategory.name}`}>
                     <span className="absolute inset-0" />
                     {secondaryCategory.name}
                   </Link>
@@ -84,7 +83,7 @@ export default function ShopByCategory({ data }: FeaturedCategoryData) {
             <div className="p-6 flex items-end sm:absolute sm:inset-0">
               <div>
                 <h3 className="font-semibold text-white">
-                  <Link to={`/shop/categories/${secondaryCategory2.name}`}>
+                  <Link href={`/shop/categories/${secondaryCategory2.name}`}>
                     <span className="absolute inset-0" />
                     {secondaryCategory2.name}
                   </Link>
@@ -99,7 +98,7 @@ export default function ShopByCategory({ data }: FeaturedCategoryData) {
 
         <div className="mt-6 sm:hidden">
           <Link
-            to="/shop/categories"
+            href="/shop/categories"
             className="block text-sm font-semibold text-indigo-600 hover:text-indigo-500"
           >
             Browse all categories<span aria-hidden="true"> &rarr;</span>

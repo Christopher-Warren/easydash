@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 export default function ShopBySubcategory({ data }: any) {
   return (
@@ -15,7 +15,7 @@ export default function ShopBySubcategory({ data }: any) {
           {data.getAllSubcategories.map((subcategory: any) => (
             <Link
               key={subcategory.name}
-              to={`shop/subcategories/${subcategory.name}`}
+              href={`shop/subcategories/${subcategory.name}`}
               className="group block"
             >
               <div
