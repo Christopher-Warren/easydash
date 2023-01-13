@@ -7,6 +7,7 @@ import { store } from "../redux/store";
 import SideBar from "../client/src/components/SideBar";
 import { useRouter } from "next/router";
 import { ThemeContextProvider } from "../hooks/useTheme";
+import Navbar from "../components/navigation/store-navigation/Navbar";
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -17,7 +18,7 @@ function MyApp({ Component, pageProps }) {
       <Provider store={store}>
         <ThemeContextProvider>
           <div className="dark bg-gray-900">
-            {inDashboard && <SideBar />}
+            {inDashboard ? <SideBar /> : <Navbar />}
             <Component {...pageProps} />
           </div>
         </ThemeContextProvider>

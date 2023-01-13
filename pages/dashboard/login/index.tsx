@@ -1,5 +1,5 @@
-import PrimaryButton from "../../../client/src/components/buttons/PrimaryButton";
-import LoginInput from "../../../client/src/components/LoginInput";
+import PrimaryButton from "../../../components/buttons/PrimaryButton";
+import LoginInput from "../../../components/LoginInput";
 import Link from "next/link";
 import LoginWrapper from "../../../components/LoginWrapper";
 import { useMutation } from "@apollo/client";

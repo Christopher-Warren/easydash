@@ -1,5 +1,3 @@
-import Login from "../../client/src/pages/Login";
-import { getCookie } from "cookies-next";
 import Home from "../../client/src/pages/dashboard/Home";
 import useTheme from "../../hooks/useTheme";
 
