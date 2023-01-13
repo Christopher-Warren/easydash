@@ -16,7 +16,7 @@ export default function Navbar() {
 
   if (!data) return null;
   return (
-    <div className="bg-white">
+    <div className="border-b border-gray-200 bg-white">
       {/* Mobile menu */}
       <MobileNav
         open={open}
@@ -24,12 +24,12 @@ export default function Navbar() {
         getAllCategories={data.getAllCategories}
       ></MobileNav>
 
-      <header className="relative bg-white z-20">
+      <header className="relative z-20">
         <nav
           aria-label="Top"
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
         >
-          <div className="border-b border-gray-200">
+          <div className="">
             <div className="h-16 flex items-center">
               <LeftNav
                 getAllCategories={data.getAllCategories}
