@@ -118,7 +118,7 @@ const SideBar = () => {
       ${
         sideToggle
           ? "!h-screen border-r bg-white  dark:bg-gray-800  dark:border-gray-100/25 "
-          : "bg-transparent md:bg-white"
+          : "bg-transparent md:bg-white md:dark:bg-gray-800"
       }`}
     >
       <div className="lg:mt-32 mt-10">

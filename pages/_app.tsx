@@ -6,18 +6,21 @@ import "../styles/globals.css";
 import { store } from "../redux/store";
 import SideBar from "../client/src/components/SideBar";
 import { useRouter } from "next/router";
+import { ThemeContextProvider } from "../hooks/useTheme";
 
 function MyApp({ Component, pageProps }) {
-  // console.log("client: ", client);
-
   const router = useRouter();
   const inDashboard = router.pathname.includes("/dashboard");
 
   return (
     <ApolloProvider client={client as any}>
       <Provider store={store}>
-        {inDashboard && <SideBar />}
-        <Component {...pageProps} />
+        <ThemeContextProvider>
+          <div className="dark bg-gray-900">
+            {inDashboard && <SideBar />}
+            <Component {...pageProps} />
+          </div>
+        </ThemeContextProvider>
       </Provider>
     </ApolloProvider>
   );
