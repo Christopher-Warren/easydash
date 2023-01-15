@@ -166,20 +166,23 @@ const SideBar = () => {
         {/* Replaces menu button with Logo on lg+ */}
 
         {navLinks.map(({ Icon, href }) => {
-          const isCurrentPage = router.pathname === href;
+          const uri = href.slice(10) || null;
+
+          const currentPage =
+            router.asPath.includes(uri) || router.asPath === href;
+
           return (
-            // Transition doesn't work with current implementation
             <Link
               key={href}
               className={`block transition-all duration-300 hover:bg-purple-200 ${
-                isCurrentPage ? "bg-purple-500 text-white" : "text-gray-500"
+                currentPage ? "bg-purple-500 text-white" : "text-gray-500"
               }`}
               href={href}
             >
               <Icon />
             </Link>
           );
-        })}
+        }, 1)}
       </div>
     </div>
   );
