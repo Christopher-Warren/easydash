@@ -1,10 +1,10 @@
 import { QueryResult, useMutation } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { DELETE_PRODUCTS } from "../../graphql/mutation_vars";
-import { ModalFormIDs } from "../../pages/modals/Modals";
-import { useAppDispatch } from "../../../../redux/hooks";
-import { toggleModal } from "../../../../redux/modal/modalSlice";
-import customPrompt from "../../utils/customPrompt";
+// import { ModalFormIDs } from "../../pages/modals/Modals";
+import { useAppDispatch } from "../../redux/hooks";
+import { toggleModal } from "../../redux/modal/modalSlice";
+// `import customPrompt from "../../utils/customPrompt";`
 import ProductsFilter from "../filter/ProductsFilter";
 import TableCard from "../cards/TableCard";
 import Checkbox from "../inputs/Checkbox";
@@ -65,12 +65,12 @@ const ProductsTable = ({
             key={index}
             onClick={(e: any) => {
               if (e.target.type === "checkbox") return;
-              dispatch(
-                toggleModal({
-                  value: ModalFormIDs.editProduct,
-                  productId: item._id,
-                })
-              );
+              // dispatch(
+              //   toggleModal({
+              //     value: ModalFormIDs.editProduct,
+              //     productId: item._id,
+              //   })
+              // );
             }}
           >
             <td className="relative w-8 px-4">
@@ -220,33 +220,33 @@ const ProductsTable = ({
     }
   };
 
-  const handleDelete = (e: any) => {
-    customPrompt(
-      {
-        title: "Are you sure you wish to delete these items?",
-        body: "X items will be deleted",
-        confirm: "DELETE",
-        cancel: "BACK",
-      },
-      () => {
-        const filterIds = data.products.filter(
-          (item: any, idx: any) => isChecked[idx]
-        );
-        const selectedProducts = filterIds.map((item: any) => item._id);
-        deleteProducts({
-          variables: {
-            productIds: selectedProducts,
-          },
-        }).then((data: any) => {
-          setIsChecked((data) => data.map((i) => false));
-          refetch();
-        });
-      }
-    );
-  };
+  // const handleDelete = (e: any) => {
+  //   customPrompt(
+  //     {
+  //       title: "Are you sure you wish to delete these items?",
+  //       body: "X items will be deleted",
+  //       confirm: "DELETE",
+  //       cancel: "BACK",
+  //     },
+  //     () => {
+  //       const filterIds = data.products.filter(
+  //         (item: any, idx: any) => isChecked[idx]
+  //       );
+  //       const selectedProducts = filterIds.map((item: any) => item._id);
+  //       deleteProducts({
+  //         variables: {
+  //           productIds: selectedProducts,
+  //         },
+  //       }).then((data: any) => {
+  //         setIsChecked((data) => data.map((i) => false));
+  //         refetch();
+  //       });
+  //     }
+  //   );
+  // };
   return (
     <TableCard className={className}>
-      <table className="table-auto w-full capitalize">
+      <table className="table-auto w-full capitalize overflow-x-scroll">
         <thead>
           <tr className="">
             <th className="relative w-8 px-4 py-3" colSpan={6}>
@@ -298,7 +298,7 @@ const ProductsTable = ({
               ></Checkbox>
             </th>
 
-            <th className="w-10 md:table-cell hidden">
+            <th className="w-10 md:table-cell hidden bg-red">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -325,7 +325,7 @@ const ProductsTable = ({
                 <th className="text-right lg:pr-8 pr-3.5">
                   <button
                     className=" p-1 rounded-full bg-red-400 text-white hover:bg-red-500 transition-colors"
-                    onClick={handleDelete}
+                    // onClick={handleDelete}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -347,7 +347,7 @@ const ProductsTable = ({
               <>
                 <th
                   onClick={() => handleSort("name")}
-                  className="lg:w-5/12 px-5 hover:text-gray-700 dark:hover:text-gray-200"
+                  className="lg:w-5/12 px-5 hover:text-gray-700 dark:hover:text-gray-200 text-left"
                 >
                   Name
                   <svg
@@ -368,7 +368,7 @@ const ProductsTable = ({
                 </th>
                 <th
                   onClick={() => handleSort("category.name")}
-                  className="w-3/12 hover:text-gray-700 dark:hover:text-gray-200"
+                  className="w-3/12 text-left hover:text-gray-700 dark:hover:text-gray-200"
                 >
                   Category
                   <svg
@@ -389,7 +389,7 @@ const ProductsTable = ({
                 </th>
                 <th
                   onClick={() => handleSort("stock")}
-                  className="w-1/12 hover:text-gray-700 dark:hover:text-gray-200"
+                  className="w-1/12 text-left hover:text-gray-700 dark:hover:text-gray-200"
                 >
                   Qty.
                   <svg

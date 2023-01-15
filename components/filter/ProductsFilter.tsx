@@ -3,8 +3,8 @@ import { useState } from "react";
 import SelectOption from "../buttons/SelectOption";
 
 // Handle errors
-import { addError } from "../../../../redux/error/errorSlice";
-import { useAppDispatch } from "../../../../redux/hooks";
+// import { addError } from "../../../../redux/error/errorSlice";
+// import { useAppDispatch } from "../../../../redux/hooks";
 import {
   GET_ALL_CATEGORIES,
   GET_ALL_SUBCATEGORIES,
@@ -39,7 +39,7 @@ const ProductsFilter = ({
   const [stock, setStock] = useState({ min: 0, max: 0, showOut: false });
 
   // handle errors
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
   const handleFormSubmit = (e: any) => {
     e.preventDefault();
@@ -47,14 +47,14 @@ const ProductsFilter = ({
     const categoryFilter: {}[] = [];
     const subcategoryFilter: {}[] = [];
 
-    if (price.min > price.max) {
-      dispatch(addError("Min price should be less than max price"));
-      return;
-    }
-    if (stock.min > stock.max) {
-      dispatch(addError("Min price should be less than max price"));
-      return;
-    }
+    // if (price.min > price.max) {
+    //   dispatch(addError("Min price should be less than max price"));
+    //   return;
+    // }
+    // if (stock.min > stock.max) {
+    //   dispatch(addError("Min price should be less than max price"));
+    //   return;
+    // }
 
     for (let i = 0; i < e.currentTarget.length; i++) {
       const isChecked = e.currentTarget[i].checked;
