@@ -9,6 +9,8 @@ import ProductsFilter from "../filter/ProductsFilter";
 import TableCard from "../cards/TableCard";
 import Checkbox from "../inputs/Checkbox";
 import SelectPrimary from "../inputs/SelectPrimary";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 const ProductsTable = ({
   products,
@@ -35,6 +37,8 @@ const ProductsTable = ({
   //   if (location.state) setFilter(location.state)
   // }, [location])
 
+  const router = useRouter();
+
   useEffect(() => {
     refetch({
       input: {
@@ -58,13 +62,15 @@ const ProductsTable = ({
       return data.products.map((item: any, index: any) => {
         return (
           <tr
-            className={` hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 transition-colors  cursor-pointer border-y dark:border-gray-700 border-gray-200  ${
+            className={`relative hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 transition-colors  cursor-pointer   ${
               isChecked[index] &&
               "bg-purple-50 dark:bg-gray-700/50 odd:dark:bg-gray-700/50"
             }`}
             key={index}
             onClick={(e: any) => {
               if (e.target.type === "checkbox") return;
+
+              // router.push(`/${item._id}`);
               // dispatch(
               //   toggleModal({
               //     value: ModalFormIDs.editProduct,
@@ -73,10 +79,15 @@ const ProductsTable = ({
               // );
             }}
           >
-            <td className="relative w-8 px-4">
+            <td className="">
+              <Link
+                className="absolute top-0 left-0 w-full h-full"
+                href={`/dashboard/products/${item._id}`}
+              />
+              <div className="absolute h-px w-full  top-0 left-0 dark:bg-gray-700 bg-gray-200"></div>
               <Checkbox
                 type="checkbox"
-                className="lg:w-4 w-5 h-5 lg:h-4 accent-purple-500 "
+                className="lg:w-4 w-5 h-5 lg:h-4 accent-purple-500 px-4"
                 value={item._id}
                 checked={isChecked && isChecked[index]}
                 onChange={() =>
@@ -122,7 +133,7 @@ const ProductsTable = ({
                 )}
               </div>
             </td>
-            <td className="px-5 relative">
+            <td className="px-5 ">
               <div className="py-3">
                 <div className="">
                   <h2 className="text-base  leading-tight">{item.name}</h2>
@@ -149,7 +160,7 @@ const ProductsTable = ({
       return skeleton.map((i) => {
         return (
           <tr
-            className="hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 border-y border-gray-200 dark:border-gray-700"
+            className="hover:bg-purple-200 hover:dark:bg-gray-700 dark:odd:bg-slate-800 border-gray-200 dark:border-gray-700"
             key={i}
           >
             <td className="relative w-8 px-4   py-[1.437rem]">
@@ -271,17 +282,18 @@ const ProductsTable = ({
                   placeholder="Search products..."
                 ></input>
               </div>
-              <div className="border-b border-gray-200 dark:border-gray-700 w-full absolute left-0  bottom-0 " />
+              <div className="border-gray-200 dark:border-gray-700 w-full absolute left-0  bottom-0 " />
             </th>
           </tr>
 
           <tr
-            className={`text-base dark:text-gray-400 text-gray-500 ${
+            className={`relative text-base dark:text-gray-400 text-gray-500 ${
               isChecked.some((val) => val === true) &&
               "bg-purple-50 dark:bg-gray-800 "
             }`}
           >
-            <th className="relative w-8 px-4 py-3 ">
+            <th className="w-8 px-4 py-3 ">
+              <div className="absolute h-px w-full  top-0 left-0 dark:bg-gray-700 bg-gray-200"></div>
               <Checkbox
                 type="checkbox"
                 className="lg:w-4 w-5 h-5 lg:h-4 mt-1 accent-purple-500"
@@ -297,7 +309,6 @@ const ProductsTable = ({
                 }}
               ></Checkbox>
             </th>
-
             <th className="w-10 md:table-cell hidden bg-red">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -438,7 +449,7 @@ const ProductsTable = ({
 
           {limit > data?.products.length && (
             <tr
-              className="dark:odd:bg-slate-800  border-y
+              className="dark:odd:bg-slate-800  
        dark:border-gray-700 border-gray-200 text-gray-400 
       "
             >
@@ -454,10 +465,88 @@ const ProductsTable = ({
             </tr>
           )}
         </tbody>
+
+        <tfoot>
+          <tr className="relative">
+            <td colSpan={6} className="">
+              <div className="absolute h-px w-full  top-0 left-0 dark:bg-gray-700 bg-gray-200"></div>
+              <div className="flex items-center px-4 h-full justify-between">
+                <div className="flex items-center">
+                  <span className="normal-case pr-2 text-gray-400">
+                    No. of products
+                  </span>
+                  <SelectPrimary
+                    className=""
+                    containerClassName="w-12"
+                    onChange={(e: any) => {
+                      setLimit(parseInt(e.currentTarget.value));
+                      setIsChecked((val) => val.map(() => false));
+                      setSkip(0);
+                    }}
+                  >
+                    <option>5</option>
+                    <option>10</option>
+                    <option>20</option>
+                  </SelectPrimary>
+                </div>
+
+                <div className="flex ">
+                  <button
+                    disabled={skip === 0}
+                    onClick={(e: any) => {
+                      setSkip((prev: number) => prev - limit);
+                      setIsChecked((val) => val.map(() => false));
+                    }}
+                    className="p-0.5 active:outline hover:outline hover:outline-gray-500 disabled:outline-transparent dark:outline-gray-600 outline-2 rounded-sm  disabled:text-gray-300 dark:disabled:text-gray-700 dark:disabled:outline-transparent"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className=""
+                    >
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                  </button>
+
+                  <button
+                    disabled={products.data?.products?.length < limit}
+                    onClick={(e: any) => {
+                      setSkip((prev: number) => prev + limit);
+                      setIsChecked((val) => val.map(() => false));
+                    }}
+                    className="ml-4 p-0.5 active:outline hover:outline hover:outline-gray-500 disabled:outline-transparent dark:outline-gray-600 outline-2 rounded-sm  disabled:text-gray-300 dark:disabled:text-gray-700 dark:disabled:outline-transparent"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className=""
+                    >
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tfoot>
       </table>
 
       {/* Table Footer */}
-      <div className="">
+      {/* <div className="">
         <div className="flex items-center px-4 h-full justify-between">
           <div className="flex items-center">
             <span className="normal-case pr-2 text-gray-400">
@@ -528,7 +617,7 @@ const ProductsTable = ({
             </button>
           </div>
         </div>
-      </div>
+      </div> */}
     </TableCard>
   );
 };

@@ -124,8 +124,14 @@ const RootQuery = {
 
     return products;
   },
-  getProduct: async (_parent, input) => {
+  getProduct: async (_parent, args) => {
+    // @TODO: Take in product id only, having
+    // an input object is overkill
+
+    const input = args.input;
+
     await dbConnect();
+
     const product = await Product.findById(input._id)
       .populate("category")
       .populate("subcategory");

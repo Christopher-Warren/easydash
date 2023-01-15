@@ -170,6 +170,7 @@ const SideBar = () => {
           return (
             // Transition doesn't work with current implementation
             <Link
+              key={href}
               className={`block transition-all duration-300 hover:bg-purple-200 ${
                 isCurrentPage ? "bg-purple-500 text-white" : "text-gray-500"
               }`}

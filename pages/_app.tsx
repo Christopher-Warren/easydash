@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 
 import "../styles/globals.css";
 import { store } from "../redux/store";
-import SideBar from "../client/src/components/SideBar";
+import SideBar from "../components/SideBar";
 import { useRouter } from "next/router";
 import { ThemeContextProvider } from "../hooks/useTheme";
 import Navbar from "../components/navigation/store-navigation/Navbar";
