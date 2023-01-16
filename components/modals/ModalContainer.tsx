@@ -18,35 +18,13 @@ type ModalProps = {
   title: string;
   children: any;
   size: size;
-  opts: PromptTypes;
+  opts?: PromptTypes;
   hasChanged?: boolean;
 };
 
-const ModalContainer = ({
-  children,
-  size,
-  opts,
-  hasChanged,
-  title,
-  className,
-}: ModalProps) => {
-  const dispatch = useAppDispatch();
-
+const ModalContainer = ({ children, size, title, className }: ModalProps) => {
   return (
-    <div
-      className="bg-black bg-opacity-20 fixed top-0  h-screen w-full z-20 lg:pl-20 overflow-y-scroll transition-opacity duration-200"
-      id="overlay"
-      onClick={(e: any) => {
-        const closeModal = () => {
-          dispatch(toggleModal({ value: null }));
-        };
-
-        // if (e.target.id === "overlay") {
-        //   if (hasChanged) customPrompt(opts, closeModal);
-        //   if (!hasChanged) closeModal();
-        // }
-      }}
-    >
+    <div>
       <div className={`${size} max-w-7xl max-w mx-auto`}>
         <PageWrapper>
           <div className="w-full left-0 z-30 modal-anims  transition-all duration-100">

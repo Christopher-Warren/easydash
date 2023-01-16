@@ -10,6 +10,9 @@ export const ThemeContextProvider = ({ children }: any) => {
   );
 };
 
+// at useTheme (webpack-internal:///./hooks/useTheme.tsx:24:31)
+// at DashboardHome (webpack-internal:///./pages/dashboard/index.tsx:23:80)
+
 const useTheme = () => {
   const [theme, setTheme] =
     useContext<[null | "light" | "dark", any]>(ThemeContext);

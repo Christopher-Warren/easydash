@@ -1,6 +1,7 @@
 import normalizeInputs from "../../utils/normalizeInputs";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+
+import { jwtVerify } from "jose";
 
 import User from "../../models/user";
 import Product from "../../models/product";
@@ -10,15 +11,23 @@ import Order from "../../models/order";
 
 import S3 from "aws-sdk/clients/s3";
 import dbConnect from "../../lib/dbConnect";
-import { setCookie, deleteCookie } from "cookies-next";
+import { setCookie, deleteCookie, getCookie } from "cookies-next";
 
 const RootMutation = {
   createProduct: async (
     _parent,
     { productInput, sessionExpired },
-    { isAdmin }
+    { req, res }
   ) => {
     await dbConnect();
+
+    // check authentication
+    const JWT_SECRET = process.env.JWT_SECRET;
+    const secret = new TextEncoder().encode(JWT_SECRET);
+
+    console.log("mutation", await jwtVerify(req.cookies.token, secret));
+
+    return null;
     if (sessionExpired) throw new Error("Session expired");
     if (!isAdmin) throw new Error("Easydash runs in read only mode");
     if (!productInput.subcategory)
@@ -442,7 +451,6 @@ const RootMutation = {
     return { userId: user.id, email: email, role: user.role };
   },
   logout: (_parent, _args, { req, res }) => {
-    console.log("ww");
     deleteCookie("token", { req, res });
     // On frontend we need to remove 'user' localstorage item,
     // and update isLoggedInVar
