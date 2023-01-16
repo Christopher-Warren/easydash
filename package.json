@@ -22,6 +22,7 @@
     "apollo-server-express": "^3.3.0",
     "autoprefixer": "^10.4.13",
     "aws-sdk": "^2.1028.0",
+    "axios": "^1.2.2",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.5",
     "cookies-next": "^2.1.1",

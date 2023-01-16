@@ -1,9 +1,9 @@
 import PageWrapper from "../PageWrapper";
 
-import { toggleModal } from "../../../../redux/modal/modalSlice";
+import { toggleModal } from "../../redux/modal/modalSlice";
 
-import { useAppDispatch } from "../../../../redux/hooks";
-import customPrompt from "../../utils/customPrompt";
+import { useAppDispatch } from "../../redux/hooks";
+// import customPrompt from "../../utils/customPrompt";
 import InfoCardLarge from "../cards/InfoCardLarge";
 
 type size = "max-w-3xl" | "max-w-4xl" | "max-w-5xl" | "max-w-6xl" | "max-w-7xl";
@@ -41,10 +41,10 @@ const ModalContainer = ({
           dispatch(toggleModal({ value: null }));
         };
 
-        if (e.target.id === "overlay") {
-          if (hasChanged) customPrompt(opts, closeModal);
-          if (!hasChanged) closeModal();
-        }
+        // if (e.target.id === "overlay") {
+        //   if (hasChanged) customPrompt(opts, closeModal);
+        //   if (!hasChanged) closeModal();
+        // }
       }}
     >
       <div className={`${size} max-w-7xl max-w mx-auto`}>

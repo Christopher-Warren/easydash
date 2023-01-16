@@ -127,6 +127,7 @@ const RootQuery = {
   getProduct: async (_parent, args) => {
     // @TODO: Take in product id only, having
     // an input object is overkill
+    // Rename resolvers
 
     const input = args.input;
 

@@ -4,22 +4,21 @@ import { useQuery, useMutation, QueryResult } from "@apollo/client";
 
 import { Fragment, useState } from "react";
 
-import { toggleModal } from "../../../../redux/modal/modalSlice";
-import { addError } from "../../../../redux/error/errorSlice";
-import { useAppDispatch } from "../../../../redux/hooks";
+// import { addError } from "../../redux/error/errorSlice";
+// import { useAppDispatch } from "../../redux/hooks";
 
 import axios from "axios";
 import PrimaryButton from "../buttons/PrimaryButton";
 
-import img from "../../assets/feather/image.svg";
+// import img from "../../assets/feather/image.svg";
 import SecondaryButton from "../buttons/SecondaryButton";
 import SelectPrimary from "../inputs/SelectPrimary";
 import TextInput from "../inputs/TextInput";
 import TextArea from "../inputs/TextArea";
 
-import customPrompt from "../../utils/customPrompt";
+// import customPrompt from "../../utils/customPrompt";
 import Progress from "../progress/Progress";
-import useHasStateChanged from "../../hooks/useHasStateChanged";
+// import useHasStateChanged from "../../hooks/useHasStateChanged";
 import { GET_ALL_CATEGORIES } from "../../graphql/query_vars";
 import { CREATE_PRODUCT } from "../../graphql/mutation_vars";
 
@@ -50,7 +49,7 @@ const CreateProductModal = () => {
   const [createProduct] = useMutation(CREATE_PRODUCT);
 
   // Global state
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
   // Form state
   const [name, setName] = useState("");
@@ -74,14 +73,14 @@ const CreateProductModal = () => {
 
   const [progress, setProgress] = useState(0);
 
-  const hasChanged = useHasStateChanged([
-    name,
-    category,
-    subcategory,
-    description,
-    price,
-    stock,
-  ]);
+  // const hasChanged = useHasStateChanged([
+  //   name,
+  //   category,
+  //   subcategory,
+  //   description,
+  //   price,
+  //   stock,
+  // ]);
 
   const renderCategoryOptions = () => {
     return data?.getAllCategories.map((category: any, index: number) => {
@@ -133,11 +132,11 @@ const CreateProductModal = () => {
 
     return (
       <div className="md:col-span-2 col-span-full row-span-6 grid grid-cols-12 h-fit">
-        <img
+        {/* <img
           className="col-span-9 w-full h-64 object-cover"
           src={imgUrls[0] || img}
           alt="img"
-        ></img>
+        ></img> */}
         <div className="col-span-3 h-64  overflow-y-auto overflow-x-none ">
           {images}
         </div>
@@ -203,9 +202,8 @@ const CreateProductModal = () => {
             },
           })
           .then(() => {
-            dispatch(toggleModal({ value: null }));
-
-            dispatch(addError("Product successfully created."));
+            // dispatch(toggleModal({ value: null }));
+            // dispatch(addError("Product successfully created."));
           });
       })
       .catch((error) => {
@@ -217,7 +215,7 @@ const CreateProductModal = () => {
     <ModalContainer
       size="max-w-3xl"
       title="Create a New Product"
-      hasChanged={hasChanged}
+      // hasChanged={hasChanged}
       opts={closePromptOpts}
     >
       <form
@@ -325,11 +323,11 @@ const CreateProductModal = () => {
             onClick={(e: any) => {
               e.preventDefault();
               const closeModal = () => {
-                dispatch(toggleModal({ value: null }));
+                // dispatch(toggleModal({ value: null }));
               };
 
-              if (hasChanged) customPrompt(closePromptOpts, closeModal);
-              if (!hasChanged) closeModal();
+              // if (hasChanged) customPrompt(closePromptOpts, closeModal);
+              // if (!hasChanged) closeModal();
             }}
           >
             Back
