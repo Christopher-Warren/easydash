@@ -1,7 +1,7 @@
 import normalizeInputs from "../../utils/normalizeInputs";
 import bcrypt from "bcryptjs";
 
-import { jwtVerify } from "jose";
+import { jwtVerify, SignJWT } from "jose";
 
 import User from "../../models/user";
 import Product from "../../models/product";
@@ -428,11 +428,23 @@ const RootMutation = {
 
     if (!isEqual || !user) throw new Error("Invalid password or email address");
 
-    const token = jwt.sign(
-      { userId: user.id, email: user.email },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" }
-    );
+    const alg = "HS256";
+    const JWT_SECRET = process.env.JWT_SECRET;
+    const secret = new TextEncoder().encode(JWT_SECRET);
+
+    const token = await new SignJWT({ userId: user.id, email: user.email })
+      .setProtectedHeader({ alg })
+      .setIssuedAt()
+      .setExpirationTime("10s")
+      .sign(secret);
+
+    console.log("token: ", token);
+
+    // const token = jwt.sign(
+    //   { userId: user.id, email: user.email },
+    //   process.env.JWT_SECRET,
+    //   { expiresIn: "7d" }
+    // );
 
     // We can set a maxAge to infinite, and trigger session expired
     // err based off jwt verify.
