@@ -49,6 +49,7 @@ export const schema = `
     _id: ID!
     email: String!
     password: String
+    refreshToken: String
   }
 
 
@@ -69,7 +70,7 @@ export const schema = `
 
   input UserInput {
     email: String!
-    password: String
+    password: String!
   }
 
   ##############
