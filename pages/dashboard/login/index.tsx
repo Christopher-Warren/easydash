@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 const Login = () => {
   const loading = false;
 
-  const [login, { data }] = useMutation(USER_LOGIN);
+  const [login] = useMutation(USER_LOGIN);
 
   const router = useRouter();
 

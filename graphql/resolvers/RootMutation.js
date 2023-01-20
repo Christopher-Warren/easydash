@@ -432,30 +432,18 @@ const RootMutation = {
     const JWT_SECRET = process.env.JWT_SECRET;
     const secret = new TextEncoder().encode(JWT_SECRET);
 
+    // maxAge: 60000 * 60 * 24 * 7,
+
     const token = await new SignJWT({ userId: user.id, email: user.email })
       .setProtectedHeader({ alg })
       .setIssuedAt()
-      .setExpirationTime("10s")
+      .setExpirationTime(Date.now() + 60000 * 60 * 24 * 7)
       .sign(secret);
 
-    console.log("token: ", token);
-
-    // const token = jwt.sign(
-    //   { userId: user.id, email: user.email },
-    //   process.env.JWT_SECRET,
-    //   { expiresIn: "7d" }
-    // );
-
-    // We can set a maxAge to infinite, and trigger session expired
-    // err based off jwt verify.
-    // maxAge: 60000 * 60 * 24 * 7,
-
-    // Need to change this to use 'jose'
     setCookie("token", token, {
-      // Expires after 7 days
       req,
       res,
-      maxAge: 60000 * 60 * 24 * 7 * 2,
+      expires: new Date(Date.now() + 60000 * 60 * 24 * 7),
       httpOnly: true,
       sameSite: true,
     });
@@ -464,8 +452,6 @@ const RootMutation = {
   },
   logout: (_parent, _args, { req, res }) => {
     deleteCookie("token", { req, res });
-    // On frontend we need to remove 'user' localstorage item,
-    // and update isLoggedInVar
 
     return { message: "You have logged out successfully" };
   },
