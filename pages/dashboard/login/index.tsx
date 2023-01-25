@@ -5,6 +5,7 @@ import LoginWrapper from "../../../components/LoginWrapper";
 import { useMutation } from "@apollo/client";
 import { USER_LOGIN } from "../../../graphql/mutation_vars";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 const Login = () => {
   const loading = false;
@@ -13,16 +14,23 @@ const Login = () => {
 
   const router = useRouter();
 
+  useEffect(() => {
+    localStorage.removeItem("user");
+  }, []);
+
   const handleLogin = async (e: any) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
+
     try {
-      await login({
+      const { data } = await login({
         variables: {
           email: formData.get("email"),
           password: formData.get("password"),
         },
       });
+      localStorage.setItem("user", data.login.email);
+
       router.push("/dashboard");
     } catch (error) {
       // console.log(error)

@@ -432,18 +432,18 @@ const RootMutation = {
     const JWT_SECRET = process.env.JWT_SECRET;
     const secret = new TextEncoder().encode(JWT_SECRET);
 
-    // maxAge: 60000 * 60 * 24 * 7,
+    // Date.now() + 60000 * 60 * 24 * 7
 
     const token = await new SignJWT({ userId: user.id, email: user.email })
       .setProtectedHeader({ alg })
       .setIssuedAt()
-      .setExpirationTime(Date.now() + 60000 * 60 * 24 * 7)
+      .setExpirationTime(Date.now() + 2000)
       .sign(secret);
 
     setCookie("token", token, {
       req,
       res,
-      expires: new Date(Date.now() + 60000 * 60 * 24 * 7),
+      expires: new Date(Date.now() + 2000),
       httpOnly: true,
       sameSite: true,
     });
