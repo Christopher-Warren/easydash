@@ -4,28 +4,23 @@ import { useEffect } from "react";
 import PageWrapper from "../../../components/PageWrapper";
 import { GET_PRODUCT } from "../../../graphql/query_vars";
 
-export async function getServerSideProps() {
+import product from "../../../models/product.js";
+import { serializeModelData } from "../../../utils/serializeModelData";
+
+export async function getServerSideProps(context) {
+  const productId = context.query.pid;
+  const item = await product.findById(productId);
   return {
     props: {
-      hey: "there",
+      product: serializeModelData(item),
     },
   };
 }
 
-const Product = () => {
-  const router = useRouter();
-  const { pid } = router.query;
-
-  const { data } = useQuery(GET_PRODUCT, {
-    variables: {
-      input: {
-        _id: pid,
-      },
-    },
-  });
+const Product = ({ product }) => {
   return (
     <PageWrapper className="ml-20">
-      {data && <div className="ml-20">name: {data.getProduct.name}</div>}
+      {product && <div className="ml-20">name: {product.name}</div>}
     </PageWrapper>
   );
 };
