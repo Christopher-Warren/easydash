@@ -17,9 +17,9 @@ export async function middleware(req: NextRequest) {
 
   const verified = await jwtVerify(token, secret);
 
-  console.log(verified);
   if (onLoginPage && verified)
     return NextResponse.redirect(new URL("/dashboard", req.url));
+
   return NextResponse.next();
 }
 

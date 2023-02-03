@@ -21,9 +21,11 @@ export async function getServerSideProps() {
 
   // @ts-ignore
   // @TODO convert models to Ts
-  const categories = await Category.find({}, "name");
+  const categories = await Category.find({}, "name subcategories").populate(
+    "subcategories"
+  );
   // @ts-ignore
-  const subcategories = await Subcategory.find({}, "name");
+  const subcategories = await Subcategory.find({});
 
   return {
     props: {
@@ -42,7 +44,9 @@ const NewProduct = ({ categories, subcategories }) => {
   // Form state
   const [name, setName] = useState("");
   const [category, setCategory] = useState(categories[0].name || "");
-  const [subcategory, setSubcategory] = useState(subcategories[0].name || "");
+  const [subcategory, setSubcategory] = useState(
+    categories[0].subcategories[0].name || ""
+  );
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
   const [stock, setStock] = useState(0);
@@ -57,15 +61,6 @@ const NewProduct = ({ categories, subcategories }) => {
 
   const [progress, setProgress] = useState(0);
 
-  // const hasChanged = useHasStateChanged([
-  //   name,
-  //   category,
-  //   subcategory,
-  //   description,
-  //   price,
-  //   stock,
-  // ]);
-
   const renderCategoryOptions = () => {
     return categories.map((category: any, index: number) => {
       return (
@@ -77,9 +72,11 @@ const NewProduct = ({ categories, subcategories }) => {
   };
 
   const renderSubcategoryOptions = () => {
-    return subcategories.map((subcategory: any) => {
-      return <option key={subcategory._id}>{subcategory.name}</option>;
-    });
+    return categories
+      .find((i) => i.name === category)
+      .subcategories.map((subcategory: any) => {
+        return <option key={subcategory._id}>{subcategory.name}</option>;
+      });
   };
 
   const renderImagePreview = () => {
@@ -171,7 +168,7 @@ const NewProduct = ({ categories, subcategories }) => {
         });
 
         await axios
-          .post("/api/image", formData, {
+          .post("/api/productImage/upload", formData, {
             headers: {
               productid: data.createProduct._id,
             },
@@ -210,13 +207,13 @@ const NewProduct = ({ categories, subcategories }) => {
           <SelectPrimary
             value={category}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-              const defaultSubcategory = data?.getAllCategories.filter(
+              const defaultSubcategory = categories.filter(
                 (category) => category.name === e.currentTarget.value
               )[0]?.subcategories[0]?.name;
 
               setCategory(e.currentTarget.value);
 
-              if (!subcategory && defaultSubcategory) {
+              if (defaultSubcategory) {
                 setSubcategory(defaultSubcategory);
               }
               if (!e.currentTarget.value) setSubcategory("");

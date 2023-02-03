@@ -20,7 +20,6 @@ function MyApp({ Component, pageProps }) {
       <Provider store={store}>
         <ThemeContextProvider>
           <div className="dark bg-gray-900">
-            {/* {inDashboard ? <SideBar /> : <Navbar />} */}
             {inDashboard && !inLogin && <SideBar />}
             {!inDashboard && <Navbar />}
 

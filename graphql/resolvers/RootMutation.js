@@ -12,6 +12,7 @@ import Order from "../../models/order";
 import S3 from "aws-sdk/clients/s3";
 import dbConnect from "../../lib/dbConnect";
 import { setCookie, deleteCookie, getCookie } from "cookies-next";
+import { isAdmin } from "../../lib/auth/isAdmin";
 
 const RootMutation = {
   createProduct: async (
@@ -19,17 +20,11 @@ const RootMutation = {
     { productInput, sessionExpired },
     { req, res }
   ) => {
+    const admin = await isAdmin(req);
+    if (!admin) throw new Error("Easydash demo runs in read only mode");
     await dbConnect();
 
-    // check authentication
-    const JWT_SECRET = process.env.JWT_SECRET;
-    const secret = new TextEncoder().encode(JWT_SECRET);
-
-    console.log("mutation", await jwtVerify(req.cookies.token, secret));
-
-    return null;
     if (sessionExpired) throw new Error("Session expired");
-    if (!isAdmin) throw new Error("Easydash runs in read only mode");
     if (!productInput.subcategory)
       throw new Error("Please enter a Subcategory");
     if (productInput.category === "new-category")
@@ -432,18 +427,18 @@ const RootMutation = {
     const JWT_SECRET = process.env.JWT_SECRET;
     const secret = new TextEncoder().encode(JWT_SECRET);
 
-    // Date.now() + 60000 * 60 * 24 * 7
+    const inOneWeek = Date.now() + 60000 * 60 * 24 * 7;
 
     const token = await new SignJWT({ userId: user.id, email: user.email })
       .setProtectedHeader({ alg })
       .setIssuedAt()
-      .setExpirationTime(Date.now() + 2000)
+      .setExpirationTime(inOneWeek)
       .sign(secret);
 
     setCookie("token", token, {
       req,
       res,
-      expires: new Date(Date.now() + 2000),
+      expires: new Date(inOneWeek),
       httpOnly: true,
       sameSite: true,
     });
