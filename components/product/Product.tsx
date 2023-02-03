@@ -1,67 +1,30 @@
-import ModalContainer from "./ModalContainer";
-
-import { useQuery, useMutation, QueryResult } from "@apollo/client";
-
-import { Fragment, useState } from "react";
-
-// import { addError } from "../../redux/error/errorSlice";
-// import { useAppDispatch } from "../../redux/hooks";
-
+import { useMutation } from "@apollo/client";
 import axios from "axios";
+import { Fragment, useState } from "react";
+import { CREATE_ORDER } from "../../graphql/mutation_vars";
 import PrimaryButton from "../buttons/PrimaryButton";
-
-// import img from "../../assets/feather/image.svg";
 import SecondaryButton from "../buttons/SecondaryButton";
 import SelectPrimary from "../inputs/SelectPrimary";
-import TextInput from "../inputs/TextInput";
 import TextArea from "../inputs/TextArea";
-
-// import customPrompt from "../../utils/customPrompt";
+import TextInput from "../inputs/TextInput";
+import ModalContainer from "../modals/ModalContainer";
 import Progress from "../progress/Progress";
-// import useHasStateChanged from "../../hooks/useHasStateChanged";
-import { GET_ALL_CATEGORIES } from "../../graphql/query_vars";
-import { CREATE_PRODUCT } from "../../graphql/mutation_vars";
 
-type ModifyProductType = {
-  products: QueryResult;
-  children?: any;
-};
-
-interface CategoryTypes {
-  getAllCategories: any[];
-}
-
-type PromptTypes = {
-  title: string;
-  body: string;
-  confirm: string;
-  cancel: string;
-};
-const closePromptOpts: PromptTypes = {
-  title: "Are you sure you wish to go back?",
-  body: "All changes will be lost",
-  confirm: "Back",
-  cancel: "Stay",
-};
-
-const CreateProductModal = () => {
-  const { data } = useQuery<CategoryTypes>(GET_ALL_CATEGORIES);
-  const [createProduct] = useMutation(CREATE_PRODUCT);
+const ViewProduct = ({ categories, product, gqlAction }) => {
+  const [createProduct] = useMutation(gqlAction);
 
   // Global state
   // const dispatch = useAppDispatch();
 
   // Form state
-  const [name, setName] = useState("");
-  const [category, setCategory] = useState(
-    data?.getAllCategories[0]?.name || ""
-  );
+  const [name, setName] = useState(product?.name || "");
+  const [category, setCategory] = useState(categories[0].name || "");
   const [subcategory, setSubcategory] = useState(
-    data?.getAllCategories[0]?.subcategories[0]?.name || ""
+    categories[0].subcategories[0].name || ""
   );
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(0);
-  const [stock, setStock] = useState(0);
+  const [description, setDescription] = useState(product?.description || "");
+  const [price, setPrice] = useState(product?.price || 0);
+  const [stock, setStock] = useState(product?.stock || 0);
 
   const [newCategoryInput, setNewCategoryInput] = useState<any>("");
   const [newSubCategoryInput, setNewSubCategoryInput] = useState<any>("");
@@ -73,17 +36,8 @@ const CreateProductModal = () => {
 
   const [progress, setProgress] = useState(0);
 
-  // const hasChanged = useHasStateChanged([
-  //   name,
-  //   category,
-  //   subcategory,
-  //   description,
-  //   price,
-  //   stock,
-  // ]);
-
   const renderCategoryOptions = () => {
-    return data?.getAllCategories.map((category: any, index: number) => {
+    return categories.map((category: any, index: number) => {
       return (
         <Fragment key={index}>
           <option className="">{category.name}</option>
@@ -93,15 +47,11 @@ const CreateProductModal = () => {
   };
 
   const renderSubcategoryOptions = () => {
-    const subcategories = data?.getAllCategories.filter(
-      (obj) => obj.name === category
-    )[0]?.subcategories;
-
-    if (!subcategories) return null;
-
-    return subcategories.map((subcategory: any) => {
-      return <option key={subcategory._id}>{subcategory.name}</option>;
-    });
+    return categories
+      .find((i) => i.name === category)
+      .subcategories.map((subcategory: any) => {
+        return <option key={subcategory._id}>{subcategory.name}</option>;
+      });
   };
 
   const renderImagePreview = () => {
@@ -133,22 +83,22 @@ const CreateProductModal = () => {
     return (
       <div className="md:col-span-2 col-span-full row-span-6 grid grid-cols-12 h-fit">
         {/* <img
-          className="col-span-9 w-full h-64 object-cover"
-          src={imgUrls[0] || img}
-          alt="img"
-        ></img> */}
+            className="col-span-9 w-full h-64 object-cover"
+            src={imgUrls[0] || img}
+            alt="img"
+          ></img> */}
         <div className="col-span-3 h-64  overflow-y-auto overflow-x-none ">
           {images}
         </div>
 
         <input
           className="col-span-full my-4 file:mr-4 file:py-2 file:px-4
-              file:rounded-full file:border-0 w-full 
-              file:text-sm file:font-semibold 
-              file:bg-purple-50 file:text-purple-700
-              hover:file:bg-purple-100
-              dark:file:bg-purple-600 dark:file:text-purple-50
-              "
+                file:rounded-full file:border-0 w-full 
+                file:text-sm file:font-semibold 
+                file:bg-purple-50 file:text-purple-700
+                hover:file:bg-purple-100
+                dark:file:bg-purple-600 dark:file:text-purple-50
+                "
           id="file_input"
           type="file"
           multiple
@@ -193,7 +143,7 @@ const CreateProductModal = () => {
         });
 
         await axios
-          .post("/api/image", formData, {
+          .post("/api/productImage/upload", formData, {
             headers: {
               productid: data.createProduct._id,
             },
@@ -212,12 +162,7 @@ const CreateProductModal = () => {
   };
 
   return (
-    <ModalContainer
-      size="max-w-3xl"
-      title="Create a New Product"
-      // hasChanged={hasChanged}
-      opts={closePromptOpts}
-    >
+    <ModalContainer size="max-w-3xl" title="Create a New Product">
       <form
         id="newProductForm"
         className="grid grid-cols-4  gap-10"
@@ -237,13 +182,13 @@ const CreateProductModal = () => {
           <SelectPrimary
             value={category}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-              const defaultSubcategory = data?.getAllCategories.filter(
+              const defaultSubcategory = categories.filter(
                 (category) => category.name === e.currentTarget.value
               )[0]?.subcategories[0]?.name;
 
               setCategory(e.currentTarget.value);
 
-              if (!subcategory && defaultSubcategory) {
+              if (defaultSubcategory) {
                 setSubcategory(defaultSubcategory);
               }
               if (!e.currentTarget.value) setSubcategory("");
@@ -338,4 +283,4 @@ const CreateProductModal = () => {
   );
 };
 
-export default CreateProductModal;
+export default ViewProduct;

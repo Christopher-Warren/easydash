@@ -1,15 +1,11 @@
-import { useState } from 'react'
-import SelectOption from '../buttons/SelectOption'
+import { useState } from "react";
+import SelectOption from "../buttons/SelectOption";
 
-// Handle errors
-import { addError } from '../../redux/error/errorSlice'
-import { useAppDispatch } from '../../redux/hooks'
-
-import PrimaryButton from '../buttons/PrimaryButton'
-import SecondaryButton from '../buttons/SecondaryButton'
-import TotalFilter from './filter_items/TotalFilter'
-import StatusFilter from './filter_items/StatusFilter'
-import OrderNumberFilter from './filter_items/OrderNumberFilter'
+import PrimaryButton from "../buttons/PrimaryButton";
+import SecondaryButton from "../buttons/SecondaryButton";
+import TotalFilter from "./filter_items/TotalFilter";
+import StatusFilter from "./filter_items/StatusFilter";
+import OrderNumberFilter from "./filter_items/OrderNumberFilter";
 
 const OrdersFilter = ({
   options,
@@ -22,85 +18,84 @@ const OrdersFilter = ({
   filter,
   setFilter,
 }: any) => {
-  const [hide, setHide] = useState(true)
+  const [hide, setHide] = useState(true);
 
-  const [total, setTotal] = useState({ min: 0, max: 0 })
-  const [orderNumber, setOrderNumber] = useState({ min: 0, max: 0 })
+  const [total, setTotal] = useState({ min: 0, max: 0 });
+  const [orderNumber, setOrderNumber] = useState({ min: 0, max: 0 });
 
-  const [paymentActive, setPaymentActive] = useState(false)
-  const [fulfillmentActive, setFulfillmentActive] = useState(false)
+  const [paymentActive, setPaymentActive] = useState(false);
+  const [fulfillmentActive, setFulfillmentActive] = useState(false);
   const [statusChecked, setStatusChecked] = useState({
     paid: false,
     fulfilled: false,
-  })
+  });
   // handle errors
-  const dispatch = useAppDispatch()
 
   const handleFormSubmit = (e: any) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (total.min > total.max) {
-      dispatch(addError('Minimum should be less than maximum'))
-      return
+      // dispatch(addError('Minimum should be less than maximum'))
+      return;
     }
 
     if (orderNumber.min > orderNumber.max) {
-      dispatch(addError('Minimum should be less than maximum'))
-      return
+      // dispatch(addError('Minimum should be less than maximum'))
+      return;
     }
 
     setFilter(() => {
-      const newFilter: any = []
+      const newFilter: any = [];
 
       if (paymentActive) {
         newFilter.push({
-          field: 'status.paid',
+          field: "status.paid",
           query: {
-            eq: statusChecked.paid ? 'true' : 'false',
+            eq: statusChecked.paid ? "true" : "false",
           },
-        })
+        });
       }
 
       if (fulfillmentActive) {
         newFilter.push({
-          field: 'status.fulfilled',
+          field: "status.fulfilled",
           query: {
-            eq: statusChecked.fulfilled ? 'true' : 'false',
+            eq: statusChecked.fulfilled ? "true" : "false",
           },
-        })
+        });
       }
 
       if (total.min && total.max > 0) {
         newFilter.push({
-          field: 'total',
+          field: "total",
           query: {
             gte: total.min,
             lte: total.max,
           },
-        })
+        });
       }
 
       if (orderNumber.min && orderNumber.max > 0) {
         newFilter.push({
-          field: 'orderNumber',
+          field: "orderNumber",
           query: {
             gte: orderNumber.min,
             lte: orderNumber.max,
           },
-        })
+        });
       }
 
-      return newFilter
-    })
+      return newFilter;
+    });
 
-    setHide(true)
-  }
+    setHide(true);
+  };
 
   return (
     <div
       onBlur={(e: any) => {
         if (!e.currentTarget.contains(e.relatedTarget)) {
-          setHide(true)
+          setHide(true);
         }
       }}
       className="relative"
@@ -127,7 +122,7 @@ const OrdersFilter = ({
         className={`absolute rounded-sm overflow-hidden drop-shadow-[0_5px_8px_rgb(0,0,0,0.1)] dark:shadow-gray-900/50 
       dark:bg-gray-800 dark:text-white  transition-all 
     text-black z-40  bg-white
-      ${hide && 'h-0 w-0 opacity-0'} `}
+      ${hide && "h-0 w-0 opacity-0"} `}
       >
         <div className="flex flex-wrap  w-max text-gray-800 dark:text-gray-50">
           <form id="filter form" onSubmit={handleFormSubmit}>
@@ -137,16 +132,16 @@ const OrdersFilter = ({
                 <SecondaryButton
                   className="px-3 py-1"
                   onClick={(e: any) => {
-                    e.preventDefault()
+                    e.preventDefault();
 
-                    setFilter([])
+                    setFilter([]);
 
-                    setFulfillmentActive(false)
-                    setPaymentActive(false)
-                    setOrderNumber({ min: 0, max: 0 })
-                    setTotal({ min: 0, max: 0 })
+                    setFulfillmentActive(false);
+                    setPaymentActive(false);
+                    setOrderNumber({ min: 0, max: 0 });
+                    setTotal({ min: 0, max: 0 });
 
-                    setHide(true)
+                    setHide(true);
                   }}
                 >
                   Clear
@@ -181,7 +176,7 @@ const OrdersFilter = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default OrdersFilter
+export default OrdersFilter;

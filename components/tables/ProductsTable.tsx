@@ -2,8 +2,7 @@ import { QueryResult, useMutation } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { DELETE_PRODUCTS } from "../../graphql/mutation_vars";
 // import { ModalFormIDs } from "../../pages/modals/Modals";
-import { useAppDispatch } from "../../redux/hooks";
-import { toggleModal } from "../../redux/modal/modalSlice";
+
 // `import customPrompt from "../../utils/customPrompt";`
 import ProductsFilter from "../filter/ProductsFilter";
 import TableCard from "../cards/TableCard";
@@ -56,8 +55,6 @@ const ProductsTable = ({
   }
 
   const RenderTableItems = () => {
-    const dispatch = useAppDispatch();
-
     if (!loading && !error) {
       return data.products.map((item: any, index: any) => {
         return (

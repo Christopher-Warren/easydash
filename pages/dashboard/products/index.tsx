@@ -3,9 +3,6 @@ import { useQuery } from "@apollo/client";
 import PageWrapper from "../../../components/PageWrapper";
 import PrimaryButton from "../../../components/buttons/PrimaryButton";
 
-import { useAppDispatch } from "../../../redux/hooks";
-import { toggleModal } from "../../../redux/modal/modalSlice";
-
 import LoadingSpinner from "../../../components/LoadingSpinner";
 
 import ProductsTable from "../../../components/tables/ProductsTable";
@@ -18,8 +15,6 @@ const ProductsPage = () => {
   });
 
   const { loading, networkStatus } = products;
-
-  const dispatch = useAppDispatch();
 
   return (
     <PageWrapper>

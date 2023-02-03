@@ -3,9 +3,6 @@ import { onError } from "@apollo/client/link/error";
 
 import { cache, isLoggedInVar, isAdminVar } from "./cache";
 
-import { addError } from "../redux/error/errorSlice";
-
-import { store } from "../redux/store";
 import { EXTEND_TYPE_DEFS } from "./types_extension";
 
 export const typeDefs = EXTEND_TYPE_DEFS;
@@ -26,7 +23,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
         isAdminVar(false);
       }
 
-      store.dispatch(addError(error.message));
+      // store.dispatch(addError(error.message));
     });
   }
 });

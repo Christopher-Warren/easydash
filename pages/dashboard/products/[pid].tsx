@@ -1,28 +1,35 @@
-import { useQuery } from "@apollo/client";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import PageWrapper from "../../../components/PageWrapper";
-import { GET_PRODUCT } from "../../../graphql/query_vars";
+import ViewProduct from "../../../components/product/Product";
+import { MODIFY_PRODUCT } from "../../../graphql/mutation_vars";
+
+import category from "../../../models/category";
 
 import product from "../../../models/product.js";
 import { serializeModelData } from "../../../utils/serializeModelData";
 
 export async function getServerSideProps(context) {
   const productId = context.query.pid;
+  // @ts-ignore
   const item = await product.findById(productId);
+  const categories = await category
+    // @ts-ignore
+    .find({}, "name subcategories")
+    .populate("subcategories");
   return {
     props: {
       product: serializeModelData(item),
+      categories: serializeModelData(categories),
     },
   };
 }
 
-const Product = ({ product }) => {
+const EditProduct = ({ product, categories }) => {
   return (
-    <PageWrapper className="ml-20">
-      {product && <div className="ml-20">name: {product.name}</div>}
-    </PageWrapper>
+    <ViewProduct
+      product={product}
+      categories={categories}
+      gqlAction={MODIFY_PRODUCT}
+    />
   );
 };
 
-export default Product;
+export default EditProduct;

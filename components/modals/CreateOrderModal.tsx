@@ -1,58 +1,54 @@
-import { QueryResult, useMutation } from '@apollo/client'
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { CREATE_ORDER } from '../../graphql/mutation_vars'
-import { addError } from '../../redux/error/errorSlice'
-import { toggleModal } from '../../redux/modal/modalSlice'
-import { listOfCities } from '../../utils/forms/listOfCities'
-import { listOfStates } from '../../utils/forms/listOfStates'
-import PrimaryButton from '../buttons/PrimaryButton'
-import SecondaryButton from '../buttons/SecondaryButton'
+import { QueryResult, useMutation } from "@apollo/client";
+import { useState } from "react";
 
-import InfoCardSmall from '../cards/InfoCardSmall'
-import Checkbox from '../inputs/Checkbox'
-import SelectPrimary from '../inputs/SelectPrimary'
-import TextInput from '../inputs/TextInput'
-import OrderProductsTable from '../tables/OrderProductsTable'
+import { CREATE_ORDER } from "../../graphql/mutation_vars";
+import { listOfCities } from "../../utils/forms/listOfCities";
+import { listOfStates } from "../../utils/forms/listOfStates";
+import PrimaryButton from "../buttons/PrimaryButton";
+import SecondaryButton from "../buttons/SecondaryButton";
 
-import ModalContainer, { PromptTypes } from './ModalContainer'
+import InfoCardSmall from "../cards/InfoCardSmall";
+import Checkbox from "../inputs/Checkbox";
+import SelectPrimary from "../inputs/SelectPrimary";
+import TextInput from "../inputs/TextInput";
+import OrderProductsTable from "../tables/OrderProductsTable";
+
+import ModalContainer, { PromptTypes } from "./ModalContainer";
 
 const CreateOrderModal = ({
   products,
   orders,
 }: {
-  products: QueryResult
-  orders: QueryResult
+  products: QueryResult;
+  orders: QueryResult;
 }) => {
   const closePromptOpts: PromptTypes = {
-    title: 'Are you sure you wish to go back?',
-    body: 'All changes will be lost',
-    confirm: 'Back',
-    cancel: 'Stay',
-  }
-  const { refetch } = orders
+    title: "Are you sure you wish to go back?",
+    body: "All changes will be lost",
+    confirm: "Back",
+    cancel: "Stay",
+  };
+  const { refetch } = orders;
 
-  const dispatch = useDispatch()
+  const [createOrder] = useMutation(CREATE_ORDER);
 
-  const [createOrder] = useMutation(CREATE_ORDER)
+  const [cartItems, setCartItems] = useState([]);
 
-  const [cartItems, setCartItems] = useState([])
-
-  const [isSameChecked, setIsSameChecked] = useState(false)
+  const [isSameChecked, setIsSameChecked] = useState(false);
 
   const initShippingBilling = {
-    firstName: '',
-    lastName: '',
-    address: '',
-    address2: '',
-    city: 'Atlanta',
-    state: 'GA',
-    zipcode: '',
-    country: 'USA',
-  }
+    firstName: "",
+    lastName: "",
+    address: "",
+    address2: "",
+    city: "Atlanta",
+    state: "GA",
+    zipcode: "",
+    country: "USA",
+  };
 
-  const [shippingInfo, setShippingInfo] = useState(initShippingBilling)
-  const [billingInfo, setBillingInfo] = useState(initShippingBilling)
+  const [shippingInfo, setShippingInfo] = useState(initShippingBilling);
+  const [billingInfo, setBillingInfo] = useState(initShippingBilling);
 
   return (
     <ModalContainer
@@ -79,16 +75,16 @@ const CreateOrderModal = ({
                   className="h-min   dark:bg-gray-700 tex rounded-sm dark:text-gray-50  text-right"
                   value={item.qty}
                   onChange={(e) => {
-                    const chosenQty = parseFloat(e.currentTarget.value)
-                    if (isNaN(chosenQty) || chosenQty < 0) return
+                    const chosenQty = parseFloat(e.currentTarget.value);
+                    if (isNaN(chosenQty) || chosenQty < 0) return;
 
                     setCartItems((prev: any) => {
                       if (chosenQty === 0) {
                         const removeItem = prev.filter(
-                          (val: any) => val._id !== item._id,
-                        )
+                          (val: any) => val._id !== item._id
+                        );
 
-                        return removeItem
+                        return removeItem;
                       }
 
                       return prev.map((val: any) => {
@@ -96,11 +92,11 @@ const CreateOrderModal = ({
                           return {
                             ...val,
                             qty: chosenQty,
-                          }
+                          };
                         }
-                        return val
-                      })
-                    })
+                        return val;
+                      });
+                    });
                   }}
                   type="number"
                 ></input>
@@ -110,17 +106,17 @@ const CreateOrderModal = ({
           <div>Subtotal: </div>
 
           <div>
-            Total:{' '}
+            Total:{" "}
             {cartItems.reduce((prev, acc: any) => {
-              return prev + acc.price * acc.qty
+              return prev + acc.price * acc.qty;
             }, 0)}
           </div>
         </InfoCardSmall>
       </div>
       <form
         onSubmit={(e) => {
-          e.preventDefault()
-          if (cartItems.length === 0) return
+          e.preventDefault();
+          if (cartItems.length === 0) return;
 
           // shippingInput: shippingInfo,
           //       billingInput: isSameChecked ? shippingInfo : billingInfo,
@@ -128,9 +124,9 @@ const CreateOrderModal = ({
             const parsedProduct = {
               product: obj._id,
               qty: obj.qty,
-            }
-            return parsedProduct
-          })
+            };
+            return parsedProduct;
+          });
 
           createOrder({
             variables: {
@@ -153,13 +149,13 @@ const CreateOrderModal = ({
             },
           })
             .then(() => {
-              refetch()
-              dispatch(addError('Order successfully created!'))
-              dispatch(toggleModal({ value: null }))
+              refetch();
+              // dispatch(addError('Order successfully created!'))
+              // dispatch(toggleModal({ value: null }))
             })
             .catch((error) => {
               // console.error(error.message)
-            })
+            });
         }}
       >
         <div className="grid lg:grid-cols-2 gap-6">
@@ -281,9 +277,9 @@ const CreateOrderModal = ({
                   type="checkbox"
                   name="subcategory option"
                   onChange={(e: any) => {
-                    setIsSameChecked(!isSameChecked)
+                    setIsSameChecked(!isSameChecked);
 
-                    setBillingInfo(initShippingBilling)
+                    setBillingInfo(initShippingBilling);
                   }}
                   checked={isSameChecked}
                   id="isSame"
@@ -294,17 +290,17 @@ const CreateOrderModal = ({
           >
             <div
               className={`grid grid-cols-8 gap-6  ${
-                isSameChecked && 'opacity-40 pointer-events-none'
+                isSameChecked && "opacity-40 pointer-events-none"
               }`}
             >
               <TextInput
                 value={billingInfo.firstName}
                 onChange={(e) => {
-                  if (isSameChecked) return
+                  if (isSameChecked) return;
                   setBillingInfo({
                     ...billingInfo,
                     firstName: e.currentTarget.value,
-                  })
+                  });
                 }}
                 containerClassName="md:col-span-4 col-span-8 "
                 placeholder="First Name"
@@ -312,11 +308,11 @@ const CreateOrderModal = ({
               <TextInput
                 value={billingInfo.lastName}
                 onChange={(e) => {
-                  if (isSameChecked) return
+                  if (isSameChecked) return;
                   setBillingInfo({
                     ...billingInfo,
                     lastName: e.currentTarget.value,
-                  })
+                  });
                 }}
                 containerClassName="md:col-span-4  col-span-8"
                 placeholder="Last Name"
@@ -324,11 +320,11 @@ const CreateOrderModal = ({
               <TextInput
                 value={billingInfo.address}
                 onChange={(e) => {
-                  if (isSameChecked) return
+                  if (isSameChecked) return;
                   setBillingInfo({
                     ...billingInfo,
                     address: e.currentTarget.value,
-                  })
+                  });
                 }}
                 containerClassName="md:col-span-4  col-span-8"
                 placeholder="Address"
@@ -336,11 +332,11 @@ const CreateOrderModal = ({
               <TextInput
                 value={billingInfo.address2}
                 onChange={(e) => {
-                  if (isSameChecked) return
+                  if (isSameChecked) return;
                   setBillingInfo({
                     ...billingInfo,
                     address2: e.currentTarget.value,
-                  })
+                  });
                 }}
                 containerClassName="md:col-span-4  col-span-8"
                 placeholder="Address 2"
@@ -348,11 +344,11 @@ const CreateOrderModal = ({
               <SelectPrimary
                 value={billingInfo.city}
                 onChange={(e: any) => {
-                  if (isSameChecked) return
+                  if (isSameChecked) return;
                   setBillingInfo({
                     ...billingInfo,
                     city: e.currentTarget.value,
-                  })
+                  });
                 }}
                 containerClassName="md:col-span-3 col-span-6"
                 label="City"
@@ -367,11 +363,11 @@ const CreateOrderModal = ({
               <SelectPrimary
                 value={billingInfo.state}
                 onChange={(e: any) => {
-                  if (isSameChecked) return
+                  if (isSameChecked) return;
                   setBillingInfo({
                     ...billingInfo,
                     state: e.currentTarget.value,
-                  })
+                  });
                 }}
                 containerClassName="md:col-span-2 col-span-2"
                 label="State"
@@ -386,12 +382,12 @@ const CreateOrderModal = ({
               <TextInput
                 value={billingInfo.zipcode}
                 onChange={(e) => {
-                  if (isSameChecked) return
+                  if (isSameChecked) return;
 
                   setBillingInfo({
                     ...billingInfo,
                     zipcode: e.currentTarget.value,
-                  })
+                  });
                 }}
                 containerClassName="md:col-span-3 col-span-4"
                 placeholder="Zip"
@@ -400,12 +396,12 @@ const CreateOrderModal = ({
               <SelectPrimary
                 value={billingInfo.country}
                 onChange={(e: any) => {
-                  if (isSameChecked) return
+                  if (isSameChecked) return;
 
                   setBillingInfo({
                     ...billingInfo,
                     country: e.currentTarget.value,
-                  })
+                  });
                 }}
                 containerClassName="md:col-span-3 col-span-4"
                 label="Country"
@@ -426,7 +422,7 @@ const CreateOrderModal = ({
             Create Order
           </PrimaryButton>
           <SecondaryButton
-            onClick={(e: any) => dispatch(toggleModal({ value: null }))}
+            // onClick={(e: any) => dispatch(toggleModal({ value: null }))}
             className="px-3 py-1"
           >
             Back
@@ -434,7 +430,7 @@ const CreateOrderModal = ({
         </div>
       </form>
     </ModalContainer>
-  )
-}
+  );
+};
 
-export default CreateOrderModal
+export default CreateOrderModal;

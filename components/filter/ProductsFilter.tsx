@@ -2,9 +2,6 @@ import { useQuery } from "@apollo/client";
 import { useState } from "react";
 import SelectOption from "../buttons/SelectOption";
 
-// Handle errors
-// import { addError } from "../../../../redux/error/errorSlice";
-// import { useAppDispatch } from "../../../../redux/hooks";
 import {
   GET_ALL_CATEGORIES,
   GET_ALL_SUBCATEGORIES,

@@ -1,8 +1,5 @@
 import PageWrapper from "../PageWrapper";
 
-import { toggleModal } from "../../redux/modal/modalSlice";
-
-import { useAppDispatch } from "../../redux/hooks";
 // import customPrompt from "../../utils/customPrompt";
 import InfoCardLarge from "../cards/InfoCardLarge";
 
