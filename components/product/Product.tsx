@@ -32,7 +32,7 @@ const ViewProduct = ({ categories, product, gqlAction }) => {
   // State to manage deletion of images
   const [selectedImgs, setSelectedImgs] = useState<any>([]);
   // Temp preview image
-  const [imgUrls, setImgUrls] = useState<any[]>([]);
+  const [imgUrls, setImgUrls] = useState<any[]>(product?.images);
 
   const [progress, setProgress] = useState(0);
 
@@ -82,11 +82,11 @@ const ViewProduct = ({ categories, product, gqlAction }) => {
 
     return (
       <div className="md:col-span-2 col-span-full row-span-6 grid grid-cols-12 h-fit">
-        {/* <img
-            className="col-span-9 w-full h-64 object-cover"
-            src={imgUrls[0] || img}
-            alt="img"
-          ></img> */}
+        <img
+          className="col-span-9 w-full h-64 object-cover"
+          src={imgUrls[0] || img}
+          alt="img"
+        ></img>
         <div className="col-span-3 h-64  overflow-y-auto overflow-x-none ">
           {images}
         </div>

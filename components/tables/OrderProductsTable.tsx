@@ -1,30 +1,30 @@
-import { QueryResult } from '@apollo/client'
-import { useEffect, useState } from 'react'
+import { QueryResult, useQuery } from "@apollo/client";
+import { useEffect, useState } from "react";
 
-import ProductsFilter from '../filter/ProductsFilter'
-import TableCard from '../cards/TableCard'
-import SelectPrimary from '../inputs/SelectPrimary'
-import LoadingSpinner from '../LoadingSpinner'
+import ProductsFilter from "../filter/ProductsFilter";
+import TableCard from "../cards/TableCard";
+import SelectPrimary from "../inputs/SelectPrimary";
+import LoadingSpinner from "../LoadingSpinner";
+import { GET_PRODUCTS } from "../../graphql/query_vars";
 
 const OrderProductsTable = ({
-  products,
   className,
   setCartItems,
 }: {
-  products: QueryResult
-  className?: string
-  setCartItems: any
+  className?: string;
+  setCartItems: any;
 }) => {
-  const { data, loading, error, refetch, networkStatus } = products
+  const { data, loading, error, refetch, networkStatus } =
+    useQuery(GET_PRODUCTS);
 
-  const [limit, setLimit] = useState(5)
-  const [skip, setSkip] = useState(0)
-  const [sort, setSort] = useState<null | string>(null)
-  const [order, setOrder] = useState<null | number>(null)
+  const [limit, setLimit] = useState(5);
+  const [skip, setSkip] = useState(0);
+  const [sort, setSort] = useState<null | string>(null);
+  const [order, setOrder] = useState<null | number>(null);
 
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState("");
 
-  const [filter, setFilter] = useState([])
+  const [filter, setFilter] = useState([]);
   useEffect(() => {
     refetch({
       input: {
@@ -35,8 +35,8 @@ const OrderProductsTable = ({
         filter: filter,
         search: search,
       },
-    })
-  }, [refetch, limit, skip, sort, order, filter, search])
+    });
+  }, [refetch, limit, skip, sort, order, filter, search]);
 
   const RenderTableItems = () => {
     if (!loading && !error) {
@@ -52,7 +52,7 @@ const OrderProductsTable = ({
                   <img
                     className="object-cover object-center font-light rounded-sm h-full w-full"
                     src={item.images[0]}
-                    alt={item.name + ' '}
+                    alt={item.name + " "}
                   ></img>
                 ) : (
                   <svg
@@ -100,23 +100,25 @@ const OrderProductsTable = ({
               <div
                 className="relative text-gray-600 justify-end flex"
                 onClick={(e: any) => {
-                  if (e.target.type === 'number') return
-                  const chosenQty = parseFloat(e.currentTarget.firstChild.value)
+                  if (e.target.type === "number") return;
+                  const chosenQty = parseFloat(
+                    e.currentTarget.firstChild.value
+                  );
                   setCartItems((prev: any[]) => {
                     if (!prev.some((val) => val._id === item._id)) {
-                      return [...prev, { ...item, qty: chosenQty }]
+                      return [...prev, { ...item, qty: chosenQty }];
                     }
                     const mappedItems = prev.map((val) => {
                       if (val._id === item._id) {
                         return {
                           ...val,
                           qty: val.qty + chosenQty,
-                        }
+                        };
                       }
-                      return val
-                    })
-                    return mappedItems
-                  })
+                      return val;
+                    });
+                    return mappedItems;
+                  });
 
                   //
                   // Doesn't work?
@@ -163,10 +165,10 @@ const OrderProductsTable = ({
               </div>
             </td>
           </tr>
-        )
-      })
+        );
+      });
     } else {
-      const skeleton = Array.from(Array(limit).keys())
+      const skeleton = Array.from(Array(limit).keys());
       return skeleton.map((i) => {
         return (
           <tr
@@ -221,19 +223,19 @@ const OrderProductsTable = ({
               </div>
             </td>
           </tr>
-        )
-      })
+        );
+      });
     }
-  }
+  };
 
   const handleSort = (string: string) => {
-    setSort(string)
+    setSort(string);
     if (order === -1 || string !== sort) {
-      setOrder(1)
+      setOrder(1);
     } else {
-      setOrder(-1)
+      setOrder(-1);
     }
-  }
+  };
 
   return (
     <TableCard className={className}>
@@ -254,7 +256,7 @@ const OrderProductsTable = ({
                 <input
                   value={search}
                   onChange={(e) => {
-                    setSearch(e.currentTarget.value)
+                    setSearch(e.currentTarget.value);
                   }}
                   className="rounded dark:bg-gray-900 dark:text-gray-300 px-2 py-0.5 
               w-full flex-1 
@@ -286,7 +288,7 @@ const OrderProductsTable = ({
             </th>
 
             <th
-              onClick={() => handleSort('name')}
+              onClick={() => handleSort("name")}
               className="lg:w-5/12 px-5 hover:text-gray-700 dark:hover:text-gray-200 py-3 "
             >
               Name
@@ -299,8 +301,8 @@ const OrderProductsTable = ({
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 className={` ml-1 mb-0.5 w-4  inline
-                  ${sort !== 'name' && 'hidden'}
-                  ${order === 1 ? 'rotate-0' : 'rotate-180 '}`}
+                  ${sort !== "name" && "hidden"}
+                  ${order === 1 ? "rotate-0" : "rotate-180 "}`}
               >
                 <line x1="12" y1="19" x2="12" y2="5"></line>
                 <polyline points="5 12 12 5 19 12"></polyline>
@@ -308,7 +310,7 @@ const OrderProductsTable = ({
             </th>
 
             <th
-              onClick={() => handleSort('stock')}
+              onClick={() => handleSort("stock")}
               className="w-1/12 hover:text-gray-700 dark:hover:text-gray-200"
             >
               Qty.
@@ -321,15 +323,15 @@ const OrderProductsTable = ({
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 className={` ml-1 mb-0.5 w-4 inline
-                  ${sort !== 'stock' && 'hidden'}
-                  ${order === 1 ? 'rotate-0' : 'rotate-180 '}`}
+                  ${sort !== "stock" && "hidden"}
+                  ${order === 1 ? "rotate-0" : "rotate-180 "}`}
               >
                 <line x1="12" y1="19" x2="12" y2="5"></line>
                 <polyline points="5 12 12 5 19 12"></polyline>
               </svg>
             </th>
             <th
-              onClick={() => handleSort('price')}
+              onClick={() => handleSort("price")}
               className="text-right lg:pr-8 pr-3.5 hover:text-gray-700 dark:hover:text-gray-200"
             >
               Price
@@ -342,8 +344,8 @@ const OrderProductsTable = ({
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 className={` ml-1 mb-0.5 w-4 inline
-                  ${sort !== 'price' && 'hidden'}
-                  ${order === 1 ? 'rotate-0' : 'rotate-180 '}`}
+                  ${sort !== "price" && "hidden"}
+                  ${order === 1 ? "rotate-0" : "rotate-180 "}`}
               >
                 <line x1="12" y1="19" x2="12" y2="5"></line>
                 <polyline points="5 12 12 5 19 12"></polyline>
@@ -366,8 +368,8 @@ const OrderProductsTable = ({
               >
                 {data.products.length === 0 &&
                 (filter.length > 0 || search.length > 0)
-                  ? 'No matching products found'
-                  : 'There are no more products to show'}
+                  ? "No matching products found"
+                  : "There are no more products to show"}
               </td>
             </tr>
           )}
@@ -385,9 +387,9 @@ const OrderProductsTable = ({
               className=""
               containerClassName="w-12"
               onChange={(e: any) => {
-                setLimit(parseInt(e.currentTarget.value))
+                setLimit(parseInt(e.currentTarget.value));
 
-                setSkip(0)
+                setSkip(0);
               }}
             >
               <option>5</option>
@@ -400,7 +402,7 @@ const OrderProductsTable = ({
             <button
               disabled={skip === 0}
               onClick={(e: any) => {
-                setSkip((prev: number) => prev - limit)
+                setSkip((prev: number) => prev - limit);
               }}
               className="p-0.5 active:outline hover:outline hover:outline-gray-500 disabled:outline-transparent dark:outline-gray-600 outline-2 rounded-sm  disabled:text-gray-300 dark:disabled:text-gray-700 dark:disabled:outline-transparent"
             >
@@ -421,9 +423,9 @@ const OrderProductsTable = ({
             </button>
 
             <button
-              disabled={products.data?.products?.length < limit}
+              disabled={data?.products?.length < limit}
               onClick={(e: any) => {
-                setSkip((prev: number) => prev + limit)
+                setSkip((prev: number) => prev + limit);
               }}
               className="ml-4 p-0.5 active:outline hover:outline hover:outline-gray-500 disabled:outline-transparent dark:outline-gray-600 outline-2 rounded-sm  disabled:text-gray-300 dark:disabled:text-gray-700 dark:disabled:outline-transparent"
             >
@@ -446,7 +448,7 @@ const OrderProductsTable = ({
         </div>
       </div>
     </TableCard>
-  )
-}
+  );
+};
 
-export default OrderProductsTable
+export default OrderProductsTable;

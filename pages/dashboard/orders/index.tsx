@@ -176,16 +176,10 @@ const Orders = () => {
       {(loading || networkStatus === 4) && <LoadingSpinner />}
 
       <div className="flex my-5">
-        <PrimaryButton
-          padding="px-5 py-1.5 mr-5"
-          onClick={(e: any) => {
-            e.preventDefault();
+        <Link href={`/dashboard/orders/new`}>
+          <PrimaryButton padding="px-5 py-1.5 mr-5">New Order</PrimaryButton>
+        </Link>
 
-            // dispatch(toggleModal({ value: ModalFormIDs.newOrder }))
-          }}
-        >
-          Create Order
-        </PrimaryButton>
         {/* <SecondaryButton padding="px-5 py-1.5">
           Manage Categories
         </SecondaryButton> */}
