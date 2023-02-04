@@ -15,16 +15,11 @@ import { setCookie, deleteCookie, getCookie } from "cookies-next";
 import { isAdmin } from "../../lib/auth/isAdmin";
 
 const RootMutation = {
-  createProduct: async (
-    _parent,
-    { productInput, sessionExpired },
-    { req, res }
-  ) => {
+  createProduct: async (_parent, { productInput }, { req, res }) => {
     const admin = await isAdmin(req);
     if (!admin) throw new Error("Easydash demo runs in read only mode");
     await dbConnect();
 
-    if (sessionExpired) throw new Error("Session expired");
     if (!productInput.subcategory)
       throw new Error("Please enter a Subcategory");
     if (productInput.category === "new-category")
@@ -99,14 +94,10 @@ const RootMutation = {
       subcategory: updateSubcat,
     };
   },
-  modifyProduct: async (
-    _parent,
-    { productInput, sessionExpired },
-    { isAdmin }
-  ) => {
+  modifyProduct: async (_parent, { productInput }) => {
+    const admin = await isAdmin(req);
+    if (!admin) throw new Error("Easydash demo runs in read only mode");
     await dbConnect();
-    if (sessionExpired) throw new Error("Session expired");
-    if (!isAdmin) throw new Error("Easydash runs in read only mode");
 
     if (!productInput.subcategory && productInput.category)
       throw new Error("Must enter a subcategory when changing category.");
@@ -252,14 +243,11 @@ const RootMutation = {
 
     return finalProduct;
   },
-  deleteProducts: async (
-    _parent,
-    { productIds, sessionExpired },
-    { isAdmin }
-  ) => {
+  deleteProducts: async (_parent, { productIds }) => {
+    const admin = await isAdmin(req);
+    if (!admin) throw new Error("Easydash demo runs in read only mode");
     await dbConnect();
-    if (sessionExpired) throw new Error("Session expired");
-    if (!isAdmin) throw new Error("Easydash runs in read only mode");
+
     const s3 = new S3({ apiVersion: "2006-03-01", region: "us-east-2" });
 
     let deletedCount = 0;

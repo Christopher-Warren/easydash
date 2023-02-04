@@ -206,6 +206,8 @@ const RootQuery = {
     return subcategories;
   },
   getOrder: async (_parent, { input }) => {
+    // const admin = await isAdmin(req);
+    // if (!admin) throw new Error("Easydash demo runs in read only mode");
     await dbConnect();
     const order = await Order.findById(input).populate({
       path: "products",
@@ -218,6 +220,8 @@ const RootQuery = {
     return order.populate("products");
   },
   getAllOrders: async (_parent, { input }) => {
+    // const admin = await isAdmin(req);
+    // if (!admin) throw new Error("Easydash demo runs in read only mode");
     await dbConnect();
 
     const limit = input?.limit ? input.limit : null;
