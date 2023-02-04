@@ -32,10 +32,6 @@ const ProductsTable = ({
 
   const [filter, setFilter] = useState([]);
 
-  // useEffect(() => {
-  //   if (location.state) setFilter(location.state)
-  // }, [location])
-
   const router = useRouter();
 
   useEffect(() => {
@@ -217,30 +213,20 @@ const ProductsTable = ({
     }
   };
 
-  // const handleDelete = (e: any) => {
-  //   customPrompt(
-  //     {
-  //       title: "Are you sure you wish to delete these items?",
-  //       body: "X items will be deleted",
-  //       confirm: "DELETE",
-  //       cancel: "BACK",
-  //     },
-  //     () => {
-  //       const filterIds = data.products.filter(
-  //         (item: any, idx: any) => isChecked[idx]
-  //       );
-  //       const selectedProducts = filterIds.map((item: any) => item._id);
-  //       deleteProducts({
-  //         variables: {
-  //           productIds: selectedProducts,
-  //         },
-  //       }).then((data: any) => {
-  //         setIsChecked((data) => data.map((i) => false));
-  //         refetch();
-  //       });
-  //     }
-  //   );
-  // };
+  const handleDelete = (e: any) => {
+    const filterIds = data.products.filter(
+      (item: any, idx: any) => isChecked[idx]
+    );
+    const selectedProducts = filterIds.map((item: any) => item._id);
+    deleteProducts({
+      variables: {
+        productIds: selectedProducts,
+      },
+    }).then((data: any) => {
+      setIsChecked((data) => data.map((i) => false));
+      refetch();
+    });
+  };
   return (
     <TableCard className={className}>
       <table className="table-auto w-full capitalize overflow-x-scroll">
@@ -273,7 +259,7 @@ const ProductsTable = ({
           </tr>
 
           <tr
-            className={`relative text-base dark:text-gray-400 text-gray-500 ${
+            className={`relative text-base text-left dark:text-gray-400 text-gray-500 ${
               isChecked.some((val) => val === true) &&
               "bg-purple-50 dark:bg-gray-800 "
             }`}
@@ -322,7 +308,7 @@ const ProductsTable = ({
                 <th className="text-right lg:pr-8 pr-3.5">
                   <button
                     className=" p-1 rounded-full bg-red-400 text-white hover:bg-red-500 transition-colors"
-                    // onClick={handleDelete}
+                    onClick={handleDelete}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
