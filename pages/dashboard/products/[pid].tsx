@@ -6,8 +6,8 @@ import category from "../../../models/category";
 import product from "../../../models/product.js";
 import { serializeModelData } from "../../../utils/serializeModelData";
 
-export async function getServerSideProps(context) {
-  const productId = context.query.pid;
+export async function getServerSideProps({ query }) {
+  const productId = query.pid;
   // @ts-ignore
   const item = await product.findById(productId);
   const categories = await category

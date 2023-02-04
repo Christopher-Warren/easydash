@@ -64,17 +64,6 @@ const ProductsTable = ({
               "bg-purple-50 dark:bg-gray-700/50 odd:dark:bg-gray-700/50"
             }`}
             key={index}
-            onClick={(e: any) => {
-              if (e.target.type === "checkbox") return;
-
-              // router.push(`/${item._id}`);
-              // dispatch(
-              //   toggleModal({
-              //     value: ModalFormIDs.editProduct,
-              //     productId: item._id,
-              //   })
-              // );
-            }}
           >
             <td className="">
               <Link
