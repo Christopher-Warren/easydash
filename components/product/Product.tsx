@@ -1,5 +1,6 @@
 import { useMutation } from "@apollo/client";
 import axios from "axios";
+import { useRouter } from "next/router";
 import { Fragment, useState } from "react";
 import { CREATE_ORDER } from "../../graphql/mutation_vars";
 import PrimaryButton from "../buttons/PrimaryButton";
@@ -13,8 +14,7 @@ import Progress from "../progress/Progress";
 const ViewProduct = ({ categories, product, gqlAction }) => {
   const [createProduct] = useMutation(gqlAction);
 
-  // Global state
-  // const dispatch = useAppDispatch();
+  const router = useRouter();
 
   // Form state
   const [name, setName] = useState(product?.name || "");
@@ -54,7 +54,7 @@ const ViewProduct = ({ categories, product, gqlAction }) => {
       });
   };
 
-  const renderImagePreview = () => {
+  const RenderImagePreview = () => {
     if (!imgUrls) return;
 
     const images = imgUrls.map((url, index) => {
@@ -236,7 +236,7 @@ const ViewProduct = ({ categories, product, gqlAction }) => {
           ></TextInput>
         </div>
 
-        {renderImagePreview()}
+        <RenderImagePreview />
 
         <TextInput
           containerClassName="col-span-2 md:col-span-1"
@@ -267,12 +267,7 @@ const ViewProduct = ({ categories, product, gqlAction }) => {
             padding="px-10 py-2"
             onClick={(e: any) => {
               e.preventDefault();
-              const closeModal = () => {
-                // dispatch(toggleModal({ value: null }));
-              };
-
-              // if (hasChanged) customPrompt(closePromptOpts, closeModal);
-              // if (!hasChanged) closeModal();
+              router.back();
             }}
           >
             Back

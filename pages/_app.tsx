@@ -44,11 +44,9 @@ function MyApp({ Component, pageProps }) {
       <ThemeContextProvider>
         <div className="w-full h-screen absolute flex items-center justify-center z-50 pointer-events-none">
           <MoonLoader
-            className="text-white"
             color="#A855F7"
             loading={loading}
             aria-label="Loading Spinner"
-            data-testid="loader"
           />
         </div>
         <div className="dark bg-gray-900 min-h-screen">

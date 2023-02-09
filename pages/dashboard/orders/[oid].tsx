@@ -8,6 +8,7 @@ import InfoCardSmall from "../../../components/cards/InfoCardSmall";
 import TableCard from "../../../components/cards/TableCard";
 import Order from "../../../models/order";
 import { serializeModelData } from "../../../utils/serializeModelData";
+import { useRouter } from "next/router";
 
 export async function getServerSideProps({ query }) {
   const orderNumber = query.oid;
@@ -43,6 +44,8 @@ const ViewOrder = ({ order }) => {
   //   if (!order && !loading) return <div>404</div>
 
   //   if (!order) return <LoadingSpinner />
+
+  const router = useRouter();
 
   const RenderTableItems = () => {
     return order.products.map((item: any, index: any) => {
@@ -108,7 +111,15 @@ const ViewOrder = ({ order }) => {
   return (
     <PageWrapper>
       <div className="flex">
-        <SecondaryButton padding="px-5 py-1.5">{"<- Back"}</SecondaryButton>
+        <SecondaryButton
+          padding="px-5 py-1.5"
+          onClick={(e) => {
+            e.preventDefault();
+            router.back();
+          }}
+        >
+          {"<- Back"}
+        </SecondaryButton>
       </div>
 
       {/* Head */}
