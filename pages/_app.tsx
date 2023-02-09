@@ -7,11 +7,9 @@ import SideBar from "../components/SideBar";
 import { Router, useRouter } from "next/router";
 import { ThemeContextProvider } from "../hooks/useTheme";
 import Navbar from "../components/navigation/store-navigation/Navbar";
-import React from "react";
-import { ClipLoader } from "react-spinners";
-import RingLoader from "react-spinners/RingLoader";
-import CircleLoader from "react-spinners/CircleLoader";
 import MoonLoader from "react-spinners/MoonLoader";
+
+import { useEffect, useState } from "react";
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -19,14 +17,12 @@ function MyApp({ Component, pageProps }) {
   const inLogin = router.pathname.includes("/dashboard/login");
   const inDashboard = router.pathname.includes("/dashboard");
 
-  const [loading, setLoading] = React.useState(false);
-  React.useEffect(() => {
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
     const start = () => {
-      console.log("start");
       setLoading(true);
     };
     const end = () => {
-      console.log("finished");
       setLoading(false);
     };
     Router.events.on("routeChangeStart", start);
