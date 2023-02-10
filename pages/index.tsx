@@ -6,26 +6,40 @@ import ShopBySaleSection from "../components/shop_home/ShopBySale";
 import IncintiveSection from "../components/shop_home/IncintiveSection";
 
 import Footer from "../components/navigation/store-navigation/Footer";
-import { withData } from "../components/withData";
-import {
-  GET_ALL_SUBCATEGORIES,
-  GET_SHOP_HOME_DATA,
-} from "../graphql/query_vars";
 
-const ShopHome = () => {
-  const ShopByCategory = withData(ShopByCategorySection, GET_SHOP_HOME_DATA);
-  const ShopBySubcategory = withData(
-    ShopBySubcategorySection,
-    GET_ALL_SUBCATEGORIES,
-    { limit: 3 }
-  );
+import Category from "../models/category.js";
+
+import Subcategory from "../models/subcategory";
+
+import { serializeModelData } from "../utils/serializeModelData";
+
+export const getServerSideProps = async () => {
+  const categories = await Category.find({}).populate("products").limit(3);
+
+  const subcategories = await Subcategory.find({})
+    .populate("products")
+    .limit(3);
+  return {
+    props: {
+      categories: serializeModelData(categories),
+      subcategories: serializeModelData(subcategories),
+    },
+  };
+};
+
+const ShopHome = ({ categories, subcategories }) => {
+  // const ShopBySubcategory = withData(
+  //   ShopBySubcategorySection,
+  //   GET_ALL_SUBCATEGORIES,
+  //   { limit: 3 }
+  // );
 
   return (
     <>
       <HeroSection />
-      <ShopByCategory />
+      <ShopByCategorySection categories={categories} />
       <IncintiveSection />
-      <ShopBySubcategory />
+      <ShopBySubcategorySection subcategories={subcategories} />
       <ShopBySaleSection />
       <Footer />
     </>

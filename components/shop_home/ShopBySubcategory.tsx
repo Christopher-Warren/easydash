@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function ShopBySubcategory({ data }: any) {
+export default function ShopBySubcategory({ subcategories }: any) {
   return (
     <div className="bg-white">
       <div className="max-w-xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -12,7 +12,7 @@ export default function ShopBySubcategory({ data }: any) {
         </p>
 
         <div className="mt-10 space-y-12 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-x-8">
-          {data.getAllSubcategories.map((subcategory: any) => (
+          {subcategories.map((subcategory: any) => (
             <Link
               key={subcategory.name}
               href={`shop/subcategories/${subcategory.name}`}

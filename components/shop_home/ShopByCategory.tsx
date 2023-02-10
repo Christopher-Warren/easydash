@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { FeaturedCategoryData } from "../types";
 
-export default function ShopByCategory({ data }: FeaturedCategoryData) {
-  const primaryCategory = data?.getAllCategories[0];
-  const secondaryCategory = data?.getAllCategories[1];
-  const secondaryCategory2 = data?.getAllCategories[2];
+export default function ShopByCategory({ categories }: FeaturedCategoryData) {
+  const primaryCategory = categories[0];
+  const secondaryCategory = categories[1];
+  const secondaryCategory2 = categories[2];
 
   return (
     <div className="bg-gray-50">
