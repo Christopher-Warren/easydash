@@ -186,7 +186,7 @@ const RootQuery = {
           model: "Subcategory",
         },
       });
-    console.log(categories);
+
     return categories;
   },
   getAllSubcategories: async (_parent, { limit, name }) => {
