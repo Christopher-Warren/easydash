@@ -1,8 +1,9 @@
-import { Link } from 'react-router-dom'
-import { urlFromItemName } from '../../../../utils/urlFromItemName'
+// import { urlFromItemName } from "../../../../utils/urlFromItemName";
 
-export default function ListProductsByCategory({ data }: any) {
-  return data.getAllCategories.map((category: any) => {
+import Link from "next/link";
+
+const ListProductsByCategory = ({ categories }: any) => {
+  return categories.map((category: any) => {
     return (
       <div key={category._id} className="bg-white">
         <div className="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -26,7 +27,7 @@ export default function ListProductsByCategory({ data }: any) {
                 <div className="flex-1 p-4 space-y-2 flex flex-col">
                   <h3 className="text-sm font-medium text-gray-900">
                     <Link
-                      to={{
+                      href={{
                         pathname: `/shop/categories/${category.name}/${product._id}`,
                       }}
                     >
@@ -49,6 +50,8 @@ export default function ListProductsByCategory({ data }: any) {
           </div>
         </div>
       </div>
-    )
-  })
-}
+    );
+  });
+};
+
+export default ListProductsByCategory;

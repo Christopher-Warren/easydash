@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom'
-import { urlFromItemName } from '../../../../utils/urlFromItemName'
+import { useQuery } from "@apollo/client";
+import { Link } from "react-router-dom";
+import { urlFromItemName } from "../../../../utils/urlFromItemName";
 
 export default function ListProductsByCategory({ data }: any) {
   return data.getAllCategories.map((category: any) => {
@@ -49,6 +50,6 @@ export default function ListProductsByCategory({ data }: any) {
           </div>
         </div>
       </div>
-    )
-  })
+    );
+  });
 }
