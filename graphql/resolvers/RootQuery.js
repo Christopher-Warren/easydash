@@ -7,6 +7,7 @@ import generateMongoFilterStages from "../../utils/generateMongoFilterStages";
 import dbConnect from "../../lib/dbConnect";
 import { jwtVerify } from "jose";
 import { getCookie } from "cookies-next";
+import mongoose from "mongoose";
 
 const RootQuery = {
   products: async (_parent, args = {}, { req, res }, _info) => {
@@ -132,14 +133,25 @@ const RootQuery = {
     return products;
   },
   getCartItems: async (_parent, { input }) => {
-    console.log(input);
+    // console.log("getcart", input);
     const products = await Product.find({ _id: input })
       .populate("category")
       .populate("subcategory");
 
-    // console.log(products);
+    const ids = input.map((i) => mongoose.Types.ObjectId(i._id));
 
-    return products;
+    // TODO: Need to figure out how to do
+    // this only using mongodb
+    const mappedprods = products.map((prod, idx) => {
+      const quantity = input[idx].quantity;
+      return { ...prod._doc, quantity };
+    });
+
+    // console.log(mappedprods);
+
+    // TODO: add quantity to each item
+
+    return mappedprods;
   },
   getProduct: async (_parent, args) => {
     // @TODO: Take in product id only, having

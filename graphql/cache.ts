@@ -9,4 +9,3 @@ if (typeof window !== "undefined") {
 export const cartItemsVar = makeVar<{ _id: string; quantity: number }[]>(
   cart || []
 );
-console.log("cache", cartItemsVar());

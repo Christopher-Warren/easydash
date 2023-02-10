@@ -27,6 +27,7 @@ export const GET_CART_ITEMS = gql`
       }
       price
       description
+      quantity
     }
   }
 `;

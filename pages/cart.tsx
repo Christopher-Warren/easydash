@@ -14,11 +14,16 @@ import useCartCache from "../hooks/useCartCache";
 const CartPage = () => {
   const cart = useCartCache();
 
-  const { data } = useQuery(GET_CART_ITEMS, {
+  const { data, refetch } = useQuery(GET_CART_ITEMS, {
     variables: {
       input: cart,
     },
   });
+
+  // TODO: prevent refetch on mount
+  useEffect(() => {
+    refetch({ input: cart });
+  }, [cart]);
 
   if (!data) return null;
 
@@ -88,7 +93,6 @@ const CartPage = () => {
                           >
                             Quantity, {product.name}
                           </label>
-                          {console.log(cart[productIdx].quantity)}
                           <select
                             value={cart[productIdx].quantity}
                             onChange={(e) => {
@@ -219,7 +223,8 @@ const CartPage = () => {
                 <dd className="text-base font-medium text-gray-900">
                   ${" "}
                   {`${data.getCartItems.reduce(
-                    (prev: any, curr: any, idx: any) => prev + curr.price,
+                    (prev: any, curr: any, idx: any) =>
+                      prev + curr.price * curr.quantity,
                     0
                   )}`}
                 </dd>
