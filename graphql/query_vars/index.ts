@@ -31,12 +31,6 @@ export const GET_CART_ITEMS = gql`
   }
 `;
 
-export const GET_CART_ITEMS2 = gql`
-  query GetCartItems {
-    cartItems @client
-  }
-`;
-
 export const GET_SHOP_HOME_DATA = gql`
   query categories {
     getAllCategories {

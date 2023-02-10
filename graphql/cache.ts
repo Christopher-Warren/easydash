@@ -1,19 +1,6 @@
 import { InMemoryCache, makeVar } from "@apollo/client";
 
-export const cache: InMemoryCache = new InMemoryCache({
-  typePolicies: {
-    Query: {
-      fields: {
-        cartItems: {
-          read() {
-            console.log("read");
-            return cartItemsVar();
-          },
-        },
-      },
-    },
-  },
-});
+export const cache: InMemoryCache = new InMemoryCache({});
 let cart = null;
 if (typeof window !== "undefined") {
   cart = JSON.parse(localStorage.getItem("cart"));

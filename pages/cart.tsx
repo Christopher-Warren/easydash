@@ -8,19 +8,17 @@ import {
 import Link from "next/link";
 import { useEffect } from "react";
 import { cartItemsVar } from "../graphql/cache";
-import { GET_CART_ITEMS, GET_CART_ITEMS2 } from "../graphql/query_vars";
+import { GET_CART_ITEMS } from "../graphql/query_vars";
 import useCartCache from "../hooks/useCartCache";
 
 const CartPage = () => {
-  const cart = useReactiveVar(cartItemsVar);
+  const cart = useCartCache();
 
   const { data } = useQuery(GET_CART_ITEMS, {
     variables: {
       input: cart,
     },
   });
-
-  useCartCache(cart);
 
   if (!data) return null;
 
@@ -52,7 +50,7 @@ const CartPage = () => {
                   <li key={product._id} className="flex py-6 sm:py-10">
                     <div className="flex-shrink-0">
                       <img
-                        src={product.images}
+                        src={product.images[0]}
                         alt={product.description}
                         className="w-24 h-24 rounded-md object-center object-cover sm:w-48 sm:h-48"
                       />
@@ -90,19 +88,16 @@ const CartPage = () => {
                           >
                             Quantity, {product.name}
                           </label>
+                          {console.log(cart[productIdx].quantity)}
                           <select
                             value={cart[productIdx].quantity}
                             onChange={(e) => {
-                              const itemExists = cart.find(
-                                (val) => val._id === product._id
+                              // get cart item and copy
+                              cart[productIdx].quantity = parseInt(
+                                e.currentTarget.value
                               );
-
-                              if (itemExists)
-                                itemExists.quantity = parseInt(
-                                  e.currentTarget.value
-                                );
-
-                              cartItemsVar([...cartItemsVar()]);
+                              // update cart items
+                              cartItemsVar([...cart]);
                             }}
                             id={`quantity-${productIdx}`}
                             name={`quantity-${productIdx}`}

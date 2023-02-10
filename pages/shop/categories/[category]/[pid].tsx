@@ -44,9 +44,8 @@ export const getServerSideProps = async ({ params }) => {
 
 const ViewProduct = ({ product }) => {
   const [selectedSize, setSelectedSize] = useState("size");
-  const cart = useReactiveVar(cartItemsVar);
 
-  useCartCache(cart);
+  const cart = useCartCache();
 
   const handleAddProduct = (e) => {
     e.preventDefault();

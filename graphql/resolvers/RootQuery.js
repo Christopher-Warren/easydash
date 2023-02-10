@@ -132,9 +132,12 @@ const RootQuery = {
     return products;
   },
   getCartItems: async (_parent, { input }) => {
+    console.log(input);
     const products = await Product.find({ _id: input })
       .populate("category")
       .populate("subcategory");
+
+    // console.log(products);
 
     return products;
   },
