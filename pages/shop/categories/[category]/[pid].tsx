@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CheckIcon,
   QuestionMarkCircleIcon,
@@ -13,6 +13,7 @@ import { cartItemsVar } from "../../../../graphql/cache";
 import Product from "../../../../models/product.js";
 import { serializeModelData } from "../../../../utils/serializeModelData";
 import Link from "next/link";
+import useCartCache from "../../../../hooks/useCartCache";
 
 const noSizes = [
   {
@@ -44,6 +45,8 @@ export const getServerSideProps = async ({ params }) => {
 const ViewProduct = ({ product }) => {
   const [selectedSize, setSelectedSize] = useState("size");
   const cart = useReactiveVar(cartItemsVar);
+
+  useCartCache(cart);
 
   const handleAddProduct = (e) => {
     e.preventDefault();
