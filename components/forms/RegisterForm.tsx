@@ -1,31 +1,33 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import PrimaryButton from '../buttons/PrimaryButton'
-import FormInput from '../LoginInput'
+import { useState } from "react";
+import Link from "next/link";
+import PrimaryButton from "../buttons/PrimaryButton";
+import FormInput from "../LoginInput";
 
-import { validatePassword } from '../../utils/validatePassword'
-import { useMutation } from '@apollo/client'
-import LoadingSpinner from '../LoadingSpinner'
-import { CREATE_USER } from '../../graphql/mutation_vars'
+import { validatePassword } from "../../utils/validatePassword";
+import { useMutation } from "@apollo/client";
+import LoadingSpinner from "../LoadingSpinner";
+import { CREATE_USER } from "../../graphql/mutation_vars";
 
 const RegisterForm = () => {
-  const [error, setError] = useState<string[]>([])
+  const [error, setError] = useState<string[]>([]);
 
-  const [createUser, { data, loading }] = useMutation(CREATE_USER)
+  const [createUser, { data, loading }] = useMutation(CREATE_USER);
 
   return (
     <form
       className="relative"
       onSubmit={async (e: any) => {
-        e.preventDefault()
-        const formData = new FormData(e.target as HTMLFormElement)
+        e.preventDefault();
+        const formData = new FormData(e.target as HTMLFormElement);
 
-        const email = formData.get('email')
+        const email = formData.get("email");
 
-        const password = formData.get('password')?.toString()
-        const password2 = formData.get('password2')?.toString()
+        const password = formData.get("password")?.toString();
+        const password2 = formData.get("password2")?.toString();
 
-        password && password2 && validatePassword(password, password2, setError)
+        password &&
+          password2 &&
+          validatePassword(password, password2, setError);
 
         try {
           await createUser({
@@ -33,7 +35,7 @@ const RegisterForm = () => {
               email: email,
               password: password,
             },
-          })
+          });
         } catch (error) {}
       }}
     >
@@ -68,7 +70,7 @@ const RegisterForm = () => {
           <div className="flex justify-between -mt-1 text-gray-600">
             <div>
               <span>Already have an account? </span>
-              <Link to="/dashboard/login" className="text-blue-700 underline">
+              <Link href="/dashboard/login" className="text-blue-700 underline">
                 Login
               </Link>
             </div>
@@ -78,9 +80,9 @@ const RegisterForm = () => {
             <PrimaryButton type="submit">CREATE ACCOUNT</PrimaryButton>
           </div>
           <div className="absolute bottom-0 list-none">
-            {error.length > 0 && 'Invalid Password'}
+            {error.length > 0 && "Invalid Password"}
             {error.map((i, idx) => {
-              return <li key={idx}>{i}</li>
+              return <li key={idx}>{i}</li>;
             })}
           </div>
         </>
@@ -92,7 +94,7 @@ const RegisterForm = () => {
           <div className="flex justify-between -mt-1 text-gray-600">
             <div>
               <span>You may now </span>
-              <Link to="/dashboard/" className="text-blue-700 underline">
+              <Link href="/dashboard/" className="text-blue-700 underline">
                 Login
               </Link>
             </div>
@@ -100,7 +102,7 @@ const RegisterForm = () => {
         </>
       )}
     </form>
-  )
-}
+  );
+};
 
-export default RegisterForm
+export default RegisterForm;

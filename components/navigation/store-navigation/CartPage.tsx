@@ -5,9 +5,9 @@ import {
   QuestionMarkCircleIcon,
   XIcon,
 } from "@heroicons/react/solid";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { cartItemsVar } from "../../../graphql/cache";
-import { GET_CART_ITEMS, GET_CART_ITEMS2 } from "../../../graphql/query_vars";
+import { GET_CART_ITEMS } from "../../../graphql/query_vars";
 
 export default function CartPage() {
   const cart = useReactiveVar(cartItemsVar);
@@ -58,7 +58,7 @@ export default function CartPage() {
                           <div className="flex justify-between">
                             <h3 className="text-sm">
                               <Link
-                                to={`/shop/categories/${product.category.name}/${product._id}`}
+                                href={`/shop/categories/${product.category.name}/${product._id}`}
                                 className="font-medium text-gray-700 hover:text-gray-800"
                               >
                                 {product.name}
