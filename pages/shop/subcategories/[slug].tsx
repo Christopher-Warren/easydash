@@ -1,6 +1,5 @@
 import Link from "next/link";
 import dbConnect from "../../../lib/dbConnect";
-import { FeaturedCategoryData } from "../types";
 
 import Subcategory from "../../../models/subcategory.js";
 
@@ -20,7 +19,7 @@ export const getServerSideProps = async ({ params }) => {
   };
 };
 
-function ShopBySubcategory({ subcategories }: FeaturedCategoryData) {
+function ShopBySubcategory({ subcategories }) {
   return <ListProductsByCategory categories={subcategories} />;
 }
 

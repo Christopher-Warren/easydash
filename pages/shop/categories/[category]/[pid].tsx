@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   CheckIcon,
   QuestionMarkCircleIcon,
@@ -6,7 +6,6 @@ import {
 } from "@heroicons/react/solid";
 import { RadioGroup } from "@headlessui/react";
 import { ShieldCheckIcon } from "@heroicons/react/outline";
-import { useQuery, useReactiveVar } from "@apollo/client";
 
 import { cartItemsVar } from "../../../../graphql/cache";
 

@@ -1,8 +1,4 @@
-import { useQuery } from "@apollo/client";
-import { GET_ALL_BY_CATEGORY } from "../../../../graphql/query_vars";
-import Footer from "../../../../components/navigation/store-navigation/Footer";
 import ListProductsByCategory from "../../../../components/navigation/store-navigation/shop-by-category/ListProductsByCategory";
-import { useRouter } from "next/router";
 
 import Category from "../../../../models/category";
 import dbConnect from "../../../../lib/dbConnect";

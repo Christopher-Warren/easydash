@@ -11,8 +11,6 @@ import { listOfStates } from "../../../../utils/forms/listOfStates";
 import Checkbox from "../../../../components/inputs/Checkbox";
 import PrimaryButton from "../../../../components/buttons/PrimaryButton";
 import SecondaryButton from "../../../../components/buttons/SecondaryButton";
-import Product from "../../../../models/product";
-import { serializeModelData } from "../../../../utils/serializeModelData";
 
 const CreateOrderModal = ({ products }) => {
   const [createOrder] = useMutation(CREATE_ORDER);

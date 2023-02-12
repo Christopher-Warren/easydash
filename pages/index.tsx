@@ -7,12 +7,6 @@ import IncintiveSection from "../components/shop_home/IncintiveSection";
 
 import Footer from "../components/navigation/store-navigation/Footer";
 
-import Category from "../models/category.js";
-
-import Subcategory from "../models/subcategory";
-
-import { serializeModelData } from "../utils/serializeModelData";
-import dbConnect from "../lib/dbConnect";
 import { useQuery } from "@apollo/client";
 import {
   GET_ALL_SUBCATEGORIES,
