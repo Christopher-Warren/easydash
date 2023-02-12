@@ -8,3 +8,5 @@ env.js
 
 client/src/pages/shop/components
 .next
+
+client.old
