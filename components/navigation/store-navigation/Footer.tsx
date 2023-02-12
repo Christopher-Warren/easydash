@@ -1,11 +1,10 @@
-import { useQuery } from '@apollo/client'
-import { GET_SHOP_HOME_DATA } from '../../../graphql/query_vars'
-import { FeaturedCategoryProps } from '../types'
+import { useQuery } from "@apollo/client";
+import { GET_SHOP_HOME_DATA } from "../../../graphql/query_vars";
 
 const Footer = () => {
-  const { data } = useQuery<FeaturedCategoryProps>(GET_SHOP_HOME_DATA)
+  const { data } = useQuery(GET_SHOP_HOME_DATA);
 
-  if (!data) return null
+  if (!data) return null;
   return (
     <footer aria-labelledby="footer-heading" className="bg-gray-900">
       <h2 id="footer-heading" className="sr-only">
@@ -100,7 +99,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

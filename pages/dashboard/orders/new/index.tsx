@@ -38,7 +38,6 @@ const CreateOrderModal = ({ products }) => {
       <div className="flex flex-col  lg:flex-row gap-6 ">
         <OrderProductsTable
           className="lg:w-2/3 w-full shadow-md "
-          products={products}
           setCartItems={setCartItems}
         ></OrderProductsTable>
         <InfoCardSmall title="Cart" className="lg:w-1/3 h-full">

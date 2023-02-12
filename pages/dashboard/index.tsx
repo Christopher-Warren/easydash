@@ -1,4 +1,4 @@
-import Home from "../../client/src/pages/dashboard/Home";
+import Home from "../../components/dashboard/Home";
 import useTheme from "../../hooks/useTheme";
 
 // export async function getServerSideProps({ req, res }) {

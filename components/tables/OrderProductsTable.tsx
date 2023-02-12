@@ -7,13 +7,7 @@ import SelectPrimary from "../inputs/SelectPrimary";
 import LoadingSpinner from "../LoadingSpinner";
 import { GET_PRODUCTS } from "../../graphql/query_vars";
 
-const OrderProductsTable = ({
-  className,
-  setCartItems,
-}: {
-  className?: string;
-  setCartItems: any;
-}) => {
+const OrderProductsTable = ({ className, setCartItems }) => {
   const { data, loading, error, refetch, networkStatus } =
     useQuery(GET_PRODUCTS);
 

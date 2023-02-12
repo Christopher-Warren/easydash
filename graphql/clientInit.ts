@@ -1,7 +1,7 @@
 import { ApolloClient, HttpLink, from } from "@apollo/client/";
 import { onError } from "@apollo/client/link/error";
 
-import { cache, isLoggedInVar, isAdminVar } from "./cache";
+import { cache } from "./cache";
 
 import { EXTEND_TYPE_DEFS } from "./types_extension";
 
@@ -12,21 +12,7 @@ const httpLink = new HttpLink({
   credentials: "include",
 });
 
-const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors) {
-    graphQLErrors.forEach((error) => {
-      if (error.message.includes("Session expired")) {
-        console.log("session expired, login again");
-        localStorage.removeItem("role");
-        localStorage.removeItem("user");
-        isLoggedInVar(false);
-        isAdminVar(false);
-      }
-
-      // store.dispatch(addError(error.message));
-    });
-  }
-});
+const errorLink = onError(({ graphQLErrors, networkError }) => {});
 
 export const client = new ApolloClient({
   cache: cache,

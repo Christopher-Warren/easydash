@@ -30,6 +30,7 @@ function classNames(...classes) {
 export const getServerSideProps = async ({ params }) => {
   const productId = params.pid;
 
+  // @ts-ignore
   const product = await Product.findById(productId)
     .populate("category")
     .populate("subcategory");

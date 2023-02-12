@@ -8,6 +8,8 @@ import ListProductsByCategory from "../../../components/navigation/store-navigat
 
 export const getServerSideProps = async ({ params }) => {
   await dbConnect();
+
+  // @ts-ignore
   const subcategories = await Subcategory.find({ name: params.slug })
     .populate("products")
     .limit(3);

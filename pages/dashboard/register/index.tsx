@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Link from "next/link";
-import { validatePassword } from "../../../client/src/utils/validatePassword";
-import LoadingSpinner from "../../../client/src/components/LoadingSpinner";
-import LoginInput from "../../../client/src/components/LoginInput";
-import PrimaryButton from "../../../client/src/components/buttons/PrimaryButton";
+import { validatePassword } from "../../../utils/validatePassword";
+import LoadingSpinner from "../../../components/LoadingSpinner";
+import LoginInput from "../../../components/LoginInput";
+import PrimaryButton from "../../../components/buttons/PrimaryButton";
 import LoginWrapper from "../../../components/LoginWrapper";
 
 const Register = () => {

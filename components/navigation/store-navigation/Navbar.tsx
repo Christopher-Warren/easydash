@@ -5,14 +5,11 @@ import { GET_SHOP_HOME_DATA } from "../../../graphql/query_vars";
 import { MobileNav } from "./navbar/MobileNav";
 import { RightNav } from "./navbar/RightNav";
 import { LeftNav } from "./navbar/LeftNav";
-// import { FeaturedCategoryProps } from '../types'
-
-type FeaturedCategoryProps = any;
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 
-  const { data } = useQuery<FeaturedCategoryProps>(GET_SHOP_HOME_DATA);
+  const { data } = useQuery(GET_SHOP_HOME_DATA);
 
   if (!data) return null;
   return (

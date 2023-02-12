@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { FeaturedCategoryData } from "../types";
 
-export default function ShopByCategory({ categories }: FeaturedCategoryData) {
+export default function ShopByCategory({ categories }) {
   const primaryCategory = categories[0];
   const secondaryCategory = categories[1];
   const secondaryCategory2 = categories[2];

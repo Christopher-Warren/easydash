@@ -36,6 +36,8 @@ export const getServerSideProps = async ({ params }) => {
     we should probably find a solution that takes care of all of our populations
     in one method
 */
+
+  // @ts-ignore
   const categories = await Category.find({ name: category })
     .populate("products")
     .populate("subcategories")

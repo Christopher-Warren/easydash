@@ -8,7 +8,7 @@ export default function ListProductsBySubcategory({ data }: any) {
       <div key={subcategory._id} className="bg-white">
         <div className="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
           <span className="text-lg">
-            <Link to={`/shop/categories/${subcategory.category.name}`}>
+            <Link href={`/shop/categories/${subcategory.category.name}`}>
               {subcategory.category.name}
             </Link>
           </span>
@@ -34,7 +34,7 @@ export default function ListProductsBySubcategory({ data }: any) {
                 <div className="flex-1 p-4 space-y-2 flex flex-col">
                   <h3 className="text-sm font-medium text-gray-900">
                     <Link
-                      to={{
+                      href={{
                         pathname: `/shop/categories/${subcategory.name}/${product._id}`,
                       }}
                     >

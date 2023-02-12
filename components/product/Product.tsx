@@ -84,7 +84,8 @@ const ViewProduct = ({ categories, product, gqlAction }) => {
       <div className="md:col-span-2 col-span-full row-span-6 grid grid-cols-12 h-fit">
         <img
           className="col-span-9 w-full h-64 object-cover"
-          src={imgUrls[0] || img}
+          // TODO: add fallback image if none exist
+          src={imgUrls[0]}
           alt="img"
         ></img>
         <div className="col-span-3 h-64  overflow-y-auto overflow-x-none ">

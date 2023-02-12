@@ -12,6 +12,8 @@ import { useRouter } from "next/router";
 
 export async function getServerSideProps({ query }) {
   const orderNumber = query.oid;
+
+  // @ts-ignore
   const order = await Order.findById(orderNumber).populate({
     path: "products",
     populate: {
