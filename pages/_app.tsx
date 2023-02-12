@@ -46,13 +46,18 @@ function MyApp({ Component, pageProps }) {
             aria-label="Loading Spinner"
           />
         </div>
+        {inDashboard ? (
+          <div className="dark bg-gray-900 min-h-screen">
+            {!inLogin && <SideBar />}
 
-        <div className="dark bg-gray-900 min-h-screen">
-          {inDashboard && !inLogin && <SideBar />}
-          {!inDashboard && <Navbar />}
-
-          <Component {...pageProps} />
-        </div>
+            <Component {...pageProps} />
+          </div>
+        ) : (
+          <div className="min-h-screen">
+            <Navbar />
+            <Component {...pageProps} />
+          </div>
+        )}
       </ThemeContextProvider>
     </ApolloProvider>
   );
