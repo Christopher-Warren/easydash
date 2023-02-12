@@ -1,7 +1,5 @@
 import { useState } from "react";
 import Link from "next/link";
-import { useMutation } from "@apollo/client";
-import { CREATE_USER } from "../../../client/src/graphql/mutation_vars";
 import { validatePassword } from "../../../client/src/utils/validatePassword";
 import LoadingSpinner from "../../../client/src/components/LoadingSpinner";
 import LoginInput from "../../../client/src/components/LoginInput";
