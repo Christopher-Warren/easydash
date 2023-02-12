@@ -12,28 +12,27 @@ import Category from "../models/category.js";
 import Subcategory from "../models/subcategory";
 
 import { serializeModelData } from "../utils/serializeModelData";
+import dbConnect from "../lib/dbConnect";
+import { useQuery } from "@apollo/client";
+import {
+  GET_ALL_SUBCATEGORIES,
+  GET_SHOP_HOME_DATA,
+} from "../graphql/query_vars";
 
-export const getServerSideProps = async () => {
-  const categories = await Category.find({}).populate("products").limit(3);
+const ShopHome = () => {
+  // TODO: Refactor api to populate
+  // • shop nav bar
+  // • shop footer
+  // • shop sections
+  const { data } = useQuery(GET_SHOP_HOME_DATA);
+  const { data: data2 } = useQuery(GET_ALL_SUBCATEGORIES, {
+    variables: { limit: 3 },
+  });
 
-  const subcategories = await Subcategory.find({})
-    .populate("products")
-    .limit(3);
-  return {
-    props: {
-      categories: serializeModelData(categories),
-      subcategories: serializeModelData(subcategories),
-    },
-  };
-};
+  const categories = data?.getAllCategories;
+  const subcategories = data2?.getAllSubcategories;
 
-const ShopHome = ({ categories, subcategories }) => {
-  // const ShopBySubcategory = withData(
-  //   ShopBySubcategorySection,
-  //   GET_ALL_SUBCATEGORIES,
-  //   { limit: 3 }
-  // );
-
+  if (!data || !data2) return null;
   return (
     <>
       <HeroSection />

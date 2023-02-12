@@ -169,6 +169,10 @@ const RootQuery = {
     return product;
   },
   getAllCategories: async (_parent, { name }) => {
+    // TODO: Refactor api to populate
+    // • shop nav bar
+    // • shop footer
+    // • shop sections
     await dbConnect();
     /*
     Nested population

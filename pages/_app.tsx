@@ -1,4 +1,4 @@
-import { ApolloProvider } from "@apollo/client";
+import { ApolloProvider, useQuery } from "@apollo/client";
 import { client } from "../graphql/clientInit";
 
 import "../styles/globals.css";
@@ -10,6 +10,7 @@ import Navbar from "../components/navigation/store-navigation/Navbar";
 import MoonLoader from "react-spinners/MoonLoader";
 
 import { useEffect, useState } from "react";
+import { GET_SHOP_HOME_DATA } from "../graphql/query_vars";
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -45,6 +46,7 @@ function MyApp({ Component, pageProps }) {
             aria-label="Loading Spinner"
           />
         </div>
+
         <div className="dark bg-gray-900 min-h-screen">
           {inDashboard && !inLogin && <SideBar />}
           {!inDashboard && <Navbar />}
