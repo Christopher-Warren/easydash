@@ -5,6 +5,7 @@ import dbConnect from "../../../../lib/dbConnect";
 import { serializeModelData } from "../../../../utils/serializeModelData";
 
 export const getServerSideProps = async ({ params }) => {
+  console.log("getServerSideProps");
   const category = params.category;
 
   await dbConnect();
