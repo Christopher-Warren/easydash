@@ -1,6 +1,7 @@
 import ListProductsByCategory from "../../../../components/navigation/store-navigation/shop-by-category/ListProductsByCategory";
 
 import Category from "../../../../models/category";
+import Products from "../../../../models/product";
 import dbConnect from "../../../../lib/dbConnect";
 import { serializeModelData } from "../../../../utils/serializeModelData";
 
@@ -37,10 +38,11 @@ export const getServerSideProps = async ({ params }) => {
     we should probably find a solution that takes care of all of our populations
     in one method
 */
+  // @ts-ignore
+  const product = await Products.find({});
 
   // @ts-ignore
   const categories = await Category.find({ name: category })
-    .populate("products")
     .populate("subcategories")
     .populate({
       path: "products",
