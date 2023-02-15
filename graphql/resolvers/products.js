@@ -5,12 +5,15 @@ import Subcategory from "../../models/subcategory";
 import normalizeInputs from "../../utils/normalizeInputs";
 import generateMongoFilterStages from "../../utils/generateMongoFilterStages";
 
+import dbConnect from "../../lib/dbConnect.ts";
+
 import S3 from "aws-sdk/clients/s3";
 
 export default {
   // GraphQL Args: https://www.apollographql.com/docs/apollo-server/data/resolvers/#resolver-arguments
   products: async (_parent, args = {}, _context, _info) => {
     // if (sessionExpired) throw new Error("Session expired");
+    await dbConnect();
     const { input } = args;
 
     const limit = input?.limit ? input.limit : null;
