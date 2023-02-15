@@ -1,16 +1,16 @@
 import ListProductsByCategory from "../../../../components/navigation/store-navigation/shop-by-category/ListProductsByCategory";
 
 import Category from "../../../../models/category";
-import "../../../../models/product";
-import "../../../../models/subcategory";
+// import "../../../../models/product";
+// import "../../../../models/subcategory";
 import dbConnect from "../../../../lib/dbConnect";
 import { serializeModelData } from "../../../../utils/serializeModelData";
 
 export const getServerSideProps = async ({ params }) => {
-  console.log("getServerSideProps");
   const category = params.category;
 
   await dbConnect();
+  console.log(Category);
   /*
     Nested population
     https://stackoverflow.com/a/34444982/15676430

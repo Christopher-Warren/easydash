@@ -1,8 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const Schema = mongoose.Schema;
-
-const orderSchema = new Schema({
+const orderSchema = new mongoose.Schema({
   orderNumber: Number,
   createdAt: {
     type: Date,
@@ -13,7 +11,7 @@ const orderSchema = new Schema({
   products: [
     {
       product: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
         required: true,
       },
@@ -48,4 +46,4 @@ const orderSchema = new Schema({
   },
 });
 
-module.exports = mongoose.models.Order || mongoose.model("Order", orderSchema);
+export default mongoose.models.Order || mongoose.model("Order", orderSchema);
