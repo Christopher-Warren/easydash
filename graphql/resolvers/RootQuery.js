@@ -6,7 +6,6 @@ import Order from "../../models/order";
 import generateMongoFilterStages from "../../utils/generateMongoFilterStages";
 import dbConnect from "../../lib/dbConnect";
 import { jwtVerify } from "jose";
-import { getCookie } from "cookies-next";
 import mongoose from "mongoose";
 
 const RootQuery = {
@@ -14,9 +13,9 @@ const RootQuery = {
     // if (sessionExpired) throw new Error("Session expired");
     await dbConnect();
 
-    const token = req.cookies.token;
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-    const stat = await jwtVerify(req.cookies.token, secret);
+    // const token = req.cookies.token;
+    // const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+    // const stat = await jwtVerify(req.cookies.token, secret);
 
     const { input } = args;
 
