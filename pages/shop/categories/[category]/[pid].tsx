@@ -29,12 +29,12 @@ function classNames(...classes) {
 
 export const getServerSideProps = async ({ params }) => {
   const productId = params.pid;
-
+  console.log("getting product data...");
   // @ts-ignore
   const product = await Product.findById(productId)
     .populate("category")
     .populate("subcategory");
-
+  console.log(product);
   return {
     props: {
       product: serializeModelData(product),
