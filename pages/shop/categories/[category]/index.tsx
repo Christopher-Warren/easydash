@@ -10,7 +10,7 @@ export const getServerSideProps = async ({ params }) => {
   const category = params.category;
 
   await dbConnect();
-  console.log(Category);
+  console.log(Product, Subcategory);
   /*
     Nested population
     https://stackoverflow.com/a/34444982/15676430
