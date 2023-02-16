@@ -1,8 +1,8 @@
 import ListProductsByCategory from "../../../../components/navigation/store-navigation/shop-by-category/ListProductsByCategory";
 
 import Category from "../../../../models/category";
-// import "../../../../models/product";
-// import "../../../../models/subcategory";
+import Product from "../../../../models/product";
+import Subcategory from "../../../../models/subcategory";
 import dbConnect from "../../../../lib/dbConnect";
 import { serializeModelData } from "../../../../utils/serializeModelData";
 
