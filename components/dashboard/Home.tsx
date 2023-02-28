@@ -1,6 +1,6 @@
 import PageWrapper from "../../components/PageWrapper";
 import InfoCard from "../../components/cards/InfoCardSmall";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import OrdersActivity from "../../components/orders/OrdersActivity";
 import Link from "next/link";
@@ -15,7 +15,11 @@ import { LOGOUT } from "../../graphql/types_extension";
 import { useRouter } from "next/router";
 
 const Home = () => {
-  const userId = null;
+  const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    setUserId(localStorage.getItem("user"));
+  });
 
   // Add this to a hook of some kind that has both login
   // and logout functionality
