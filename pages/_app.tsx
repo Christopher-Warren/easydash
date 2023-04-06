@@ -10,6 +10,7 @@ import Navbar from "../components/navigation/store-navigation/Navbar";
 import MoonLoader from "react-spinners/MoonLoader";
 
 import { useEffect, useState } from "react";
+import DemoBanner from "../components/DemoBanner";
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -47,6 +48,7 @@ function MyApp({ Component, pageProps }) {
         </div>
         {inDashboard ? (
           <div className="dark bg-gray-900 min-h-screen">
+            <DemoBanner />
             {!inLogin && <SideBar />}
 
             <Component {...pageProps} />
@@ -54,6 +56,7 @@ function MyApp({ Component, pageProps }) {
         ) : (
           <div className="min-h-screen">
             <Navbar />
+            <DemoBanner />
             <Component {...pageProps} />
           </div>
         )}
