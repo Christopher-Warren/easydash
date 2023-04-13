@@ -54,7 +54,7 @@ function MyApp({ Component, pageProps }) {
             <Component {...pageProps} />
           </div>
         ) : (
-          <div className="min-h-screen">
+          <div className="min-h-screen pt-10">
             <Navbar />
             <DemoBanner />
             <Component {...pageProps} />
