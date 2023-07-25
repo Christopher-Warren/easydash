@@ -12,6 +12,7 @@ import {
   GET_ALL_SUBCATEGORIES,
   GET_SHOP_HOME_DATA,
 } from "../graphql/query_vars";
+import { MoonLoader } from "react-spinners";
 
 const ShopHome = () => {
   // TODO: Refactor api to populate
@@ -26,7 +27,7 @@ const ShopHome = () => {
   const categories = data?.getAllCategories;
   const subcategories = data2?.getAllSubcategories;
 
-  if (!data || !data2) return null;
+  if (!data || !data2) return <MoonLoader />;
   return (
     <>
       <HeroSection />
