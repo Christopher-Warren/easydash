@@ -1,4 +1,5 @@
-import Link from "next/link";
+import Link from 'next/link';
+import { MoonLoader } from 'react-spinners';
 
 export default function ShopBySubcategory({ subcategories }: any) {
   return (
@@ -24,7 +25,7 @@ export default function ShopBySubcategory({ subcategories }: any) {
               >
                 <img
                   src={subcategory.products[0].images[0]}
-                  alt={"subcategory pic"}
+                  alt={'subcategory pic'}
                   className="w-full h-full object-center object-cover"
                 />
               </div>

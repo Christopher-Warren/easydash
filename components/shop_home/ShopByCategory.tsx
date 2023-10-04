@@ -1,4 +1,5 @@
-import Link from "next/link";
+import Link from 'next/link';
+import { MoonLoader } from 'react-spinners';
 
 export default function ShopByCategory({ categories }) {
   const primaryCategory = categories[0];
