@@ -6,34 +6,51 @@ import ShopBySaleSection from '../components/shop_home/ShopBySale';
 import IncintiveSection from '../components/shop_home/IncintiveSection';
 
 import Footer from '../components/navigation/store-navigation/Footer';
+import dbConnect from '../lib/dbConnect';
+import Category from '../models/category';
+import Subcategory from '../models/subcategory';
 
-import { useQuery } from '@apollo/client';
-import {
-  GET_ALL_SUBCATEGORIES,
-  GET_SHOP_HOME_DATA,
-} from '../graphql/query_vars';
-import { MoonLoader } from 'react-spinners';
-import ModalContainer from '../components/modals/ModalContainer';
+export const getStaticProps = async () => {
+  await dbConnect();
+  const categories = await Category.find()
+    .populate('products')
+    .populate('subcategories')
+    .populate({
+      path: 'products',
+      populate: {
+        path: 'subcategory',
+        model: 'Subcategory',
+      },
+    });
 
-const ShopHome = () => {
+  const subcategories = await Subcategory.find()
+    .populate('products')
+    .populate('category')
+    .populate({
+      path: 'products',
+      populate: {
+        path: 'category',
+        model: 'Category',
+      },
+    })
+    .limit(3);
+
+  return {
+    props: {
+      categories: JSON.stringify(categories),
+      subcategories: JSON.stringify(subcategories),
+    },
+  };
+};
+
+const ShopHome = (props) => {
   // TODO: Refactor api to populate
   // • shop nav bar
   // • shop footer
-  // • shop sections
-  const { data } = useQuery(GET_SHOP_HOME_DATA);
-  const { data: data2 } = useQuery(GET_ALL_SUBCATEGORIES, {
-    variables: { limit: 3 },
-  });
+  // • shop section
 
-  const categories = data?.getAllCategories;
-  const subcategories = data2?.getAllSubcategories;
-
-  if (!data || !data2)
-    return (
-      <div className="flex justify-center mt-28">
-        <MoonLoader />
-      </div>
-    );
+  const categories = JSON.parse(props.categories);
+  const subcategories = JSON.parse(props.subcategories);
   return (
     <>
       <HeroSection />
