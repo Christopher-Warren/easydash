@@ -1,24 +1,24 @@
-import PageWrapper from "../../components/PageWrapper";
-import InfoCard from "../../components/cards/InfoCardSmall";
-import { useEffect, useState } from "react";
-import { DateTime } from "luxon";
-import OrdersActivity from "../../components/orders/OrdersActivity";
-import Link from "next/link";
-import { useMutation, useQuery } from "@apollo/client";
-import { GET_ALL_ORDERS, GET_PRODUCTS } from "../../graphql/query_vars";
+import PageWrapper from '../../components/PageWrapper';
+import InfoCard from '../../components/cards/InfoCardSmall';
+import { useEffect, useState } from 'react';
+import { DateTime } from 'luxon';
+import OrdersActivity from '../../components/orders/OrdersActivity';
+import Link from 'next/link';
+import { useMutation, useQuery } from '@apollo/client';
+import { GET_ALL_ORDERS, GET_PRODUCTS } from '../../graphql/query_vars';
 
-import SecondaryButton from "../../components/buttons/SecondaryButton";
-import PrimaryButton from "../../components/buttons/PrimaryButton";
+import SecondaryButton from '../../components/buttons/SecondaryButton';
+import PrimaryButton from '../../components/buttons/PrimaryButton';
 
-import { LOGOUT } from "../../graphql/types_extension";
+import { LOGOUT } from '../../graphql/types_extension';
 
-import { useRouter } from "next/router";
+import { useRouter } from 'next/router';
 
 const Home = () => {
-  const [userId, setUserId] = useState("");
+  const [userId, setUserId] = useState('');
 
   useEffect(() => {
-    setUserId(localStorage.getItem("user"));
+    setUserId(localStorage.getItem('user'));
   });
 
   // Add this to a hook of some kind that has both login
@@ -35,9 +35,9 @@ const Home = () => {
       input: {
         limit: null,
         filter: {
-          field: "status.fulfilled",
+          field: 'status.fulfilled',
           query: {
-            eq: "false",
+            eq: 'false',
           },
         },
       },
@@ -49,7 +49,7 @@ const Home = () => {
       input: {
         limit: null,
         filter: {
-          field: "stock",
+          field: 'stock',
           query: {
             gte: 0,
             lte: 0,
@@ -70,7 +70,7 @@ const Home = () => {
       input: {
         filter: [
           {
-            field: "createdAt",
+            field: 'createdAt',
             query: {
               gte: pastWeek,
               lte: now,
@@ -83,7 +83,7 @@ const Home = () => {
   }, [refetch]);
 
   const renderRecentSales = (data: any) => {
-    if (!data || data.getAllOrders === null) return "0";
+    if (!data || data.getAllOrders === null) return '0';
 
     return data.getAllOrders.reduce((acc: number, arr: any) => {
       return acc + arr.total;
@@ -91,7 +91,7 @@ const Home = () => {
   };
 
   const renderRecentOrders = (data: any) => {
-    if (!data || data.getAllOrders === null) return "0";
+    if (!data || data.getAllOrders === null) return '0';
 
     return data.getAllOrders.length;
   };
@@ -126,20 +126,20 @@ const Home = () => {
       <div className="grid md:grid-cols-4 grid-cols-1 gap-6  row-span-full">
         <div className="grid grid-cols-2  col-span-3 gap-6 h-min">
           <div className="md:col-span-1 col-span-2">
-            <InfoCard title="Sales">
-              <span className="text-sm block dark:text-gray-400 ">
+            <InfoCard title="Sales" className="p-5">
+              <span className="text-sm block dark:text-gray-400">
                 Past week
               </span>
 
               <span className="text-4xl block text-right">
-                {"$"}
+                {'$'}
                 {renderRecentSales(data)}
               </span>
             </InfoCard>
           </div>
 
           <div className="md:col-span-1 col-span-2">
-            <InfoCard title="Orders">
+            <InfoCard title="Orders" className="p-5">
               <span className="text-sm block dark:text-gray-400 ">
                 Past week
               </span>
@@ -155,7 +155,7 @@ const Home = () => {
                 <li className=" hover:bg-purple-200 p-3 hover:dark:bg-gray-700 transition-colors cursor-pointer">
                   <Link
                     className="flex justify-between w-full"
-                    href={"/dashboard/orders"}
+                    href={'/dashboard/orders'}
                     // to={{
                     //   pathname: "/dashboard/orders",
                     //   state: [
@@ -175,7 +175,7 @@ const Home = () => {
                     // }}
                   >
                     <span>
-                      {unfulfilled.data && unfulfilled.data.getAllOrders.length}{" "}
+                      {unfulfilled.data && unfulfilled.data.getAllOrders.length}{' '}
                       orders ready to fulfill
                     </span>
                     <svg
@@ -198,7 +198,7 @@ const Home = () => {
                 <li className=" hover:bg-purple-200 p-3 hover:dark:bg-gray-700 transition-colors cursor-pointer">
                   <Link
                     className="flex justify-between w-full"
-                    href={"/dashboard/products"}
+                    href={'/dashboard/products'}
                     // to={{
                     //   pathname: "/dashboard/products",
                     //   state: [
@@ -238,7 +238,7 @@ const Home = () => {
 
         <div className="md:col-span-1 col-span-3 h-min">
           <div>
-            <InfoCard title="Activity" titleClassName="relative mb-5">
+            <InfoCard title="Activity" titleClassName="relative p-5">
               {/* <div className="bg-gray-800 absolute h-px left-0 w-full"></div> */}
               <OrdersActivity></OrdersActivity>
             </InfoCard>

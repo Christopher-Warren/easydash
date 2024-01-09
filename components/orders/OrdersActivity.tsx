@@ -1,6 +1,6 @@
-import { useQuery } from '@apollo/client'
-import { GET_ALL_ORDERS } from '../../graphql/query_vars'
-import { calcRelativeCreatedAt } from '../../utils/calcRelativeCreatedAt'
+import { useQuery } from '@apollo/client';
+import { GET_ALL_ORDERS } from '../../graphql/query_vars';
+import { calcRelativeCreatedAt } from '../../utils/calcRelativeCreatedAt';
 
 const OrdersActivity = () => {
   const { data } = useQuery(GET_ALL_ORDERS, {
@@ -12,16 +12,16 @@ const OrdersActivity = () => {
       },
     },
     pollInterval: 5000,
-  })
+  });
 
   const RenderRecentOrders = () => {
-    if (!data) return null
+    if (!data) return null;
 
     return data.getAllOrders.map((order: any) => {
-      const createdAt = calcRelativeCreatedAt(order.createdAt)
+      const createdAt = calcRelativeCreatedAt(order.createdAt);
 
       return (
-        <li className="" key={order.orderNumber}>
+        <li className="px-5 py-1" key={order.orderNumber}>
           <div className="bg-gray-900 absolute h-px  left-0 w-full"></div>
           <div className="inline-block py-3">
             <span className="block text-lg">
@@ -31,15 +31,15 @@ const OrdersActivity = () => {
             <span className="block text-gray-500 text-sm">{createdAt}</span>
           </div>
         </li>
-      )
-    })
-  }
+      );
+    });
+  };
 
   return (
-    <ol className="text-lg -mb-3">
+    <ol className="text-lg">
       <RenderRecentOrders></RenderRecentOrders>
     </ol>
-  )
-}
+  );
+};
 
-export default OrdersActivity
+export default OrdersActivity;

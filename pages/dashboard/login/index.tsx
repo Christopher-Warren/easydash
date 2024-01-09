@@ -1,21 +1,20 @@
-import PrimaryButton from "../../../components/buttons/PrimaryButton";
-import LoginInput from "../../../components/LoginInput";
-import Link from "next/link";
-import LoginWrapper from "../../../components/LoginWrapper";
-import { useMutation } from "@apollo/client";
-import { USER_LOGIN } from "../../../graphql/mutation_vars";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import PrimaryButton from '../../../components/buttons/PrimaryButton';
+import LoginInput from '../../../components/LoginInput';
+import Link from 'next/link';
+import LoginWrapper from '../../../components/LoginWrapper';
+import { useMutation } from '@apollo/client';
+import { USER_LOGIN } from '../../../graphql/mutation_vars';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 const Login = () => {
-  const loading = false;
-
-  const [login] = useMutation(USER_LOGIN);
+  const [login, { loading }] = useMutation(USER_LOGIN);
 
   const router = useRouter();
 
   useEffect(() => {
-    localStorage.removeItem("user");
+    localStorage.removeItem('user');
   }, []);
 
   const handleLogin = async (e: any) => {
@@ -25,13 +24,13 @@ const Login = () => {
     try {
       const { data } = await login({
         variables: {
-          email: formData.get("email"),
-          password: formData.get("password"),
+          email: formData.get('email'),
+          password: formData.get('password'),
         },
       });
-      localStorage.setItem("user", data.login.email);
+      localStorage.setItem('user', data.login.email);
 
-      router.push("/dashboard");
+      router.push('/dashboard');
     } catch (error) {
       // console.log(error)
     }
@@ -40,9 +39,9 @@ const Login = () => {
   return (
     <LoginWrapper>
       <form className="relative" onSubmit={handleLogin}>
-        {/* {loading && <LoadingSpinner />} */}
+        {loading && <LoadingSpinner />}
 
-        <div className={loading ? "hidden" : ""}>
+        <div className={`${loading && ''}`}>
           {/* <img
                     className="lg:mx-0 mx-auto dark:brightness-[2.5] "
                     src={logo}
@@ -69,8 +68,8 @@ const Login = () => {
           <div className="flex justify-between -mt-1 text-blue-500 only-of-type:a">
             <div>
               <span className="dark:text-gray-500 text-gray-600">
-                {" "}
-                No Account?{" "}
+                {' '}
+                No Account?{' '}
               </span>
               <Link href="/dashboard/register" className="underline">
                 Create One!

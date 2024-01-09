@@ -20,8 +20,7 @@ const InfoCardSmall = ({
             {altTitle}
           </div>
         )}
-
-        {children}
+        <div>{children}</div>
       </div>
     </div>
   );
