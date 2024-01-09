@@ -1,4 +1,4 @@
-module.exports = ordersSchema = `
+export const ordersSchema = `
 type Order {
     _id: ID!
     orderNumber: Float!
@@ -85,4 +85,4 @@ input GetAllOrdersInput {
     search: String
     filter: [Filter]
 }
-`
+`;

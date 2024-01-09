@@ -1,11 +1,13 @@
-const authResolver = require('./auth')
-const productsResolver = require('./products')
-const ordersResolver = require('./orders')
+const authResolver = require("./auth");
+const productsResolver = require("./products");
+const ordersResolver = require("./orders");
 
-const rootResolver = {
+const rootQuery = {
   ...authResolver,
   ...productsResolver,
   ...ordersResolver,
-}
+};
 
-module.exports = rootResolver
+console.log(rootQuery);
+
+module.exports = rootQuery;
